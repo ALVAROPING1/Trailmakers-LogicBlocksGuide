@@ -2,6 +2,6 @@
     <img src="https://i.imgur.com/YNxhfqJ.png"/>
 </h1>
 
-# Trailmakers Logic Gates Guide
+# Trailmakers Logic Blocks Guide
 
-A guide about how logic gates work in the game "Trailmakers"
+A guide about how logic blocks work in the game "Trailmakers"
