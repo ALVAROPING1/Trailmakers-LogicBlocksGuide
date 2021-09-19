@@ -1,3 +1,4 @@
 *.pdf
 ~$*.rtf
+*.tmp
 .markdownlint.json
