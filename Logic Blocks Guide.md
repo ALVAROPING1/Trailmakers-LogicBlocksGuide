@@ -9,12 +9,20 @@ mainfontoptions:
 
 fontsize: 12pt
 
+# For some reason, boxlinks is necessary for colorlinks to work even though it shouldn't have any effect when colorlinks is set
+boxlinks: true
+linkcolor: hyperlinkBlue
+urlcolor: hyperlinkBlue
+
 geometry: "left=3cm,right=3cm,top=2.5cm,bottom=2.5cm"
 header-includes: |
     ```{=latex}
     % Fonts
     \setmathfont{Cambria Math}
     \parskip=3.5pt
+
+    % Hyperlink color
+    \definecolor{hyperlinkBlue}{RGB}{5,99,193}
 
     % Horizontal line width on tables (tabular/aligned)
     \usepackage{array}
@@ -43,7 +51,6 @@ header-includes: |
     \setlist[itemize,9]{label=\LabelItemI}
 
     \renewlist{itemize}{itemize}{9}
-
 
     % Diagrams
     \usepackage{tikz}
@@ -162,7 +169,7 @@ header-includes: |
   - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines it affects the power
   - For servos/hinges/large hinges it affects the angle
     - For hinges the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds when using decimal output value
-    - Hinges are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [here](#OutputValue2MultiplierTable)
+    - Hinges are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2MultiplierTable)
   - For spinning servos/helicopter engines/pistons it affects the speed
   - For tone generators it affects the volume
   - For the rest of the blocks, it doesn't affect anything
@@ -218,7 +225,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - 2-way: $3n$
         - 2-way+cycle: $3n + 1$
       - Takes 3 frames to update
-      - Example blueprints: [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
+      - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
     - Base 10
       - $n = 10^\text{amount of cells}; \text{ amount of cells} = \log_10 n$
       - Each cell is the general circuit for $n=10$ with cycle (except for the last cell which can have any value between $2$ and $10$ for $n$ and doesn't need to have cycle) and only the first cell with an input gate
@@ -233,7 +240,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_10 n} - 1}}} + 30 \ceil{\log_10 n} - 30$
         - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_10 n} - 1}}} + 30 \ceil{\log_10 n} - 29$
       - Takes 3 frames to update for each cell that needs to change
-      - Example blueprints: [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
+      - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
     - Binary
       - $n = 2^\text{amount of cells}; \text{ amount of cells} = \log_2 n$
       - Diagram of the circuit:
@@ -246,7 +253,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - 2-way: $4 \ceil{\log_2 n} + 5$
         - 2-way+cycle: $4 \ceil{\log_2 n} + 2$
       - Takes 4 frames to update for 1-way and 3 frames for the other versions
-      - Example blueprints: [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
+      - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
     - When to use each method
 
 +---+----------------------------+-------------------------------------+
@@ -410,6 +417,6 @@ Note: this is just based on the amount of logic gates each method uses (unless t
 - If you want your system to not modify the input that passes through, configure all of the logic gates to have an output value of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
 - Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
 - If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
-- If you still have any questions or need help with something, feel free to contact me on the [official trailmakers discord server](https://discord.gg/trailmakers)
+- If you still have any questions or need help with something, feel free to contact me on the [\underline{official trailmakers discord server}](https://discord.gg/trailmakers)
 
 ## Made by ALVAROPING1#6682
