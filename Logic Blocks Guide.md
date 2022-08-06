@@ -31,26 +31,21 @@ header-includes: |
     % Increase max nesting depth for lists
     \newcommand{\LabelItemI}{\labelitemfont \textbullet}
     \newcommand{\LabelItemII}{\labelitemfont \bfseries \textendash}
-    \newcommand{\LabelItemIII}{\labelitemfont \textasteriskcentered}
-    \newcommand{\LabelItemIV}{\labelitemfont \textperiodcentered}
+    \newcommand{\LabelItemIII}{\labelitemfont \rule[0.5ex]{0.6ex}{0.6ex}}
+    \newcommand{\LabelItemIV}{\labelitemfont \textasteriskcentered}
 
     \usepackage{enumitem}
 
-    \setlistdepth{9}
+    \setlistdepth{5}
 
-    \setlist[enumerate]{leftmargin=2em}
     \setlist[itemize]{leftmargin=2em}
     \setlist[itemize,1]{label=\LabelItemI, leftmargin=2.5em}
     \setlist[itemize,2]{label=\LabelItemII}
     \setlist[itemize,3]{label=\LabelItemIII}
     \setlist[itemize,4]{label=\LabelItemIV}
     \setlist[itemize,5]{label=\LabelItemI}
-    \setlist[itemize,6]{label=\LabelItemII}
-    \setlist[itemize,7]{label=\LabelItemIII}
-    \setlist[itemize,8]{label=\LabelItemIV}
-    \setlist[itemize,9]{label=\LabelItemI}
 
-    \renewlist{itemize}{itemize}{9}
+    \renewlist{itemize}{itemize}{5}
 
     % Diagrams
     \usepackage{tikz}
