@@ -1,528 +1,253 @@
-**[Logic Blocks Guide]{.underline}**
+---
+mainfont: Calibri.ttf
+mainfontoptions:
+- Extension=.ttf
+- UprightFont=*
+- BoldFont=*b
+- ItalicFont=*i
+- BoldItalicFont=*z
 
-[Settings [2](#_Toc82856913)](#_Toc82856913)
+fontsize: 12pt
 
-[• Distance sensor [2](#_Toc82856914)](#_Toc82856914)
+geometry: "left=3cm,right=3cm,top=2.5cm,bottom=2.5cm"
+header-includes: |
+    ```{=latex}
+    % Fonts
+    \setmathfont{Cambria Math}
+    \parskip=3.5pt
 
-[• Altitude sensor [2](#_Toc82856915)](#_Toc82856915)
+    % Horizontal line width on tables (tabular/aligned)
+    \usepackage{array}
+    \newcommand\HLine[1]{\noalign{\hrule height #1}}
 
-[• Speed sensor [3](#_Toc82856916)](#_Toc82856916)
+    % Increase max nesting depth for lists
+    \newcommand{\LabelItemI}{\labelitemfont \textbullet}
+    \newcommand{\LabelItemII}{\labelitemfont \bfseries \textendash}
+    \newcommand{\LabelItemIII}{\labelitemfont \textasteriskcentered}
+    \newcommand{\LabelItemIV}{\labelitemfont \textperiodcentered}
 
-[• Angle sensor [3](#_Toc82856917)](#_Toc82856917)
+    \usepackage{enumitem}
 
-[• Compass [4](#_Toc110697954)](#_Toc110697954)
+    \setlistdepth{9}
 
-[• Logic Gates [5](#_Toc110697955)](#_Toc110697955)
+    \setlist[enumerate]{leftmargin=2em}
+    \setlist[itemize]{leftmargin=2em}
+    \setlist[itemize,1]{label=\LabelItemI, leftmargin=2.5em}
+    \setlist[itemize,2]{label=\LabelItemII}
+    \setlist[itemize,3]{label=\LabelItemIII}
+    \setlist[itemize,4]{label=\LabelItemIV}
+    \setlist[itemize,5]{label=\LabelItemI}
+    \setlist[itemize,6]{label=\LabelItemII}
+    \setlist[itemize,7]{label=\LabelItemIII}
+    \setlist[itemize,8]{label=\LabelItemIV}
+    \setlist[itemize,9]{label=\LabelItemI}
 
-[Output value [7](#_Toc82856919)](#_Toc82856919)
+    \renewlist{itemize}{itemize}{9}
 
-[• How the output value is calculated [7](#_Toc82856920)](#_Toc82856920)
 
-[Useful circuits [8](#_Toc82856921)](#_Toc82856921)
+    % Diagrams
+    \usepackage{tikz}
+    \usetikzlibrary{positioning, fit}
+    \tikzset{node/.style={circle, fill=black!100, inner sep=0pt, minimum size=2.5mm}}
 
-[• NOR/NOT gate [8](#_Toc82856922)](#_Toc82856922)
-
-[• Pulse generator/Rising edge detector
-[8](#_Toc82856923)](#_Toc82856923)
-
-[• Falling edge detector [9](#_Toc82856924)](#_Toc82856924)
-
-[• Latch [9](#_Toc82856925)](#_Toc82856925)
-
-[• Counter [9](#_Toc82856926)](#_Toc82856926)
-
-[ General circuit [9](#_Toc82856927)](#_Toc82856927)
-
-[ Base 10 [10](#_Toc82856928)](#_Toc82856928)
-
-[ Binary [11](#_Toc82856929)](#_Toc82856929)
-
-[ When to use each method [13](#_Toc82856930)](#_Toc82856930)
-
-[Output value to multiplier table for hinges
-[14](#OutputValue2MultiplierTable)](#OutputValue2MultiplierTable)
-
-[Tips [16](#_Toc82856932)](#_Toc82856932)
-
-[]{#_Toc82856913 .anchor}Settings
-
--   []{#_Toc82856914 .anchor}Distance sensor
-
-```{=html}
-<!-- -->
-```
--   Range: in meters, $1\ \text{block} = 0.25\ m$
-
--   Output value: from -1 to 1
-
--   Trigger
-
-    -   Normal: sends an output when it detects something
-
-    -   Inverted: sends an output when it detects nothing
-
-    ```{=html}
-    <!-- -->
+    % Ceiling function
+    \usepackage{mathtools}
+    \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
     ```
-    -   ![](media/image1.png){width="2.2256944444444446in"
-        > height="1.3416666666666666in"}Outputs
-
-```{=html}
-<!-- -->
-```
--   []{#_Toc82856915 .anchor}Altitude sensor
-
-    -   Altitude: in meters above the frame of reference,
-        $1\ \text{block} = 0.25\ m$
-
-    -   Output value: from -1 to 1
-
-    -   Frame of reference
-
-        -   Ignore waves: fixed altitude at the average sea level
-
-        -   Relative to waves: altitude of the water below the sensor
-
-        -   Outside of high seas, both options are equivalent
-
-    -   Trigger
-
-        -   Normal: sends an output when it's above the altitude you set
-
-        -   Below: sends an output when it's below the altitude you set
-
-```{=html}
-<!-- -->
-```
--   Outputs
-
-![](media/image2.png){width="3.475in" height="1.9756944444444444in"}
-
--   []{#_Toc82856916 .anchor}Speed sensor
-
-    -   Speed: in km/h or mph depending on the speed unit settings
-
-        -   **IMPORTANT:** only detects the movement in the direction
-            that the arrow points. The speed is measured from the
-            position of the block
-
-    -   Output value: from -1 to 1
-
-    -   Trigger
-
-        -   Normal: sends an output when it goes faster than the speed
-            you set
-
-        -   Below: sends an output when it goes slower that the speed
-            you set
-
-```{=html}
-<!-- -->
-```
--   ![](media/image3.png){width="2.225in"
-    > height="1.6291666666666667in"}Outputs
-
-```{=html}
-<!-- -->
-```
--   []{#_Toc82856917 .anchor}Angle sensor
-
-    -   Direction: in degrees, changes the position of the middle point
-        of the activation threshold
-
-    -   Width: in degrees, changes the size of the activation threshold
-
-    -   Output value: from -1 to 1
-
-    -   Trigger
-
-        -   Normal: sends an output when the arrow is inside the
-            activation threshold
-
-        -   Outside: sends an output when the arrow is outside the
-            activation threshold
-
-        -   Note: the arrow will always try to point up no matter the
-            orientation (in the direction of highest slope of the plane
-            it is in)
-
-    -   ![](media/image4.png){width="2.466666666666667in"
-        height="2.025in"}Outputs
-
--   []{#_Toc110697954 .anchor}Compass
-
-    -   Direction: in degrees, changes the position of the middle point
-        of the activation threshold
-
-    -   Width: in degrees, changes the size of the activation threshold
-
-    -   Output value: from -1 to 1
-
-    -   Trigger
-
-        -   Normal: sends an output when the arrow is inside the
-            activation threshold
-
-        -   Outside: sends an output when the arrow is outside the
-            activation threshold
-
-        -   Note: the arrow will always try to point north no matter the
-            orientation
-
-    -   ![](media/image5.png){width="3.0243055555555554in"
-        height="2.2222222222222223in"}Outputs
-
--   []{#_Toc110697955 .anchor}Logic Gates
-
-    -   Keybinds: green (1) and red (-1), they act as the same input (an
-        and gate with a green and a red keybind will send an output even
-        when just pressing one of the 2 keybinds), but act as a
-        different input for each seat (an and gate with a keybind will
-        require someone in each seat that has control over it pressing
-        the keybind to send an output)
-
-        -   Toggle: toggles **inputs**, when an input reaches a gate it
-            will toggle on the color toggled (if there is, it's of the
-            same color as the input and it's off), toggle it off (if
-            there is, it's of the same color as the input and it's on,
-            it will be toggled off after this pulse stops reaching the
-            gate) or toggle the other color off and check again the
-            other 2 rules (if it's not of the same color as the input
-            and the other color it's toggled on)
-
-            -   If you want to toggle the output instead of the inputs,
-                make the signal go through another gate with the toggle
-                after the gate in which you want to toggle the output
-
-    -   Timers
-
-        -   The timers start as soon as the gate receives a **single
-            input**, even if the gate doesn't meet the conditions to
-            send an output
-
-        -   The number will be rounded to have only 2 decimal places
-            when shown on the menu, but the number which will be used is
-            the one you wrote rounded to 8 decimal places. Due to a bug
-            only up to 5 characters can be written, so depending on
-            which value you write the number of decimals which can be
-            used will vary
-
-        -   Delay: in seconds, only applied when activating but not when
-            deactivating. Note: each logic gate has an extra delay of
-            1/60 seconds due to the state of all the logic gates being
-            updated only once per physics' frame
-
-        -   Duration and pause (previously known as active and inactive
-            time respectively): in seconds, setting the duration to a
-            number different than 0 and pause to 0 will make it send a
-            single pulse until turned off and on again. If both of them
-            are not 0 it will create a cycle which will be repeated
-            until it's deactivated. The shortest length for a pulse is 1
-            frame (1/60 seconds), any value lower than this won't send
-            an output
-
-        -   The order of the timers is as follows:
-            delay-\>duration-\>pause-\>back to duration (if pause is 0
-            it ends after the duration ends)
-
-        -   In the case of delay and duration timers, even though their
-            values are expressed in seconds, the game handles them as a
-            number of frames. To calculate that number just do
-            $\text{seconds}*60$. If this number is not an integer, it
-            will be rounded down to the nearest integer. If this number
-            is an integer however, it will randomly either be kept as it
-            is or be subtracted one frame, so it's recommended to add
-            0.01 to the original number to make sure it always stays in
-            the correct number of frames. Pause timers aren't subject to
-            this, and the exact time in seconds is used for them
-
-    -   Output value: from -1 to 1
-
-    -   ![](media/image6.png){width="3.720833333333333in"
-        height="1.5090277777777779in"}Outputs
-
-[]{#_Toc82856919 .anchor}Output value
-
--   When something is activated, it acts as if you pressed the keybind.
-    Positive values act as the green keybind and negative values act as
-    the red keybind. For things that only have green keybind, the
-    absolute value will be used
-
--   Goes from -1 to 1
-
-    -   Due to a bug only up to 5 characters can be written, so
-        depending on if the value is positive or negative you will only
-        be able to use up to 4 or 3 decimals respectively. More decimals
-        can be achieved by using multiple gates: if the number is
-        expressed in scientific notation as $\pm a*10^{b}$, *a* can be
-        any number such that $0 \leq a \leq 10$ with up to 7 decimals
-        while *b* can be any integer such that $- 81 \leq b \leq - 1$.
-        If *a* has more than 7 decimals, it will be rounded to 7
-        decimals
-
--   It's the percentage of power that whatever it activates will use,
-    applied to the value set in the settings (if applicable)
-
-    -   For engines it affects the max speed and acceleration (the
-        torque)
-
-    -   For thrusters/gimbals/propellers/underwater propellers/outboard
-        boat engines it affects the power
-
-    -   For servos/hinges/large hinges it affects the angle
-
-        -   For hinges the speed depends on the max angle and not the
-            angle achieved with the output value, resulting in faster
-            speeds when using decimal output value. Hinges are currently
-            bugged resulting in angles way lower than they should be.
-            There is a table at the end of this guide with the
-            multiplier for each output value
-            [here](#OutputValue2MultiplierTable)
-
-```{=html}
-<!-- -->
-```
--   For spinning servos/helicopter engines/pistons it affects the speed
-
--   For tone generators it affects the volume
-
--   For the rest of the blocks, it doesn\'t affect anything
-
-```{=html}
-<!-- -->
-```
--   []{#_Toc82856920 .anchor}How the output value is calculated
-
-    -   First it checks if its conditions are met
-
-        -   AND gate: all inputs are on
-
-        -   OR gate: at least 1 input is on
-
-        -   XOR gate: only 1 input is on
-
-    -   Second it adds up the output values of all of its inputs
-
-        -   If the result is \> 1 it gets replaced with 1
-
-        -   If the result is \< -1 it gets replaced with -1
-
-    -   Third it multiplies the result by its output value
-
-    -   Lastly it sends the result as its output value. On the steam
-        version, the final output value must also be different from 0 to
-        send an output
-
-    -   ![](media/image7.png){width="5.300694444444445in"
-        height="1.511111111111111in"}Diagram made by Zoomah:
-
-    -   Example
-
-An AND gate with an output value of 0.5 has 2 inputs, one of them has an
-output value of 0.8 and the other of 0.5, when both of them are on at
-the same time (so the AND gate sends an output) the output values of the
-inputs are added up, $0.8 + 0.5 = 1.3$. Because 1.3 is bigger than 1,
-the gate replaces it with 1, then that value is multiplied by the output
-value of the gate, $1*0.5 = 0.5$, so the AND gate sends an output of 0.5
-
-[]{#_Toc82856921 .anchor}Useful circuits
-
--   []{#_Toc82856922 .anchor}NOR/NOT gate
-
-    -   Inverts the state of the input
-
-    -   Made by connecting an always on input (a sensor that is always
-        on, all sensors can be configured to work like this but the most
-        commonly used one is a distance sensor with 0 range and invert
-        trigger) to a XOR gate
-
-    -   If it only has a single input that isn't the always on input it
-        will act as a NOT gate, if it has multiple it will act as a NOR
-        gate
-
-    -   You can make a NAND/XNOR gate by making an AND/XOR gate output
-        to a NOT gate and taking the output from the NOT gate
-
--   []{#_Toc82856923 .anchor}Pulse generator/Rising edge detector
-
-    -   Sends a pulse of a specific length (usually a single frame which
-        is 1/60 seconds) when the input goes from off to on
-
-    -   Made by setting the duration to the length of the pulse on an OR
-        gate
-
--   []{#_Toc82856924 .anchor}Falling edge detector
-
-    -   Sends a pulse of a specific length when the input goes from on
-        to off
-
-    -   Made by connecting a NOT gate to a pulse generator
-
--   []{#_Toc82856925 .anchor}Latch
-
-    -   Stores a single bit of information
-
-    -   Made by activating toggle on an OR gate, requires the input to
-        be a pulse to be easily controlled by other gates (use a pulse
-        generator for this)[]{#_Toc82856926 .anchor}
-
--   Counter
-
-    -   Can store the value of a variable with *n* possible values
-
-    -   There are 3 ways of doing it, general method, base 10 and
-        binary, which one uses less gates depends on the situation
-
-        -   []{#_Toc82856927 .anchor}General circuit
-
-            -   $n = amount\ of\ cells$
-
-            -   Diagram of the circuit:
-
-            -   You can add an extra AND gate to each cell, reverse the
-                direction of their inputs (right to left rather than
-                left to right) and add a second pulse generator as input
-                connected to those extra AND gates to allow the value to
-                go up and down rather than only up
-
-            -   Requires a startup pulse to one of the toggled OR gates
-                work (achieved with a 1 frame pulse generator)
-
-            -   Complexity (amount of logic gates used without the ones
-                used to create the startup pulse as those can be reused)
-
-                -   1-way: $2n$
-
-                -   1-way+cycle: $2n + 1$
-
-                -   2-way: $3n$
-
-                -   2-way+cycle: $3n + 1$
-
-            -   Takes 3 frames to update
-
-            -   Example blueprints:
-                [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907),
-                [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841),
-                [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361)
-                and
-                [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)[]{#_Toc82856928
-                .anchor}
-
-        -   Base 10
-
-            -   $n = 10^{\text{amount\ of\ cells}};\ \text{amount\ of\ cells} = \log_{10}n$
-
-            -   Each cell is the general circuit for *n*=10 with cycle
-                (except for the last cell which can have any value
-                between 2 and 10 for *n* and doesn't need to have cycle)
-                and only the first cell with an input gate
-
-            -   Diagram of the circuit:
-
-            -   You can use the 2-way version of the general method for
-                the cells to make it 2-way, the only thing that changes
-                is that the AND gate of the extra gates that connects to
-                the next cell is the first one rather than the last
-
-            -   Might require a decoder to be used (unless you just want
-                to show numbers on a screen, you can use each cell as a
-                digit of the number in that case), to create it you just
-                need to take *n* AND gates and assign a different
-                combination of 1 output gate from each cell to each of
-                them (if you only need to use it combined with other
-                circuits you can combine all of their decoders into a
-                single one to use less gates)
-
-            -   Requires a startup pulse to one of the toggled OR gates
-                work (achieved with a 1 frame pulse generator)
-
-            -   Complexity (amount of logic gates used without the ones
-                used to create the startup pulse as those can be reused)
-
-                -   1-way:
-
-$$2RoundUp\left( \frac{n}{10^{RoundUp(\log_{10}n) - 1}} \right) + 20RoundUp\left( \log_{10}n \right) - 20$$
-
--   1-way+cycle:
-
-$$2RoundUp\left( \frac{n}{10^{RoundUp(\log_{10}n) - 1}} \right) + 20RoundUp\left( \log_{10}n \right) - 19$$
-
--   2-way:
-
-$$3RoundUp\left( \frac{n}{10^{RoundUp(\log_{10}n) - 1}} \right) + 30RoundUp\left( \log_{10}n \right) - 30$$
-
--   2-way+cycle:
-
-$$3RoundUp\left( \frac{n}{10^{RoundUp(\log_{10}n) - 1}} \right) + 30RoundUp\left( \log_{10}n \right) - 29$$
-
--   Takes 3 frames to update for each cell that needs to change
-
--   Example blueprints:
-    [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881),
-    [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935),
-    [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676)
-    and
-    [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
-
-```{=html}
-<!-- -->
-```
--   []{#_Toc82856929 .anchor}Binary
-
-    -   $n = 2^{\text{amount\ of\ cells}};\ \text{amount\ of\ cells} = \log_{2}n$
-
-    -   Diagram of the circuit:
-
-    -   To make it 2-way you need to modify the input circuit to make
-        the 1 frame pulse generator and the OR gate send an input
-        directly to the AND gate in each cell (you can't skip the AND
-        gate in the first cell in this case). Then duplicate this
-        circuit and with a new AND gate on each cell, but make the OR
-        gate have all *output 1* gates as input rather than all *output
-        2* gates. Connect the new AND gate in each cell in the same way
-        the old AND gate was connected, but use all previous cells'
-        *output 2* gates as input rather than all previous cells'
-        *output 1* gates. Finally add a NOR gate with both AND gates
-        from the first cell as input (this will be used for the
-        decoder). To make this 2-way version cycle remove the OR gate
-        from the input circuit and skip the AND gate for the increase
-        direction in the first cell (connect the input directly to
-        *output 1* for that cell)
-
-    -   Might require a decoder to be used, to create it you just need
-        to take *n* AND gates and assign a different combination of
-        either *output 1* or *output 2* from each cell (if you only need
-        to use it combined with other circuits you can combine all of
-        their decoders into a single one to use less gates). If you are
-        using the 2-way versions, all AND gates need to have the NOR
-        gate (which has both AND gates from the first cell as input) as
-        input to remove a false positive while changing values
-
-    -   Complexity (amount of logic gates used without the always on
-        sensor used to create the NOT gates nor gates used to create the
-        startup pulse as those can be reused)
-
-        -   1-way: $3RoundUp\left( \log_{2}n \right) + 2$
-
-        -   1-way+cycle: $3RoundUp\left( \log_{2}n \right)$
-
-        -   2-way: $4RoundUp\left( \log_{2}n \right) + 5$
-
-        -   2-way+cycle: 4$\text{RoundUp}\left( \log_{2}n \right) + 2$
-
-    -   Takes 4 frames to update for 1-way and 3 frames for the other
-        versions
-
-    -   Example blueprints:
-        [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489),
-        [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845),
-        [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019)
-        and
-        [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)[]{#_Toc82856930
-        .anchor}
-
--   When to use each method
+---
+
+# \LARGE \underline{Logic Blocks Guide}
+
+## \Large \underline{Settings}
+
+- **\large Distance sensor**
+  - Range: in meters, $1 \text{ block} = 0.25 m$
+  - Output value: from $-1$ to $1$
+  - Trigger
+    - Normal: sends an output when it detects something
+    - Inverted: sends an output when it detects nothing
+  - Outputs
+
+    <!-- TODO: Add image and annotations
+      - ![](media/image1.png){width="2.2256944444444446in"
+            > height="1.3416666666666666in"}
+    -->
+
+- **\large Altitude sensor**
+  - Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 m$
+  - Output value: from $-1$ to $1$
+  - Frame of reference
+    - Ignore waves: fixed altitude at the average sea level
+    - Relative to waves: altitude of the water below the sensor
+    - Outside of high seas, both options are equivalent
+  - Trigger
+    - Normal: sends an output when it's above the altitude you set
+    - Below: sends an output when it's below the altitude you set
+  - Outputs
+
+    <!-- TODO: Add image and annotations
+    ![](media/image2.png){width="3.475in" height="1.9756944444444444in"}
+    -->
+
+- **\large Speed sensor**
+  - Speed: in $km/h$ or $mph$ depending on the speed unit settings
+    - **IMPORTANT:** only detects the movement in the direction that the arrow points. The speed is measured from the position of the block
+  - Output value: from $-1$ to $1$
+  - Trigger
+    - Normal: sends an output when it goes faster than the speed you set
+    - Below: sends an output when it goes slower that the speed you set
+  - Outputs
+
+    <!-- TODO: Add image and annotations
+    - ![](media/image3.png){width="2.225in"
+        > height="1.6291666666666667in"}
+    -->
+
+- **\large Angle sensor**
+  - Direction: in degrees, changes the position of the middle point of the activation threshold
+  - Width: in degrees, changes the size of the activation threshold
+  - Output value: from $-1$ to $1$
+  - Trigger
+    - Normal: sends an output when the arrow is inside the activation threshold
+    - Outside: sends an output when the arrow is outside the activation threshold
+    - Note: the arrow will always try to point up no matter the orientation (in the direction of highest slope of the plane it is in)
+  - Outputs
+
+    <!-- TODO: Add image and annotations
+      - ![](media/image4.png){width="2.466666666666667in"
+            height="2.025in"}
+    -->
+
+- **\large Compass**
+  - Direction: in degrees, changes the position of the middle point of the activation threshold
+  - Width: in degrees, changes the size of the activation threshold
+  - Output value: from $-1$ to $1$
+  - Trigger
+    - Normal: sends an output when the arrow is inside the activation threshold
+    - Outside: sends an output when the arrow is outside the activation threshold
+    - Note: the arrow will always try to point north no matter the orientation
+  - Outputs
+
+    <!-- TODO: Add image and annotations
+      - ![](media/image5.png){width="3.0243055555555554in"
+            height="2.2222222222222223in"}
+    -->
+
+- **\large Logic Gates**
+  - Keybinds: green ($1$) and red ($-1$), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
+    - Toggle: toggles **inputs**, when an input reaches a gate it will toggle on the color toggled (if there is, it's of the same color as the input and it's off), toggle it off (if there is, it's of the same color as the input and it's on, it will be toggled off after this pulse stops reaching the gate) or toggle the other color off and check again the other 2 rules (if it's not of the same color as the input and the other color it's toggled on)
+      - If you want to toggle the output instead of the inputs, make the signal go through another gate with the toggle after the gate in which you want to toggle the output
+  - Timers
+    - The timers start as soon as the gate receives a **single input**, even if the gate doesn't meet the conditions to send an output
+    - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one you wrote rounded to 8 decimal places. Due to a bug only up to 5 characters can be written, so depending on which value you write the number of decimals which can be used will vary
+    - Delay: in seconds, only applied when activating but not when deactivating. Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated only once per physics' frame
+    - Duration and pause (previously known as active and inactive time respectively): in seconds, setting the duration to a number different than $0$ and pause to $0$ will make it send a single pulse until turned off and on again. If both of them are not $0$ it will create a cycle which will be repeated until it's deactivated. The shortest length for a pulse is $1$ frame ($1/60 s$), any value lower than this won't send an output
+    - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is 0 it ends after the duration ends)
+    - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. To calculate that number just do $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
+  - Output value: from $-1$ to $1$
+  - Outputs
+
+    <!-- TODO: Add image and annotations
+      - ![](media/image6.png){width="3.720833333333333in"
+            height="1.5090277777777779in"}
+    -->
+
+## \Large \underline{Output value}
+
+- When something is activated, it acts as if you pressed the keybind. Positive values act as the green keybind and negative values act as the red keybind. For things that only have green keybind, the absolute value will be used
+- Goes from $-1$ to $1$
+  - Due to a bug only up to 5 characters can be written, so depending on if the value is positive or negative you will only be able to use up to 4 or 3 decimals respectively. More decimals can be achieved by using multiple gates: if the number is expressed in scientific notation as $\pm a \cdot 10^b$, $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals
+- It's the percentage of power that whatever it activates will use, applied to the value set in the settings (if applicable)
+  - For engines it affects the max speed and acceleration (the torque)
+  - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines it affects the power
+  - For servos/hinges/large hinges it affects the angle
+    - For hinges the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds when using decimal output value
+    - Hinges are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [here](#OutputValue2MultiplierTable)
+  - For spinning servos/helicopter engines/pistons it affects the speed
+  - For tone generators it affects the volume
+  - For the rest of the blocks, it doesn't affect anything
+- **\large How the output value is calculated**
+  - First the gate checks if its conditions are met
+    - AND gate: all inputs are on
+    - OR gate: at least 1 input is on
+    - XOR gate: only 1 input is on
+  - Second it adds up the output values of all of its inputs
+    - If the result is $> 1$ it gets replaced with $1$
+    - If the result is $< -1$ it gets replaced with $-1$
+  - Third it multiplies the result by its output value
+  - Lastly it sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
+  - Diagram made by Zoomah:
+
+    <!-- TODO: Add image and annotations
+      - ![](media/image7.png){width="5.300694444444445in"
+            height="1.511111111111111in"}
+    -->
+
+  - Example
+
+An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When both of them are on at the same time (so the AND gate sends an output) the output values of the inputs are added up, $0.8 + 0.5 = 1.3$. Because $1.3$ is bigger than $1$, the gate replaces it with $1$, then that value is multiplied by the output value of the gate, $1 \cdot 0.5 = 0.5$, so the AND gate sends an output of $0.5$
+
+## \Large \underline{Useful circuits}
+
+- **\large NOR/NOT gate**
+  - Inverts the state of the input
+  - Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
+  - If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
+  - You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
+- **\large Rising edge detector**
+  - Sends a pulse of a specific length (usually a single frame which is $1/60 s$) when the input goes from off to on
+  - Made by setting the duration to the length of the pulse on an OR gate
+- **\large Falling edge detector**
+  - Sends a pulse of a specific length when the input goes from on to off
+  - Made by connecting a NOT gate to a pulse generator
+- **\large Latch**
+  - Stores a single bit of information
+  - Made by activating toggle on an OR gate, requires the input to be a pulse to be easily controlled by other gates (use a pulse generator for this)
+- **\large Counter**
+  - Can store the value of a variable with $n$ possible values
+  - There are 3 ways of doing it: general method, base 10 and binary. Which one uses less gates depends on the situation
+    - General circuit
+      - $n = \text{amount of cells}$
+      - Diagram of the circuit:
+        <!-- TODO: diagram of the circuit-->
+      - You can add an extra AND gate to each cell, reverse the direction of their inputs (right to left rather than left to right) and add a second pulse generator as input connected to those extra AND gates to allow the value to go up and down rather than only up
+      - Requires a startup pulse to one of the toggled OR gates work (achieved with a 1 frame pulse generator)
+      - Complexity (amount of logic gates used without the ones used to create the startup pulse as those can be reused)
+        - 1-way: $2n$
+        - 1-way+cycle: $2n + 1$
+        - 2-way: $3n$
+        - 2-way+cycle: $3n + 1$
+      - Takes 3 frames to update
+      - Example blueprints: [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
+    - Base 10
+      - $n = 10^\text{amount of cells}; \text{ amount of cells} = \log_10 n$
+      - Each cell is the general circuit for $n=10$ with cycle (except for the last cell which can have any value between $2$ and $10$ for $n$ and doesn't need to have cycle) and only the first cell with an input gate
+      - Diagram of the circuit:
+        <!-- TODO: diagram of the circuit-->
+      - You can use the 2-way version of the general method for the cells to make it 2-way, the only thing that changes is that the AND gate of the extra gates that connects to the next cell is the first one rather than the last
+      - Might require a decoder to be used (unless you just want to show numbers on a screen, you can use each cell as a digit of the number in that case), to create it you just need to take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
+      - Requires a startup pulse to one of the toggled OR gates on each cell work (achieved with a 1 frame pulse generator)
+      - Complexity (amount of logic gates used without the ones used to create the startup pulse as those can be reused)
+        - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_10 n} - 1}}} + 20 \ceil{\log_10 n} - 20$
+        - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_10 n} - 1}}} + 20 \ceil{\log_10 n} - 19$
+        - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_10 n} - 1}}} + 30 \ceil{\log_10 n} - 30$
+        - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_10 n} - 1}}} + 30 \ceil{\log_10 n} - 29$
+      - Takes 3 frames to update for each cell that needs to change
+      - Example blueprints: [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
+    - Binary
+      - $n = 2^\text{amount of cells}; \text{ amount of cells} = \log_2 n$
+      - Diagram of the circuit:
+        <!-- TODO: diagram of the circuit-->
+      - To make it 2-way you need to modify the input circuit to make the 1 frame pulse generator and the OR gate send an input directly to the AND gate in each cell (you can't skip the AND gate in the first cell in this case). Then, duplicate the input circuit and add a new AND gate to each cell, but make the OR gate have all *output 1* gates as input rather than all *output 2* gates. Connect the new AND gate in each cell in the same way the old AND gate was connected, but use all previous cells' *output 2* gates as input rather than all previous cells' *output 1* gates. Finally add a NOR gate with both AND gates from the first cell as input (this will be used for the decoder). To make this 2-way version cycle remove the OR gate from the input circuit and skip the AND gate for the increase direction in the first cell (connect the input directly to *output 1* for that cell)
+      - Might require a decoder to be used, to create it you just need to take *n* AND gates and assign a different combination of either *output 1* or *output 2* from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates). If you are using the 2-way versions, all AND gates need to have the NOR gate (which has both AND gates from the first cell as input) as input to remove a false positive while changing values
+      - Complexity (amount of logic gates used without the always on sensor used to create the NOT gates nor gates used to create the startup pulse as those can be reused)
+        - 1-way: $3 \ceil{\log_2 n} + 2$
+        - 1-way+cycle: $3 \ceil{\log_2 n}$
+        - 2-way: $4 \ceil{\log_2 n} + 5$
+        - 2-way+cycle: $4 \ceil{\log_2 n} + 2$
+      - Takes 4 frames to update for 1-way and 3 frames for the other versions
+      - Example blueprints: [1-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [1-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [2-way](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [2-way+cycle](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
+    - When to use each method
 
 +---+----------------------------+-------------------------------------+
 |   | **1-way**                  | **2-way**                           |
@@ -530,77 +255,69 @@ $$3RoundUp\left( \frac{n}{10^{RoundUp(\log_{10}n) - 1}} \right) + 30RoundUp\left
 | > | Doesn't require an         | Doesn't require an individual       |
 |   | individual decoder:        | decoder:                            |
 | * |                            |                                     |
-| * | -   For *n*\<6 use the     | -   For *n*≤5 use the general       |
+| * | - For *n*\<6 use the     | - For *n*≤5 use the general       |
 | W |     general method         |     method                          |
 | i |                            |                                     |
-| t | -   For *n*≥6 use the      | -   For *n*\>5 use the binary       |
+| t | - For *n*≥6 use the      | - For *n*\>5 use the binary       |
 | h |     binary method          |     method                          |
 | o |                            |                                     |
 | u | Requires an individual     | Requires an individual decoder:     |
 | t | decoder:                   |                                     |
-| > |                            | -   For *n*≤10 use the general      |
-|   | -   For *n*\<15 use the    |     method                          |
+| > |                            | - For *n*≤10 use the general      |
+|   | - For *n*\<15 use the    |     method                          |
 | c |     general method         |                                     |
-| y |                            | -   For *n>*10 use the binary       |
-| c | -   For *n*≥15 use the     |     method                          |
+| y |                            | - For *n>*10 use the binary       |
+| c | - For *n*≥15 use the     |     method                          |
 | l |     binary method          |                                     |
 | e |                            | Show values directly on a screen    |
 | * | Show values directly on a  | (only numbers for n>12)             |
 | * | screen (only numbers for   |                                     |
-|   | n>12)                      | -   For *n*≤10 use the general      |
+|   | n>12)                      | - For *n*≤10 use the general      |
 |   |                            |     method                          |
-|   | -   For *n*≤12 use the     |                                     |
-|   |     general method         | -   For 10\<*n*\<15 use the binary  |
+|   | - For *n*≤12 use the     |                                     |
+|   |     general method         | - For 10\<*n*\<15 use the binary  |
 |   |                            |     method                          |
-|   | -   For *n*\>12 use the    |                                     |
-|   |     base 10 method         | -   For *n*≥15 use the base 10      |
+|   | - For *n*\>12 use the    |                                     |
+|   |     base 10 method         | - For *n*≥15 use the base 10      |
 |   |                            |     method                          |
 +---+----------------------------+-------------------------------------+
 | > | Doesn't require an         | Doesn't require an individual       |
 |   | individual decoder:        | decoder:                            |
 | * |                            |                                     |
-| * | -   Use the binary method  | -   For *n*≤3 use the general       |
+| * | - Use the binary method  | - For *n*≤3 use the general       |
 | W |                            |     method                          |
 | i | Requires an individual     |                                     |
-| t | decoder:                   | -   For *n*\>3 use the binary       |
+| t | decoder:                   | - For *n*\>3 use the binary       |
 | h |                            |     method                          |
-| > | -   For *n*\<12 use the    |                                     |
+| > | - For *n*\<12 use the    |                                     |
 |   |     general method         | Requires an individual decoder:     |
 | c |                            |                                     |
-| y | -   For *n*≥12 use the     | -   For *n*≤6 use the general       |
+| y | - For *n*≥12 use the     | - For *n*≤6 use the general       |
 | c |     binary method          |     method                          |
 | l |                            |                                     |
-| e | Show values directly on a  | -   For *n*\>6 use the binary       |
+| e | Show values directly on a  | - For *n*\>6 use the binary       |
 | * | screen (only numbers for   |     method                          |
 | * | *n*\>12)                   |                                     |
 |   |                            | Show values directly on a screen    |
-|   | -   For *n*\<12 use the    | (only numbers for *n*\>12)          |
+|   | - For *n*\<12 use the    | (only numbers for *n*\>12)          |
 |   |     general method         |                                     |
-|   |                            | -   For *n*≤6 use the general       |
-|   | -   For *n*=12 use the     |     method                          |
+|   |                            | - For *n*≤6 use the general       |
+|   | - For *n*=12 use the     |     method                          |
 |   |     binary method          |                                     |
-|   |                            | -   For 6\<*n*≤16 use the binary    |
-|   | -   For *n*\>12 use the    |     method                          |
+|   |                            | - For 6\<*n*≤16 use the binary    |
+|   | - For *n*\>12 use the    |     method                          |
 |   |     base 10 method         |                                     |
-|   |                            | -   For *n*\>16 use the base 10     |
+|   |                            | - For *n*\>16 use the base 10     |
 |   |                            |     method                          |
 +---+----------------------------+-------------------------------------+
 
-Note: this is just based on the amount of logic gates each method uses
-(unless there is a tie, in which case speed is used), however the amount
-of time it takes for the system to update might also matter depending on
-the situation, in which case on average the fastest is the general
-method, followed by the binary method and lastly the base 10 method (in
-the 1-way version the binary and base 10 positions must be swapped)
+Note: this is just based on the amount of logic gates each method uses (unless there is a tie, in which case speed is used), however the amount of time it takes for the system to update might also matter depending on the situation, in which case on average the fastest is the general method, followed by the binary method and lastly the base 10 method (in the 1-way version the binary and base 10 positions must be swapped)
 
-[]{#OutputValue2MultiplierTable .anchor}Output value to multiplier table
-for hinges
+## \Large \underline{Output value to multiplier table for hinges}
 
--   Final angle is the resulting angle of the hinge measured with a max
-    > angle of 90 degrees and an error of ±0.005 degrees
+- Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 
--   The multiplier was calculated by doing
-    > $\text{multiplier} = \frac{\text{final\ angle}}{90}$
+- The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
 
   -----------------------------------------------------------------------------------------------------------------
   **Output   **Final   **Multiplier**   **Output   **Final   **Multiplier**   **Output   **Final   **Multiplier**
@@ -685,39 +402,14 @@ for hinges
                                         0.490      06.005    0.06672222                            
   -----------------------------------------------------------------------------------------------------------------
 
--   [\[CHART\]]{.chart}Graph of the multiplier as a function of the
-    > output value
+- Graph of the multiplier as a function of the output value
+  <!-- TODO: Add graph-->
 
-[]{#_Toc82856932 .anchor}Tips
+## \Large \underline{Tips}
 
--   If you want your system to not modify the input that passes through,
-    > configure all of the logic gates to have an output value of 1.
-    > Then, if a gate needs to have more inputs other than the original
-    > one, make sure the sum of the output values of those other inputs
-    > is 0. This will make the output which reaches whatever your system
-    > activates be the output that the sensors/keybinds had
+- If you want your system to not modify the input that passes through, configure all of the logic gates to have an output value of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
+- Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
+- If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
+- If you still have any questions or need help with something, feel free to contact me on the [official trailmakers discord server](https://discord.gg/trailmakers)
 
--   Organize the logic gates on a testbed while working with them before
-    > adding them to your vehicle, having the logic gates organized as
-    > opposed to scattered across your entire vehicle will make
-    > remembering what each gate does easier. There is no wrong way to
-    > organize them as long as they aren't randomly placed, but the way
-    > I do it is by splitting the gates into groups depending on
-    > function, inside each group the arrows of logic gates point
-    > towards the outputs of that gate and away from its inputs, then I
-    > put the groups of logic gates that a group outputs to in the
-    > direction the arrows of the logic gates that the group uses as
-    > output are pointing, while I put the groups that group uses as
-    > input in the opposite direction
-
--   If you have problems figuring out how to do something with logic
-    > gates, draw it on paper first, being able to see all connections
-    > at once helps a lot. Another method is writing it with if
-    > statements as they translate to logic gates easily (each logic
-    > gate is an individual if statement)
-
--   If you still have any questions or need help with something, feel
-    > free to contact me on the [official trailmakers discord
-    > server](https://discord.gg/trailmakers)
-
-**Made by ALVAROPING1#6682**
+## Made by ALVAROPING1#6682
