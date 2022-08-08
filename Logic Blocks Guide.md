@@ -305,7 +305,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     - \titleCEB
       \phantomsection
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEB}
-      - $n = 10^\text{amount of cells}; \text{ amount of cells} = \log_10 n$
+      - $n = 10^\text{amount of cells}; \text{ amount of cells} = \log_{10} n$
       - Each cell is the general circuit for $n=10$ with cycle (except for the last cell which can have any value between $2$ and $10$ for $n$ and doesn't need to have cycle) and only the first cell with an input gate
       - Diagram of the circuit:
         <!-- TODO: diagram of the circuit-->
@@ -313,10 +313,10 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       - Might require a decoder to be used (unless you just want to show numbers on a screen, you can use each cell as a digit of the number in that case), to create it you just need to take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
       - Requires a startup pulse to one of the toggled OR gates on each cell work (achieved with a 1 frame pulse generator)
       - Complexity (amount of logic gates used without the ones used to create the startup pulse as those can be reused)
-        - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_10 n} - 1}}} + 20 \ceil{\log_10 n} - 20$
-        - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_10 n} - 1}}} + 20 \ceil{\log_10 n} - 19$
-        - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_10 n} - 1}}} + 30 \ceil{\log_10 n} - 30$
-        - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_10 n} - 1}}} + 30 \ceil{\log_10 n} - 29$
+        - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 20$
+        - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
+        - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 30$
+        - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 29$
       - Takes 3 frames to update for each cell that needs to change
       - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
     \newcommand{\titleCEC}{Binary}
