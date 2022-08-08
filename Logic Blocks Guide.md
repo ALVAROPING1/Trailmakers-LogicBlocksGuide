@@ -218,15 +218,15 @@ header-includes: |
 - **\TitleFormatII{\titleBA}**
   \phantomsection
   \addcontentsline{toc}{subsection}{\TOCLabelII \titleBA}
-  - First the gate checks if its conditions are met
-    - AND gate: all inputs are on
-    - OR gate: at least 1 input is on
-    - XOR gate: only 1 input is on
-  - Second it adds up the output values of all of its inputs
-    - If the result is $> 1$ it gets replaced with $1$
-    - If the result is $< -1$ it gets replaced with $-1$
-  - Third it multiplies the result by its output value
-  - Lastly it sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
+  1) The gate checks if its conditions are met
+     - AND gate: all inputs are on
+     - OR gate: at least 1 input is on
+     - XOR gate: only 1 input is on
+  2) The gate adds up the output values of all of its inputs
+     - If the result is $> 1$ it gets replaced with $1$
+     - If the result is $< -1$ it gets replaced with $-1$
+  3) The gate multiplies the result by its output value
+  4) The gate sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
   - Diagram made by Zoomah:
 
     <!-- TODO: Add image and annotations
