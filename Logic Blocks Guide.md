@@ -55,14 +55,36 @@ header-includes: |
     % Ceiling function
     \usepackage{mathtools}
     \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+    % Table of contents
+    \renewcommand*\contentsname{}
+
+    \newcommand{\TOCLabelI}{\large \color{black}}
+    \newcommand{\TOCLabelII}{\hspace{-0.225em} \color{black} \LabelItemI \hspace{0.5em}}
+    \newcommand{\TOCLabelIII}{\hspace{-0.305em} \color{black} \LabelItemIII \hspace{0.5em}}
+
+    \newcommand{\TitleFormat}[1]{\LARGE \underline{#1}}
+    \newcommand{\TitleFormatI}[1]{\Large \underline{#1}}
+    \newcommand{\TitleFormatII}[1]{\large #1}
     ```
 ---
 
-# \LARGE \underline{Logic Blocks Guide}
+# \TitleFormat{Logic Blocks Guide} {.unlisted .unnumbered}
 
-## \Large \underline{Settings}
+\tableofcontents
+\clearpage
 
-- **\large Distance sensor**
+\newcommand{\titleA}{Settings}
+\phantomsection
+\addcontentsline{toc}{section}{\TOCLabelI \titleA}
+
+## \TitleFormatI{\titleA} {.unlisted .unnumbered}
+
+\newcommand{\titleAA}{Distance Sensor}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleAA}
+
+- **\TitleFormatII{\titleAA}**
   - Range: in meters, $1 \text{ block} = 0.25 m$
   - Output value: from $-1$ to $1$
   - Trigger
@@ -75,7 +97,11 @@ header-includes: |
             > height="1.3416666666666666in"}
     -->
 
-- **\large Altitude sensor**
+\newcommand{\titleAB}{Altitude Sensor}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleAB}
+
+- **\TitleFormatII{\titleAB}**
   - Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 m$
   - Output value: from $-1$ to $1$
   - Frame of reference
@@ -91,7 +117,11 @@ header-includes: |
     ![](media/image2.png){width="3.475in" height="1.9756944444444444in"}
     -->
 
-- **\large Speed sensor**
+\newcommand{\titleAC}{Speed Sensor}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleAC}
+
+- **\TitleFormatII{\titleAC}**
   - Speed: in $km/h$ or $mph$ depending on the speed unit settings
     - **IMPORTANT:** only detects the movement in the direction that the arrow points. The speed is measured from the position of the block
   - Output value: from $-1$ to $1$
@@ -105,7 +135,11 @@ header-includes: |
         > height="1.6291666666666667in"}
     -->
 
-- **\large Angle sensor**
+\newcommand{\titleAD}{Angle Sensor}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleAD}
+
+- **\TitleFormatII{\titleAD}**
   - Direction: in degrees, changes the position of the middle point of the activation threshold
   - Width: in degrees, changes the size of the activation threshold
   - Output value: from $-1$ to $1$
@@ -120,7 +154,11 @@ header-includes: |
             height="2.025in"}
     -->
 
-- **\large Compass**
+\newcommand{\titleAE}{Compass}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleAE}
+
+- **\TitleFormatII{\titleAE}**
   - Direction: in degrees, changes the position of the middle point of the activation threshold
   - Width: in degrees, changes the size of the activation threshold
   - Output value: from $-1$ to $1$
@@ -135,7 +173,11 @@ header-includes: |
             height="2.2222222222222223in"}
     -->
 
-- **\large Logic Gates**
+\newcommand{\titleAF}{Logic Gates}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleAF}
+
+- **\TitleFormatII{\titleAF}**
   - Keybinds: green ($1$) and red ($-1$), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
     - Toggle: toggles **inputs**, when an input reaches a gate it will toggle on the color toggled (if there is, it's of the same color as the input and it's off), toggle it off (if there is, it's of the same color as the input and it's on, it will be toggled off after this pulse stops reaching the gate) or toggle the other color off and check again the other 2 rules (if it's not of the same color as the input and the other color it's toggled on)
       - If you want to toggle the output instead of the inputs, make the signal go through another gate with the toggle after the gate in which you want to toggle the output
@@ -154,7 +196,11 @@ header-includes: |
             height="1.5090277777777779in"}
     -->
 
-## \Large \underline{Output value}
+\newcommand{\titleB}{Output Value}
+\phantomsection
+\addcontentsline{toc}{section}{\TOCLabelI \titleB}
+
+## \TitleFormatI{\titleB} {.unlisted .unnumbered}
 
 - When something is activated, it acts as if you pressed the keybind. Positive values act as the green keybind and negative values act as the red keybind. For things that only have green keybind, the absolute value will be used
 - Goes from $-1$ to $1$
@@ -168,7 +214,10 @@ header-includes: |
   - For spinning servos/helicopter engines/pistons it affects the speed
   - For tone generators it affects the volume
   - For the rest of the blocks, it doesn't affect anything
-- **\large How the output value is calculated**
+\newcommand{\titleBA}{How the output value is calculated}
+- **\TitleFormatII{\titleBA}**
+  \phantomsection
+  \addcontentsline{toc}{subsection}{\TOCLabelII \titleBA}
   - First the gate checks if its conditions are met
     - AND gate: all inputs are on
     - OR gate: at least 1 input is on
@@ -189,26 +238,57 @@ header-includes: |
 
 An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When both of them are on at the same time (so the AND gate sends an output) the output values of the inputs are added up, $0.8 + 0.5 = 1.3$. Because $1.3$ is bigger than $1$, the gate replaces it with $1$, then that value is multiplied by the output value of the gate, $1 \cdot 0.5 = 0.5$, so the AND gate sends an output of $0.5$
 
-## \Large \underline{Useful circuits}
+\newcommand{\titleC}{Useful Circuits}
+\phantomsection
+\addcontentsline{toc}{section}{\TOCLabelI \titleC}
 
-- **\large NOR/NOT gate**
+## \TitleFormatI{\titleC} {.unlisted .unnumbered}
+
+\newcommand{\titleCA}{NOR/NOT Gate}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCA}
+
+- **\TitleFormatII{\titleCA}**
   - Inverts the state of the input
   - Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
   - If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
   - You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
-- **\large Rising edge detector**
+
+\newcommand{\titleCB}{Pulse generator/Rising edge detector}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCB}
+
+- **\TitleFormatII{\titleCB}**
   - Sends a pulse of a specific length (usually a single frame which is $1/60 s$) when the input goes from off to on
   - Made by setting the duration to the length of the pulse on an OR gate
-- **\large Falling edge detector**
+
+\newcommand{\titleCC}{Falling edge detector}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCC}
+
+- **\TitleFormatII{\titleCC}**
   - Sends a pulse of a specific length when the input goes from on to off
   - Made by connecting a NOT gate to a pulse generator
-- **\large Latch**
+
+\newcommand{\titleCD}{Latch}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCD}
+
+- **\TitleFormatII{\titleCD}**
   - Stores a single bit of information
   - Made by activating toggle on an OR gate, requires the input to be a pulse to be easily controlled by other gates (use a pulse generator for this)
-- **\large Counter**
+
+\newcommand{\titleCE}{Counter}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCE}
+
+- **\TitleFormatII{\titleCE}**
   - Can store the value of a variable with $n$ possible values
   - There are 3 ways of doing it: general method, base 10 and binary. Which one uses less gates depends on the situation
-    - General circuit
+    \newcommand{\titleCEA}{General Circuit}
+    - \titleCEA
+      \phantomsection
+      \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEA}
       - $n = \text{amount of cells}$
       - Diagram of the circuit:
         <!-- TODO: diagram of the circuit-->
@@ -221,7 +301,10 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - 2-way+cycle: $3n + 1$
       - Takes 3 frames to update
       - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
-    - Base 10
+    \newcommand{\titleCEB}{Base 10}
+    - \titleCEB
+      \phantomsection
+      \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEB}
       - $n = 10^\text{amount of cells}; \text{ amount of cells} = \log_10 n$
       - Each cell is the general circuit for $n=10$ with cycle (except for the last cell which can have any value between $2$ and $10$ for $n$ and doesn't need to have cycle) and only the first cell with an input gate
       - Diagram of the circuit:
@@ -236,7 +319,10 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_10 n} - 1}}} + 30 \ceil{\log_10 n} - 29$
       - Takes 3 frames to update for each cell that needs to change
       - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
-    - Binary
+    \newcommand{\titleCEC}{Binary}
+    - \titleCEC
+      \phantomsection
+      \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEC}
       - $n = 2^\text{amount of cells}; \text{ amount of cells} = \log_2 n$
       - Diagram of the circuit:
         <!-- TODO: diagram of the circuit-->
@@ -249,7 +335,10 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - 2-way+cycle: $4 \ceil{\log_2 n} + 2$
       - Takes 4 frames to update for 1-way and 3 frames for the other versions
       - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
-    - When to use each method
+    \newcommand{\titleCED}{When to use each method}
+    - \titleCED
+      \phantomsection
+      \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCED}
 
 +---+----------------------------+-------------------------------------+
 |   | **1-way**                  | **2-way**                           |
@@ -315,7 +404,11 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
 Note: this is just based on the amount of logic gates each method uses (unless there is a tie, in which case speed is used), however the amount of time it takes for the system to update might also matter depending on the situation, in which case on average the fastest is the general method, followed by the binary method and lastly the base 10 method (in the 1-way version the binary and base 10 positions must be swapped)
 
-## \Large \underline{Output value to multiplier table for hinges}
+\newcommand{\titleD}{Output value to multiplier table for hinges}
+\phantomsection
+\addcontentsline{toc}{section}{\TOCLabelI \titleD}
+
+## \TitleFormatI{\titleD} {#OutputValue2MultiplierTable .unlisted .unnumbered}
 
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 
@@ -407,11 +500,15 @@ Note: this is just based on the amount of logic gates each method uses (unless t
 - Graph of the multiplier as a function of the output value
   <!-- TODO: Add graph-->
 
-## \Large \underline{Tips}
+\newcommand{\titleE}{Tips}
+\phantomsection
+\addcontentsline{toc}{section}{\TOCLabelI \titleE}
+
+## \TitleFormatI{\titleE} {.unlisted .unnumbered}
 
 - If you want your system to not modify the input that passes through, configure all of the logic gates to have an output value of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
 - Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
 - If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
 - If you still have any questions or need help with something, feel free to contact me on the [\underline{official trailmakers discord server}](https://discord.gg/trailmakers)
 
-## Made by ALVAROPING1#6682
+## \large Made by ALVAROPING1#6682 {.unlisted .unnumbered}
