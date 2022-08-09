@@ -49,8 +49,12 @@ header-includes: |
 
     % Diagrams
     \usepackage{tikz}
-    \usetikzlibrary{positioning, fit}
-    \tikzset{node/.style={circle, fill=black!100, inner sep=0pt, minimum size=2.5mm}}
+    \usetikzlibrary{positioning, fit, calc, arrows.meta}
+    \tikzset{annotation/.style={rectangle, draw=black, fill=white, thick, align=left, minimum height=6.6mm}}
+    \tikzset{arrow/.style={-Triangle, thick}}
+
+    % Images location
+    \graphicspath{ {img/} }
 
     % Ceiling function
     \usepackage{mathtools}
@@ -92,10 +96,43 @@ header-includes: |
     - Inverted: sends an output when it detects nothing
   - Outputs
 
-    <!-- TODO: Add image and annotations
-      - ![](media/image1.png){width="2.2256944444444446in"
-            > height="1.3416666666666666in"}
-    -->
+\vspace{2mm}
+\begin{center}
+\begin{tikzpicture}
+    % Image in a node
+    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=16em]{distance_sensor}};
+    % Use the image as the bounding box of the tikzpicture for centering
+    \useasboundingbox (image.south east) rectangle (image.north west);
+
+    % Create scope with normalized axes
+    \begin{scope}[
+        x={($0.05*(image.south east)$)},
+        y={($0.05*(image.north west)$)}
+    ]
+        % Draw grid
+        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+        % Draw axes labels
+        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
+        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+
+        % Nodes
+        \node[annotation, left] (output_on) at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off) at (21.5, 16.4) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left] (range) at (-1.5, 3) {Range};
+        \node[annotation, below] (output_value) at (8.5, -1.5) {Output value};
+        \node[annotation, right] (trigger) at (21.5, 0) {Invert trigger (on/off),\\currently off\\(normal trigger)};
+
+        % Arrows
+        \draw[arrow] (output_on.east) -- (4.4, 16.4);
+        \draw[arrow] (output_off.west) -- (9.8, 16.4);
+        \draw[arrow] (range.east) -- (0.3, 3);
+        \draw[arrow] (output_value.north) -- (8.5, 0.7);
+        \draw[arrow] (trigger.west) -- (14, 4.5);
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{10mm}
 
 \newcommand{\titleAB}{Altitude Sensor}
 \phantomsection
@@ -113,9 +150,45 @@ header-includes: |
     - Below: sends an output when it's below the altitude you set
   - Outputs
 
-    <!-- TODO: Add image and annotations
-    ![](media/image2.png){width="3.475in" height="1.9756944444444444in"}
-    -->
+\vspace{2mm}
+\begin{center}
+\begin{tikzpicture}
+    % Image in a node
+    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=21em]{altitude_sensor}};
+    % Use the image as the bounding box of the tikzpicture for centering
+    \useasboundingbox (image.south east) rectangle (image.north west);
+
+    % Create scope with normalized axes
+    \begin{scope}[
+        x={($0.05*(image.south east)$)},
+        y={($0.05*(image.north west)$)}
+    ]
+        % Draw grid
+        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+        % Draw axes labels
+        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
+        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+
+        % Nodes
+        \node[annotation, left] (output_on) at (-1.5, 16.2) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off) at (21.5, 16.2) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left] (altitude) at (-1.5, 2.5) {Altitude};
+        \node[annotation, below] (output_value) at (4.9, -1.5) {Output value};
+        \node[annotation, below] (reference_frame) at (12.2, -1.5) {Frame of reference};
+        \node[annotation, right] (trigger) at (21.5, -2.5) {Trigger below (on/off),\\currently off\\(normal trigger)};
+
+        % Arrows
+        \draw[arrow] (output_on.east) -- (7.75, 16.2);
+        \draw[arrow] (output_off.west) -- (14.75, 16.2);
+        \draw[arrow] (altitude.east) -- (0.15, 2.5);
+        \draw[arrow] ($(output_value.north) + (1, 0)$) -- (5.9, 0.6);
+        \draw[arrow] ($(reference_frame.north) + (-1.6, 0)$) -- (10.6, 1.55);
+        \draw[arrow] (trigger.west) -- (16.2, 1.7);
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{12mm}
 
 \newcommand{\titleAC}{Speed Sensor}
 \phantomsection
@@ -130,10 +203,43 @@ header-includes: |
     - Below: sends an output when it goes slower that the speed you set
   - Outputs
 
-    <!-- TODO: Add image and annotations
-    - ![](media/image3.png){width="2.225in"
-        > height="1.6291666666666667in"}
-    -->
+\vspace{2mm}
+\begin{center}
+\begin{tikzpicture}
+    % Image in a node
+    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=15em]{speed_sensor}};
+    % Use the image as the bounding box of the tikzpicture for centering
+    \useasboundingbox (image.south east) rectangle (image.north west);
+
+    % Create scope with normalized axes
+    \begin{scope}[
+        x={($0.05*(image.south east)$)},
+        y={($0.05*(image.north west)$)}
+    ]
+        % Draw grid
+        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+        % Draw axes labels
+        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
+        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+
+        % Nodes
+        \node[annotation, left] (output_on) at (-1.5, 15.4) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off) at (21.5, 15.3) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left] (speed) at (-1.5, 2.1) {Speed};
+        \node[annotation, below] (output_value) at (7.7, -1.5) {Output value};
+        \node[annotation, right] (trigger) at (21.5, 0) {Trigger below (on/off),\\currently off\\(normal trigger)};
+
+        % Arrows
+        \draw[arrow] (output_on.east) -- (5.25, 15.4);
+        \draw[arrow] (output_off.west) -- (11.65, 15.3);
+        \draw[arrow] (speed.east) -- (0.2, 2.1);
+        \draw[arrow] (output_value.north) -- (7.7, 0.45);
+        \draw[arrow] (trigger.west) -- (12.7, 3.4);
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{10mm}
 
 \newcommand{\titleAD}{Angle Sensor}
 \phantomsection
@@ -149,10 +255,45 @@ header-includes: |
     - Note: the arrow will always try to point up no matter the orientation (in the direction of highest slope of the plane it is in)
   - Outputs
 
-    <!-- TODO: Add image and annotations
-      - ![](media/image4.png){width="2.466666666666667in"
-            height="2.025in"}
-    -->
+\vspace{2mm}
+\begin{center}
+\begin{tikzpicture}
+    % Image in a node
+    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=15em]{angle_sensor}};
+    % Use the image as the bounding box of the tikzpicture for centering
+    \useasboundingbox (image.south east) rectangle (image.north west);
+
+    % Create scope with normalized axes
+    \begin{scope}[
+        x={($0.05*(image.south east)$)},
+        y={($0.05*(image.north west)$)}
+    ]
+        % Draw grid
+        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+        % Draw axes labels
+        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
+        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+
+        % Nodes
+        \node[annotation, left] (output_on) at (-1.5, 17.2) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off) at (21.5, 17) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left] (direction) at (-1.5, 2) {Direction};
+        \node[annotation, below] (width) at (6.4, -1.5) {Width};
+        \node[annotation, below] (output_value) at (13.2, -1.5) {Output value};
+        \node[annotation, right] (trigger) at (21.5, 3.5) {Trigger outside (on/off),\\currently off\\(normal trigger)};
+
+        % Arrows
+        \draw[arrow] (output_on.east) -- (7.2, 17.2);
+        \draw[arrow] (output_off.west) -- (13.45, 17);
+        \draw[arrow] (direction.east) -- (0.2, 2);
+        \draw[arrow] ($(width.north) + (0.2, 0)$) -- (6.6, 0.7);
+        \draw[arrow] ($(output_value.north) + (-2.2, 0)$) -- (11, 0.7);
+        \draw[arrow] (trigger.west) -- (15.4, 2.25);
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{10mm}
 
 \newcommand{\titleAE}{Compass}
 \phantomsection
@@ -168,10 +309,45 @@ header-includes: |
     - Note: the arrow will always try to point north no matter the orientation
   - Outputs
 
-    <!-- TODO: Add image and annotations
-      - ![](media/image5.png){width="3.0243055555555554in"
-            height="2.2222222222222223in"}
-    -->
+\vspace{2mm}
+\begin{center}
+\begin{tikzpicture}
+    % Image in a node
+    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=21em]{compass}};
+    % Use the image as the bounding box of the tikzpicture for centering
+    \useasboundingbox (image.south east) rectangle (image.north west);
+
+    % Create scope with normalized axes
+    \begin{scope}[
+        x={($0.05*(image.south east)$)},
+        y={($0.05*(image.north west)$)}
+    ]
+        % Draw grid
+        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+        % Draw axes labels
+        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
+        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+
+        % Nodes
+        \node[annotation, left] (output_on) at (-1.5, 17) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off) at (21.5, 17) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left] (direction) at (-1.5, 2.7) {Direction};
+        \node[annotation, below] (width) at (6.4, -1.5) {Width};
+        \node[annotation, below] (output_value) at (11.8, -1.5) {Output value};
+        \node[annotation, right] (trigger) at (21.5, 4) {Trigger outside (on/off),\\currently off\\(normal trigger)};
+
+        % Arrows
+        \draw[arrow] (output_on.east) -- (9.55, 17);
+        \draw[arrow] (output_off.west) -- (15.9, 17);
+        \draw[arrow] (direction.east) -- (0.15, 2.7);
+        \draw[arrow] (width.north) -- (6.4, 1.1);
+        \draw[arrow] ($(output_value.north) + (-1.2, 0)$) -- (10.6, 1.1);
+        \draw[arrow] (trigger.west) -- (14.6, 3.3);
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{10mm}
 
 \newcommand{\titleAF}{Logic Gates}
 \phantomsection
@@ -191,10 +367,52 @@ header-includes: |
   - Output value: from $-1$ to $1$
   - Outputs
 
-    <!-- TODO: Add image and annotations
-      - ![](media/image6.png){width="3.720833333333333in"
-            height="1.5090277777777779in"}
-    -->
+\vspace{2mm}
+\begin{center}
+\begin{tikzpicture}
+    % Image in a node
+    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=26em]{logic_gate}};
+    % Use the image as the bounding box of the tikzpicture for centering
+    \useasboundingbox (image.south east) rectangle (image.north west);
+
+    % Create scope with normalized axes
+    \begin{scope}[
+        x={($0.05*(image.south east)$)},
+        y={($0.05*(image.north west)$)}
+    ]
+        % Draw grid
+        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+        % Draw axes labels
+        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
+        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+
+        % Nodes
+        \node[annotation, left] (output_on) at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off) at (21.5, 16.4) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left] (green_keybind) at (-1.5, 4.5) {Green keybind};
+        \node[annotation, below] (red_keybind) at (7.4, -1.5) {Red keybind};
+        \node[annotation, below] (toggle) at (1, -1.5) {Green/red toggle};
+        \node[annotation, below] (pause) at (11.7, -1.5) {Pause};
+        \node[annotation, below] (duration) at (15, -1.5) {Duration};
+        \node[annotation, right] (delay) at (21.5, 10) {Delay};
+        \node[annotation, right] (output_value) at (21.5, 3.1) {Output value};
+
+        % Arrows
+        \draw[arrow] (output_on.east) -- (8.8, 16.4);
+        \draw[arrow] (output_off.west) -- (13.35, 16.4);
+        \draw[arrow] (green_keybind.east) -- (0.1, 4.5);
+        \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
+        \draw[arrow] (toggle.north) -- (0.5, 1.7);
+        \draw[arrow] (toggle.north) -- (4.9, 2.1);
+        \draw[arrow] ($(pause.north) + (0.8, 0)$) -- (12.5, 0.3);
+        \draw[arrow] (duration.north) -- (13.5, 2.4);
+        \draw[arrow] (delay.west) -- (13.5, 5.5);
+        \draw[arrow] (output_value.west) -- (16.4, 3.1);
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\vspace{10mm}
 
 \newcommand{\titleB}{Output Value}
 \phantomsection
@@ -228,12 +446,10 @@ header-includes: |
   3) The gate multiplies the result by its output value
   4) The gate sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
   - Diagram made by Zoomah:
-
-    <!-- TODO: Add image and annotations
-      - ![](media/image7.png){width="5.300694444444445in"
-            height="1.511111111111111in"}
-    -->
-
+    \vspace{1mm}
+    \begin{center}
+    \hspace{-4.5em}\includegraphics[width=32em]{output_value_diagram}
+    \end{center}
   - Example
 
 An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When both of them are on at the same time (so the AND gate sends an output) the output values of the inputs are added up, $0.8 + 0.5 = 1.3$. Because $1.3$ is bigger than $1$, the gate replaces it with $1$, then that value is multiplied by the output value of the gate, $1 \cdot 0.5 = 0.5$, so the AND gate sends an output of $0.5$
