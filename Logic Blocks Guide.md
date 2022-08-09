@@ -67,7 +67,7 @@ header-includes: |
     \newcommand{\TOCLabelII}{\hspace{-0.225em} \color{black} \LabelItemI \hspace{0.5em}}
     \newcommand{\TOCLabelIII}{\hspace{-0.305em} \color{black} \LabelItemIII \hspace{0.5em}}
 
-    \newcommand{\TitleFormat}[1]{\LARGE \underline{#1}}
+    \newcommand{\TitleFormat}[1]{\centering \LARGE \underline{#1}}
     \newcommand{\TitleFormatI}[1]{\Large \underline{#1}}
     \newcommand{\TitleFormatII}[1]{\large #1}
     ```
