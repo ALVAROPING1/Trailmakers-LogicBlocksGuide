@@ -49,8 +49,11 @@ header-includes: |
 
     % Diagrams
     \usepackage{tikz}
-    \usetikzlibrary{positioning, fit, calc, arrows.meta}
-    \tikzset{annotation/.style={rectangle, draw=black, fill=white, thick, align=left, minimum height=6.6mm}}
+    \usetikzlibrary{positioning, fit, calc, arrows.meta, backgrounds}
+    \tikzset{rectangleNode/.style={rectangle, draw=black, fill=white, thick, minimum height=6.6mm}}
+    \tikzset{annotation/.style={rectangleNode, align=left}}
+    \tikzset{node/.style={rectangleNode, align=center, minimum width=30.4mm}}
+    \tikzset{hiddenNode/.style={rectangleNode, draw=none, fill=none, minimum width=5mm}}
     \tikzset{arrow/.style={-Triangle, thick}}
 
     % Images location
@@ -507,8 +510,83 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEA}
       - $n = \text{amount of cells}$
       - Diagram of the circuit:
-        <!-- TODO: diagram of the circuit-->
-      - You can add an extra AND gate to each cell, reverse the direction of their inputs (right to left rather than left to right) and add a second pulse generator as input connected to those extra AND gates to allow the value to go up and down rather than only up
+        \vspace{2mm}
+        \begin{tikzpicture}[trim left=8.1em]
+        % Nodes
+
+        % Cell 1
+        \node[node] (OR_1) {Toggled OR gate\\(output)};
+        \node[node] (AND_1) [below = 5mm of OR_1] {AND gate};
+        \coordinate[above=16pt of OR_1] (cell_1);
+
+        % Hidden cell 1
+        \node[hiddenNode] (OR_h1) [right = of OR_1] {};
+        \node[hiddenNode] (AND_h1) [right = of AND_1] {};
+
+        % Cell k
+        \node[node] (OR_k) [right = of OR_h1] {Toggled OR gate\\(output)};
+        \node[node] (AND_k) [right = of AND_h1] {AND gate};
+        \coordinate[above=16pt of OR_k] (cell_k);
+
+        % Cell k+1
+        \node[node] (OR_k+1) [right = of OR_k] {Toggled OR gate\\(output)};
+        \node[node] (AND_k+1) [right = of AND_k] {AND gate};
+        \coordinate[above=16pt of OR_k+1] (cell_k+1);
+
+        % Hidden cell 2
+        \node[hiddenNode] (OR_h2) [right = of OR_k+1] {};
+        \node[hiddenNode] (AND_h2) [right = of AND_k+1] {};
+
+        % Cell n
+        \node[node] (OR_n) [right = of OR_h2] {Toggled OR gate\\(output)};
+        \node[hiddenNode] (AND_n) [right = of AND_h2] {};
+        \coordinate[above=16pt of OR_n] (cell_n);
+
+        % Input gate
+        \node[node] (input) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node, fit=(OR_1)(AND_1)(cell_1), label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(OR_h1)(AND_h1)] {$\cdots$};
+            \node[node, fit=(OR_k)(AND_k)(cell_k), label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node, fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(OR_h2)(AND_h2)] {$\cdots$};
+            \node[node, fit=(OR_n)(AND_n)(cell_n), label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
+        \end{scope}
+
+        % Arrows
+
+        % Cell 1
+        \draw[arrow] (AND_1.east) -- +(0.5, 0) |- (OR_h1.west);
+        \draw[arrow] ($(OR_1.south) + (-2mm, 0)$) -- ($(AND_1.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_1.north) + (2mm, 0)$) -- ($(OR_1.south) + (2mm, 0)$);
+
+        % Hidden cell 1
+        \draw[arrow] (AND_h1.east) -- +(0.5, 0) |- (OR_k.west);
+
+        % Cell k
+        \draw[arrow] (AND_k.east) -- +(0.5, 0) |- (OR_k+1.west);
+        \draw[arrow] ($(OR_k.south) + (-2mm, 0)$) -- ($(AND_k.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_k.north) + (2mm, 0)$) -- ($(OR_k.south) + (2mm, 0)$);
+
+        % Cell k+1
+        \draw[arrow] (AND_k+1.east) -- +(0.5, 0) |- (OR_h2.west);
+        \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
+
+        % Hidden cell 2
+        \draw[arrow] (AND_h2.east) -- +(0.5, 0) |- (OR_n.west);
+
+        % Input gate
+        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_1.south);
+        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_h1.south);
+        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_k.south);
+        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_k+1.south);
+        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_h2.south);
+        \end{tikzpicture}\vspace{1mm}
+      - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
+      - To allow the value to be decreased, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
       - Requires a startup pulse to one of the toggled OR gates work (achieved with a 1 frame pulse generator)
       - Complexity (amount of logic gates used without the ones used to create the startup pulse as those can be reused)
         - 1-way: $2n$
