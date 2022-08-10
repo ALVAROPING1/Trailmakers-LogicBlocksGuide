@@ -503,7 +503,11 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
 - **\TitleFormatII{\titleCE}**
   - Can store the value of a variable with $n$ possible values
-  - There are 3 ways of doing it: general method, base 10 and binary. Which one uses less gates depends on the situation
+  - Depending on how it's made, it can be 1 or 2 way and have cycle or not
+    - 1-way: the value can only be increased
+    - 2-way: the value can be both increased and decreased
+    - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
+  - There are 3 ways of doing it: general circuit, base 10 and binary. Which one uses less gates depends on the situation
     \newcommand{\titleCEA}{General Circuit}
     - \titleCEA
       \phantomsection
