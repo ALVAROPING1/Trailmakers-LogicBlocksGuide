@@ -592,7 +592,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_h2.south);
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
-      - To allow the value to be decreased, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
+      - To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
       - Requires a startup pulse to one of the toggled OR gates work (achieved with a 1 frame pulse generator)
       - Complexity
         - 1-way: $2n$
