@@ -508,12 +508,13 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     - 1-way: the value can only be increased
     - 2-way: the value can be both increased and decreased
     - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
-  - There are 3 ways of doing it: general circuit, base 10 and binary. Which one uses less gates depends on the situation
+  - The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
+  - There are 3 ways of doing it: general circuit, base 10 and binary. Which one is least complex depends on the situation \
     \newcommand{\titleCEA}{General Circuit}
     - \titleCEA
       \phantomsection
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEA}
-      - $n = \text{amount of cells}$ \
+      - $n = \text{amount of cells}$
       - Diagram of the circuit:
         \vspace{2mm}
         \begin{tikzpicture}[trim left=8.1em]
@@ -593,7 +594,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
       - To allow the value to be decreased, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
       - Requires a startup pulse to one of the toggled OR gates work (achieved with a 1 frame pulse generator)
-      - Complexity (amount of logic gates used without the ones used to create the startup pulse as those can be reused)
+      - Complexity
         - 1-way: $2n$
         - 1-way+cycle: $2n + 1$
         - 2-way: $3n$
@@ -671,12 +672,12 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
         % Input gate
         \draw[arrow] (input.north) -- +(0, 0.5) -| (ANDs_1.south);
-        \end{tikzpicture}\vspace{1mm} \
+        \end{tikzpicture}\vspace{1mm}
       - To add cycle, add cycle to the last cell
       - To make it 2-way, make each cell 2-way and connect the cells in the same direction using the first AND gate of each cell rather than the last
       - Might require a decoder to be used (unless you just want to show numbers on a screen, you can use each cell as a digit of the number in that case), to create it you just need to take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
       - Requires a startup pulse to one of the toggled OR gates on each cell work (achieved with a 1 frame pulse generator)
-      - Complexity (amount of logic gates used without the ones used to create the startup pulse as those can be reused)
+      - Complexity
         - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 20$
         - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
         - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 30$
@@ -692,7 +693,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         <!-- TODO: diagram of the circuit-->
       - To make it 2-way you need to modify the input circuit to make the 1 frame pulse generator and the OR gate send an input directly to the AND gate in each cell (you can't skip the AND gate in the first cell in this case). Then, duplicate the input circuit and add a new AND gate to each cell, but make the OR gate have all *output 1* gates as input rather than all *output 2* gates. Connect the new AND gate in each cell in the same way the old AND gate was connected, but use all previous cells' *output 2* gates as input rather than all previous cells' *output 1* gates. Finally add a NOR gate with both AND gates from the first cell as input (this will be used for the decoder). To make this 2-way version cycle remove the OR gate from the input circuit and skip the AND gate for the increase direction in the first cell (connect the input directly to *output 1* for that cell)
       - Might require a decoder to be used, to create it you just need to take *n* AND gates and assign a different combination of either *output 1* or *output 2* from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates). If you are using the 2-way versions, all AND gates need to have the NOR gate (which has both AND gates from the first cell as input) as input to remove a false positive while changing values
-      - Complexity (amount of logic gates used without the always on sensor used to create the NOT gates nor gates used to create the startup pulse as those can be reused)
+      - Complexity
         - 1-way: $3 \ceil{\log_2 n} + 2$
         - 1-way+cycle: $3 \ceil{\log_2 n}$
         - 2-way: $4 \ceil{\log_2 n} + 5$
