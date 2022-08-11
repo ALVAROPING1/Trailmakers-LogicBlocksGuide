@@ -508,8 +508,9 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     - 1-way: the value can only be increased
     - 2-way: the value can be both increased and decreased
     - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
+    - Base designs are 1-way without cycle
   - The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
-  - There are 3 ways of doing it: general circuit, base 10 and binary. Which one is least complex depends on the situation \
+  - There are 3 ways of doing it: general circuit, base 10 and binary. Which one is least complex depends on the situation
     \newcommand{\titleCEA}{General Circuit}
     - \titleCEA
       \phantomsection
