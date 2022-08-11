@@ -604,11 +604,76 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     - \titleCEB
       \phantomsection
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEB}
-      - $n = 10^\text{amount of cells}; \text{ amount of cells} = \log_{10} n$
-      - Each cell is the general circuit for $n=10$ with cycle (except for the last cell which can have any value between $2$ and $10$ for $n$ and doesn't need to have cycle) and only the first cell with an input gate
+      - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
+      - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
       - Diagram of the circuit:
-        <!-- TODO: diagram of the circuit-->
-      - You can use the 2-way version of the general method for the cells to make it 2-way, the only thing that changes is that the AND gate of the extra gates that connects to the next cell is the first one rather than the last
+        \vspace{2mm}
+        \begin{tikzpicture}[trim left=8.1em]
+        % Nodes
+
+        % Cell 1
+        \node[node] (AND_final_1) {Last AND gate};
+        \node[node] (ANDs_1) [below = 1.5mm of AND_final_1] {All AND gates};
+        \coordinate[above=16pt of AND_final_1] (cell_1);
+
+        % Hidden cell 1
+        \node[hiddenNode] (AND_final_h1) [right = of AND_final_1] {};
+        \node[hiddenNode] (ANDs_h1) [right = of ANDs_1] {};
+
+        % Cell k
+        \node[node] (AND_final_k) [right = of AND_final_h1] {Last AND gate};
+        \node[node] (ANDs_k) [right = of ANDs_h1] {All AND gates};
+        \coordinate[above=16pt of AND_final_k] (cell_k);
+
+        % Cell k+1
+        \node[node] (AND_final_k+1) [right = of AND_final_k] {Last AND gate};
+        \node[node] (ANDs_k+1) [right = of ANDs_k] {All AND gates};
+        \coordinate[above=16pt of AND_final_k+1] (cell_k+1);
+
+        % Hidden cell 2
+        \node[hiddenNode] (AND_final_h2) [right = of AND_final_k+1] {};
+        \node[hiddenNode] (ANDs_h2) [right = of ANDs_k+1] {};
+
+        % Cell n
+        \node[hiddenNode] (AND_final_n) [right = of AND_final_h2] {};
+        \node[node] (ANDs_n) [right = of ANDs_h2] {All AND gates};
+        \coordinate[above=16pt of AND_final_n] (cell_n);
+
+        % Input gate
+        \node[node] (input) at ($(ANDs_k)!0.5!(ANDs_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node, fit=(ANDs_1)(AND_final_1)(cell_1), label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(ANDs_h1)(AND_final_h1)] {$\cdots$};
+            \node[node, fit=(ANDs_k)(AND_final_k)(cell_k), label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node, fit=(ANDs_k+1)(AND_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(ANDs_h2)(AND_final_h2)] {$\cdots$};
+            \node[node, fit=(ANDs_n)(AND_final_n)(cell_n), label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
+        \end{scope}
+
+        % Arrows
+
+        % Cell 1
+        \draw[arrow] (AND_final_1.east) -- +(0.5, 0) |- (ANDs_h1.west);
+
+        % Hidden cell 1
+        \draw[arrow] (AND_final_h1.east) -- +(0.5, 0) |- (ANDs_k.west);
+
+        % Cell k
+        \draw[arrow] (AND_final_k.east) -- +(0.5, 0) |- (ANDs_k+1.west);
+
+        % Cell k+1
+        \draw[arrow] (AND_final_k+1.east) -- +(0.5, 0) |- (ANDs_h2.west);
+
+        % Hidden cell 2
+        \draw[arrow] (AND_final_h2.east) -- +(0.5, 0) |- (ANDs_n.west);
+
+        % Input gate
+        \draw[arrow] (input.north) -- +(0, 0.5) -| (ANDs_1.south);
+        \end{tikzpicture}\vspace{1mm} \
+      - To add cycle, add cycle to the last cell
+      - To make it 2-way, make each cell 2-way and connect the cells in the same direction using the first AND gate of each cell rather than the last
       - Might require a decoder to be used (unless you just want to show numbers on a screen, you can use each cell as a digit of the number in that case), to create it you just need to take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
       - Requires a startup pulse to one of the toggled OR gates on each cell work (achieved with a 1 frame pulse generator)
       - Complexity (amount of logic gates used without the ones used to create the startup pulse as those can be reused)
