@@ -15,6 +15,7 @@ linkcolor: hyperlinkBlue
 urlcolor: hyperlinkBlue
 
 geometry: "left=3cm,right=3cm,top=2.5cm,bottom=2.5cm"
+
 header-includes: |
     ```{=latex}
     % Fonts
@@ -49,14 +50,15 @@ header-includes: |
     % Vertically center table cells
     \usepackage{array}
 
-    % Increase max nesting depth for lists
+    % Custom list labels
     \newcommand{\LabelItemI}{\labelitemfont \textbullet}
     \newcommand{\LabelItemII}{\labelitemfont \bfseries \textendash}
     \newcommand{\LabelItemIII}{\labelitemfont \rule[0.5ex]{0.6ex}{0.6ex}}
     \newcommand{\LabelItemIV}{\labelitemfont \textasteriskcentered}
 
+    % Increase max nesting depth for lists
     \usepackage{enumitem}
-
+    
     \setlistdepth{5}
 
     \setlist[itemize]{leftmargin=2em}
@@ -65,16 +67,21 @@ header-includes: |
     \setlist[itemize,3]{label=\LabelItemIII}
     \setlist[itemize,4]{label=\LabelItemIV}
     \setlist[itemize,5]{label=\LabelItemI}
-
+    
     \renewlist{itemize}{itemize}{5}
 
     % Diagrams
     \usepackage{tikz}
     \usetikzlibrary{positioning, fit, calc, arrows.meta, backgrounds}
+    % Basic node style
     \tikzset{rectangleNode/.style={rectangle, draw=black, fill=white, thick, minimum height=6.6mm}}
+    % Node style for image annotations
     \tikzset{annotation/.style={rectangleNode, align=left}}
+    % Node style for diagram nodes
     \tikzset{node/.style={rectangleNode, align=center, minimum width=30.4mm}}
+    % Node style for hidden diagram nodes
     \tikzset{hiddenNode/.style={rectangleNode, draw=none, fill=none, minimum width=5mm}}
+    % Style for arrows
     \tikzset{arrow/.style={-Triangle, thick}}
 
     % Images location
