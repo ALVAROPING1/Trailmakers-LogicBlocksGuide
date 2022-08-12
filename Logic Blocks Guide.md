@@ -39,7 +39,7 @@ header-includes: |
     \renewcommand\theadfont{\bfseries}
 
     % Increase table cell height
-    \renewcommand{\arraystretch}{1.45}
+    \renewcommand{\arraystretch}{1.4}
 
     % Increase table header height
     \renewcommand\theadgape{\Gape[5pt]}
@@ -83,6 +83,10 @@ header-includes: |
     \tikzset{hiddenNode/.style={rectangleNode, draw=none, fill=none, minimum width=5mm}}
     % Style for arrows
     \tikzset{arrow/.style={-Triangle, thick}}
+
+    % Plot graphs
+    \usepackage{pgfplots}
+    \pgfplotsset{every axis plot/.append style={very thick}}
 
     % Images location
     \graphicspath{ {img/} }
@@ -915,8 +919,23 @@ Note: this is just based on the amount of logic gates each method uses (unless t
     \cmidrule(l{-3pt}){4-6}
 \end{longtable}
 
-- Graph of the multiplier as a function of the output value
-  <!-- TODO: Add graph-->
+\vspace{-2mm}
+\hspace{-3.5em}
+\begin{tikzpicture}
+\begin{axis}[
+    height=27.5em,
+    width=42em,
+    title={Multiplier as a function of the output value},
+    xlabel={Output value},
+    ylabel={Multiplier},
+    xmin=0, xmax=1,
+    ymin=0, ymax=1,
+    minor tick num=1,
+    grid=both
+]
+\addplot[color=blue, mark=*] file {Output_Value_to_Multiplier.dat};
+\end{axis}
+\end{tikzpicture}
 
 \newcommand{\titleE}{Tips}
 \phantomsection
