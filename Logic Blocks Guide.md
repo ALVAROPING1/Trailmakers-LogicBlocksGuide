@@ -40,8 +40,14 @@ header-includes: |
     % Increase table cell height
     \renewcommand{\arraystretch}{1.45}
 
+    % Increase table header height
+    \renewcommand\theadgape{\Gape[5pt]}
+
     % Merge rows/columns in tables
     \usepackage{multirow}
+
+    % Vertically center table cells
+    \usepackage{array}
 
     % Increase max nesting depth for lists
     \newcommand{\LabelItemI}{\labelitemfont \textbullet}
@@ -721,69 +727,91 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       \phantomsection
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCED}
 
-+---+----------------------------+-------------------------------------+
-|   | **1-way**                  | **2-way**                           |
-+===+============================+=====================================+
-| > | Doesn't require an         | Doesn't require an individual       |
-|   | individual decoder:        | decoder:                            |
-| * |                            |                                     |
-| * | - For *n*\<6 use the     | - For *n*≤5 use the general       |
-| W |     general method         |     method                          |
-| i |                            |                                     |
-| t | - For *n*≥6 use the      | - For *n*\>5 use the binary       |
-| h |     binary method          |     method                          |
-| o |                            |                                     |
-| u | Requires an individual     | Requires an individual decoder:     |
-| t | decoder:                   |                                     |
-| > |                            | - For *n*≤10 use the general      |
-|   | - For *n*\<15 use the    |     method                          |
-| c |     general method         |                                     |
-| y |                            | - For *n>*10 use the binary       |
-| c | - For *n*≥15 use the     |     method                          |
-| l |     binary method          |                                     |
-| e |                            | Show values directly on a screen    |
-| * | Show values directly on a  | (only numbers for n>12)             |
-| * | screen (only numbers for   |                                     |
-|   | n>12)                      | - For *n*≤10 use the general      |
-|   |                            |     method                          |
-|   | - For *n*≤12 use the     |                                     |
-|   |     general method         | - For 10\<*n*\<15 use the binary  |
-|   |                            |     method                          |
-|   | - For *n*\>12 use the    |                                     |
-|   |     base 10 method         | - For *n*≥15 use the base 10      |
-|   |                            |     method                          |
-+---+----------------------------+-------------------------------------+
-| > | Doesn't require an         | Doesn't require an individual       |
-|   | individual decoder:        | decoder:                            |
-| * |                            |                                     |
-| * | - Use the binary method  | - For *n*≤3 use the general       |
-| W |                            |     method                          |
-| i | Requires an individual     |                                     |
-| t | decoder:                   | - For *n*\>3 use the binary       |
-| h |                            |     method                          |
-| > | - For *n*\<12 use the    |                                     |
-|   |     general method         | Requires an individual decoder:     |
-| c |                            |                                     |
-| y | - For *n*≥12 use the     | - For *n*≤6 use the general       |
-| c |     binary method          |     method                          |
-| l |                            |                                     |
-| e | Show values directly on a  | - For *n*\>6 use the binary       |
-| * | screen (only numbers for   |     method                          |
-| * | *n*\>12)                   |                                     |
-|   |                            | Show values directly on a screen    |
-|   | - For *n*\<12 use the    | (only numbers for *n*\>12)          |
-|   |     general method         |                                     |
-|   |                            | - For *n*≤6 use the general       |
-|   | - For *n*=12 use the     |     method                          |
-|   |     binary method          |                                     |
-|   |                            | - For 6\<*n*≤16 use the binary    |
-|   | - For *n*\>12 use the    |     method                          |
-|   |     base 10 method         |                                     |
-|   |                            | - For *n*\>16 use the base 10     |
-|   |                            |     method                          |
-+---+----------------------------+-------------------------------------+
+\vspace{2mm}
+\hspace{-0.85cm}
+\begin{tabular}{|c|m{18.35em}|m{18.35em}|}
+    \cline{2-3}
+    \multicolumn{1}{c|}{} & \thead{1-way} & \thead{2-way} \\
+    \hline
+    % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
+    \rotatebox[origin=c]{90}{\thead{Without cycle}}
+    &
+    Doesn’t require an individual decoder:
+    \begin{itemize}
+        \item For $n < 6$ use the general method
+        \item For $n \geq 6$ use the binary method
+    \end{itemize}
+    Requires an individual decoder:
+    \begin{itemize}
+        \item For $n < 15$ use the general method
+        \item For $n \geq 15$ use the binary method
+    \end{itemize}
+    Show values directly on a screen (only numbers for $n > 12$):
+    \begin{itemize}
+        \item For $n \leq 12$ use the general method
+        \item For $n > 12$ use the base 10 method
+        \newline
+    \end{itemize}
+    &
+    Doesn’t require an individual decoder:
+    \begin{itemize}
+        \item For $n \leq 5$ use the general method
+        \item For $n > 5$ use the binary method
+    \end{itemize}
+    Requires an individual decoder:
+    \begin{itemize}
+        \item For $n \leq 10$ use the general method
+        \item For $n > 10$ use the binary method
+    \end{itemize}
+    Show values directly on a screen (only numbers for $n > 12$):
+    \begin{itemize}
+        \item For $n \leq 10$ use the general method
+        \item For $10 < n < 15$ use the binary method
+        \item For $n \geq 15$ use the base 10 method
+    \end{itemize} \\
+    \hline
+    \rotatebox[origin=c]{90}{\thead{With cycle}}
+    &
+    Doesn’t require an individual decoder:
+    \begin{itemize}
+        \item Use the binary method
+        \newline
+    \end{itemize}
+    Requires an individual decoder:
+    \begin{itemize}
+        \item For $n < 12$ use the general method
+        \item For $n \geq 12$ use the binary method
+    \end{itemize}
+    Show values directly on a screen (only numbers for $n > 12$):
+    \begin{itemize}
+        \item For $n < 12$ use the general method
+        \item For $n = 12$ use the binary method
+        \item For $n > 12$ use the base 10 method
+    \end{itemize}
+    &
+    Doesn’t require an individual decoder:
+    \begin{itemize}
+        \item For $n \leq 3$ use the general method
+        \item For $n > 3$ use the binary method
+    \end{itemize}
+    Requires an individual decoder:
+    \begin{itemize}
+        \item For $n \leq 6$ use the general method
+        \item For $n > 6$ use the binary method
+    \end{itemize}
+    Show values directly on a screen (only numbers for $n > 12$):
+    \begin{itemize}
+        \item For $n \leq 6$ use the general method
+        \item For $6 < n \leq 16$ use the binary method
+        \item For $n > 16$ use the base 10 method
+    \end{itemize} \\
+    \hline
+\end{tabular}
+\
 
 Note: this is just based on the amount of logic gates each method uses (unless there is a tie, in which case speed is used), however the amount of time it takes for the system to update might also matter depending on the situation, in which case on average the fastest is the general method, followed by the binary method and lastly the base 10 method (in the 1-way version the binary and base 10 positions must be swapped)
+
+\clearpage
 
 \newcommand{\titleD}{Output value to multiplier table for hinges}
 \phantomsection
