@@ -148,22 +148,22 @@ header-includes: |
         %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
         % Draw axes labels
-        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
-        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
         % Nodes
-        \node[annotation, left] (output_on) at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off) at (21.5, 16.4) {Output (off)\\(won’t send an\\input to it)};
-        \node[annotation, left] (range) at (-1.5, 3) {Range};
-        \node[annotation, below] (output_value) at (8.5, -1.5) {Output value};
-        \node[annotation, right] (trigger) at (21.5, 0) {Invert trigger (on/off),\\currently off\\(normal trigger)};
+        \node[annotation, left]  (output_on)    at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off)   at (21.5, 16.4) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left]  (range)        at (-1.5, 3)    {Range};
+        \node[annotation, below] (output_value) at (8.5, -1.5)  {Output value};
+        \node[annotation, right] (trigger)      at (21.5, 0)    {Invert trigger (on/off),\\currently off\\(normal trigger)};
 
         % Arrows
-        \draw[arrow] (output_on.east) -- (4.4, 16.4);
-        \draw[arrow] (output_off.west) -- (9.8, 16.4);
-        \draw[arrow] (range.east) -- (0.3, 3);
+        \draw[arrow] (output_on.east)     -- (4.4, 16.4);
+        \draw[arrow] (output_off.west)    -- (9.8, 16.4);
+        \draw[arrow] (range.east)         -- (0.3, 3);
         \draw[arrow] (output_value.north) -- (8.5, 0.7);
-        \draw[arrow] (trigger.west) -- (14, 4.5);
+        \draw[arrow] (trigger.west)       -- (14, 4.5);
     \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -202,24 +202,24 @@ header-includes: |
         %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
         % Draw axes labels
-        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
-        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
         % Nodes
-        \node[annotation, left] (output_on) at (-1.5, 16.2) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off) at (21.5, 16.2) {Output (off)\\(won’t send an\\input to it)};
-        \node[annotation, left] (altitude) at (-1.5, 2.5) {Altitude};
-        \node[annotation, below] (output_value) at (4.9, -1.5) {Output value};
+        \node[annotation, left]  (output_on)       at (-1.5, 16.2) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off)      at (21.5, 16.2) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left]  (altitude)        at (-1.5, 2.5)  {Altitude};
+        \node[annotation, below] (output_value)    at (4.9, -1.5)  {Output value};
         \node[annotation, below] (reference_frame) at (12.2, -1.5) {Frame of reference};
-        \node[annotation, right] (trigger) at (21.5, -2.5) {Trigger below (on/off),\\currently off\\(normal trigger)};
+        \node[annotation, right] (trigger)         at (21.5, -2.5) {Trigger below (on/off),\\currently off\\(normal trigger)};
 
         % Arrows
-        \draw[arrow] (output_on.east) -- (7.75, 16.2);
-        \draw[arrow] (output_off.west) -- (14.75, 16.2);
-        \draw[arrow] (altitude.east) -- (0.15, 2.5);
-        \draw[arrow] ($(output_value.north) + (1, 0)$) -- (5.9, 0.6);
+        \draw[arrow] (output_on.east)                        -- (7.75, 16.2);
+        \draw[arrow] (output_off.west)                       -- (14.75, 16.2);
+        \draw[arrow] (altitude.east)                         -- (0.15, 2.5);
+        \draw[arrow] ($(output_value.north) + (1, 0)$)       -- (5.9, 0.6);
         \draw[arrow] ($(reference_frame.north) + (-1.6, 0)$) -- (10.6, 1.55);
-        \draw[arrow] (trigger.west) -- (16.2, 1.7);
+        \draw[arrow] (trigger.west)                          -- (16.2, 1.7);
     \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -255,22 +255,22 @@ header-includes: |
         %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
         % Draw axes labels
-        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
-        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
         % Nodes
-        \node[annotation, left] (output_on) at (-1.5, 15.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off) at (21.5, 15.3) {Output (off)\\(won’t send an\\input to it)};
-        \node[annotation, left] (speed) at (-1.5, 2.1) {Speed};
-        \node[annotation, below] (output_value) at (7.7, -1.5) {Output value};
-        \node[annotation, right] (trigger) at (21.5, 0) {Trigger below (on/off),\\currently off\\(normal trigger)};
+        \node[annotation, left]  (output_on)    at (-1.5, 15.4) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off)   at (21.5, 15.3) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left]  (speed)        at (-1.5, 2.1)  {Speed};
+        \node[annotation, below] (output_value) at (7.7, -1.5)  {Output value};
+        \node[annotation, right] (trigger)      at (21.5, 0)    {Trigger below (on/off),\\currently off\\(normal trigger)};
 
         % Arrows
-        \draw[arrow] (output_on.east) -- (5.25, 15.4);
-        \draw[arrow] (output_off.west) -- (11.65, 15.3);
-        \draw[arrow] (speed.east) -- (0.2, 2.1);
+        \draw[arrow] (output_on.east)     -- (5.25, 15.4);
+        \draw[arrow] (output_off.west)    -- (11.65, 15.3);
+        \draw[arrow] (speed.east)         -- (0.2, 2.1);
         \draw[arrow] (output_value.north) -- (7.7, 0.45);
-        \draw[arrow] (trigger.west) -- (12.7, 3.4);
+        \draw[arrow] (trigger.west)       -- (12.7, 3.4);
     \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -307,24 +307,24 @@ header-includes: |
         %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
         % Draw axes labels
-        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
-        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
         % Nodes
-        \node[annotation, left] (output_on) at (-1.5, 17.2) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off) at (21.5, 17) {Output (off)\\(won’t send an\\input to it)};
-        \node[annotation, left] (direction) at (-1.5, 2) {Direction};
-        \node[annotation, below] (width) at (6.4, -1.5) {Width};
+        \node[annotation, left]  (output_on)    at (-1.5, 17.2) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left]  (direction)    at (-1.5, 2)    {Direction};
+        \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
         \node[annotation, below] (output_value) at (13.2, -1.5) {Output value};
-        \node[annotation, right] (trigger) at (21.5, 3.5) {Trigger outside (on/off),\\currently off\\(normal trigger)};
+        \node[annotation, right] (trigger)      at (21.5, 3.5)  {Trigger outside (on/off),\\currently off\\(normal trigger)};
 
         % Arrows
-        \draw[arrow] (output_on.east) -- (7.2, 17.2);
-        \draw[arrow] (output_off.west) -- (13.45, 17);
-        \draw[arrow] (direction.east) -- (0.2, 2);
-        \draw[arrow] ($(width.north) + (0.2, 0)$) -- (6.6, 0.7);
+        \draw[arrow] (output_on.east)                     -- (7.2, 17.2);
+        \draw[arrow] (output_off.west)                    -- (13.45, 17);
+        \draw[arrow] (direction.east)                     -- (0.2, 2);
+        \draw[arrow] ($(width.north) + (0.2, 0)$)         -- (6.6, 0.7);
         \draw[arrow] ($(output_value.north) + (-2.2, 0)$) -- (11, 0.7);
-        \draw[arrow] (trigger.west) -- (15.4, 2.25);
+        \draw[arrow] (trigger.west)                       -- (15.4, 2.25);
     \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -361,24 +361,24 @@ header-includes: |
         %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
         % Draw axes labels
-        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
-        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
         % Nodes
-        \node[annotation, left] (output_on) at (-1.5, 17) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off) at (21.5, 17) {Output (off)\\(won’t send an\\input to it)};
-        \node[annotation, left] (direction) at (-1.5, 2.7) {Direction};
-        \node[annotation, below] (width) at (6.4, -1.5) {Width};
+        \node[annotation, left]  (output_on)    at (-1.5, 17)   {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left]  (direction)    at (-1.5, 2.7)  {Direction};
+        \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
         \node[annotation, below] (output_value) at (11.8, -1.5) {Output value};
-        \node[annotation, right] (trigger) at (21.5, 4) {Trigger outside (on/off),\\currently off\\(normal trigger)};
+        \node[annotation, right] (trigger)      at (21.5, 4)    {Trigger outside (on/off),\\currently off\\(normal trigger)};
 
         % Arrows
-        \draw[arrow] (output_on.east) -- (9.55, 17);
-        \draw[arrow] (output_off.west) -- (15.9, 17);
-        \draw[arrow] (direction.east) -- (0.15, 2.7);
-        \draw[arrow] (width.north) -- (6.4, 1.1);
+        \draw[arrow] (output_on.east)                     -- (9.55, 17);
+        \draw[arrow] (output_off.west)                    -- (15.9, 17);
+        \draw[arrow] (direction.east)                     -- (0.15, 2.7);
+        \draw[arrow] (width.north)                        -- (6.4, 1.1);
         \draw[arrow] ($(output_value.north) + (-1.2, 0)$) -- (10.6, 1.1);
-        \draw[arrow] (trigger.west) -- (14.6, 3.3);
+        \draw[arrow] (trigger.west)                       -- (14.6, 3.3);
     \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -419,31 +419,31 @@ header-includes: |
         %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
         % Draw axes labels
-        %\foreach \x in {0,1,...,20} { \node [below] at (\x,0) {\tiny \x}; }
-        %\foreach \y in {0,1,...,20} { \node [left] at (0,\y) {\tiny \y};}
+        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
         % Nodes
-        \node[annotation, left] (output_on) at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off) at (21.5, 16.4) {Output (off)\\(won’t send an\\input to it)};
-        \node[annotation, left] (green_keybind) at (-1.5, 4.5) {Green keybind};
-        \node[annotation, below] (red_keybind) at (7.4, -1.5) {Red keybind};
-        \node[annotation, below] (toggle) at (1, -1.5) {Green/red toggle};
-        \node[annotation, below] (pause) at (11.7, -1.5) {Pause};
-        \node[annotation, below] (duration) at (15, -1.5) {Duration};
-        \node[annotation, right] (delay) at (21.5, 10) {Delay};
-        \node[annotation, right] (output_value) at (21.5, 3.1) {Output value};
+        \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+        \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
+        \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
+        \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+        \node[annotation, below] (pause)         at (11.7, -1.5) {Pause};
+        \node[annotation, below] (duration)      at (15, -1.5)   {Duration};
+        \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
+        \node[annotation, right] (output_value)  at (21.5, 3.1)  {Output value};
 
         % Arrows
-        \draw[arrow] (output_on.east) -- (8.8, 16.4);
-        \draw[arrow] (output_off.west) -- (13.35, 16.4);
-        \draw[arrow] (green_keybind.east) -- (0.1, 4.5);
+        \draw[arrow] (output_on.east)                   -- (8.8, 16.4);
+        \draw[arrow] (output_off.west)                  -- (13.35, 16.4);
+        \draw[arrow] (green_keybind.east)               -- (0.1, 4.5);
         \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
-        \draw[arrow] (toggle.north) -- (0.5, 1.7);
-        \draw[arrow] (toggle.north) -- (4.9, 2.1);
-        \draw[arrow] ($(pause.north) + (0.8, 0)$) -- (12.5, 0.3);
-        \draw[arrow] (duration.north) -- (13.5, 2.4);
-        \draw[arrow] (delay.west) -- (13.5, 5.5);
-        \draw[arrow] (output_value.west) -- (16.4, 3.1);
+        \draw[arrow] (toggle.north)                     -- (0.5, 1.7);
+        \draw[arrow] (toggle.north)                     -- (4.9, 2.1);
+        \draw[arrow] ($(pause.north) + (0.8, 0)$)       -- (12.5, 0.3);
+        \draw[arrow] (duration.north)                   -- (13.5, 2.4);
+        \draw[arrow] (delay.west)                       -- (13.5, 5.5);
+        \draw[arrow] (output_value.west)                -- (16.4, 3.1);
     \end{scope}
 \end{tikzpicture}
 \end{center}
@@ -554,60 +554,60 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         % Nodes
 
         % Cell 1
-        \node[node] (OR_1) {Toggled OR gate\\(output)};
-        \node[node] (AND_1) [below = 5mm of OR_1] {AND gate};
-        \coordinate[above=16pt of OR_1] (cell_1);
+        \node[node]       (OR_1)                          {Toggled OR gate\\(output)};
+        \node[node]       (AND_1)   [below = 5mm of OR_1] {AND gate};
+        \coordinate[above=16pt of OR_1]   (cell_1);
 
         % Hidden cell 1
-        \node[hiddenNode] (OR_h1) [right = of OR_1] {};
-        \node[hiddenNode] (AND_h1) [right = of AND_1] {};
+        \node[hiddenNode] (OR_h1)   [right = of OR_1]     {};
+        \node[hiddenNode] (AND_h1)  [right = of AND_1]    {};
 
         % Cell k
-        \node[node] (OR_k) [right = of OR_h1] {Toggled OR gate\\(output)};
-        \node[node] (AND_k) [right = of AND_h1] {AND gate};
-        \coordinate[above=16pt of OR_k] (cell_k);
+        \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\(output)};
+        \node[node]       (AND_k)   [right = of AND_h1]   {AND gate};
+        \coordinate[above=16pt of OR_k]   (cell_k);
 
         % Cell k+1
-        \node[node] (OR_k+1) [right = of OR_k] {Toggled OR gate\\(output)};
-        \node[node] (AND_k+1) [right = of AND_k] {AND gate};
+        \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\(output)};
+        \node[node]       (AND_k+1) [right = of AND_k]    {AND gate};
         \coordinate[above=16pt of OR_k+1] (cell_k+1);
 
         % Hidden cell 2
-        \node[hiddenNode] (OR_h2) [right = of OR_k+1] {};
-        \node[hiddenNode] (AND_h2) [right = of AND_k+1] {};
+        \node[hiddenNode] (OR_h2)   [right = of OR_k+1]   {};
+        \node[hiddenNode] (AND_h2)  [right = of AND_k+1]  {};
 
         % Cell n
-        \node[node] (OR_n) [right = of OR_h2] {Toggled OR gate\\(output)};
-        \node[hiddenNode] (AND_n) [right = of AND_h2] {};
-        \coordinate[above=16pt of OR_n] (cell_n);
+        \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\(output)};
+        \node[hiddenNode] (AND_n)   [right = of AND_h2]   {};
+        \coordinate[above=16pt of OR_n]   (cell_n);
 
         % Input gate
         \node[node] (input) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
 
         % Cell bounding boxes
         \begin{scope}[on background layer]
-            \node[node, fit=(OR_1)(AND_1)(cell_1), label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(OR_h1)(AND_h1)] {$\cdots$};
-            \node[node, fit=(OR_k)(AND_k)(cell_k), label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node, fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(OR_h2)(AND_h2)] {$\cdots$};
-            \node[node, fit=(OR_n)(AND_n)(cell_n), label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
+            \node[node,       fit=(OR_1)(AND_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(OR_h1)(AND_h1)]             {$\cdots$};
+            \node[node,       fit=(OR_k)(AND_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(OR_h2)(AND_h2)]             {$\cdots$};
+            \node[node,       fit=(OR_n)(AND_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
         \end{scope}
 
         % Arrows
 
         % Cell 1
         \draw[arrow] (AND_1.east) -- +(0.5, 0) |- (OR_h1.west);
-        \draw[arrow] ($(OR_1.south) + (-2mm, 0)$) -- ($(AND_1.north) + (-2mm, 0)$);
-        \draw[arrow] ($(AND_1.north) + (2mm, 0)$) -- ($(OR_1.south) + (2mm, 0)$);
+        \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
 
         % Hidden cell 1
         \draw[arrow] (AND_h1.east) -- +(0.5, 0) |- (OR_k.west);
 
         % Cell k
         \draw[arrow] (AND_k.east) -- +(0.5, 0) |- (OR_k+1.west);
-        \draw[arrow] ($(OR_k.south) + (-2mm, 0)$) -- ($(AND_k.north) + (-2mm, 0)$);
-        \draw[arrow] ($(AND_k.north) + (2mm, 0)$) -- ($(OR_k.south) + (2mm, 0)$);
+        \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
 
         % Cell k+1
         \draw[arrow] (AND_k+1.east) -- +(0.5, 0) |- (OR_h2.west);
@@ -646,65 +646,65 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         % Nodes
 
         % Cell 1
-        \node[node] (AND_final_1) {Last AND gate};
-        \node[node] (ANDs_1) [below = 1.5mm of AND_final_1] {All AND gates};
-        \coordinate[above=16pt of AND_final_1] (cell_1);
+        \node[node]       (AND_final_1)                                  {Last AND gate};
+        \node[node]       (ANDs_1)        [below = 1.5mm of AND_final_1] {All AND gates};
+        \coordinate[above=16pt of AND_final_1]   (cell_1);
 
         % Hidden cell 1
-        \node[hiddenNode] (AND_final_h1) [right = of AND_final_1] {};
-        \node[hiddenNode] (ANDs_h1) [right = of ANDs_1] {};
+        \node[hiddenNode] (AND_final_h1)  [right = of AND_final_1]       {};
+        \node[hiddenNode] (ANDs_h1)       [right = of ANDs_1]            {};
 
         % Cell k
-        \node[node] (AND_final_k) [right = of AND_final_h1] {Last AND gate};
-        \node[node] (ANDs_k) [right = of ANDs_h1] {All AND gates};
-        \coordinate[above=16pt of AND_final_k] (cell_k);
+        \node[node]       (AND_final_k)   [right = of AND_final_h1]      {Last AND gate};
+        \node[node]       (ANDs_k)        [right = of ANDs_h1]           {All AND gates};
+        \coordinate[above=16pt of AND_final_k]   (cell_k);
 
         % Cell k+1
-        \node[node] (AND_final_k+1) [right = of AND_final_k] {Last AND gate};
-        \node[node] (ANDs_k+1) [right = of ANDs_k] {All AND gates};
+        \node[node]       (AND_final_k+1) [right = of AND_final_k]       {Last AND gate};
+        \node[node]       (ANDs_k+1)      [right = of ANDs_k]            {All AND gates};
         \coordinate[above=16pt of AND_final_k+1] (cell_k+1);
 
         % Hidden cell 2
-        \node[hiddenNode] (AND_final_h2) [right = of AND_final_k+1] {};
-        \node[hiddenNode] (ANDs_h2) [right = of ANDs_k+1] {};
+        \node[hiddenNode] (AND_final_h2)  [right = of AND_final_k+1]     {};
+        \node[hiddenNode] (ANDs_h2)       [right = of ANDs_k+1]          {};
 
         % Cell n
-        \node[hiddenNode] (AND_final_n) [right = of AND_final_h2] {};
-        \node[node] (ANDs_n) [right = of ANDs_h2] {All AND gates};
-        \coordinate[above=16pt of AND_final_n] (cell_n);
+        \node[hiddenNode] (AND_final_n)   [right = of AND_final_h2]      {};
+        \node[node]       (ANDs_n)        [right = of ANDs_h2]           {All AND gates};
+        \coordinate[above=16pt of AND_final_n]   (cell_n);
 
         % Input gate
         \node[node] (input) at ($(ANDs_k)!0.5!(ANDs_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
 
         % Cell bounding boxes
         \begin{scope}[on background layer]
-            \node[node, fit=(ANDs_1)(AND_final_1)(cell_1), label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(ANDs_h1)(AND_final_h1)] {$\cdots$};
-            \node[node, fit=(ANDs_k)(AND_final_k)(cell_k), label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node, fit=(ANDs_k+1)(AND_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(ANDs_h2)(AND_final_h2)] {$\cdots$};
-            \node[node, fit=(ANDs_n)(AND_final_n)(cell_n), label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
+            \node[node,       fit=(ANDs_1)(AND_final_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(ANDs_h1)(AND_final_h1)]             {$\cdots$};
+            \node[node,       fit=(ANDs_k)(AND_final_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(ANDs_k+1)(AND_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(ANDs_h2)(AND_final_h2)]             {$\cdots$};
+            \node[node,       fit=(ANDs_n)(AND_final_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
         \end{scope}
 
         % Arrows
 
         % Cell 1
-        \draw[arrow] (AND_final_1.east) -- +(0.5, 0) |- (ANDs_h1.west);
+        \draw[arrow] (AND_final_1.east)   -- +(0.5, 0) |- (ANDs_h1.west);
 
         % Hidden cell 1
-        \draw[arrow] (AND_final_h1.east) -- +(0.5, 0) |- (ANDs_k.west);
+        \draw[arrow] (AND_final_h1.east)  -- +(0.5, 0) |- (ANDs_k.west);
 
         % Cell k
-        \draw[arrow] (AND_final_k.east) -- +(0.5, 0) |- (ANDs_k+1.west);
+        \draw[arrow] (AND_final_k.east)   -- +(0.5, 0) |- (ANDs_k+1.west);
 
         % Cell k+1
         \draw[arrow] (AND_final_k+1.east) -- +(0.5, 0) |- (ANDs_h2.west);
 
         % Hidden cell 2
-        \draw[arrow] (AND_final_h2.east) -- +(0.5, 0) |- (ANDs_n.west);
+        \draw[arrow] (AND_final_h2.east)  -- +(0.5, 0) |- (ANDs_n.west);
 
         % Input gate
-        \draw[arrow] (input.north) -- +(0, 0.5) -| (ANDs_1.south);
+        \draw[arrow] (input.north)        -- +(0, 0.5) -| (ANDs_1.south);
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, add cycle to the last cell
       - To make it 2-way, make each cell 2-way and connect the cells in the same direction using the first AND gate of each cell rather than the last
