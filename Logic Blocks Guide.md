@@ -749,34 +749,34 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     &
     Doesn’t require an individual decoder:
     \begin{itemize}
-        \item For $n < 6$ use the general method
+        \item For $n < 6$ use the general circuit
         \item For $n \geq 6$ use the binary method
     \end{itemize}
     Requires an individual decoder:
     \begin{itemize}
-        \item For $n < 15$ use the general method
+        \item For $n < 15$ use the general circuit
         \item For $n \geq 15$ use the binary method
     \end{itemize}
     Show values directly on a screen (only numbers for $n > 12$):
     \begin{itemize}
-        \item For $n \leq 12$ use the general method
+        \item For $n \leq 12$ use the general circuit
         \item For $n > 12$ use the base 10 method
         \newline
     \end{itemize}
     &
     Doesn’t require an individual decoder:
     \begin{itemize}
-        \item For $n \leq 5$ use the general method
+        \item For $n \leq 5$ use the general circuit
         \item For $n > 5$ use the binary method
     \end{itemize}
     Requires an individual decoder:
     \begin{itemize}
-        \item For $n \leq 10$ use the general method
+        \item For $n \leq 10$ use the general circuit
         \item For $n > 10$ use the binary method
     \end{itemize}
     Show values directly on a screen (only numbers for $n > 12$):
     \begin{itemize}
-        \item For $n \leq 10$ use the general method
+        \item For $n \leq 10$ use the general circuit
         \item For $10 < n < 15$ use the binary method
         \item For $n \geq 15$ use the base 10 method
     \end{itemize} \\
@@ -790,29 +790,29 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     \end{itemize}
     Requires an individual decoder:
     \begin{itemize}
-        \item For $n < 12$ use the general method
+        \item For $n < 12$ use the general circuit
         \item For $n \geq 12$ use the binary method
     \end{itemize}
     Show values directly on a screen (only numbers for $n > 12$):
     \begin{itemize}
-        \item For $n < 12$ use the general method
+        \item For $n < 12$ use the general circuit
         \item For $n = 12$ use the binary method
         \item For $n > 12$ use the base 10 method
     \end{itemize}
     &
     Doesn’t require an individual decoder:
     \begin{itemize}
-        \item For $n \leq 3$ use the general method
+        \item For $n \leq 3$ use the general circuit
         \item For $n > 3$ use the binary method
     \end{itemize}
     Requires an individual decoder:
     \begin{itemize}
-        \item For $n \leq 6$ use the general method
+        \item For $n \leq 6$ use the general circuit
         \item For $n > 6$ use the binary method
     \end{itemize}
     Show values directly on a screen (only numbers for $n > 12$):
     \begin{itemize}
-        \item For $n \leq 6$ use the general method
+        \item For $n \leq 6$ use the general circuit
         \item For $6 < n \leq 16$ use the binary method
         \item For $n > 16$ use the base 10 method
     \end{itemize} \\
@@ -820,7 +820,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 \end{tabular}
 \
 
-Note: this is just based on the amount of logic gates each method uses (unless there is a tie, in which case speed is used), however the amount of time it takes for the system to update might also matter depending on the situation, in which case on average the fastest is the general method, followed by the binary method and lastly the base 10 method (in the 1-way version the binary and base 10 positions must be swapped)
+Note: this is just based on the amount of logic gates each method uses (unless there is a tie, in which case speed is used), however the amount of time it takes for the system to update might also matter depending on the situation, in which case on average the fastest is the general circuit, followed by the binary method and lastly the base 10 method (in the 1-way version the binary and base 10 positions must be swapped)
 
 \clearpage
 
