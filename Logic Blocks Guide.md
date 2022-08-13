@@ -922,19 +922,21 @@ Note: this is just based on the amount of logic gates each method uses (unless t
 \vspace{-2mm}
 \hspace{-3.5em}
 \begin{tikzpicture}
-\begin{axis}[
-    height=27.5em,
-    width=42em,
-    title={Multiplier as a function of the output value},
-    xlabel={Output value},
-    ylabel={Multiplier},
-    xmin=0, xmax=1,
-    ymin=0, ymax=1,
-    minor tick num=1,
-    grid=both
-]
-\addplot[color=blue, mark=*] file {Output_Value_to_Multiplier.dat};
-\end{axis}
+    \begin{axis}[
+        height=27.5em,
+        width=42em,
+        title={Multiplier as a function of the output value},
+        xlabel={Output value},
+        ylabel={Multiplier},
+        domain = 0:1,
+        xmin=0, xmax=1,
+        ymin=0, ymax=1,
+        minor tick num=1,
+        grid=both
+    ]
+        \addplot[color=blue, mark=*] file {Output_Value_to_Multiplier.dat};
+        \addplot[color=black, samples=3] {x} node[above left, midway] {$y=x$};
+    \end{axis}
 \end{tikzpicture}
 
 \newcommand{\titleE}{Tips}
