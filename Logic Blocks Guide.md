@@ -597,25 +597,25 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         % Arrows
 
         % Cell 1
-        \draw[arrow] (AND_1.east) -- +(0.5, 0) |- (OR_h1.west);
+        \draw[arrow] (AND_1.east)   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
         \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
         \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
 
         % Hidden cell 1
-        \draw[arrow] (AND_h1.east) -- +(0.5, 0) |- (OR_k.west);
+        \draw[arrow] (AND_h1.east)  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
 
         % Cell k
-        \draw[arrow] (AND_k.east) -- +(0.5, 0) |- (OR_k+1.west);
+        \draw[arrow] (AND_k.east)   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
         \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
         \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
 
         % Cell k+1
-        \draw[arrow] (AND_k+1.east) -- +(0.5, 0) |- (OR_h2.west);
+        \draw[arrow] (AND_k+1.east) -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
         \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
         \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
 
         % Hidden cell 2
-        \draw[arrow] (AND_h2.east) -- +(0.5, 0) |- (OR_n.west);
+        \draw[arrow] (AND_h2.east)  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
 
         % Input gate
         \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_1.south);
@@ -689,19 +689,19 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         % Arrows
 
         % Cell 1
-        \draw[arrow] (AND_final_1.east)   -- +(0.5, 0) |- (ANDs_h1.west);
+        \draw[arrow] (AND_final_1.east)   -- ($(AND_final_1.east)!0.5!(AND_final_h1.west)$)   |- (ANDs_h1.west);
 
         % Hidden cell 1
-        \draw[arrow] (AND_final_h1.east)  -- +(0.5, 0) |- (ANDs_k.west);
+        \draw[arrow] (AND_final_h1.east)  -- ($(AND_final_h1.east)!0.5!(AND_final_k.west)$)   |- (ANDs_k.west);
 
         % Cell k
-        \draw[arrow] (AND_final_k.east)   -- +(0.5, 0) |- (ANDs_k+1.west);
+        \draw[arrow] (AND_final_k.east)   -- ($(AND_final_k.east)!0.5!(AND_final_k+1.west)$)  |- (ANDs_k+1.west);
 
         % Cell k+1
-        \draw[arrow] (AND_final_k+1.east) -- +(0.5, 0) |- (ANDs_h2.west);
+        \draw[arrow] (AND_final_k+1.east) -- ($(AND_final_k+1.east)!0.5!(AND_final_h2.west)$) |- (ANDs_h2.west);
 
         % Hidden cell 2
-        \draw[arrow] (AND_final_h2.east)  -- +(0.5, 0) |- (ANDs_n.west);
+        \draw[arrow] (AND_final_h2.east)  -- ($(AND_final_h2.east)!0.5!(AND_final_n.west)$)   |- (ANDs_n.west);
 
         % Input gate
         \draw[arrow] (input.north)        -- +(0, 0.5) -| (ANDs_1.south);
