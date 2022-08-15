@@ -586,7 +586,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \coordinate[above=16pt of OR_n]   (cell_n);
 
         % Input gate
-        \node[node] (input) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+        \node[node] (input_pulse) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
 
         % Cell bounding boxes
         \begin{scope}[on background layer]
@@ -601,32 +601,34 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         % Arrows
 
         % Cell 1
-        \draw[arrow] (AND_1.east)   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
+        \draw[arrow] (AND_1.east)                   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
         \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
         \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
 
         % Hidden cell 1
-        \draw[arrow] (AND_h1.east)  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
+        \draw[arrow] (AND_h1.east)                  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
 
         % Cell k
-        \draw[arrow] (AND_k.east)   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
+        \draw[arrow] (AND_k.east)                   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
         \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
         \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
 
         % Cell k+1
-        \draw[arrow] (AND_k+1.east) -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
+        \draw[arrow] (AND_k+1.east)                 -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
         \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
         \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
 
         % Hidden cell 2
-        \draw[arrow] (AND_h2.east)  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
+        \draw[arrow] (AND_h2.east)                  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
 
         % Input gate
-        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_1.south);
-        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_h1.south);
-        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_k.south);
-        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_k+1.south);
-        \draw[arrow] (input.north) -- +(0, 0.5) -| (AND_h2.south);
+        \coordinate  (input) at ($(input_pulse.north) + (0, 0.5)$);
+        \draw[line]  (input_pulse.north)            -- (input);
+        \draw[arrow] (input)                        -| (AND_1.south);
+        \draw[arrow] (input)                        -| (AND_h2.south);
+        \draw[arrow] (input -| AND_h1)              -- (AND_h1.south);
+        \draw[arrow] (input -| AND_k)               -- (AND_k.south);
+        \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
       - To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
@@ -678,7 +680,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \coordinate[above=16pt of AND_final_n]   (cell_n);
 
         % Input gate
-        \node[node] (input) at ($(ANDs_k)!0.5!(ANDs_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+        \node[node] (input_pulse) at ($(ANDs_k)!0.5!(ANDs_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
 
         % Cell bounding boxes
         \begin{scope}[on background layer]
@@ -708,7 +710,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[arrow] (AND_final_h2.east)  -- ($(AND_final_h2.east)!0.5!(AND_final_n.west)$)   |- (ANDs_n.west);
 
         % Input gate
-        \draw[arrow] (input.north)        -- +(0, 0.5) -| (ANDs_1.south);
+        \draw[arrow] (input_pulse.north)  -- +(0, 0.5) -| (ANDs_1.south);
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, add cycle to the last cell
       - To make it 2-way, make each cell 2-way and connect the cells in the same direction using the first AND gate of each cell rather than the last
