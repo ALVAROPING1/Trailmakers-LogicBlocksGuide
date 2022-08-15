@@ -837,7 +837,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - 1-way+cycle: $2 \ceil{\log_2 n}$
         - 2-way: $4 \ceil{\log_2 n} + 4$
         - 2-way+cycle: $4 \ceil{\log_2 n}$
-      - Takes 4 frames to update for 1-way and 3 frames for the other versions
+      - Takes 4 frames to update without cycle and 3 frames with cycle
       - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
     \newcommand{\titleCED}{When to use each method}
     - \titleCED
