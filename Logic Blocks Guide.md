@@ -714,7 +714,9 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, add cycle to the last cell
       - To make it 2-way, make each cell 2-way and connect the cells in the same direction using the first AND gate of each cell rather than the last
-      - Might require a decoder to be used (unless you just want to show numbers on a screen, you can use each cell as a digit of the number in that case), to create it you just need to take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
+      - Might require a decoder to be used (unless you just want to show numbers on a screen, in which case you can use each cell as a digit of the number)
+        - To create it, take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
+        - Has a complexity of $n$ gates
       - Requires a startup pulse to one of the toggled OR gates on each cell work (achieved with a 1 frame pulse generator)
       - Complexity
         - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 20$
@@ -831,7 +833,9 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
       - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gate. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
-      - Might require a decoder to be used, to create it you just need to take *n* AND gates and assign a different combination of either *output 1* or *output 2* from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates). If you are using the 2-way versions, all AND gates need to have the NOR gate (which has both AND gates from the first cell as input) as input to remove a false positive while changing values
+      - Might require a decoder to be used
+        - To create it, add a NOT gate to each cell if you don't already have one (1-way versions). Then, take $n$ AND gates and assign a different combination of either the OR or the NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
+        - Has a complexity of $\ceil{\log_2 n} + n$ for the 1-way versions and $n$ for the 2-way versions
       - Complexity
         - 1-way: $2 \ceil{\log_2 n} + 2$
         - 1-way+cycle: $2 \ceil{\log_2 n}$
