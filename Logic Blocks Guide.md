@@ -72,7 +72,7 @@ header-includes: |
 
     % Diagrams
     \usepackage{tikz}
-    \usetikzlibrary{positioning, fit, calc, arrows.meta, backgrounds}
+    \usetikzlibrary{positioning, fit, calc, arrows.meta, backgrounds, decorations.markings}
     % Basic node style
     \tikzset{rectangleNode/.style={rectangle, draw=black, fill=white, thick, minimum height=6.6mm}}
     % Node style for image annotations
@@ -81,8 +81,12 @@ header-includes: |
     \tikzset{node/.style={rectangleNode, align=center, minimum width=30.4mm}}
     % Node style for hidden diagram nodes
     \tikzset{hiddenNode/.style={rectangleNode, draw=none, fill=none, minimum width=5mm}}
+    % Style for lines
+    \tikzset{line/.style={-, thick}}
     % Style for arrows
     \tikzset{arrow/.style={-Triangle, thick}}
+    % Style for arrows with the tip on the middle
+    \tikzset{->-/.style={line, decoration={markings, mark=at position 0.5 with {\arrow{Triangle}}}, postaction={decorate}}}
 
     % Plot graphs
     \usepackage{pgfplots}
@@ -721,16 +725,116 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     - \titleCEC
       \phantomsection
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEC}
-      - $n = 2^\text{amount of cells}; \text{ amount of cells} = \log_2 n$
+      - Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
+      - $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
       - Diagram of the circuit:
-        <!-- TODO: diagram of the circuit-->
-      - To make it 2-way you need to modify the input circuit to make the 1 frame pulse generator and the OR gate send an input directly to the AND gate in each cell (you can't skip the AND gate in the first cell in this case). Then, duplicate the input circuit and add a new AND gate to each cell, but make the OR gate have all *output 1* gates as input rather than all *output 2* gates. Connect the new AND gate in each cell in the same way the old AND gate was connected, but use all previous cells' *output 2* gates as input rather than all previous cells' *output 1* gates. Finally add a NOR gate with both AND gates from the first cell as input (this will be used for the decoder). To make this 2-way version cycle remove the OR gate from the input circuit and skip the AND gate for the increase direction in the first cell (connect the input directly to *output 1* for that cell)
+        \vspace{2mm}
+        \begin{tikzpicture}[trim left=8.1em]
+        % Nodes
+
+        % Cell 1
+        \node[node]       (OR_1)                                      {Toggled OR gate\\(output)};
+        \node[node]       (AND_1)         [below = 5mm of OR_1]       {AND gate};
+        \coordinate[above=16pt of OR_1]        (cell_1);
+
+        % Hidden cell 1
+        \node[hiddenNode] (OR_h1)         [right = of OR_1]           {};
+        \node[hiddenNode] (AND_h1)        [right = of AND_1]          {};
+
+        % Cell k
+        \node[node]       (OR_k)          [right = of OR_h1]          {Toggled OR gate\\(output)};
+        \node[node]       (AND_k)         [right = of AND_h1]         {AND gate};
+        \coordinate[above=16pt of OR_k]        (cell_k);
+
+        % Cell k+1
+        \node[node]       (OR_k+1)        [right = of OR_k]           {Toggled OR gate\\(output)};
+        \node[node]       (AND_k+1)       [right = of AND_k]          {AND gate};
+        \coordinate[above=16pt of OR_k+1]      (cell_k+1);
+
+        % Hidden cell 2
+        \node[hiddenNode] (OR_h2)         [right = of OR_k+1]         {};
+        \node[hiddenNode] (AND_h2)        [right = of AND_k+1]        {};
+
+        % Cell n
+        \node[node]       (OR_n)          [right = of OR_h2]          {Toggled OR gate\\(output)};
+        \node[node]       (AND_n)         [right = of AND_h2]         {AND gate};
+        \coordinate[above=16pt of OR_n]        (cell_n);
+
+        % Input circuit
+        \node[node]       (input_pulse) at ($(AND_k) + (0.25, -2.75)$)  {1 frame pulse\\generator (input)};
+        \node[node]       (input_NAND)    [right = 5mm of input_pulse] {NAND gate};
+        \coordinate[above=16pt of input_pulse] (input_cell);
+
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node,       fit=(OR_1)(AND_1)(cell_1),                 label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(OR_h1)(AND_h1)]                       {$\cdots$};
+            \node[node,       fit=(OR_k)(AND_k)(cell_k),                 label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1),           label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(OR_h2)(AND_h2)]                       {$\cdots$};
+            \node[node,       fit=(OR_n)(AND_n)(cell_n),                 label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_2 n}$}] {};
+            \node[node,       fit=(input_pulse)(input_NAND)(input_cell), label={[anchor=north, yshift=-2.5pt]Input Circuit}] {};
+        \end{scope}
+
+        % Arrows
+
+        % Points between cells
+        \coordinate (1-h1)   at ($(OR_1.east)!0.5!(OR_h1.west)   + (0, 1.75)$);
+        \coordinate (h1-k)   at ($(OR_h1.east)!0.5!(OR_k.west)   + (0, 1.75)$);
+        \coordinate (k-k+1)  at ($(OR_k.east)!0.5!(OR_k+1.west)  + (0, 1.75)$);
+        \coordinate (k+1-h2) at ($(OR_k+1.east)!0.5!(OR_h2.west) + (0, 1.75)$);
+        \coordinate (h2-n)   at ($(OR_h2.east)!0.5!(OR_n.west)   + (0, 1.75)$);
+        \coordinate (n-)     at ($(OR_n.east)                    + (0.5, 1.75)$);
+
+        % Cell 1
+        \draw[arrow] (AND_1.north)       -- (OR_1.south);
+        \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1) |- (AND_h1.west);
+
+        % Hidden cell 1
+        \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k) |- (AND_k.west);
+        \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k) -- (h1-k |- OR_k);
+
+        % Cell k
+        \draw[arrow] (AND_k.north)       -- (OR_k.south);
+        \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1) |- (AND_k+1.west);
+        \draw[->-]   (h1-k)              -- (k-k+1);
+        \draw[line]  (OR_k -| k-k+1)     -- (k-k+1);
+
+        % Cell k+1
+        \draw[arrow] (AND_k+1.north)     -- (OR_k+1.south);
+        \draw[arrow] (OR_k+1.east)       -- (OR_k+1 -| k+1-h2) |- (AND_h2.west);
+        \draw[->-]   (k-k+1)             -- (k+1-h2);
+        \draw[line]  (OR_k+1 -| k+1-h2)  -- (k+1-h2);
+
+        % Hidden cell 2
+        \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n) |- (AND_n.west);
+        \draw[->-]   (k+1-h2)            -- (h2-n);
+
+        % Cell n
+        \draw[arrow] (AND_n.north)       -- (OR_n.south);
+        \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-) -- (n- |- OR_n);
+
+        % Input circuit
+        \draw[arrow] (OR_n.east)         -- ($(OR_n.east) + (0.5, 0)$) |- (input_NAND.east);
+
+        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
+        \draw[line]  (input_pulse.north) -- (input);
+        \draw[line]  (input_NAND.north)  -- (input_NAND |- input);
+        \draw[arrow] (input)             -| (AND_1.south);
+        \draw[arrow] (input)             -| (AND_n.south);
+        \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
+        \draw[arrow] (input -| AND_k)    -| (AND_k.south);
+        \draw[arrow] (input -| AND_k+1)  -| (AND_k+1.south);
+        \draw[arrow] (input -| AND_h2)   -| (AND_h2.south);
+        \end{tikzpicture}\vspace{1mm}
+      - To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
+      - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gate. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
       - Might require a decoder to be used, to create it you just need to take *n* AND gates and assign a different combination of either *output 1* or *output 2* from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates). If you are using the 2-way versions, all AND gates need to have the NOR gate (which has both AND gates from the first cell as input) as input to remove a false positive while changing values
       - Complexity
-        - 1-way: $3 \ceil{\log_2 n} + 2$
-        - 1-way+cycle: $3 \ceil{\log_2 n}$
-        - 2-way: $4 \ceil{\log_2 n} + 5$
-        - 2-way+cycle: $4 \ceil{\log_2 n} + 2$
+        - 1-way: $2 \ceil{\log_2 n} + 2$
+        - 1-way+cycle: $2 \ceil{\log_2 n}$
+        - 2-way: $4 \ceil{\log_2 n} + 4$
+        - 2-way+cycle: $4 \ceil{\log_2 n}$
       - Takes 4 frames to update for 1-way and 3 frames for the other versions
       - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
     \newcommand{\titleCED}{When to use each method}
