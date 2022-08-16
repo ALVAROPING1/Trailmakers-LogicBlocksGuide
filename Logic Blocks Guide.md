@@ -115,6 +115,11 @@ header-includes: |
 
 # \TitleFormat{Logic Blocks Guide} {.unlisted .unnumbered}
 
+\vspace{1mm}
+\begin{center}
+\includegraphics[width=\linewidth]{thumbnail}
+\end{center}
+
 \tableofcontents
 \clearpage
 
