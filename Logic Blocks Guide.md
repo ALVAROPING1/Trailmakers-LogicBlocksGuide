@@ -653,77 +653,104 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         % Nodes
 
         % Cell 1
-        \node[node]       (AND_final_1)                                  {Last AND gate};
+        \node[node]       (ORs_1)                                        {All OR gates\\except the last};
+        \node[node]       (AND_final_1)   [below = 1.5mm of ORs_1]       {Last AND gate};
         \node[node]       (ANDs_1)        [below = 1.5mm of AND_final_1] {All AND gates};
-        \coordinate[above=16pt of AND_final_1]   (cell_1);
+        \coordinate[above=16pt of ORs_1]   (cell_1);
 
         % Hidden cell 1
+        \node[hiddenNode] (ORs_h1)        [right = of ORs_1]             {};
         \node[hiddenNode] (AND_final_h1)  [right = of AND_final_1]       {};
         \node[hiddenNode] (ANDs_h1)       [right = of ANDs_1]            {};
 
         % Cell k
+        \node[node]       (ORs_k)         [right = of ORs_h1]            {All OR gates\\except the last};
         \node[node]       (AND_final_k)   [right = of AND_final_h1]      {Last AND gate};
         \node[node]       (ANDs_k)        [right = of ANDs_h1]           {All AND gates};
-        \coordinate[above=16pt of AND_final_k]   (cell_k);
+        \coordinate[above=16pt of ORs_k]   (cell_k);
 
         % Cell k+1
+        \node[node]       (ORs_k+1)       [right = of ORs_k]             {All OR gates\\except the last};
         \node[node]       (AND_final_k+1) [right = of AND_final_k]       {Last AND gate};
         \node[node]       (ANDs_k+1)      [right = of ANDs_k]            {All AND gates};
-        \coordinate[above=16pt of AND_final_k+1] (cell_k+1);
+        \coordinate[above=16pt of ORs_k+1] (cell_k+1);
 
         % Hidden cell 2
+        \node[hiddenNode] (ORs_h2)        [right = of ORs_k+1]           {};
         \node[hiddenNode] (AND_final_h2)  [right = of AND_final_k+1]     {};
         \node[hiddenNode] (ANDs_h2)       [right = of ANDs_k+1]          {};
 
         % Cell n
+        \node[node]       (ORs_n)         [right = of ORs_h2]            {All OR gates\\except the last};
         \node[hiddenNode] (AND_final_n)   [right = of AND_final_h2]      {};
         \node[node]       (ANDs_n)        [right = of ANDs_h2]           {All AND gates};
-        \coordinate[above=16pt of AND_final_n]   (cell_n);
+        \coordinate[above=16pt of ORs_n]   (cell_n);
 
         % Input gate
-        \node[node] (input_pulse) at ($(ANDs_k)!0.5!(ANDs_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+        \node[node]       (input_pulse) at ($(ANDs_k) + (0.45, -2.75)$) {1 frame pulse\\generator (input)};
+        \node[node]       (input_OR)      [right = 1.5mm of input_pulse] {OR gate};
+        \coordinate[above=16pt of input_pulse] (input_cell);
 
         % Cell bounding boxes
         \begin{scope}[on background layer]
-            \node[node,       fit=(ANDs_1)(AND_final_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(ANDs_h1)(AND_final_h1)]             {$\cdots$};
-            \node[node,       fit=(ANDs_k)(AND_final_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node,       fit=(ANDs_k+1)(AND_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(ANDs_h2)(AND_final_h2)]             {$\cdots$};
-            \node[node,       fit=(ANDs_n)(AND_final_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
+            \node[node,       fit=(ORs_1)(ANDs_1)(AND_final_1)(cell_1),         label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(ORs_h1)(ANDs_h1)(AND_final_h1)]              {$\cdots$};
+            \node[node,       fit=(ORs_k)(ANDs_k)(AND_final_k)(cell_k),         label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(ORs_k+1)(ANDs_k+1)(AND_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(ORs_h2)(ANDs_h2)(AND_final_h2)]              {$\cdots$};
+            \node[node,       fit=(ORs_n)(ANDs_n)(AND_final_n)(cell_n),         label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
+            \node[node,       fit=(input_pulse)(input_OR)(input_cell),          label={[anchor=north, yshift=-2.5pt]Input circuit}] {};
         \end{scope}
 
         % Arrows
 
+        % Points between cells
+        \coordinate (1-h1)   at ($(ORs_1.east)!0.5!(ORs_h1.west)   + (0, 1.75)$);
+        \coordinate (h1-k)   at ($(ORs_h1.east)!0.5!(ORs_k.west)   + (0, 1.75)$);
+        \coordinate (k-k+1)  at ($(ORs_k.east)!0.5!(ORs_k+1.west)  + (0, 1.75)$);
+        \coordinate (k+1-h2) at ($(ORs_k+1.east)!0.5!(ORs_h2.west) + (0, 1.75)$);
+        \coordinate (h2-n)   at ($(ORs_h2.east)!0.5!(ORs_n.west)   + (0, 1.75)$);
+        \coordinate (n-)     at ($(ORs_n.east)                     + (0.5, 0)$);
+
         % Cell 1
-        \draw[arrow] (AND_final_1.east)   -- ($(AND_final_1.east)!0.5!(AND_final_h1.west)$)   |- (ANDs_h1.west);
+        \draw[line]  (ORs_1.east)         -| (1-h1)                    -- (h1-k);
+        \draw[arrow] (AND_final_1.east)   -- (AND_final_1 -| 1-h1)     |- (ANDs_h1.west);
 
         % Hidden cell 1
-        \draw[arrow] (AND_final_h1.east)  -- ($(AND_final_h1.east)!0.5!(AND_final_k.west)$)   |- (ANDs_k.west);
+        \draw[line]  (ORs_h1.east)        -| (h1-k)                    -- (k-k+1);
+        \draw[arrow] (AND_final_h1.east)  -- (AND_final_h1 -| h1-k)    |- (ANDs_k.west);
 
         % Cell k
-        \draw[arrow] (AND_final_k.east)   -- ($(AND_final_k.east)!0.5!(AND_final_k+1.west)$)  |- (ANDs_k+1.west);
+        \draw[line]  (ORs_k.east)         -| (k-k+1)                   -- (k+1-h2);
+        \draw[arrow] (AND_final_k.east)   -- (AND_final_k -| k-k+1)    |- (ANDs_k+1.west);
 
         % Cell k+1
-        \draw[arrow] (AND_final_k+1.east) -- ($(AND_final_k+1.east)!0.5!(AND_final_h2.west)$) |- (ANDs_h2.west);
+        \draw[line]  (ORs_k+1.east)       -| (k+1-h2)                   -- (h2-n);
+        \draw[arrow] (AND_final_k+1.east) -- (AND_final_k+1 -| k+1-h2) |- (ANDs_h2.west);
 
         % Hidden cell 2
-        \draw[arrow] (AND_final_h2.east)  -- ($(AND_final_h2.east)!0.5!(AND_final_n.west)$)   |- (ANDs_n.west);
+        \draw[line]  (ORs_h2.east)        -| (h2-n)                    -| (n-);
+        \draw[arrow] (AND_final_h2.east)  -- (AND_final_h2 -| h2-n)    |- (ANDs_n.west);
+
+        % Cell n
+        \draw[arrow] (ORs_n.east)         -- (n-)                      |- (input_OR.east);
 
         % Input gate
-        \draw[arrow] (input_pulse.north)  -- +(0, 0.5) -| (ANDs_1.south);
+        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
+        \draw[arrow] (input_pulse.north)  -- (input)                   -| (ANDs_1.south);
+        \draw[line]  (input_OR.north)     |- (input);
         \end{tikzpicture}\vspace{1mm}
-      - To add cycle, add cycle to the last cell
-      - To make it 2-way, make each cell 2-way and connect the cells in the same direction using the first AND gate of each cell rather than the last
+      - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
+      - To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first AND gate of each cell rather than the last, and connect the new input circuit to all AND gates on the first cell
       - Might require a decoder to be used (unless you just want to show numbers on a screen, in which case you can use each cell as a digit of the number)
         - To create it, take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
         - Has a complexity of $n$ gates
       - Requires a startup pulse to one of the toggled OR gates on each cell work (achieved with a 1 frame pulse generator)
       - Complexity
-        - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 20$
+        - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
         - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
-        - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 30$
-        - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 29$
+        - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
+        - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 22$
       - Takes 3 frames to update for each cell that needs to change
       - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
     \newcommand{\titleCEC}{Binary}
