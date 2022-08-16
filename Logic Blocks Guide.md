@@ -1,4 +1,8 @@
 ---
+title-meta: Logic Blocks Guide
+author-meta: ALVAROPING1#6682
+lang: en
+
 mainfont: Calibri.ttf
 mainfontoptions:
 - Extension=.ttf
