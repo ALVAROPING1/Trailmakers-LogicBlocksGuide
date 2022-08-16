@@ -634,7 +634,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
       - To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
-      - Requires a startup pulse to one of the toggled OR gates work (achieved with a 1 frame pulse generator)
+      - Requires a startup pulse to one of the toggled OR gates to work (achieved with a 1 frame pulse generator)
       - Complexity
         - 1-way: $2n$
         - 1-way+cycle: $2n + 1$
@@ -747,7 +747,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       - Might require a decoder (unless you want to show numbers on a screen)
         - To create it, take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
         - Has a complexity of $n$ gates
-      - Requires a startup pulse to one of the toggled OR gates on each cell work (achieved with a 1 frame pulse generator)
+      - Requires a startup pulse to one of the toggled OR gates on each cell to work (achieved with a 1 frame pulse generator)
       - Complexity
         - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
         - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
