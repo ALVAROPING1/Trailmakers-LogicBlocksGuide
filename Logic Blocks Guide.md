@@ -796,8 +796,8 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \coordinate[above=16pt of OR_n]        (cell_n);
 
         % Input circuit
-        \node[node]       (input_pulse) at ($(AND_k) + (0.25, -2.75)$)  {1 frame pulse\\generator (input)};
-        \node[node]       (input_NAND)    [right = 5mm of input_pulse] {NAND gate};
+        \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)  {1 frame pulse\\generator (input)};
+        \node[node]       (input_NAND)    [right = 1.5mm of input_pulse] {NAND gate};
         \coordinate[above=16pt of input_pulse] (input_cell);
 
         % Cell bounding boxes
