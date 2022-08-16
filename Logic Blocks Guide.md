@@ -553,6 +553,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       \phantomsection
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEA}
       - $n = \text{amount of cells}$
+      - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
       - Diagram of the circuit:
         \vspace{2mm}
         \begin{tikzpicture}[trim left=8.1em]
@@ -647,6 +648,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEB}
       - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
       - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
+      - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit) \
       - Diagram of the circuit:
         \vspace{2mm}
         \begin{tikzpicture}[trim left=8.1em]
@@ -742,7 +744,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
       - To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first AND gate of each cell rather than the last, and connect the new input circuit to all AND gates on the first cell
-      - Might require a decoder to be used (unless you just want to show numbers on a screen, in which case you can use each cell as a digit of the number)
+      - Might require a decoder (unless you want to show numbers on a screen)
         - To create it, take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
         - Has a complexity of $n$ gates
       - Requires a startup pulse to one of the toggled OR gates on each cell work (achieved with a 1 frame pulse generator)
@@ -759,6 +761,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEC}
       - Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
       - $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
+      - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
       - Diagram of the circuit:
         \vspace{2mm}
         \begin{tikzpicture}[trim left=8.1em]
@@ -861,7 +864,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
       - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gate. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
-      - Might require a decoder to be used
+      - Might require a decoder
         - To create it, add a NOT gate to each cell if you don't already have one (1-way versions). Then, take $n$ AND gates and assign a different combination of either the OR or the NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
         - Has a complexity of $\ceil{\log_2 n} + n$ for the 1-way versions and $n$ for the 2-way versions
       - Complexity
