@@ -565,7 +565,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         % Nodes
 
         % Cell 1
-        \node[node]       (OR_1)                          {Toggled OR gate\\(output)};
+        \node[node]       (OR_1)                          {Toggled OR gate\\with 1 frame\\delay (output)};
         \node[node]       (AND_1)   [below = 5mm of OR_1] {AND gate};
         \coordinate[above=16pt of OR_1]   (cell_1);
 
@@ -574,12 +574,12 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \node[hiddenNode] (AND_h1)  [right = of AND_1]    {};
 
         % Cell k
-        \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\(output)};
+        \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\with 1 frame\\delay (output)};
         \node[node]       (AND_k)   [right = of AND_h1]   {AND gate};
         \coordinate[above=16pt of OR_k]   (cell_k);
 
         % Cell k+1
-        \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\(output)};
+        \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\with 1 frame\\delay (output)};
         \node[node]       (AND_k+1) [right = of AND_k]    {AND gate};
         \coordinate[above=16pt of OR_k+1] (cell_k+1);
 
@@ -588,7 +588,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \node[hiddenNode] (AND_h2)  [right = of AND_k+1]  {};
 
         % Cell n
-        \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\(output)};
+        \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\with 1 frame\\delay (output)};
         \node[hiddenNode] (AND_n)   [right = of AND_h2]   {};
         \coordinate[above=16pt of OR_n]   (cell_n);
 
@@ -653,7 +653,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEB}
       - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
       - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
-      - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit) \
+      - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
       - Diagram of the circuit:
         \vspace{2mm}
         \begin{tikzpicture}[trim left=8.1em]
