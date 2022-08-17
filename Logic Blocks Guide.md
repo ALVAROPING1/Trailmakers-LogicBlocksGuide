@@ -790,35 +790,35 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         % Nodes
 
         % Cell 1
-        \node[node]       (OR_1)                                      {Toggled OR gate\\(output)};
-        \node[node]       (AND_1)         [below = 5mm of OR_1]       {AND gate};
+        \node[node]       (OR_1)                                         {Toggled OR gate\\(output)};
+        \node[node]       (AND_1)         [below = 5mm of OR_1]          {AND gate};
         \coordinate[above=16pt of OR_1]        (cell_1);
 
         % Hidden cell 1
-        \node[hiddenNode] (OR_h1)         [right = of OR_1]           {};
-        \node[hiddenNode] (AND_h1)        [right = of AND_1]          {};
+        \node[hiddenNode] (OR_h1)         [right = of OR_1]              {};
+        \node[hiddenNode] (AND_h1)        [right = of AND_1]             {};
 
         % Cell k
-        \node[node]       (OR_k)          [right = of OR_h1]          {Toggled OR gate\\(output)};
-        \node[node]       (AND_k)         [right = of AND_h1]         {AND gate};
+        \node[node]       (OR_k)          [right = of OR_h1]             {Toggled OR gate\\(output)};
+        \node[node]       (AND_k)         [right = of AND_h1]            {AND gate};
         \coordinate[above=16pt of OR_k]        (cell_k);
 
         % Cell k+1
-        \node[node]       (OR_k+1)        [right = of OR_k]           {Toggled OR gate\\(output)};
-        \node[node]       (AND_k+1)       [right = of AND_k]          {AND gate};
+        \node[node]       (OR_k+1)        [right = of OR_k]              {Toggled OR gate\\(output)};
+        \node[node]       (AND_k+1)       [right = of AND_k]             {AND gate};
         \coordinate[above=16pt of OR_k+1]      (cell_k+1);
 
         % Hidden cell 2
-        \node[hiddenNode] (OR_h2)         [right = of OR_k+1]         {};
-        \node[hiddenNode] (AND_h2)        [right = of AND_k+1]        {};
+        \node[hiddenNode] (OR_h2)         [right = of OR_k+1]            {};
+        \node[hiddenNode] (AND_h2)        [right = of AND_k+1]           {};
 
         % Cell n
-        \node[node]       (OR_n)          [right = of OR_h2]          {Toggled OR gate\\(output)};
-        \node[node]       (AND_n)         [right = of AND_h2]         {AND gate};
+        \node[node]       (OR_n)          [right = of OR_h2]             {Toggled OR gate\\(output)};
+        \node[node]       (AND_n)         [right = of AND_h2]            {AND gate};
         \coordinate[above=16pt of OR_n]        (cell_n);
 
         % Input circuit
-        \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)  {1 frame pulse\\generator (input)};
+        \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)   {1 frame pulse\\generator (input)};
         \node[node]       (input_NAND)    [right = 1.5mm of input_pulse] {NAND gate};
         \coordinate[above=16pt of input_pulse] (input_cell);
 
@@ -845,15 +845,15 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
         % Cell 1
         \draw[arrow] (AND_1.north)       -- (OR_1.south);
-        \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1) |- (AND_h1.west);
+        \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1)     |- (AND_h1.west);
 
         % Hidden cell 1
-        \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k) |- (AND_k.west);
-        \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k) -- (h1-k |- OR_k);
+        \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k)    |- (AND_k.west);
+        \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k)   -- (h1-k |- OR_k);
 
         % Cell k
         \draw[arrow] (AND_k.north)       -- (OR_k.south);
-        \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1) |- (AND_k+1.west);
+        \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1)    |- (AND_k+1.west);
         \draw[->-]   (h1-k)              -- (k-k+1);
         \draw[line]  (OR_k -| k-k+1)     -- (k-k+1);
 
@@ -864,15 +864,13 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[line]  (OR_k+1 -| k+1-h2)  -- (k+1-h2);
 
         % Hidden cell 2
-        \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n) |- (AND_n.west);
+        \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n)    |- (AND_n.west);
         \draw[->-]   (k+1-h2)            -- (h2-n);
 
         % Cell n
         \draw[arrow] (AND_n.north)       -- (OR_n.south);
-        \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-) -- (n- |- OR_n);
-
-        % Input circuit
-        \draw[arrow] (OR_n.east)         -- ($(OR_n.east) + (0.5, 0)$) |- (input_NAND.east);
+        \draw[arrow] (OR_n.east)         -- (OR_n -| n-)       |- (input_NAND.east);
+        \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
 
         \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
         \draw[line]  (input_pulse.north) -- (input);
