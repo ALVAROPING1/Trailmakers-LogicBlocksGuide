@@ -898,84 +898,104 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     - \titleCED
       \phantomsection
       \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCED}
+      - Calculated for $n \geq 3$, for $n = 2$ a latch is always best
 
 \vspace{2mm}
-\hspace{-0.85cm}
-\begin{tabular}{|c|m{18.35em}|m{18.35em}|}
+\hspace{-1.25cm}
+\begin{tabular}{|c|m{18.75em}|m{18.75em}|}
     \cline{2-3}
     \multicolumn{1}{c|}{} & \thead{1-way} & \thead{2-way} \\
     \hline
     % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
     \rotatebox[origin=c]{90}{\thead{Without cycle}}
     &
+    Doesn't require a decoder:
+    \begin{itemize}
+        \item For $n \leq 3$ use the general circuit
+        \item For $n > 3$ use the binary circuit
+    \end{itemize}
     Doesn't require an individual decoder:
     \begin{itemize}
-        \item For $n < 6$ use the general circuit
-        \item For $n \geq 6$ use the binary method
+        \item For $n \leq 5$ use the general circuit
+        \item For $n > 5$ use the binary circuit
     \end{itemize}
     Requires an individual decoder:
     \begin{itemize}
-        \item For $n < 15$ use the general circuit
-        \item For $n \geq 15$ use the binary method
+        \item For $n \leq 14$ or $n = 17$ use the general circuit
+        \item For $n > 14$ and $n \neq 17$ use the binary circuit
     \end{itemize}
     Show values directly on a screen (only numbers for $n > 12$):
     \begin{itemize}
         \item For $n \leq 12$ use the general circuit
-        \item For $n > 12$ use the base 10 method
+        \item For $n > 12$ use the base 10 circuit
         \newline
     \end{itemize}
     &
+    Doesn't require a decoder:
+    \begin{itemize}
+        \item For $n \leq 5$ use the general circuit
+        \item For $n > 5$ use the binary circuit
+    \end{itemize}
     Doesn't require an individual decoder:
     \begin{itemize}
         \item For $n \leq 5$ use the general circuit
-        \item For $n > 5$ use the binary method
+        \item For $n > 5$ use the binary circuit
     \end{itemize}
     Requires an individual decoder:
     \begin{itemize}
         \item For $n \leq 10$ use the general circuit
-        \item For $n > 10$ use the binary method
+        \item For $n > 10$ use the binary circuit
+        \newline
+        \newline
     \end{itemize}
-    Show values directly on a screen (only numbers for $n > 12$):
+    Show values directly on a screen (only numbers for $n > 16$):
     \begin{itemize}
         \item For $n \leq 10$ use the general circuit
-        \item For $10 < n < 15$ use the binary method
-        \item For $n \geq 15$ use the base 10 method
+        \item For $10 < n \leq 16$ use the binary circuit
+        \item For $n > 16$ use the base 10 circuit
     \end{itemize} \\
     \hline
     \rotatebox[origin=c]{90}{\thead{With cycle}}
     &
+    Doesn't require a decoder:
+    \begin{itemize}
+        \item Use the binary circuit
+    \end{itemize}
     Doesn't require an individual decoder:
     \begin{itemize}
-        \item Use the binary method
+        \item Use the binary circuit
+    \end{itemize}
+    Requires an individual decoder:
+    \begin{itemize}
+        \item For $n \leq 11$ use the general circuit
+        \item For $n > 11$ use the binary circuit
+    \end{itemize}
+    Show values directly on a screen (only numbers for $n > 12$):
+    \begin{itemize}
+        \item For $n < 12$ use the general circuit
+        \item For $n = 12$ use the binary circuit
+        \item For $n > 12$ use the base 10 circuit
         \newline
     \end{itemize}
-    Requires an individual decoder:
-    \begin{itemize}
-        \item For $n < 12$ use the general circuit
-        \item For $n \geq 12$ use the binary method
-    \end{itemize}
-    Show values directly on a screen (only numbers for $n > 12$):
-    \begin{itemize}
-        \item For $n < 12$ use the general circuit
-        \item For $n = 12$ use the binary method
-        \item For $n > 12$ use the base 10 method
-    \end{itemize}
     &
+    Doesn't require a decoder:
+    \begin{itemize}
+        \item Use the binary circuit
+    \end{itemize}
     Doesn't require an individual decoder:
     \begin{itemize}
-        \item For $n \leq 3$ use the general circuit
-        \item For $n > 3$ use the binary method
+        \item Use the binary circuit
     \end{itemize}
     Requires an individual decoder:
     \begin{itemize}
-        \item For $n \leq 6$ use the general circuit
-        \item For $n > 6$ use the binary method
+        \item For $n \leq 3$ or $n = 5$ use the general circuit
+        \item For $n = 4$ or $n > 5$ use the binary circuit
     \end{itemize}
-    Show values directly on a screen (only numbers for $n > 12$):
+    Show values directly on a screen (only numbers for $n > 17$):
     \begin{itemize}
-        \item For $n \leq 6$ use the general circuit
-        \item For $6 < n \leq 16$ use the binary method
-        \item For $n > 16$ use the base 10 method
+        \item For $n \leq 3$ or $n = 5$ use the general circuit
+        \item For $n = 4$ or $5 < n \leq 17$ use the binary circuit
+        \item For $n > 17$ use the base 10 circuit
     \end{itemize} \\
     \hline
 \end{tabular}
