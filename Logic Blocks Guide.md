@@ -774,7 +774,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
         - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
         - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
-        - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 22$
+        - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
       - Takes 4 frames to update without cycle and 3 frames with cycle
       - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
     \newcommand{\titleCEC}{Binary}
@@ -888,7 +888,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         - To create it, add a NOT gate to each cell if you don't already have one (1-way versions). Then, take $n$ AND gates and assign a different combination of either the OR or the NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
         - Has a complexity of $\ceil{\log_2 n} + n$ for the 1-way versions and $n$ for the 2-way versions
       - Complexity
-        - 1-way: $2 \ceil{\log_2 n} + 2$
+        - 1-way: $2 \ceil{\log_2 n} + 3$
         - 1-way+cycle: $2 \ceil{\log_2 n}$
         - 2-way: $4 \ceil{\log_2 n} + 4$
         - 2-way+cycle: $4 \ceil{\log_2 n}$
