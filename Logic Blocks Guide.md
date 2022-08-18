@@ -163,7 +163,7 @@ header-includes: |
 
         % Nodes
         \node[annotation, left]  (output_on)    at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)   at (21.5, 16.4) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, right] (output_off)   at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
         \node[annotation, left]  (range)        at (-1.5, 3)    {Range};
         \node[annotation, below] (output_value) at (8.5, -1.5)  {Output value};
         \node[annotation, right] (trigger)      at (21.5, 0)    {Invert trigger (on/off),\\currently off\\(normal trigger)};
@@ -217,7 +217,7 @@ header-includes: |
 
         % Nodes
         \node[annotation, left]  (output_on)       at (-1.5, 16.2) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)      at (21.5, 16.2) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, right] (output_off)      at (21.5, 16.2) {Output (off)\\(won't send an\\input to it)};
         \node[annotation, left]  (altitude)        at (-1.5, 2.5)  {Altitude};
         \node[annotation, below] (output_value)    at (4.9, -1.5)  {Output value};
         \node[annotation, below] (reference_frame) at (12.2, -1.5) {Frame of reference};
@@ -270,7 +270,7 @@ header-includes: |
 
         % Nodes
         \node[annotation, left]  (output_on)    at (-1.5, 15.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)   at (21.5, 15.3) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, right] (output_off)   at (21.5, 15.3) {Output (off)\\(won't send an\\input to it)};
         \node[annotation, left]  (speed)        at (-1.5, 2.1)  {Speed};
         \node[annotation, below] (output_value) at (7.7, -1.5)  {Output value};
         \node[annotation, right] (trigger)      at (21.5, 0)    {Trigger below (on/off),\\currently off\\(normal trigger)};
@@ -322,7 +322,7 @@ header-includes: |
 
         % Nodes
         \node[annotation, left]  (output_on)    at (-1.5, 17.2) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
         \node[annotation, left]  (direction)    at (-1.5, 2)    {Direction};
         \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
         \node[annotation, below] (output_value) at (13.2, -1.5) {Output value};
@@ -376,7 +376,7 @@ header-includes: |
 
         % Nodes
         \node[annotation, left]  (output_on)    at (-1.5, 17)   {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
         \node[annotation, left]  (direction)    at (-1.5, 2.7)  {Direction};
         \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
         \node[annotation, below] (output_value) at (11.8, -1.5) {Output value};
@@ -434,7 +434,7 @@ header-includes: |
 
         % Nodes
         \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won’t send an\\input to it)};
+        \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
         \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
         \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
         \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
@@ -908,7 +908,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
     \rotatebox[origin=c]{90}{\thead{Without cycle}}
     &
-    Doesn’t require an individual decoder:
+    Doesn't require an individual decoder:
     \begin{itemize}
         \item For $n < 6$ use the general circuit
         \item For $n \geq 6$ use the binary method
@@ -925,7 +925,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \newline
     \end{itemize}
     &
-    Doesn’t require an individual decoder:
+    Doesn't require an individual decoder:
     \begin{itemize}
         \item For $n \leq 5$ use the general circuit
         \item For $n > 5$ use the binary method
@@ -944,7 +944,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     \hline
     \rotatebox[origin=c]{90}{\thead{With cycle}}
     &
-    Doesn’t require an individual decoder:
+    Doesn't require an individual decoder:
     \begin{itemize}
         \item Use the binary method
         \newline
@@ -961,7 +961,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \item For $n > 12$ use the base 10 method
     \end{itemize}
     &
-    Doesn’t require an individual decoder:
+    Doesn't require an individual decoder:
     \begin{itemize}
         \item For $n \leq 3$ use the general circuit
         \item For $n > 3$ use the binary method
