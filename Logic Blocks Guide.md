@@ -1115,7 +1115,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
         minor tick num=1,
         grid=both
     ]
-        \addplot[color=blue, mark=*] file {Output_Value_to_Multiplier.dat};
+        \addplot[color=blue, mark=*] file {Output_Value_to_Multiplier.dat} node[above left, midway] {$f(x)$};
         \addplot[color=black, samples=3] {x} node[above left, midway] {$y=x$};
     \end{axis}
 \end{tikzpicture}
