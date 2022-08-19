@@ -472,7 +472,8 @@ header-includes: |
   - For engines it affects the max speed and acceleration (the torque)
   - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines it affects the power
   - For servos/hinges/large hinges it affects the angle
-    - For hinges the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds when using fractional output value
+    - For hinges the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
+    - For hinges it only works without hold position
     - Hinges are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2Multiplier)
   - For spinning servos/helicopter engines/pistons it affects the speed
   - For tone generators it affects the volume
