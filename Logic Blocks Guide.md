@@ -473,7 +473,7 @@ header-includes: |
   - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines it affects the power
   - For servos/hinges/large hinges it affects the angle
     - For hinges the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds when using fractional output value
-    - Hinges are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2MultiplierTable)
+    - Hinges are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2Multiplier)
   - For spinning servos/helicopter engines/pistons it affects the speed
   - For tone generators it affects the volume
   - For the rest of the blocks, it doesn't affect anything
@@ -1005,11 +1005,11 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
 \clearpage
 
-\newcommand{\titleD}{Output value to multiplier table for hinges}
+\newcommand{\titleD}{Output value to multiplier for hinges}
 \phantomsection
 \addcontentsline{toc}{section}{\TOCLabelI \titleD}
 
-## \TitleFormatI{\titleD} {#OutputValue2MultiplierTable .unlisted .unnumbered}
+## \TitleFormatI{\titleD} {#OutputValue2Multiplier .unlisted .unnumbered}
 
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 
