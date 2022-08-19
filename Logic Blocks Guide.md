@@ -134,7 +134,7 @@ header-includes: |
 \addcontentsline{toc}{subsection}{\TOCLabelII \titleAA}
 
 - **\TitleFormatII{\titleAA}**
-  - Range: in meters, $1 \text{ block} = 0.25 m$
+  - Range: in meters, $1 \text{ block} = 0.25 \text{ m}$
   - Output value: from $-1$ to $1$
   - Trigger
     - Normal: sends an output when it detects something
@@ -184,7 +184,7 @@ header-includes: |
 \addcontentsline{toc}{subsection}{\TOCLabelII \titleAB}
 
 - **\TitleFormatII{\titleAB}**
-  - Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 m$
+  - Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 \text{ m}$
   - Output value: from $-1$ to $1$
   - Frame of reference
     - Ignore waves: fixed altitude at the average sea level
@@ -240,7 +240,7 @@ header-includes: |
 \addcontentsline{toc}{subsection}{\TOCLabelII \titleAC}
 
 - **\TitleFormatII{\titleAC}**
-  - Speed: in $km/h$ or $mph$ depending on the speed unit settings
+  - Speed: in km/h or mph depending on the speed unit settings
     - **IMPORTANT:** only detects the movement in the direction that the arrow points. The speed is measured from the position of the block
   - Output value: from $-1$ to $1$
   - Trigger
