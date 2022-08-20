@@ -1002,7 +1002,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 \end{tabular}
 \
 
-Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and base 10 with cycle circuits, followed by the binary circuit with cycle, then by the base 10 circuit without cycle and lastly the binary circuit without cycle
+Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and base 10 with cycle circuits, followed by the 1-way binary circuit with cycle, then by the base 10 circuit without cycle and lastly the binary circuit without cycle or with 2-way
 
 \clearpage
 
