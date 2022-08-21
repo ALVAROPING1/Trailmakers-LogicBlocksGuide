@@ -766,7 +766,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
         \end{tikzpicture}\vspace{1mm}
       - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
-      - To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first AND gate of each cell rather than the last, and connect the new input circuit to all AND gates on the first cell
+      - To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first OR gate of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
       - Might require a decoder (unless you want to show numbers on a screen)
         - To create it, take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
         - Has a complexity of $n$ gates
