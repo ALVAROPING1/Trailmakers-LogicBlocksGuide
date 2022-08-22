@@ -6,15 +6,15 @@
 
 A guide about how logic blocks work in the game "Trailmakers"
 
-# Building from source
+## Building from source
 
-## Requisites
+### Requisites
 
 - [Pandoc](https://pandoc.org/installing.html) with a latex distribution for PDF output
 - `Calibri` and `Cambria Math` fonts (preinstalled on Windows)
 - The cloned repository
 
-## Compiling the guide
+### Compiling the guide
 
 Enter the cloned repository, then run:
 
