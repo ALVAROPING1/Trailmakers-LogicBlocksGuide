@@ -1006,6 +1006,38 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
 \clearpage
 
+\newcommand{\titleCF}{No-Delay Signal Toggle}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCF}
+
+- **\TitleFormatII{\titleCF}**
+  - Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
+  - Doesn't work when the output block is an AND/XOR gate. Additionally, on consoles, it doesn't work for output blocks that don't take output value into account either
+  - Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
+  - Diagram of the circuit:
+    \vspace{2mm}
+    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
+    % Nodes
+
+    \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
+    \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
+    \node[wideNode] (input_toggle1) [above = 2cm of input_signal]  {OR Gate with\\toggle keybind};
+    \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
+    \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
+    \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
+    \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
+
+    % Arrows
+
+    \draw[arrow] (input_signal.east)  -- (output_blocks.west);
+    \draw[arrow] (input_signal.north) |- (XOR.west);
+    \draw[arrow] (XOR.east)           -| (output_blocks.north);
+    \draw[->-]   (input_toggle1.east) -- (toggles);
+    \draw[->-]   (input_toggle2.west) -- (toggles);
+    \draw[arrow] (toggles)            -- (XOR.north);
+    \end{tikzpicture}\vspace{1mm}
+  - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
+
 \newcommand{\titleD}{Output value to multiplier for hinges}
 \phantomsection
 \addcontentsline{toc}{section}{\TOCLabelI \titleD}
