@@ -471,10 +471,10 @@ header-includes: |
 - It's the percentage of power that whatever it activates will use, applied to the value set in the settings (if applicable)
   - For engines it affects the max speed and acceleration (the torque)
   - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines it affects the power
-  - For servos/hinges/large hinges it affects the angle
-    - For hinges the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
-    - For hinges it only works without hold position
-    - Hinges are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2Multiplier)
+  - For servos/hinges/large hinges/wings with control surfaces it affects the angle
+    - For hinges/wings the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
+    - It only works without hold position
+    - Hinges and wings are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2Multiplier)
   - For spinning servos/helicopter engines/pistons it affects the speed
   - For tone generators it affects the volume
   - For the rest of the blocks, it doesn't affect anything
@@ -1044,6 +1044,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
 ## \TitleFormatI{\titleD} {#OutputValue2Multiplier .unlisted .unnumbered}
 
+- Applies to all blocks with hinge-like behaviour (hinges and wings with control surfaces)
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 
 - The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
