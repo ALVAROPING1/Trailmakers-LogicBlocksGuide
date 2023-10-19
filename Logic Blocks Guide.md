@@ -874,8 +874,8 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
 
         \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
-        \draw[line]  (input_pulse.north) -- (input);
-        \draw[line]  (input_NAND.north)  -- (input_NAND |- input);
+        \draw[->-]   (input_pulse.north) -- (input);
+        \draw[->-]   (input_NAND.north)  -- (input_NAND |- input);
         \draw[arrow] (input)             -| (AND_1.south);
         \draw[arrow] (input)             -| (AND_n.south);
         \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
