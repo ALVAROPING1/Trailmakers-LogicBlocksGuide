@@ -1134,6 +1134,8 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
     - Credits to Precache for figuring out this circuit
 
+\clearpage
+
 \newcommand{\titleD}{Output value to multiplier for hinges/wings with control surfaces}
 \phantomsection
 \addcontentsline{toc}{section}{\TOCLabelI \titleD}
