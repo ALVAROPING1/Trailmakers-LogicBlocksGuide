@@ -1133,13 +1133,12 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
     - Credits to Precache for figuring out this circuit
 
-\newcommand{\titleD}{Output value to multiplier for hinges}
+\newcommand{\titleD}{Output value to multiplier for hinges/wings with control surfaces}
 \phantomsection
 \addcontentsline{toc}{section}{\TOCLabelI \titleD}
 
 ## \TitleFormatI{\titleD} {#OutputValue2Multiplier .unlisted .unnumbered}
 
-- Applies to all blocks with hinge-like behaviour (hinges and wings with control surfaces)
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 
 - The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
