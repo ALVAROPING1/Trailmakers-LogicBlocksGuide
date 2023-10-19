@@ -1038,6 +1038,101 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
     \end{tikzpicture}\vspace{1mm}
   - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
 
+\newcommand{\titleCG}{Feedback Loop}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCG}
+
+- **\TitleFormatII{\titleCG}**
+  - Allows to store an analog value in the range $[-1, 1]$
+  - Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
+  - Each frame the input is active, the stored value increases by the value of the input
+    - With a close to 0 output value as input, the circuit can be used to generate an analog output value
+  - One of the OR gates can be replaced with an XOR to add a reset input. In this case, the normal input should go to the OR gate only and the reset input must be 2 different signals connected to the XOR gate
+    - Be aware that this method adds a 1 frame jitter to the stored signal
+  \newcommand{\titleCGA}{Clamped Feedback Loop}
+  - \titleCGA
+    \phantomsection
+    \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCGA}
+    - Allows limiting the output signal of a feedback loop to the range $[0, 1]$
+    - Diagram of the circuit:
+      \vspace{2mm}
+      \begin{tikzpicture}[trim left=-8em]
+      % Nodes
+
+      \node[node] (feedback_top)                               {OR Gate};
+      \node[node] (feedback_bot) [below = 5mm of feedback_top] {OR Gate};
+      \coordinate (feedback_mid) at ($(feedback_top.west)!0.5!(feedback_bot.west)$);
+
+      \node[node] (input)        [left = of feedback_mid]      {Input Signal};
+
+      \coordinate[above=16pt of feedback_top] (feedback);
+
+      \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
+      \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output value};
+
+      \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output value\\(output)};
+
+      % Bounding boxes
+      \begin{scope}[on background layer]
+          \node[node, fit=(feedback_top)(feedback_bot)(feedback), label={[anchor=north, yshift=-2.5pt]Feedback Loop}] {};
+      \end{scope}
+
+      % Arrows
+
+      \coordinate  (input_split) at ($(input.east) + (0.5, 0)$);
+      \draw[line]  (input.east)                    -- (input_split);
+      \draw[arrow] (input_split)                   |- (feedback_top.west);
+      \draw[arrow] (input_split)                   |- (feedback_bot.west);
+      \draw[arrow] ($(feedback_bot.north) + (2mm, 0)$)  -- ($(feedback_top.south) + (2mm, 0)$);
+      \draw[arrow] ($(feedback_top.south) + (-2mm, 0)$) -- ($(feedback_bot.north) + (-2mm, 0)$);
+      \draw[arrow] (C+1.west)                      -- (feedback_bot.east);
+      \draw[arrow] (C+1.north)                     -- (C-1.south);
+      \draw[arrow] (C-1.west |- feedback_top.east) |- (feedback_top.east);
+      \draw[arrow] (C-1.east)                      -- (output.west);
+      \draw[arrow] (feedback_bot.south) -- ($(feedback_bot.south) + (0, -0.5)$) -| (output);
+      \end{tikzpicture}\vspace{1mm}
+    - Note: the input signal is reversed. This means that a negative value increases the stored value while a positive value decreases it
+    - Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
+    - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=2911246646)
+    - Python script to simulate the behaviour (input value is automatically reversed):
+
+      ```python
+      def clamp(x: float) -> float:
+          return min(max(x, -1), 1)
+
+      def update(
+          feedback_top: float, feedback_bottom: float, user_input: float
+      ) -> tuple[float, float]:
+          return (
+              clamp(feedback_bottom - user_input + 1),
+              clamp(feedback_top    - user_input - 1)
+          )
+
+      def print_state(feedback_top: float, feedback_bottom: float):
+          print("State:")
+          print("\tFeedback Top: ", round(feedback_top, 3))
+          print("\tFeedback Bottom: ", round(feedback_bottom, 3))
+          print("Output: ", round(clamp(-(feedback_top - 1)), 3))
+
+      feedback_top, feedback_bottom = 1, 0
+      print_state(feedback_top, feedback_bottom)
+      while True:
+          user_input = input("Enter input (between -1 and 1, Q to quit): ")
+          if user_input.lower() == "q":
+              break
+          try:
+              user_input = float(user_input)
+          except ValueError:
+              print("Invalid input. Try again")
+              continue
+          feedback_top, feedback_bottom = (
+              update(feedback_top, feedback_bottom, user_input)
+          )
+          print_state(feedback_top, feedback_bottom)
+      ```
+
+    - Credits to Precache for figuring out this circuit
+
 \newcommand{\titleD}{Output value to multiplier for hinges}
 \phantomsection
 \addcontentsline{toc}{section}{\TOCLabelI \titleD}
