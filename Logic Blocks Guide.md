@@ -190,6 +190,7 @@ header-includes: |
     - Ignore waves: fixed altitude at the average sea level
     - Relative to waves: altitude of the water below the sensor
     - Outside of high seas, both options are equivalent
+    - On space sector, it's the max value while outside an atmosphere and close to the center of the planet while inside one
   - Trigger
     - Normal: sends an output when it's above the altitude you set
     - Below: sends an output when it's below the altitude you set
