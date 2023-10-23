@@ -460,13 +460,15 @@ header-includes: |
 \end{center}
 \vspace{10mm}
 
+\clearpage
+
 \newcommand{\titleB}{Output Value}
 \phantomsection
 \addcontentsline{toc}{section}{\TOCLabelI \titleB}
 
 ## \TitleFormatI{\titleB} {.unlisted .unnumbered}
 
-- When something is activated, it acts as if you pressed the keybind. Positive values act as the green keybind and negative values act as the red keybind. For things that only have a green keybind, the absolute value will be used \
+- When something is activated, it acts as if you pressed the keybind. Positive values act as the green keybind and negative values act as the red keybind. For things that only have a green keybind, the absolute value will be used
 - Goes from $-1$ to $1$
   - Due to a bug only up to 5 characters can be written, so depending on if the value is positive or negative you will only be able to use up to 4 or 3 decimals respectively
   - More decimals can be achieved by using multiple gates: if the number is expressed in scientific notation as $\pm a \cdot 10^b$, $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals
@@ -494,12 +496,14 @@ header-includes: |
      - If the result is $< -1$ it gets replaced with $-1$
   3) The gate multiplies the result by its output value
   4) The gate sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
+  - Full formula: $\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$
+  \
+  \
   - Diagram made by Zoomah:
     \vspace{1mm}
     \begin{center}
     \hspace{-4.5em}\includegraphics[width=36.9em]{output_value_diagram}
     \end{center}
-  - Full formula: $\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$
   - Example
 
 An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output
@@ -1003,11 +1007,8 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     \end{itemize} \\
     \hline
 \end{tabular}
-\
 
 Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and base 10 with cycle circuits, followed by the 1-way binary circuit with cycle, then by the base 10 circuit without cycle and lastly the binary circuit without cycle or with 2-way
-
-\clearpage
 
 \newcommand{\titleCF}{No-Delay Signal Toggle}
 \phantomsection
@@ -1024,7 +1025,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
     \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
     \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
-    \node[wideNode] (input_toggle1) [above = 2cm of input_signal]  {OR Gate with\\toggle keybind};
+    \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
     \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
     \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
     \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
