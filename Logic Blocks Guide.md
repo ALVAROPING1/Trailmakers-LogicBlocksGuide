@@ -472,12 +472,13 @@ header-includes: |
   - More decimals can be achieved by using multiple gates: if the number is expressed in scientific notation as $\pm a \cdot 10^b$, $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals
 - It's the percentage of power that whatever it activates will use, applied to the value set in the settings (if applicable)
   - For engines it affects the max speed and acceleration (the torque)
-  - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines it affects the power
+  - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines/quantum rudder it affects the power
   - For servos/hinges/large hinges/wings with control surfaces it affects the angle
     - For hinges/wings the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
     - It only works without hold position
     - Hinges and wings are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2Multiplier)
-  - For spinning servos/helicopter engines/pistons it affects the speed
+  - For spinning servos/helicopter engines/pistons/gyro/gyro stabilizer it affects the speed
+    - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
   - For tone generators it affects the volume
   - For the rest of the blocks, it doesn't affect anything
 \newcommand{\titleBA}{How the output value is calculated}
