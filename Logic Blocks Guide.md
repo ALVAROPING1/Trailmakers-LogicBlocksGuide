@@ -1016,7 +1016,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
 - **\TitleFormatII{\titleCF}**
   - Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
-  - Doesn't work when the output block is an AND/XOR gate. Additionally, on consoles, it doesn't work for output blocks that don't take output value into account either
+  - Doesn't work when the output block is an AND/XOR gate
   - Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
   - Diagram of the circuit:
     \vspace{2mm}
