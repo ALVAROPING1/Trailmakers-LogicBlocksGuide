@@ -62,7 +62,7 @@ header-includes: |
 
     % Increase max nesting depth for lists
     \usepackage{enumitem}
-    
+
     \setlistdepth{5}
 
     \setlist[itemize]{leftmargin=2em}
@@ -71,7 +71,7 @@ header-includes: |
     \setlist[itemize,3]{label=\LabelItemIII}
     \setlist[itemize,4]{label=\LabelItemIV}
     \setlist[itemize,5]{label=\LabelItemI}
-    
+
     \renewlist{itemize}{itemize}{5}
 
     % Diagrams
@@ -190,6 +190,7 @@ header-includes: |
     - Ignore waves: fixed altitude at the average sea level
     - Relative to waves: altitude of the water below the sensor
     - Outside of high seas, both options are equivalent
+    - On space sector, it's the max value while outside an atmosphere and close to the center of the planet while inside one
   - Trigger
     - Normal: sends an output when it's above the altitude you set
     - Below: sends an output when it's below the altitude you set
@@ -459,23 +460,27 @@ header-includes: |
 \end{center}
 \vspace{10mm}
 
+\clearpage
+
 \newcommand{\titleB}{Output Value}
 \phantomsection
 \addcontentsline{toc}{section}{\TOCLabelI \titleB}
 
 ## \TitleFormatI{\titleB} {.unlisted .unnumbered}
 
-- When something is activated, it acts as if you pressed the keybind. Positive values act as the green keybind and negative values act as the red keybind. For things that only have green keybind, the absolute value will be used \
+- When something is activated, it acts as if you pressed the keybind. Positive values act as the green keybind and negative values act as the red keybind. For things that only have a green keybind, the absolute value will be used
 - Goes from $-1$ to $1$
-  - Due to a bug only up to 5 characters can be written, so depending on if the value is positive or negative you will only be able to use up to 4 or 3 decimals respectively. More decimals can be achieved by using multiple gates: if the number is expressed in scientific notation as $\pm a \cdot 10^b$, $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals
+  - Due to a bug only up to 5 characters can be written, so depending on if the value is positive or negative you will only be able to use up to 4 or 3 decimals respectively
+  - More decimals can be achieved by using multiple gates: if the number is expressed in scientific notation as $\pm a \cdot 10^b$, $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals
 - It's the percentage of power that whatever it activates will use, applied to the value set in the settings (if applicable)
   - For engines it affects the max speed and acceleration (the torque)
-  - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines it affects the power
-  - For servos/hinges/large hinges it affects the angle
-    - For hinges the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
-    - For hinges it only works without hold position
-    - Hinges are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2Multiplier)
-  - For spinning servos/helicopter engines/pistons it affects the speed
+  - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines/quantum rudder it affects the power
+  - For servos/hinges/large hinges/wings with control surfaces it affects the angle
+    - For hinges/wings the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
+    - It only works without hold position
+    - Hinges and wings are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2Multiplier)
+  - For spinning servos/helicopter engines/pistons/gyro/gyro stabilizer it affects the speed
+    - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
   - For tone generators it affects the volume
   - For the rest of the blocks, it doesn't affect anything
 \newcommand{\titleBA}{How the output value is calculated}
@@ -491,12 +496,14 @@ header-includes: |
      - If the result is $< -1$ it gets replaced with $-1$
   3) The gate multiplies the result by its output value
   4) The gate sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
+  - Full formula: $\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$
+  \
+  \
   - Diagram made by Zoomah:
     \vspace{1mm}
     \begin{center}
     \hspace{-4.5em}\includegraphics[width=36.9em]{output_value_diagram}
     \end{center}
-    \
   - Example
 
 An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output
@@ -874,8 +881,8 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
 
         \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
-        \draw[line]  (input_pulse.north) -- (input);
-        \draw[line]  (input_NAND.north)  -- (input_NAND |- input);
+        \draw[->-]   (input_pulse.north) -- (input);
+        \draw[->-]   (input_NAND.north)  -- (input_NAND |- input);
         \draw[arrow] (input)             -| (AND_1.south);
         \draw[arrow] (input)             -| (AND_n.south);
         \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
@@ -1000,13 +1007,139 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
     \end{itemize} \\
     \hline
 \end{tabular}
-\
 
 Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and base 10 with cycle circuits, followed by the 1-way binary circuit with cycle, then by the base 10 circuit without cycle and lastly the binary circuit without cycle or with 2-way
 
+\newcommand{\titleCF}{No-Delay Signal Toggle}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCF}
+
+- **\TitleFormatII{\titleCF}**
+  - Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
+  - Doesn't work when the output block is an AND/XOR gate
+  - Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
+  - Diagram of the circuit:
+    \vspace{2mm}
+    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
+    % Nodes
+
+    \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
+    \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
+    \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
+    \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
+    \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
+    \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
+    \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
+
+    % Arrows
+
+    \draw[arrow] (input_signal.east)  -- (output_blocks.west);
+    \draw[arrow] (input_signal.north) |- (XOR.west);
+    \draw[arrow] (XOR.east)           -| (output_blocks.north);
+    \draw[->-]   (input_toggle1.east) -- (toggles);
+    \draw[->-]   (input_toggle2.west) -- (toggles);
+    \draw[arrow] (toggles)            -- (XOR.north);
+    \end{tikzpicture}\vspace{1mm}
+  - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
+
+\newcommand{\titleCG}{Feedback Loop}
+\phantomsection
+\addcontentsline{toc}{subsection}{\TOCLabelII \titleCG}
+
+- **\TitleFormatII{\titleCG}**
+  - Allows to store an analog value in the range $[-1, 1]$
+  - Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
+  - Each frame the input is active, the stored value increases by the value of the input
+    - With a close to 0 output value as input, the circuit can be used to generate an analog output value
+  - One of the OR gates can be replaced with an XOR to add a reset input. In this case, the normal input should go to the OR gate only and the reset input must be 2 different signals connected to the XOR gate
+    - Be aware that this method adds a 1 frame jitter to the stored signal
+  \newcommand{\titleCGA}{Clamped Feedback Loop}
+  - \titleCGA
+    \phantomsection
+    \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCGA}
+    - Allows limiting the output signal of a feedback loop to the range $[0, 1]$
+    - Diagram of the circuit:
+      \vspace{2mm}
+      \begin{tikzpicture}[trim left=-8em]
+      % Nodes
+
+      \node[node] (feedback_top)                               {OR Gate};
+      \node[node] (feedback_bot) [below = 5mm of feedback_top] {OR Gate};
+      \coordinate (feedback_mid) at ($(feedback_top.west)!0.5!(feedback_bot.west)$);
+
+      \node[node] (input)        [left = of feedback_mid]      {Input Signal};
+
+      \coordinate[above=16pt of feedback_top] (feedback);
+
+      \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
+      \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output value};
+
+      \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output value\\(output)};
+
+      % Bounding boxes
+      \begin{scope}[on background layer]
+          \node[node, fit=(feedback_top)(feedback_bot)(feedback), label={[anchor=north, yshift=-2.5pt]Feedback Loop}] {};
+      \end{scope}
+
+      % Arrows
+
+      \coordinate  (input_split) at ($(input.east) + (0.5, 0)$);
+      \draw[line]  (input.east)                    -- (input_split);
+      \draw[arrow] (input_split)                   |- (feedback_top.west);
+      \draw[arrow] (input_split)                   |- (feedback_bot.west);
+      \draw[arrow] ($(feedback_bot.north) + (2mm, 0)$)  -- ($(feedback_top.south) + (2mm, 0)$);
+      \draw[arrow] ($(feedback_top.south) + (-2mm, 0)$) -- ($(feedback_bot.north) + (-2mm, 0)$);
+      \draw[arrow] (C+1.west)                      -- (feedback_bot.east);
+      \draw[arrow] (C+1.north)                     -- (C-1.south);
+      \draw[arrow] (C-1.west |- feedback_top.east) |- (feedback_top.east);
+      \draw[arrow] (C-1.east)                      -- (output.west);
+      \draw[arrow] (feedback_bot.south) -- ($(feedback_bot.south) + (0, -0.5)$) -| (output);
+      \end{tikzpicture}\vspace{1mm}
+    - Note: the input signal is reversed. This means that a negative value increases the stored value while a positive value decreases it
+    - Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
+    - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=2911246646)
+    - Python script to simulate the behaviour (input value is automatically reversed):
+
+      ```python
+      def clamp(x: float) -> float:
+          return min(max(x, -1), 1)
+
+      def update(
+          feedback_top: float, feedback_bottom: float, user_input: float
+      ) -> tuple[float, float]:
+          return (
+              clamp(feedback_bottom - user_input + 1),
+              clamp(feedback_top    - user_input - 1)
+          )
+
+      def print_state(feedback_top: float, feedback_bottom: float):
+          print("State:")
+          print("\tFeedback Top: ", round(feedback_top, 3))
+          print("\tFeedback Bottom: ", round(feedback_bottom, 3))
+          print("Output: ", round(clamp(-(feedback_top - 1)), 3))
+
+      feedback_top, feedback_bottom = 1, 0
+      print_state(feedback_top, feedback_bottom)
+      while True:
+          user_input = input("Enter input (between -1 and 1, Q to quit): ")
+          if user_input.lower() == "q":
+              break
+          try:
+              user_input = float(user_input)
+          except ValueError:
+              print("Invalid input. Try again")
+              continue
+          feedback_top, feedback_bottom = (
+              update(feedback_top, feedback_bottom, user_input)
+          )
+          print_state(feedback_top, feedback_bottom)
+      ```
+
+    - Credits to Precache for figuring out this circuit
+
 \clearpage
 
-\newcommand{\titleD}{Output value to multiplier for hinges}
+\newcommand{\titleD}{Output value to multiplier for hinges/wings with control surfaces}
 \phantomsection
 \addcontentsline{toc}{section}{\TOCLabelI \titleD}
 
@@ -1130,6 +1263,6 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 - If you want your system to not modify the input that passes through, configure all of the logic gates to have an output value of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
 - Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
 - If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
-- If you still have any questions or need help with something, feel free to contact me on the [\underline{official trailmakers discord server}](https://discord.gg/trailmakers)
+- If you still have any questions or need help with something, feel free to contact me on the [\underline{official Trailmakers discord server}](https://discord.gg/trailmakers)
 
 ## \large Made by ALVAROPING1#6682 {.unlisted .unnumbered}

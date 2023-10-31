@@ -3,3 +3,4 @@
 ~$*.rtf
 *.tmp
 .markdownlint.json
+.spell/
