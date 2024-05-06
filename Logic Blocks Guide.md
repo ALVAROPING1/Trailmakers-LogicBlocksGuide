@@ -7,16 +7,6 @@ lang: en
 toc: true
 toc-depth: 3
 
-mainfont: Calibri.ttf
-mainfontoptions:
-- Extension=.ttf
-- UprightFont=*
-- BoldFont=*b
-- ItalicFont=*i
-- BoldItalicFont=*z
-
-fontsize: 12pt
-
 # For some reason, boxlinks is necessary for colorlinks to work even though it shouldn't have any effect when colorlinks is set
 boxlinks: true
 linkcolor: hyperlinkBlue
@@ -27,7 +17,6 @@ geometry: "top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm"
 header-includes: |
     ```{=latex}
     % Fonts
-    \setmathfont{Cambria Math}
     \parskip=3.5pt
 
     % Hyperlink color
