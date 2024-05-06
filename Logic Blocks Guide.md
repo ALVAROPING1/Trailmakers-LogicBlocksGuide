@@ -22,7 +22,7 @@ boxlinks: true
 linkcolor: hyperlinkBlue
 urlcolor: hyperlinkBlue
 
-geometry: "left=3cm,right=3cm,top=2.5cm,bottom=2.5cm"
+geometry: "top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm"
 
 header-includes: |
     ```{=latex}
