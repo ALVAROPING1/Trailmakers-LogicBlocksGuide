@@ -1147,8 +1147,8 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 ## \TitleFormatI{\titleD} {#OutputValue2Multiplier .unlisted .unnumbered}
 
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
-
 - The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
+- A calculator using this data made by confusionextended can be found [\underline{here}](https://www.desmos.com/calculator/i70yadxqyy)
 
 \setlength\LTleft{-0.95cm}
 \begin{longtable}{|c|c|c !{\vrule width 3pt} c|c|c !{\vrule width 3pt} c|c|c|}
