@@ -1,7 +1,11 @@
 ---
-title-meta: Logic Blocks Guide
-author-meta: ALVAROPING1#6682
+title: Logic Blocks Guide
+author: ALVAROPING1
+date: \today
 lang: en
+
+toc: true
+toc-depth: 3
 
 mainfont: Calibri.ttf
 mainfontoptions:
@@ -103,24 +107,31 @@ header-includes: |
     \usepackage{mathtools}
     \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 
+    % Title command
+    \makeatletter
+    \renewcommand{\maketitle}{
+        \begin{center}
+            \LARGE\underline{\@title}\\
+            \vspace{1mm}
+            \begin{figure}[h]
+                \makebox[\textwidth][c]{
+                    \includegraphics[width=\linewidth]{thumbnail}
+                }
+            \end{figure}
+            \raggedleft\large{\@date} \\
+        \end{center}
+    }
+    \makeatother
+
     \newcommand{\TOCLabelI}{\large \color{black}}
     \newcommand{\TOCLabelII}{\hspace{-0.225em} \color{black} \LabelItemI \hspace{0.5em}}
     \newcommand{\TOCLabelIII}{\hspace{-0.305em} \color{black} \LabelItemIII \hspace{0.5em}}
 
-    \newcommand{\TitleFormat}[1]{\centering \LARGE \underline{#1}}
     \newcommand{\TitleFormatI}[1]{\Large \underline{#1}}
     \newcommand{\TitleFormatII}[1]{\large #1}
     ```
 ---
 
-# \TitleFormat{Logic Blocks Guide} {.unlisted .unnumbered}
-
-\vspace{1mm}
-\begin{center}
-\includegraphics[width=\linewidth]{thumbnail}
-\end{center}
-
-\tableofcontents
 \clearpage
 
 \newcommand{\titleA}{Settings}
