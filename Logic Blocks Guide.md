@@ -135,6 +135,7 @@ header-includes: |
 
 - **\TitleFormatII{\titleAA}**
   - Range: in meters, $1 \text{ block} = 0.25 \text{ m}$
+    - Distance is measured from the center of the block, and only a single half of the detecting face detects objects
   - Output value: from $-1$ to $1$
   - Trigger
     - Normal: sends an output when it detects something
