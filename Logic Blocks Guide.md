@@ -122,36 +122,22 @@ header-includes: |
         \end{center}
     }
     \makeatother
-
-    \newcommand{\TOCLabelI}{\large \color{black}}
-    \newcommand{\TOCLabelII}{\hspace{-0.225em} \color{black} \LabelItemI \hspace{0.5em}}
-    \newcommand{\TOCLabelIII}{\hspace{-0.305em} \color{black} \LabelItemIII \hspace{0.5em}}
-
-    \newcommand{\TitleFormatI}[1]{\Large \underline{#1}}
-    \newcommand{\TitleFormatII}[1]{\large #1}
     ```
 ---
 
 \clearpage
 
-\newcommand{\titleA}{Settings}
-\phantomsection
-\addcontentsline{toc}{section}{\TOCLabelI \titleA}
+# Settings
 
-## \TitleFormatI{\titleA} {.unlisted .unnumbered}
+## Distance sensor
 
-\newcommand{\titleAA}{Distance Sensor}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleAA}
-
-- **\TitleFormatII{\titleAA}**
-  - Range: in meters, $1 \text{ block} = 0.25 \text{ m}$
-    - Distance is measured from the center of the block, and only a single half of the detecting face detects objects
-  - Output value: from $-1$ to $1$
-  - Trigger
-    - Normal: sends an output when it detects something
-    - Inverted: sends an output when it detects nothing
-  - Outputs
+- Range: in meters, $1 \text{ block} = 0.25 \text{ m}$
+  - Distance is measured from the center of the block, and only a single half of the detecting face detects objects
+- Output value: from $-1$ to $1$
+- Trigger
+  - Normal: sends an output when it detects something
+  - Inverted: sends an output when it detects nothing
+- Outputs
 
 \vspace{2mm}
 \begin{center}
@@ -191,22 +177,19 @@ header-includes: |
 \end{center}
 \vspace{10mm}
 
-\newcommand{\titleAB}{Altitude Sensor}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleAB}
+## Altitude Sensor
 
-- **\TitleFormatII{\titleAB}**
-  - Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 \text{ m}$
-  - Output value: from $-1$ to $1$
-  - Frame of reference
-    - Ignore waves: fixed altitude at the average sea level
-    - Relative to waves: altitude of the water below the sensor
-    - Outside of high seas, both options are equivalent
-    - On space sector, it's the max value while outside an atmosphere and close to the center of the planet while inside one
-  - Trigger
-    - Normal: sends an output when it's above the altitude you set
-    - Below: sends an output when it's below the altitude you set
-  - Outputs
+- Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 \text{ m}$
+- Output value: from $-1$ to $1$
+- Frame of reference
+  - Ignore waves: fixed altitude at the average sea level
+  - Relative to waves: altitude of the water below the sensor
+  - Outside of high seas, both options are equivalent
+  - On space sector, it's the max value while outside an atmosphere and close to the center of the planet while inside one
+- Trigger
+  - Normal: sends an output when it's above the altitude you set
+  - Below: sends an output when it's below the altitude you set
+- Outputs
 
 \vspace{2mm}
 \begin{center}
@@ -248,18 +231,15 @@ header-includes: |
 \end{center}
 \vspace{12mm}
 
-\newcommand{\titleAC}{Speed Sensor}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleAC}
+## Speed Sensor
 
-- **\TitleFormatII{\titleAC}**
-  - Speed: in km/h or mph depending on the speed unit settings
-    - **IMPORTANT:** only detects the movement in the direction that the arrow points. The speed is measured from the position of the block
-  - Output value: from $-1$ to $1$
-  - Trigger
-    - Normal: sends an output when it goes faster than the speed you set
-    - Below: sends an output when it goes slower that the speed you set
-  - Outputs
+- Speed: in km/h or mph depending on the speed unit settings
+  - **IMPORTANT:** only detects the movement in the direction that the arrow points. The speed is measured from the position of the block
+- Output value: from $-1$ to $1$
+- Trigger
+  - Normal: sends an output when it goes faster than the speed you set
+  - Below: sends an output when it goes slower that the speed you set
+- Outputs
 
 \vspace{2mm}
 \begin{center}
@@ -299,19 +279,16 @@ header-includes: |
 \end{center}
 \vspace{10mm}
 
-\newcommand{\titleAD}{Angle Sensor}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleAD}
+## Angle Sensor
 
-- **\TitleFormatII{\titleAD}**
-  - Direction: in degrees, changes the position of the middle point of the activation threshold
-  - Width: in degrees, changes the size of the activation threshold
-  - Output value: from $-1$ to $1$
-  - Trigger
-    - Normal: sends an output when the arrow is inside the activation threshold
-    - Outside: sends an output when the arrow is outside the activation threshold
-    - Note: the arrow will always try to point up no matter the orientation (in the direction of highest slope of the plane it is in)
-  - Outputs
+- Direction: in degrees, changes the position of the middle point of the activation threshold
+- Width: in degrees, changes the size of the activation threshold
+- Output value: from $-1$ to $1$
+- Trigger
+  - Normal: sends an output when the arrow is inside the activation threshold
+  - Outside: sends an output when the arrow is outside the activation threshold
+  - Note: the arrow will always try to point up no matter the orientation (in the direction of highest slope of the plane it is in)
+- Outputs
 
 \vspace{2mm}
 \begin{center}
@@ -353,19 +330,16 @@ header-includes: |
 \end{center}
 \vspace{10mm}
 
-\newcommand{\titleAE}{Compass}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleAE}
+## Compass
 
-- **\TitleFormatII{\titleAE}**
-  - Direction: in degrees, changes the position of the middle point of the activation threshold
-  - Width: in degrees, changes the size of the activation threshold
-  - Output value: from $-1$ to $1$
-  - Trigger
-    - Normal: sends an output when the arrow is inside the activation threshold
-    - Outside: sends an output when the arrow is outside the activation threshold
-    - Note: the arrow will always try to point north no matter the orientation
-  - Outputs
+- Direction: in degrees, changes the position of the middle point of the activation threshold
+- Width: in degrees, changes the size of the activation threshold
+- Output value: from $-1$ to $1$
+- Trigger
+  - Normal: sends an output when the arrow is inside the activation threshold
+  - Outside: sends an output when the arrow is outside the activation threshold
+  - Note: the arrow will always try to point north no matter the orientation
+- Outputs
 
 \vspace{2mm}
 \begin{center}
@@ -407,23 +381,20 @@ header-includes: |
 \end{center}
 \vspace{10mm}
 
-\newcommand{\titleAF}{Logic Gates}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleAF}
+## Logic gates
 
-- **\TitleFormatII{\titleAF}**
-  - Keybinds: green ($1$) and red ($-1$), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
-    - Toggle: toggles **inputs**, when an input reaches a gate it will toggle on the color toggled (if there is, it's of the same color as the input and it's off), toggle it off (if there is, it's of the same color as the input and it's on, it will be toggled off after this pulse stops reaching the gate) or toggle the other color off and check again the other 2 rules (if it's not of the same color as the input and the other color it's toggled on)
-      - If you want to toggle the output instead of the inputs, make the signal go through another gate with the toggle after the gate in which you want to toggle the output
-  - Timers
-    - The timers start as soon as the gate receives a **single input**, even if the gate doesn't meet the conditions to send an output
-    - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one you wrote rounded to 8 decimal places. Due to a bug only up to 5 characters can be written, so depending on which value you write the number of decimals which can be used will vary
-    - Delay: in seconds, only applied when activating but not when deactivating. Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated only once per physics' frame
-    - Duration and pause (previously known as active and inactive time respectively): in seconds, setting the duration to a number different than $0$ and pause to $0$ will make it send a single pulse until turned off and on again. If both of them are not $0$ it will create a cycle which will be repeated until it's deactivated. The shortest length for a pulse is $1$ frame ($1/60 s$), any value lower than this won't send an output
-    - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is 0 it ends after the duration ends)
-    - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. To calculate that number just do $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
-  - Output value: from $-1$ to $1$
-  - Outputs
+- Keybinds: green ($1$) and red ($-1$), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
+  - Toggle: toggles **inputs**, when an input reaches a gate it will toggle on the color toggled (if there is, it's of the same color as the input and it's off), toggle it off (if there is, it's of the same color as the input and it's on, it will be toggled off after this pulse stops reaching the gate) or toggle the other color off and check again the other 2 rules (if it's not of the same color as the input and the other color it's toggled on)
+    - If you want to toggle the output instead of the inputs, make the signal go through another gate with the toggle after the gate in which you want to toggle the output
+- Timers
+  - The timers start as soon as the gate receives a **single input**, even if the gate doesn't meet the conditions to send an output
+  - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one you wrote rounded to 8 decimal places. Due to a bug only up to 5 characters can be written, so depending on which value you write the number of decimals which can be used will vary
+  - Delay: in seconds, only applied when activating but not when deactivating. Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated only once per physics' frame
+  - Duration and pause (previously known as active and inactive time respectively): in seconds, setting the duration to a number different than $0$ and pause to $0$ will make it send a single pulse until turned off and on again. If both of them are not $0$ it will create a cycle which will be repeated until it's deactivated. The shortest length for a pulse is $1$ frame ($1/60 s$), any value lower than this won't send an output
+  - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is 0 it ends after the duration ends)
+  - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. To calculate that number just do $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
+- Output value: from $-1$ to $1$
+- Outputs
 
 \vspace{2mm}
 \begin{center}
@@ -474,11 +445,7 @@ header-includes: |
 
 \clearpage
 
-\newcommand{\titleB}{Output Value}
-\phantomsection
-\addcontentsline{toc}{section}{\TOCLabelI \titleB}
-
-## \TitleFormatI{\titleB} {.unlisted .unnumbered}
+# Output Value
 
 - When something is activated, it acts as if you pressed the keybind. Positive values act as the green keybind and negative values act as the red keybind. For things that only have a green keybind, the absolute value will be used
 - Goes from $-1$ to $1$
@@ -495,430 +462,406 @@ header-includes: |
     - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
   - For tone generators it affects the volume
   - For the rest of the blocks, it doesn't affect anything
-\newcommand{\titleBA}{How the output value is calculated}
-- **\TitleFormatII{\titleBA}**
-  \phantomsection
-  \addcontentsline{toc}{subsection}{\TOCLabelII \titleBA}
-  1) The gate checks if its conditions are met
-     - AND gate: all inputs are on
-     - OR gate: at least 1 input is on
-     - XOR gate: only 1 input is on
-  2) The gate adds up the output values of all of its inputs
-     - If the result is $> 1$ it gets replaced with $1$
-     - If the result is $< -1$ it gets replaced with $-1$
-  3) The gate multiplies the result by its output value
-  4) The gate sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
-  - Full formula: $\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$
-  \
-  \
-  - Diagram made by Zoomah:
-    \vspace{1mm}
-    \begin{center}
-    \hspace{-4.5em}\includegraphics[width=36.9em]{output_value_diagram}
-    \end{center}
-  - Example
+
+## How the output value is calculated
+
+1) The gate checks if its conditions are met
+   - AND gate: all inputs are on
+   - OR gate: at least 1 input is on
+   - XOR gate: only 1 input is on
+2) The gate adds up the output values of all of its inputs
+   - If the result is $> 1$ it gets replaced with $1$
+   - If the result is $< -1$ it gets replaced with $-1$
+3) The gate multiplies the result by its output value
+4) The gate sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
+
+- Full formula: $\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$
+  \tightlist <!-- Removes the spacing between the lists -->
+- Diagram made by Zoomah:
+  \vspace{1mm}
+  \begin{center}
+  \hspace{-4.5em}\includegraphics[width=36.9em]{output_value_diagram}
+  \end{center}
+- Example
 
 An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output
 
-\newcommand{\titleC}{Useful Circuits}
-\phantomsection
-\addcontentsline{toc}{section}{\TOCLabelI \titleC}
+# Useful Circuits
 
-## \TitleFormatI{\titleC} {.unlisted .unnumbered}
+## NOR/NOT Gate
 
-\newcommand{\titleCA}{NOR/NOT Gate}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleCA}
+- Inverts the state of the input
+- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
+- If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
+- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
 
-- **\TitleFormatII{\titleCA}**
-  - Inverts the state of the input
-  - Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
-  - If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
-  - You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
+## Pulse generator/Rising edge detector
 
-\newcommand{\titleCB}{Pulse generator/Rising edge detector}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleCB}
+- Sends a pulse of a specific length (usually a single frame which is $1/60 s$) when the input goes from off to on
+- Made by setting the duration to the length of the pulse on an OR gate
 
-- **\TitleFormatII{\titleCB}**
-  - Sends a pulse of a specific length (usually a single frame which is $1/60 s$) when the input goes from off to on
-  - Made by setting the duration to the length of the pulse on an OR gate
+## Falling edge detector
 
-\newcommand{\titleCC}{Falling edge detector}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleCC}
+- Sends a pulse of a specific length when the input goes from on to off
+- Made by connecting a NOT gate to a pulse generator
 
-- **\TitleFormatII{\titleCC}**
-  - Sends a pulse of a specific length when the input goes from on to off
-  - Made by connecting a NOT gate to a pulse generator
+## Latch (T-FlipFlop)
 
-\newcommand{\titleCD}{Latch}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleCD}
+- Stores a single bit of information
+- Made by activating toggle on an OR gate, requires the input to be a pulse to be easily controlled by other gates (use a pulse generator for this)
 
-- **\TitleFormatII{\titleCD}**
-  - Stores a single bit of information
-  - Made by activating toggle on an OR gate, requires the input to be a pulse to be easily controlled by other gates (use a pulse generator for this)
+## Counter
 
-\newcommand{\titleCE}{Counter}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleCE}
+- Can store the value of a variable with $n$ possible values
+- Depending on how it's made, it can be 1 or 2 way and have cycle or not
+  - 1-way: the value can only be increased
+  - 2-way: the value can be both increased and decreased
+  - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
+  - Base designs are 1-way without cycle
+- The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
+- There are 3 ways of doing it: general circuit, base 10 and binary. Which one is least complex depends on the situation
 
-- **\TitleFormatII{\titleCE}**
-  - Can store the value of a variable with $n$ possible values
-  - Depending on how it's made, it can be 1 or 2 way and have cycle or not
-    - 1-way: the value can only be increased
-    - 2-way: the value can be both increased and decreased
-    - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
-    - Base designs are 1-way without cycle
-  - The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
-  - There are 3 ways of doing it: general circuit, base 10 and binary. Which one is least complex depends on the situation
-    \newcommand{\titleCEA}{General Circuit}
-    - \titleCEA
-      \phantomsection
-      \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEA}
-      - $n = \text{amount of cells}$
-      - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
-      - Diagram of the circuit:
-        \vspace{2mm}
-        \begin{tikzpicture}[trim left=8.1em]
-        % Nodes
+### General Circuit
 
-        % Cell 1
-        \node[node]       (OR_1)                          {Toggled OR gate\\with 1 frame\\delay (output)};
-        \node[node]       (AND_1)   [below = 5mm of OR_1] {AND gate};
-        \coordinate[above=16pt of OR_1]   (cell_1);
+- $n = \text{amount of cells}$
+- The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
+- Diagram of the circuit:
+  \vspace{2mm}
+  \begin{tikzpicture}[trim left=2.1em]
+  % Nodes
 
-        % Hidden cell 1
-        \node[hiddenNode] (OR_h1)   [right = of OR_1]     {};
-        \node[hiddenNode] (AND_h1)  [right = of AND_1]    {};
+  % Cell 1
+  \node[node]       (OR_1)                          {Toggled OR gate\\with 1 frame\\delay (output)};
+  \node[node]       (AND_1)   [below = 5mm of OR_1] {AND gate};
+  \coordinate[above=16pt of OR_1]   (cell_1);
 
-        % Cell k
-        \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\with 1 frame\\delay (output)};
-        \node[node]       (AND_k)   [right = of AND_h1]   {AND gate};
-        \coordinate[above=16pt of OR_k]   (cell_k);
+  % Hidden cell 1
+  \node[hiddenNode] (OR_h1)   [right = of OR_1]     {};
+  \node[hiddenNode] (AND_h1)  [right = of AND_1]    {};
 
-        % Cell k+1
-        \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\with 1 frame\\delay (output)};
-        \node[node]       (AND_k+1) [right = of AND_k]    {AND gate};
-        \coordinate[above=16pt of OR_k+1] (cell_k+1);
+  % Cell k
+  \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\with 1 frame\\delay (output)};
+  \node[node]       (AND_k)   [right = of AND_h1]   {AND gate};
+  \coordinate[above=16pt of OR_k]   (cell_k);
 
-        % Hidden cell 2
-        \node[hiddenNode] (OR_h2)   [right = of OR_k+1]   {};
-        \node[hiddenNode] (AND_h2)  [right = of AND_k+1]  {};
+  % Cell k+1
+  \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\with 1 frame\\delay (output)};
+  \node[node]       (AND_k+1) [right = of AND_k]    {AND gate};
+  \coordinate[above=16pt of OR_k+1] (cell_k+1);
 
-        % Cell n
-        \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\with 1 frame\\delay (output)};
-        \node[hiddenNode] (AND_n)   [right = of AND_h2]   {};
-        \coordinate[above=16pt of OR_n]   (cell_n);
+  % Hidden cell 2
+  \node[hiddenNode] (OR_h2)   [right = of OR_k+1]   {};
+  \node[hiddenNode] (AND_h2)  [right = of AND_k+1]  {};
 
-        % Input gate
-        \node[node] (input_pulse) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+  % Cell n
+  \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\with 1 frame\\delay (output)};
+  \node[hiddenNode] (AND_n)   [right = of AND_h2]   {};
+  \coordinate[above=16pt of OR_n]   (cell_n);
 
-        % Cell bounding boxes
-        \begin{scope}[on background layer]
-            \node[node,       fit=(OR_1)(AND_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(OR_h1)(AND_h1)]             {$\cdots$};
-            \node[node,       fit=(OR_k)(AND_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(OR_h2)(AND_h2)]             {$\cdots$};
-            \node[node,       fit=(OR_n)(AND_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
-        \end{scope}
+  % Input gate
+  \node[node] (input_pulse) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
 
-        % Arrows
+  % Cell bounding boxes
+  \begin{scope}[on background layer]
+      \node[node,       fit=(OR_1)(AND_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+      \node[hiddenNode, fit=(OR_h1)(AND_h1)]             {$\cdots$};
+      \node[node,       fit=(OR_k)(AND_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+      \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+      \node[hiddenNode, fit=(OR_h2)(AND_h2)]             {$\cdots$};
+      \node[node,       fit=(OR_n)(AND_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
+  \end{scope}
 
-        % Cell 1
-        \draw[arrow] (AND_1.east)                   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
-        \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
-        \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
+  % Arrows
 
-        % Hidden cell 1
-        \draw[arrow] (AND_h1.east)                  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
+  % Cell 1
+  \draw[arrow] (AND_1.east)                   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
+  \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
+  \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
 
-        % Cell k
-        \draw[arrow] (AND_k.east)                   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
-        \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
-        \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
+  % Hidden cell 1
+  \draw[arrow] (AND_h1.east)                  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
 
-        % Cell k+1
-        \draw[arrow] (AND_k+1.east)                 -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
-        \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
-        \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
+  % Cell k
+  \draw[arrow] (AND_k.east)                   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
+  \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
+  \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
 
-        % Hidden cell 2
-        \draw[arrow] (AND_h2.east)                  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
+  % Cell k+1
+  \draw[arrow] (AND_k+1.east)                 -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
+  \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
+  \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
 
-        % Input gate
-        \coordinate  (input) at ($(input_pulse.north) + (0, 0.5)$);
-        \draw[line]  (input_pulse.north)            -- (input);
-        \draw[arrow] (input)                        -| (AND_1.south);
-        \draw[arrow] (input)                        -| (AND_h2.south);
-        \draw[arrow] (input -| AND_h1)              -- (AND_h1.south);
-        \draw[arrow] (input -| AND_k)               -- (AND_k.south);
-        \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
-        \end{tikzpicture}\vspace{1mm}
-      - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
-      - To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
-      - Requires a startup pulse to one of the toggled OR gates to work (achieved with a 1 frame pulse generator)
-      - Complexity
-        - 1-way: $2n$
-        - 1-way+cycle: $2n + 1$
-        - 2-way: $3n$
-        - 2-way+cycle: $3n + 1$
-      - Takes 3 frames to update
-      - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
-    \newcommand{\titleCEB}{Base 10}
-    - \titleCEB
-      \phantomsection
-      \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEB}
-      - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
-      - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
-      - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
-      - Diagram of the circuit:
-        \vspace{2mm}
-        \begin{tikzpicture}[trim left=8.1em]
-        % Nodes
+  % Hidden cell 2
+  \draw[arrow] (AND_h2.east)                  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
 
-        % Cell 1
-        \node[node]       (ORs_1)                                        {All OR gates\\except the last};
-        \node[node]       (OR_final_1)    [below = 1.5mm of ORs_1]       {Last OR gate};
-        \node[node]       (ANDs_1)        [below = 1.5mm of OR_final_1]  {All AND gates};
-        \coordinate[above=16pt of ORs_1]       (cell_1);
+  % Input gate
+  \coordinate  (input) at ($(input_pulse.north) + (0, 0.5)$);
+  \draw[line]  (input_pulse.north)            -- (input);
+  \draw[arrow] (input)                        -| (AND_1.south);
+  \draw[arrow] (input)                        -| (AND_h2.south);
+  \draw[arrow] (input -| AND_h1)              -- (AND_h1.south);
+  \draw[arrow] (input -| AND_k)               -- (AND_k.south);
+  \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
+  \end{tikzpicture}\vspace{1mm}
+- To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
+- To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
+- Requires a startup pulse to one of the toggled OR gates to work (achieved with a 1 frame pulse generator)
+- Complexity
+  - 1-way: $2n$
+  - 1-way+cycle: $2n + 1$
+  - 2-way: $3n$
+  - 2-way+cycle: $3n + 1$
+- Takes 3 frames to update
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
 
-        % Hidden cell 1
-        \node[hiddenNode] (ORs_h1)        [right = of ORs_1]             {};
-        \node[hiddenNode] (OR_final_h1)   [right = of OR_final_1]        {};
-        \node[hiddenNode] (ANDs_h1)       [right = of ANDs_1]            {};
+### Base 10
 
-        % Cell k
-        \node[node]       (ORs_k)         [right = of ORs_h1]            {All OR gates\\except the last};
-        \node[node]       (OR_final_k)    [right = of OR_final_h1]       {Last OR gate};
-        \node[node]       (ANDs_k)        [right = of ANDs_h1]           {All AND gates};
-        \coordinate[above=16pt of ORs_k]       (cell_k);
+- $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
+- Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
+- The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Diagram of the circuit:
+  \vspace{2mm}
+  \begin{tikzpicture}[trim left=2.1em]
+  % Nodes
 
-        % Cell k+1
-        \node[node]       (ORs_k+1)       [right = of ORs_k]             {All OR gates\\except the last};
-        \node[node]       (OR_final_k+1)  [right = of OR_final_k]        {Last OR gate};
-        \node[node]       (ANDs_k+1)      [right = of ANDs_k]            {All AND gates};
-        \coordinate[above=16pt of ORs_k+1]     (cell_k+1);
+  % Cell 1
+  \node[node]       (ORs_1)                                        {All OR gates\\except the last};
+  \node[node]       (OR_final_1)    [below = 1.5mm of ORs_1]       {Last OR gate};
+  \node[node]       (ANDs_1)        [below = 1.5mm of OR_final_1]  {All AND gates};
+  \coordinate[above=16pt of ORs_1]       (cell_1);
 
-        % Hidden cell 2
-        \node[hiddenNode] (ORs_h2)        [right = of ORs_k+1]           {};
-        \node[hiddenNode] (OR_final_h2)   [right = of OR_final_k+1]      {};
-        \node[hiddenNode] (ANDs_h2)       [right = of ANDs_k+1]          {};
+  % Hidden cell 1
+  \node[hiddenNode] (ORs_h1)        [right = of ORs_1]             {};
+  \node[hiddenNode] (OR_final_h1)   [right = of OR_final_1]        {};
+  \node[hiddenNode] (ANDs_h1)       [right = of ANDs_1]            {};
 
-        % Cell n
-        \node[node]       (ORs_n)         [right = of ORs_h2]            {All OR gates\\except the last};
-        \node[hiddenNode] (OR_final_n)    [right = of OR_final_h2]       {};
-        \node[node]       (ANDs_n)        [right = of ANDs_h2]           {All AND gates};
-        \coordinate[above=16pt of ORs_n]       (cell_n);
+  % Cell k
+  \node[node]       (ORs_k)         [right = of ORs_h1]            {All OR gates\\except the last};
+  \node[node]       (OR_final_k)    [right = of OR_final_h1]       {Last OR gate};
+  \node[node]       (ANDs_k)        [right = of ANDs_h1]           {All AND gates};
+  \coordinate[above=16pt of ORs_k]       (cell_k);
 
-        % Input gate
-        \node[node]       (input_pulse) at ($(ANDs_k) + (0.45, -3.25)$)  {1 frame pulse\\generator (input)};
-        \node[node]       (input_OR)      [right = 1.5mm of input_pulse] {OR gate};
-        \coordinate[above=16pt of input_pulse] (input_cell);
+  % Cell k+1
+  \node[node]       (ORs_k+1)       [right = of ORs_k]             {All OR gates\\except the last};
+  \node[node]       (OR_final_k+1)  [right = of OR_final_k]        {Last OR gate};
+  \node[node]       (ANDs_k+1)      [right = of ANDs_k]            {All AND gates};
+  \coordinate[above=16pt of ORs_k+1]     (cell_k+1);
 
-        % Cell bounding boxes
-        \begin{scope}[on background layer]
-            \node[node,       fit=(ORs_1)(ANDs_1)(OR_final_1)(cell_1),         label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(ORs_h1)(ANDs_h1)(OR_final_h1)]              {$\cdots$};
-            \node[node,       fit=(ORs_k)(ANDs_k)(OR_final_k)(cell_k),         label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node,       fit=(ORs_k+1)(ANDs_k+1)(OR_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(ORs_h2)(ANDs_h2)(OR_final_h2)]              {$\cdots$};
-            \node[node,       fit=(ORs_n)(ANDs_n)(OR_final_n)(cell_n),         label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
-            \node[node,       fit=(input_pulse)(input_OR)(input_cell),         label={[anchor=north, yshift=-2.5pt]Input circuit}] {};
-        \end{scope}
+  % Hidden cell 2
+  \node[hiddenNode] (ORs_h2)        [right = of ORs_k+1]           {};
+  \node[hiddenNode] (OR_final_h2)   [right = of OR_final_k+1]      {};
+  \node[hiddenNode] (ANDs_h2)       [right = of ANDs_k+1]          {};
 
-        % Arrows
+  % Cell n
+  \node[node]       (ORs_n)         [right = of ORs_h2]            {All OR gates\\except the last};
+  \node[hiddenNode] (OR_final_n)    [right = of OR_final_h2]       {};
+  \node[node]       (ANDs_n)        [right = of ANDs_h2]           {All AND gates};
+  \coordinate[above=16pt of ORs_n]       (cell_n);
 
-        % Points between cells (top)
-        \coordinate (1-h1)    at ($(ORs_1.east)!0.5!(ORs_h1.west)   + (0, 1.75)$);
-        \coordinate (h1-k)    at ($(ORs_h1.east)!0.5!(ORs_k.west)   + (0, 1.75)$);
-        \coordinate (k-k+1)   at ($(ORs_k.east)!0.5!(ORs_k+1.west)  + (0, 1.75)$);
-        \coordinate (k+1-h2)  at ($(ORs_k+1.east)!0.5!(ORs_h2.west) + (0, 1.75)$);
-        \coordinate (h2-n)    at ($(ORs_h2.east)!0.5!(ORs_n.west)   + (0, 1.75)$);
-        \coordinate (n-)      at ($(ORs_n.east)                     + (0.5, 1.75)$);
-        % Points between cells (bottom)
-        \coordinate (1-h1-)   at ($(1-h1)                           - (0, 4.6)$);
-        \coordinate (h1-k-)   at ($(h1-k)                           - (0, 4.6)$);
-        \coordinate (k-k+1-)  at ($(k-k+1)                          - (0, 4.6)$);
-        \coordinate (k+1-h2-) at ($(k+1-h2)                         - (0, 4.6)$);
-        \coordinate (h2-n-)   at ($(h2-n)                           - (0, 4.6)$);
+  % Input gate
+  \node[node]       (input_pulse) at ($(ANDs_k) + (0.45, -3.25)$)  {1 frame pulse\\generator (input)};
+  \node[node]       (input_OR)      [right = 1.5mm of input_pulse] {OR gate};
+  \coordinate[above=16pt of input_pulse] (input_cell);
 
-        % Cell 1
-        \draw[line]  (ORs_1.east)         -- (ORs_1 -| 1-h1);
-        \draw[arrow] (OR_final_1.east)    -- (OR_final_1 -| 1-h1)      |- (ANDs_h1.west);
+  % Cell bounding boxes
+  \begin{scope}[on background layer]
+      \node[node,       fit=(ORs_1)(ANDs_1)(OR_final_1)(cell_1),         label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+      \node[hiddenNode, fit=(ORs_h1)(ANDs_h1)(OR_final_h1)]              {$\cdots$};
+      \node[node,       fit=(ORs_k)(ANDs_k)(OR_final_k)(cell_k),         label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+      \node[node,       fit=(ORs_k+1)(ANDs_k+1)(OR_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+      \node[hiddenNode, fit=(ORs_h2)(ANDs_h2)(OR_final_h2)]              {$\cdots$};
+      \node[node,       fit=(ORs_n)(ANDs_n)(OR_final_n)(cell_n),         label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
+      \node[node,       fit=(input_pulse)(input_OR)(input_cell),         label={[anchor=north, yshift=-2.5pt]Input circuit}] {};
+  \end{scope}
 
-        % Hidden cell 1
-        \draw[line]  (ORs_h1.east)        -- (ORs_h1 -| h1-k);
-        \draw[arrow] (OR_final_h1.east)   -- (OR_final_h1 -| h1-k)     |- (ANDs_k.west);
-        \draw[->-]   (ANDs_1 -| 1-h1)     -- (1-h1-) -- (h1-k-)        -- (h1-k |- ANDs_k);
-        \draw[->-]   (ORs_1  -| 1-h1)     -- (1-h1)  -- (h1-k)         -- (h1-k |- ORs_k);
+  % Arrows
 
-        % Cell k
-        \draw[line]  (ORs_k.east)         -| (k-k+1);
-        \draw[arrow] (OR_final_k.east)    -- (OR_final_k -| k-k+1)     |- (ANDs_k+1.west);
-        \draw[->-]   (h1-k-)              -- (k-k+1-);
-        \draw[->-]   (h1-k)               -- (k-k+1);
-        \draw[line]  (ANDs_k -| k-k+1)    -- (k-k+1-);
+  % Points between cells (top)
+  \coordinate (1-h1)    at ($(ORs_1.east)!0.5!(ORs_h1.west)   + (0, 1.75)$);
+  \coordinate (h1-k)    at ($(ORs_h1.east)!0.5!(ORs_k.west)   + (0, 1.75)$);
+  \coordinate (k-k+1)   at ($(ORs_k.east)!0.5!(ORs_k+1.west)  + (0, 1.75)$);
+  \coordinate (k+1-h2)  at ($(ORs_k+1.east)!0.5!(ORs_h2.west) + (0, 1.75)$);
+  \coordinate (h2-n)    at ($(ORs_h2.east)!0.5!(ORs_n.west)   + (0, 1.75)$);
+  \coordinate (n-)      at ($(ORs_n.east)                     + (0.5, 1.75)$);
+  % Points between cells (bottom)
+  \coordinate (1-h1-)   at ($(1-h1)                           - (0, 4.6)$);
+  \coordinate (h1-k-)   at ($(h1-k)                           - (0, 4.6)$);
+  \coordinate (k-k+1-)  at ($(k-k+1)                          - (0, 4.6)$);
+  \coordinate (k+1-h2-) at ($(k+1-h2)                         - (0, 4.6)$);
+  \coordinate (h2-n-)   at ($(h2-n)                           - (0, 4.6)$);
 
-        % Cell k+1
-        \draw[line]  (ORs_k+1.east)       -| (k+1-h2);
-        \draw[arrow] (OR_final_k+1.east)  -- (OR_final_k+1 -| k+1-h2)  |- (ANDs_h2.west);
-        \draw[->-]   (k-k+1-)             -- (k+1-h2-);
-        \draw[->-]   (k-k+1)              -- (k+1-h2);
+  % Cell 1
+  \draw[line]  (ORs_1.east)         -- (ORs_1 -| 1-h1);
+  \draw[arrow] (OR_final_1.east)    -- (OR_final_1 -| 1-h1)      |- (ANDs_h1.west);
 
-        % Hidden cell 2
-        \draw[line]  (ORs_h2.east)        -- (ORs_h2 -| h2-n);
-        \draw[arrow] (OR_final_h2.east)   -- (OR_final_h2 -| h2-n)     |- (ANDs_n.west);
-        \draw[->-]   (ANDs_k+1 -| k+1-h2) -- (k+1-h2-) -- (h2-n-)      -- (h2-n |- ANDs_n);
-        \draw[->-]   (k+1-h2)             -- (h2-n);
+  % Hidden cell 1
+  \draw[line]  (ORs_h1.east)        -- (ORs_h1 -| h1-k);
+  \draw[arrow] (OR_final_h1.east)   -- (OR_final_h1 -| h1-k)     |- (ANDs_k.west);
+  \draw[->-]   (ANDs_1 -| 1-h1)     -- (1-h1-) -- (h1-k-)        -- (h1-k |- ANDs_k);
+  \draw[->-]   (ORs_1  -| 1-h1)     -- (1-h1)  -- (h1-k)         -- (h1-k |- ORs_k);
 
-        % Cell n
-        \draw[arrow] (ORs_n.east)         -- (ORs_n -| n-)             |- (input_OR.east);
-        \draw[->-]   (ORs_h2 -| h2-n)     -- (h2-n) -- (n-)            -- (n- |- ORs_n);
+  % Cell k
+  \draw[line]  (ORs_k.east)         -| (k-k+1);
+  \draw[arrow] (OR_final_k.east)    -- (OR_final_k -| k-k+1)     |- (ANDs_k+1.west);
+  \draw[->-]   (h1-k-)              -- (k-k+1-);
+  \draw[->-]   (h1-k)               -- (k-k+1);
+  \draw[line]  (ANDs_k -| k-k+1)    -- (k-k+1-);
 
-        % Input gate
-        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
-        \draw[arrow] (input_pulse.north)  -- (input)                   -| (ANDs_1.south);
-        \draw[line]  (input_OR.north)     |- (input);
-        \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
-        \end{tikzpicture}\vspace{1mm}
-      - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
-      - To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first OR gate of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
-      - Might require a decoder (unless you want to show numbers on a screen)
-        - To create it, take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
-        - Has a complexity of $n$ gates
-      - Requires a startup pulse to one of the toggled OR gates on each cell to work (achieved with a 1 frame pulse generator)
-      - Complexity
-        - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
-        - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
-        - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
-        - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
-      - Takes 3 frames to update with cycle and 4 frames otherwise
-      - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
-    \newcommand{\titleCEC}{Binary}
-    - \titleCEC
-      \phantomsection
-      \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCEC}
-      - Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
-      - $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
-      - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
-      - Diagram of the circuit:
-        \vspace{2mm}
-        \begin{tikzpicture}[trim left=8.1em]
-        % Nodes
+  % Cell k+1
+  \draw[line]  (ORs_k+1.east)       -| (k+1-h2);
+  \draw[arrow] (OR_final_k+1.east)  -- (OR_final_k+1 -| k+1-h2)  |- (ANDs_h2.west);
+  \draw[->-]   (k-k+1-)             -- (k+1-h2-);
+  \draw[->-]   (k-k+1)              -- (k+1-h2);
 
-        % Cell 1
-        \node[node]       (OR_1)                                         {Toggled OR gate\\(output)};
-        \node[node]       (AND_1)         [below = 5mm of OR_1]          {AND gate};
-        \coordinate[above=16pt of OR_1]        (cell_1);
+  % Hidden cell 2
+  \draw[line]  (ORs_h2.east)        -- (ORs_h2 -| h2-n);
+  \draw[arrow] (OR_final_h2.east)   -- (OR_final_h2 -| h2-n)     |- (ANDs_n.west);
+  \draw[->-]   (ANDs_k+1 -| k+1-h2) -- (k+1-h2-) -- (h2-n-)      -- (h2-n |- ANDs_n);
+  \draw[->-]   (k+1-h2)             -- (h2-n);
 
-        % Hidden cell 1
-        \node[hiddenNode] (OR_h1)         [right = of OR_1]              {};
-        \node[hiddenNode] (AND_h1)        [right = of AND_1]             {};
+  % Cell n
+  \draw[arrow] (ORs_n.east)         -- (ORs_n -| n-)             |- (input_OR.east);
+  \draw[->-]   (ORs_h2 -| h2-n)     -- (h2-n) -- (n-)            -- (n- |- ORs_n);
 
-        % Cell k
-        \node[node]       (OR_k)          [right = of OR_h1]             {Toggled OR gate\\(output)};
-        \node[node]       (AND_k)         [right = of AND_h1]            {AND gate};
-        \coordinate[above=16pt of OR_k]        (cell_k);
+  % Input gate
+  \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
+  \draw[arrow] (input_pulse.north)  -- (input)                   -| (ANDs_1.south);
+  \draw[line]  (input_OR.north)     |- (input);
+  \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
+  \end{tikzpicture}\vspace{1mm}
+- To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
+- To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first OR gate of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
+- Might require a decoder (unless you want to show numbers on a screen)
+  - To create it, take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
+  - Has a complexity of $n$ gates
+- Requires a startup pulse to one of the toggled OR gates on each cell to work (achieved with a 1 frame pulse generator)
+- Complexity
+  - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
+  - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
+  - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
+  - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
+- Takes 3 frames to update with cycle and 4 frames otherwise
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
 
-        % Cell k+1
-        \node[node]       (OR_k+1)        [right = of OR_k]              {Toggled OR gate\\(output)};
-        \node[node]       (AND_k+1)       [right = of AND_k]             {AND gate};
-        \coordinate[above=16pt of OR_k+1]      (cell_k+1);
+### Binary
 
-        % Hidden cell 2
-        \node[hiddenNode] (OR_h2)         [right = of OR_k+1]            {};
-        \node[hiddenNode] (AND_h2)        [right = of AND_k+1]           {};
+- Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
+- $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
+- The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Diagram of the circuit:
+  \vspace{2mm}
+  \begin{tikzpicture}[trim left=2.1em]
+  % Nodes
 
-        % Cell n
-        \node[node]       (OR_n)          [right = of OR_h2]             {Toggled OR gate\\(output)};
-        \node[node]       (AND_n)         [right = of AND_h2]            {AND gate};
-        \coordinate[above=16pt of OR_n]        (cell_n);
+  % Cell 1
+  \node[node]       (OR_1)                                         {Toggled OR gate\\(output)};
+  \node[node]       (AND_1)         [below = 5mm of OR_1]          {AND gate};
+  \coordinate[above=16pt of OR_1]        (cell_1);
 
-        % Input circuit
-        \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)   {1 frame pulse\\generator (input)};
-        \node[node]       (input_NAND)    [right = 1.5mm of input_pulse] {NAND gate};
-        \coordinate[above=16pt of input_pulse] (input_cell);
+  % Hidden cell 1
+  \node[hiddenNode] (OR_h1)         [right = of OR_1]              {};
+  \node[hiddenNode] (AND_h1)        [right = of AND_1]             {};
 
-        % Cell bounding boxes
-        \begin{scope}[on background layer]
-            \node[node,       fit=(OR_1)(AND_1)(cell_1),                 label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(OR_h1)(AND_h1)]                       {$\cdots$};
-            \node[node,       fit=(OR_k)(AND_k)(cell_k),                 label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1),           label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(OR_h2)(AND_h2)]                       {$\cdots$};
-            \node[node,       fit=(OR_n)(AND_n)(cell_n),                 label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_2 n}$}] {};
-            \node[node,       fit=(input_pulse)(input_NAND)(input_cell), label={[anchor=north, yshift=-2.5pt]Input Circuit}] {};
-        \end{scope}
+  % Cell k
+  \node[node]       (OR_k)          [right = of OR_h1]             {Toggled OR gate\\(output)};
+  \node[node]       (AND_k)         [right = of AND_h1]            {AND gate};
+  \coordinate[above=16pt of OR_k]        (cell_k);
 
-        % Arrows
+  % Cell k+1
+  \node[node]       (OR_k+1)        [right = of OR_k]              {Toggled OR gate\\(output)};
+  \node[node]       (AND_k+1)       [right = of AND_k]             {AND gate};
+  \coordinate[above=16pt of OR_k+1]      (cell_k+1);
 
-        % Points between cells
-        \coordinate (1-h1)   at ($(OR_1.east)!0.5!(OR_h1.west)   + (0, 1.75)$);
-        \coordinate (h1-k)   at ($(OR_h1.east)!0.5!(OR_k.west)   + (0, 1.75)$);
-        \coordinate (k-k+1)  at ($(OR_k.east)!0.5!(OR_k+1.west)  + (0, 1.75)$);
-        \coordinate (k+1-h2) at ($(OR_k+1.east)!0.5!(OR_h2.west) + (0, 1.75)$);
-        \coordinate (h2-n)   at ($(OR_h2.east)!0.5!(OR_n.west)   + (0, 1.75)$);
-        \coordinate (n-)     at ($(OR_n.east)                    + (0.5, 1.75)$);
+  % Hidden cell 2
+  \node[hiddenNode] (OR_h2)         [right = of OR_k+1]            {};
+  \node[hiddenNode] (AND_h2)        [right = of AND_k+1]           {};
 
-        % Cell 1
-        \draw[arrow] (AND_1.north)       -- (OR_1.south);
-        \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1)     |- (AND_h1.west);
+  % Cell n
+  \node[node]       (OR_n)          [right = of OR_h2]             {Toggled OR gate\\(output)};
+  \node[node]       (AND_n)         [right = of AND_h2]            {AND gate};
+  \coordinate[above=16pt of OR_n]        (cell_n);
 
-        % Hidden cell 1
-        \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k)    |- (AND_k.west);
-        \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k)   -- (h1-k |- OR_k);
+  % Input circuit
+  \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)   {1 frame pulse\\generator (input)};
+  \node[node]       (input_NAND)    [right = 1.5mm of input_pulse] {NAND gate};
+  \coordinate[above=16pt of input_pulse] (input_cell);
 
-        % Cell k
-        \draw[arrow] (AND_k.north)       -- (OR_k.south);
-        \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1)    |- (AND_k+1.west);
-        \draw[->-]   (h1-k)              -- (k-k+1);
-        \draw[line]  (OR_k -| k-k+1)     -- (k-k+1);
+  % Cell bounding boxes
+  \begin{scope}[on background layer]
+      \node[node,       fit=(OR_1)(AND_1)(cell_1),                 label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+      \node[hiddenNode, fit=(OR_h1)(AND_h1)]                       {$\cdots$};
+      \node[node,       fit=(OR_k)(AND_k)(cell_k),                 label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+      \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1),           label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+      \node[hiddenNode, fit=(OR_h2)(AND_h2)]                       {$\cdots$};
+      \node[node,       fit=(OR_n)(AND_n)(cell_n),                 label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_2 n}$}] {};
+      \node[node,       fit=(input_pulse)(input_NAND)(input_cell), label={[anchor=north, yshift=-2.5pt]Input Circuit}] {};
+  \end{scope}
 
-        % Cell k+1
-        \draw[arrow] (AND_k+1.north)     -- (OR_k+1.south);
-        \draw[arrow] (OR_k+1.east)       -- (OR_k+1 -| k+1-h2) |- (AND_h2.west);
-        \draw[->-]   (k-k+1)             -- (k+1-h2);
-        \draw[line]  (OR_k+1 -| k+1-h2)  -- (k+1-h2);
+  % Arrows
 
-        % Hidden cell 2
-        \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n)    |- (AND_n.west);
-        \draw[->-]   (k+1-h2)            -- (h2-n);
+  % Points between cells
+  \coordinate (1-h1)   at ($(OR_1.east)!0.5!(OR_h1.west)   + (0, 1.75)$);
+  \coordinate (h1-k)   at ($(OR_h1.east)!0.5!(OR_k.west)   + (0, 1.75)$);
+  \coordinate (k-k+1)  at ($(OR_k.east)!0.5!(OR_k+1.west)  + (0, 1.75)$);
+  \coordinate (k+1-h2) at ($(OR_k+1.east)!0.5!(OR_h2.west) + (0, 1.75)$);
+  \coordinate (h2-n)   at ($(OR_h2.east)!0.5!(OR_n.west)   + (0, 1.75)$);
+  \coordinate (n-)     at ($(OR_n.east)                    + (0.5, 1.75)$);
 
-        % Cell n
-        \draw[arrow] (AND_n.north)       -- (OR_n.south);
-        \draw[arrow] (OR_n.east)         -- (OR_n -| n-)       |- (input_NAND.east);
-        \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
+  % Cell 1
+  \draw[arrow] (AND_1.north)       -- (OR_1.south);
+  \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1)     |- (AND_h1.west);
 
-        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
-        \draw[->-]   (input_pulse.north) -- (input);
-        \draw[->-]   (input_NAND.north)  -- (input_NAND |- input);
-        \draw[arrow] (input)             -| (AND_1.south);
-        \draw[arrow] (input)             -| (AND_n.south);
-        \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
-        \draw[arrow] (input -| AND_k)    -| (AND_k.south);
-        \draw[arrow] (input -| AND_k+1)  -| (AND_k+1.south);
-        \draw[arrow] (input -| AND_h2)   -| (AND_h2.south);
-        \end{tikzpicture}\vspace{1mm}
-      - To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
-      - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gates. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
-      - Might require a decoder
-        - To create it, add a NOT gate to each cell and replace the NAND gate of the input circuit with an OR gate like in the 2-way version (if using the 1-way versions). Then, take $n$ AND gates and assign each of them a different combination of either the OR or NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
-        - Has a complexity of $\ceil{\log_2 n} + n - 1$ for the 1-way version, $\ceil{\log_2 n} + n$ for the 1-way+cycle version and $n$ for the 2-way versions
-      - Complexity
-        - 1-way: $2 \ceil{\log_2 n} + 3$
-        - 1-way+cycle: $2 \ceil{\log_2 n}$
-        - 2-way: $4 \ceil{\log_2 n} + 4$
-        - 2-way+cycle: $4 \ceil{\log_2 n}$
-      - Takes 3 frames to update for 1-way+cycle and 4 frames otherwise
-      - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
-    \newcommand{\titleCED}{When to use each method}
-    - \titleCED
-      \phantomsection
-      \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCED}
-      - Calculated for $n \geq 3$, for $n = 2$ a latch is always best
+  % Hidden cell 1
+  \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k)    |- (AND_k.west);
+  \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k)   -- (h1-k |- OR_k);
+
+  % Cell k
+  \draw[arrow] (AND_k.north)       -- (OR_k.south);
+  \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1)    |- (AND_k+1.west);
+  \draw[->-]   (h1-k)              -- (k-k+1);
+  \draw[line]  (OR_k -| k-k+1)     -- (k-k+1);
+
+  % Cell k+1
+  \draw[arrow] (AND_k+1.north)     -- (OR_k+1.south);
+  \draw[arrow] (OR_k+1.east)       -- (OR_k+1 -| k+1-h2) |- (AND_h2.west);
+  \draw[->-]   (k-k+1)             -- (k+1-h2);
+  \draw[line]  (OR_k+1 -| k+1-h2)  -- (k+1-h2);
+
+  % Hidden cell 2
+  \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n)    |- (AND_n.west);
+  \draw[->-]   (k+1-h2)            -- (h2-n);
+
+  % Cell n
+  \draw[arrow] (AND_n.north)       -- (OR_n.south);
+  \draw[arrow] (OR_n.east)         -- (OR_n -| n-)       |- (input_NAND.east);
+  \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
+
+  \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
+  \draw[->-]   (input_pulse.north) -- (input);
+  \draw[->-]   (input_NAND.north)  -- (input_NAND |- input);
+  \draw[arrow] (input)             -| (AND_1.south);
+  \draw[arrow] (input)             -| (AND_n.south);
+  \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
+  \draw[arrow] (input -| AND_k)    -| (AND_k.south);
+  \draw[arrow] (input -| AND_k+1)  -| (AND_k+1.south);
+  \draw[arrow] (input -| AND_h2)   -| (AND_h2.south);
+  \end{tikzpicture}\vspace{1mm}
+- To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
+- To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gates. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
+- Might require a decoder
+  - To create it, add a NOT gate to each cell and replace the NAND gate of the input circuit with an OR gate like in the 2-way version (if using the 1-way versions). Then, take $n$ AND gates and assign each of them a different combination of either the OR or NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
+  - Has a complexity of $\ceil{\log_2 n} + n - 1$ for the 1-way version, $\ceil{\log_2 n} + n$ for the 1-way+cycle version and $n$ for the 2-way versions
+- Complexity
+  - 1-way: $2 \ceil{\log_2 n} + 3$
+  - 1-way+cycle: $2 \ceil{\log_2 n}$
+  - 2-way: $4 \ceil{\log_2 n} + 4$
+  - 2-way+cycle: $4 \ceil{\log_2 n}$
+- Takes 3 frames to update for 1-way+cycle and 4 frames otherwise
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
+
+### When to use each method
+
+- Calculated for $n \geq 3$, for $n = 2$ a latch is always best
 
 \vspace{2mm}
 \hspace{-1.25cm}
@@ -1022,140 +965,129 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
 Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and base 10 with cycle circuits, followed by the 1-way binary circuit with cycle, then by the base 10 circuit without cycle and lastly the binary circuit without cycle or with 2-way
 
-\newcommand{\titleCF}{No-Delay Signal Toggle}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleCF}
+## No-Delay Signal Toggle
 
-- **\TitleFormatII{\titleCF}**
-  - Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
-  - Doesn't work when the output block is an AND/XOR gate
-  - Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
-  - Diagram of the circuit:
-    \vspace{2mm}
-    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
-    % Nodes
+- Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
+- Doesn't work when the output block is an AND/XOR gate
+- Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
+- Diagram of the circuit:
+  \vspace{2mm}
+  \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
+  % Nodes
 
-    \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
-    \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
-    \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
-    \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
-    \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
-    \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
-    \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
+  \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
+  \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
+  \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
+  \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
+  \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
+  \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
+  \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
 
-    % Arrows
+  % Arrows
 
-    \draw[arrow] (input_signal.east)  -- (output_blocks.west);
-    \draw[arrow] (input_signal.north) |- (XOR.west);
-    \draw[arrow] (XOR.east)           -| (output_blocks.north);
-    \draw[->-]   (input_toggle1.east) -- (toggles);
-    \draw[->-]   (input_toggle2.west) -- (toggles);
-    \draw[arrow] (toggles)            -- (XOR.north);
-    \end{tikzpicture}\vspace{1mm}
-  - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
+  \draw[arrow] (input_signal.east)  -- (output_blocks.west);
+  \draw[arrow] (input_signal.north) |- (XOR.west);
+  \draw[arrow] (XOR.east)           -| (output_blocks.north);
+  \draw[->-]   (input_toggle1.east) -- (toggles);
+  \draw[->-]   (input_toggle2.west) -- (toggles);
+  \draw[arrow] (toggles)            -- (XOR.north);
+  \end{tikzpicture}\vspace{1mm}
+- [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
 
-\newcommand{\titleCG}{Feedback Loop}
-\phantomsection
-\addcontentsline{toc}{subsection}{\TOCLabelII \titleCG}
+## Feedback Loop
 
-- **\TitleFormatII{\titleCG}**
-  - Allows to store an analog value in the range $[-1, 1]$
-  - Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
-  - Each frame the input is active, the stored value increases by the value of the input
-    - With a close to 0 output value as input, the circuit can be used to generate an analog output value
-  - One of the OR gates can be replaced with an XOR to add a reset input. In this case, the normal input should go to the OR gate only and the reset input must be 2 different signals connected to the XOR gate
-    - Be aware that this method adds a 1 frame jitter to the stored signal
-  \newcommand{\titleCGA}{Clamped Feedback Loop}
-  - \titleCGA
-    \phantomsection
-    \addcontentsline{toc}{subsubsection}{\TOCLabelIII \titleCGA}
-    - Allows limiting the output signal of a feedback loop to the range $[0, 1]$
-    - Diagram of the circuit:
-      \vspace{2mm}
-      \begin{tikzpicture}[trim left=-8em]
-      % Nodes
+- Allows to store an analog value in the range $[-1, 1]$
+- Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
+- Each frame the input is active, the stored value increases by the value of the input
+  - With a close to 0 output value as input, the circuit can be used to generate an analog output value
+- One of the OR gates can be replaced with an XOR to add a reset input. In this case, the normal input should go to the OR gate only and the reset input must be 2 different signals connected to the XOR gate
+  - Be aware that this method adds a 1 frame jitter to the stored signal
 
-      \node[node] (feedback_top)                               {OR Gate};
-      \node[node] (feedback_bot) [below = 5mm of feedback_top] {OR Gate};
-      \coordinate (feedback_mid) at ($(feedback_top.west)!0.5!(feedback_bot.west)$);
+### Clamped Feedback Loop
 
-      \node[node] (input)        [left = of feedback_mid]      {Input Signal};
+- Allows limiting the output signal of a feedback loop to the range $[0, 1]$
+- Diagram of the circuit:
+  \vspace{2mm}
+  \begin{tikzpicture}[trim left=-12em]
+  % Nodes
 
-      \coordinate[above=16pt of feedback_top] (feedback);
+  \node[node] (feedback_top)                               {OR Gate};
+  \node[node] (feedback_bot) [below = 5mm of feedback_top] {OR Gate};
+  \coordinate (feedback_mid) at ($(feedback_top.west)!0.5!(feedback_bot.west)$);
 
-      \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
-      \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output value};
+  \node[node] (input)        [left = of feedback_mid]      {Input Signal};
 
-      \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output value\\(output)};
+  \coordinate[above=16pt of feedback_top] (feedback);
 
-      % Bounding boxes
-      \begin{scope}[on background layer]
-          \node[node, fit=(feedback_top)(feedback_bot)(feedback), label={[anchor=north, yshift=-2.5pt]Feedback Loop}] {};
-      \end{scope}
+  \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
+  \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output value};
 
-      % Arrows
+  \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output value\\(output)};
 
-      \coordinate  (input_split) at ($(input.east) + (0.5, 0)$);
-      \draw[line]  (input.east)                    -- (input_split);
-      \draw[arrow] (input_split)                   |- (feedback_top.west);
-      \draw[arrow] (input_split)                   |- (feedback_bot.west);
-      \draw[arrow] ($(feedback_bot.north) + (2mm, 0)$)  -- ($(feedback_top.south) + (2mm, 0)$);
-      \draw[arrow] ($(feedback_top.south) + (-2mm, 0)$) -- ($(feedback_bot.north) + (-2mm, 0)$);
-      \draw[arrow] (C+1.west)                      -- (feedback_bot.east);
-      \draw[arrow] (C+1.north)                     -- (C-1.south);
-      \draw[arrow] (C-1.west |- feedback_top.east) |- (feedback_top.east);
-      \draw[arrow] (C-1.east)                      -- (output.west);
-      \draw[arrow] (feedback_bot.south) -- ($(feedback_bot.south) + (0, -0.5)$) -| (output);
-      \end{tikzpicture}\vspace{1mm}
-    - Note: the input signal is reversed. This means that a negative value increases the stored value while a positive value decreases it
-    - Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
-    - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=2911246646)
-    - Python script to simulate the behaviour (input value is automatically reversed):
+  % Bounding boxes
+  \begin{scope}[on background layer]
+      \node[node, fit=(feedback_top)(feedback_bot)(feedback), label={[anchor=north, yshift=-2.5pt]Feedback Loop}] {};
+  \end{scope}
 
-      ```python
-      def clamp(x: float) -> float:
-          return min(max(x, -1), 1)
+  % Arrows
 
-      def update(
-          feedback_top: float, feedback_bottom: float, user_input: float
-      ) -> tuple[float, float]:
-          return (
-              clamp(feedback_bottom - user_input + 1),
-              clamp(feedback_top    - user_input - 1)
-          )
+  \coordinate  (input_split) at ($(input.east) + (0.5, 0)$);
+  \draw[line]  (input.east)                    -- (input_split);
+  \draw[arrow] (input_split)                   |- (feedback_top.west);
+  \draw[arrow] (input_split)                   |- (feedback_bot.west);
+  \draw[arrow] ($(feedback_bot.north) + (2mm, 0)$)  -- ($(feedback_top.south) + (2mm, 0)$);
+  \draw[arrow] ($(feedback_top.south) + (-2mm, 0)$) -- ($(feedback_bot.north) + (-2mm, 0)$);
+  \draw[arrow] (C+1.west)                      -- (feedback_bot.east);
+  \draw[arrow] (C+1.north)                     -- (C-1.south);
+  \draw[arrow] (C-1.west |- feedback_top.east) |- (feedback_top.east);
+  \draw[arrow] (C-1.east)                      -- (output.west);
+  \draw[arrow] (feedback_bot.south) -- ($(feedback_bot.south) + (0, -0.5)$) -| (output);
+  \end{tikzpicture}\vspace{1mm}
+- Note: the input signal is reversed. This means that a negative value increases the stored value while a positive value decreases it
+- Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
+- [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=2911246646)
+- Python script to simulate the behaviour (input value is automatically reversed):
 
-      def print_state(feedback_top: float, feedback_bottom: float):
-          print("State:")
-          print("\tFeedback Top: ", round(feedback_top, 3))
-          print("\tFeedback Bottom: ", round(feedback_bottom, 3))
-          print("Output: ", round(clamp(-(feedback_top - 1)), 3))
+  ```python
+  def clamp(x: float) -> float:
+      return min(max(x, -1), 1)
 
-      feedback_top, feedback_bottom = 1, 0
+  def update(
+      feedback_top: float, feedback_bottom: float, user_input: float
+  ) -> tuple[float, float]:
+      return (
+          clamp(feedback_bottom - user_input + 1),
+          clamp(feedback_top    - user_input - 1)
+      )
+
+  def print_state(feedback_top: float, feedback_bottom: float):
+      print("State:")
+      print("\tFeedback Top: ", round(feedback_top, 3))
+      print("\tFeedback Bottom: ", round(feedback_bottom, 3))
+      print("Output: ", round(clamp(-(feedback_top - 1)), 3))
+
+  feedback_top, feedback_bottom = 1, 0
+  print_state(feedback_top, feedback_bottom)
+  while True:
+      user_input = input("Enter input (between -1 and 1, Q to quit): ")
+      if user_input.lower() == "q":
+          break
+      try:
+          user_input = float(user_input)
+      except ValueError:
+          print("Invalid input. Try again")
+          continue
+      feedback_top, feedback_bottom = (
+          update(feedback_top, feedback_bottom, user_input)
+      )
       print_state(feedback_top, feedback_bottom)
-      while True:
-          user_input = input("Enter input (between -1 and 1, Q to quit): ")
-          if user_input.lower() == "q":
-              break
-          try:
-              user_input = float(user_input)
-          except ValueError:
-              print("Invalid input. Try again")
-              continue
-          feedback_top, feedback_bottom = (
-              update(feedback_top, feedback_bottom, user_input)
-          )
-          print_state(feedback_top, feedback_bottom)
-      ```
+  ```
 
-    - Credits to Precache for figuring out this circuit
+- Credits to Precache for figuring out this circuit
 
 \clearpage
 
-\newcommand{\titleD}{Output value to multiplier for hinges/wings with control surfaces}
-\phantomsection
-\addcontentsline{toc}{section}{\TOCLabelI \titleD}
-
-## \TitleFormatI{\titleD} {#OutputValue2Multiplier .unlisted .unnumbered}
+# Output value to multiplier for hinges/wings with control surfaces {#OutputValue2Multiplier}
 
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 - The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
@@ -1266,11 +1198,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
     \end{axis}
 \end{tikzpicture}
 
-\newcommand{\titleE}{Tips}
-\phantomsection
-\addcontentsline{toc}{section}{\TOCLabelI \titleE}
-
-## \TitleFormatI{\titleE} {.unlisted .unnumbered}
+# Tips
 
 - If you want your system to not modify the input that passes through, configure all of the logic gates to have an output value of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
 - Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
