@@ -7,8 +7,6 @@ lang: en
 toc: true
 toc-depth: 3
 
-# For some reason, boxlinks is necessary for colorlinks to work even though it shouldn't have any effect when colorlinks is set
-boxlinks: true
 linkcolor: hyperlinkBlue
 urlcolor: hyperlinkBlue
 
