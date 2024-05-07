@@ -29,6 +29,14 @@ header-includes: |
     % Multi page tables
     \usepackage{longtable}
 
+    % Force figure location
+    \usepackage{float}
+    % Correct hiperlink to figures
+    \usepackage{caption}
+
+    % Add table of figures/tables, we can't use pandoc's built-in option because it doesn't remove color like for the table of contents
+    \newcommand{\lists}{{\hypersetup{linkcolor=} \listoffigures \listoftables}}
+
     % Multi line table cells
     \usepackage{makecell}
     \renewcommand\theadfont{\bfseries}
@@ -112,6 +120,7 @@ header-includes: |
     ```
 ---
 
+\lists
 \clearpage
 
 # Settings
@@ -126,43 +135,45 @@ header-includes: |
   - Inverted: sends an output when it detects nothing
 - Outputs
 
-\vspace{2mm}
-\begin{center}
-\begin{tikzpicture}
-    % Image in a node
-    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=16em]{distance_sensor}};
-    % Use the image as the bounding box of the tikzpicture for centering
-    \useasboundingbox (image.south east) rectangle (image.north west);
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=16em]{distance_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
 
-    % Create scope with normalized axes
-    \begin{scope}[
-        x={($0.05*(image.south east)$)},
-        y={($0.05*(image.north west)$)}
-    ]
-        % Draw grid
-        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
-        % Draw axes labels
-        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
-        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
-        % Nodes
-        \node[annotation, left]  (output_on)    at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)   at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
-        \node[annotation, left]  (range)        at (-1.5, 3)    {Range};
-        \node[annotation, below] (output_value) at (8.5, -1.5)  {Output value};
-        \node[annotation, right] (trigger)      at (21.5, 0)    {Invert trigger (on/off),\\currently off\\(normal trigger)};
+            % Nodes
+            \node[annotation, left]  (output_on)    at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)   at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (range)        at (-1.5, 3)    {Range};
+            \node[annotation, below] (output_value) at (8.5, -1.5)  {Output value};
+            \node[annotation, right] (trigger)      at (21.5, 0)    {Invert trigger (on/off),\\currently off\\(normal trigger)};
 
-        % Arrows
-        \draw[arrow] (output_on.east)     -- (4.4, 16.4);
-        \draw[arrow] (output_off.west)    -- (9.8, 16.4);
-        \draw[arrow] (range.east)         -- (0.3, 3);
-        \draw[arrow] (output_value.north) -- (8.5, 0.7);
-        \draw[arrow] (trigger.west)       -- (14, 4.5);
-    \end{scope}
-\end{tikzpicture}
-\end{center}
-\vspace{10mm}
+            % Arrows
+            \draw[arrow] (output_on.east)     -- (4.4, 16.4);
+            \draw[arrow] (output_off.west)    -- (9.8, 16.4);
+            \draw[arrow] (range.east)         -- (0.3, 3);
+            \draw[arrow] (output_value.north) -- (8.5, 0.7);
+            \draw[arrow] (trigger.west)       -- (14, 4.5);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Distance Sensor settings}
+    \label{fig:SensorDistance}
+\end{figure}
 
 ## Altitude Sensor
 
@@ -178,45 +189,47 @@ header-includes: |
   - Below: sends an output when it's below the altitude you set
 - Outputs
 
-\vspace{2mm}
-\begin{center}
-\begin{tikzpicture}
-    % Image in a node
-    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=21em]{altitude_sensor}};
-    % Use the image as the bounding box of the tikzpicture for centering
-    \useasboundingbox (image.south east) rectangle (image.north west);
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=21em]{altitude_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
 
-    % Create scope with normalized axes
-    \begin{scope}[
-        x={($0.05*(image.south east)$)},
-        y={($0.05*(image.north west)$)}
-    ]
-        % Draw grid
-        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
-        % Draw axes labels
-        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
-        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
-        % Nodes
-        \node[annotation, left]  (output_on)       at (-1.5, 16.2) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)      at (21.5, 16.2) {Output (off)\\(won't send an\\input to it)};
-        \node[annotation, left]  (altitude)        at (-1.5, 2.5)  {Altitude};
-        \node[annotation, below] (output_value)    at (4.9, -1.5)  {Output value};
-        \node[annotation, below] (reference_frame) at (12.2, -1.5) {Frame of reference};
-        \node[annotation, right] (trigger)         at (21.5, -2.5) {Trigger below (on/off),\\currently off\\(normal trigger)};
+            % Nodes
+            \node[annotation, left]  (output_on)       at (-1.5, 16.2) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)      at (21.5, 16.2) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (altitude)        at (-1.5, 2.5)  {Altitude};
+            \node[annotation, below] (output_value)    at (4.9, -1.5)  {Output value};
+            \node[annotation, below] (reference_frame) at (12.2, -1.5) {Frame of reference};
+            \node[annotation, right] (trigger)         at (21.5, -2.5) {Trigger below (on/off),\\currently off\\(normal trigger)};
 
-        % Arrows
-        \draw[arrow] (output_on.east)                        -- (7.75, 16.2);
-        \draw[arrow] (output_off.west)                       -- (14.75, 16.2);
-        \draw[arrow] (altitude.east)                         -- (0.15, 2.5);
-        \draw[arrow] ($(output_value.north) + (1, 0)$)       -- (5.9, 0.6);
-        \draw[arrow] ($(reference_frame.north) + (-1.6, 0)$) -- (10.6, 1.55);
-        \draw[arrow] (trigger.west)                          -- (16.2, 1.7);
-    \end{scope}
-\end{tikzpicture}
-\end{center}
-\vspace{12mm}
+            % Arrows
+            \draw[arrow] (output_on.east)                        -- (7.75, 16.2);
+            \draw[arrow] (output_off.west)                       -- (14.75, 16.2);
+            \draw[arrow] (altitude.east)                         -- (0.15, 2.5);
+            \draw[arrow] ($(output_value.north) + (1, 0)$)       -- (5.9, 0.6);
+            \draw[arrow] ($(reference_frame.north) + (-1.6, 0)$) -- (10.6, 1.55);
+            \draw[arrow] (trigger.west)                          -- (16.2, 1.7);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Altitude Sensor settings}
+    \label{fig:SensorAltitude}
+\end{figure}
 
 ## Speed Sensor
 
@@ -228,43 +241,45 @@ header-includes: |
   - Below: sends an output when it goes slower that the speed you set
 - Outputs
 
-\vspace{2mm}
-\begin{center}
-\begin{tikzpicture}
-    % Image in a node
-    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=15em]{speed_sensor}};
-    % Use the image as the bounding box of the tikzpicture for centering
-    \useasboundingbox (image.south east) rectangle (image.north west);
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=15em]{speed_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
 
-    % Create scope with normalized axes
-    \begin{scope}[
-        x={($0.05*(image.south east)$)},
-        y={($0.05*(image.north west)$)}
-    ]
-        % Draw grid
-        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
-        % Draw axes labels
-        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
-        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
-        % Nodes
-        \node[annotation, left]  (output_on)    at (-1.5, 15.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)   at (21.5, 15.3) {Output (off)\\(won't send an\\input to it)};
-        \node[annotation, left]  (speed)        at (-1.5, 2.1)  {Speed};
-        \node[annotation, below] (output_value) at (7.7, -1.5)  {Output value};
-        \node[annotation, right] (trigger)      at (21.5, 0)    {Trigger below (on/off),\\currently off\\(normal trigger)};
+            % Nodes
+            \node[annotation, left]  (output_on)    at (-1.5, 15.4) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)   at (21.5, 15.3) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (speed)        at (-1.5, 2.1)  {Speed};
+            \node[annotation, below] (output_value) at (7.7, -1.5)  {Output value};
+            \node[annotation, right] (trigger)      at (21.5, 0)    {Trigger below (on/off),\\currently off\\(normal trigger)};
 
-        % Arrows
-        \draw[arrow] (output_on.east)     -- (5.25, 15.4);
-        \draw[arrow] (output_off.west)    -- (11.65, 15.3);
-        \draw[arrow] (speed.east)         -- (0.2, 2.1);
-        \draw[arrow] (output_value.north) -- (7.7, 0.45);
-        \draw[arrow] (trigger.west)       -- (12.7, 3.4);
-    \end{scope}
-\end{tikzpicture}
-\end{center}
-\vspace{10mm}
+            % Arrows
+            \draw[arrow] (output_on.east)     -- (5.25, 15.4);
+            \draw[arrow] (output_off.west)    -- (11.65, 15.3);
+            \draw[arrow] (speed.east)         -- (0.2, 2.1);
+            \draw[arrow] (output_value.north) -- (7.7, 0.45);
+            \draw[arrow] (trigger.west)       -- (12.7, 3.4);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Speed Sensor settings}
+    \label{fig:SensorSpeed}
+\end{figure}
 
 ## Angle Sensor
 
@@ -277,45 +292,47 @@ header-includes: |
   - Note: the arrow will always try to point up no matter the orientation (in the direction of highest slope of the plane it is in)
 - Outputs
 
-\vspace{2mm}
-\begin{center}
-\begin{tikzpicture}
-    % Image in a node
-    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=15em]{angle_sensor}};
-    % Use the image as the bounding box of the tikzpicture for centering
-    \useasboundingbox (image.south east) rectangle (image.north west);
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=15em]{angle_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
 
-    % Create scope with normalized axes
-    \begin{scope}[
-        x={($0.05*(image.south east)$)},
-        y={($0.05*(image.north west)$)}
-    ]
-        % Draw grid
-        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
-        % Draw axes labels
-        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
-        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
-        % Nodes
-        \node[annotation, left]  (output_on)    at (-1.5, 17.2) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
-        \node[annotation, left]  (direction)    at (-1.5, 2)    {Direction};
-        \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
-        \node[annotation, below] (output_value) at (13.2, -1.5) {Output value};
-        \node[annotation, right] (trigger)      at (21.5, 3.5)  {Trigger outside (on/off),\\currently off\\(normal trigger)};
+            % Nodes
+            \node[annotation, left]  (output_on)    at (-1.5, 17.2) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (direction)    at (-1.5, 2)    {Direction};
+            \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
+            \node[annotation, below] (output_value) at (13.2, -1.5) {Output value};
+            \node[annotation, right] (trigger)      at (21.5, 3.5)  {Trigger outside (on/off),\\currently off\\(normal trigger)};
 
-        % Arrows
-        \draw[arrow] (output_on.east)                     -- (7.2, 17.2);
-        \draw[arrow] (output_off.west)                    -- (13.45, 17);
-        \draw[arrow] (direction.east)                     -- (0.2, 2);
-        \draw[arrow] ($(width.north) + (0.2, 0)$)         -- (6.6, 0.7);
-        \draw[arrow] ($(output_value.north) + (-2.2, 0)$) -- (11, 0.7);
-        \draw[arrow] (trigger.west)                       -- (15.4, 2.25);
-    \end{scope}
-\end{tikzpicture}
-\end{center}
-\vspace{10mm}
+            % Arrows
+            \draw[arrow] (output_on.east)                     -- (7.2, 17.2);
+            \draw[arrow] (output_off.west)                    -- (13.45, 17);
+            \draw[arrow] (direction.east)                     -- (0.2, 2);
+            \draw[arrow] ($(width.north) + (0.2, 0)$)         -- (6.6, 0.7);
+            \draw[arrow] ($(output_value.north) + (-2.2, 0)$) -- (11, 0.7);
+            \draw[arrow] (trigger.west)                       -- (15.4, 2.25);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Angle Sensor settings}
+    \label{fig:SensorAngle}
+\end{figure}
 
 ## Compass
 
@@ -328,45 +345,47 @@ header-includes: |
   - Note: the arrow will always try to point north no matter the orientation
 - Outputs
 
-\vspace{2mm}
-\begin{center}
-\begin{tikzpicture}
-    % Image in a node
-    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=21em]{compass}};
-    % Use the image as the bounding box of the tikzpicture for centering
-    \useasboundingbox (image.south east) rectangle (image.north west);
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=21em]{compass}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
 
-    % Create scope with normalized axes
-    \begin{scope}[
-        x={($0.05*(image.south east)$)},
-        y={($0.05*(image.north west)$)}
-    ]
-        % Draw grid
-        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
-        % Draw axes labels
-        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
-        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
-        % Nodes
-        \node[annotation, left]  (output_on)    at (-1.5, 17)   {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
-        \node[annotation, left]  (direction)    at (-1.5, 2.7)  {Direction};
-        \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
-        \node[annotation, below] (output_value) at (11.8, -1.5) {Output value};
-        \node[annotation, right] (trigger)      at (21.5, 4)    {Trigger outside (on/off),\\currently off\\(normal trigger)};
+            % Nodes
+            \node[annotation, left]  (output_on)    at (-1.5, 17)   {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (direction)    at (-1.5, 2.7)  {Direction};
+            \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
+            \node[annotation, below] (output_value) at (11.8, -1.5) {Output value};
+            \node[annotation, right] (trigger)      at (21.5, 4)    {Trigger outside (on/off),\\currently off\\(normal trigger)};
 
-        % Arrows
-        \draw[arrow] (output_on.east)                     -- (9.55, 17);
-        \draw[arrow] (output_off.west)                    -- (15.9, 17);
-        \draw[arrow] (direction.east)                     -- (0.15, 2.7);
-        \draw[arrow] (width.north)                        -- (6.4, 1.1);
-        \draw[arrow] ($(output_value.north) + (-1.2, 0)$) -- (10.6, 1.1);
-        \draw[arrow] (trigger.west)                       -- (14.6, 3.3);
-    \end{scope}
-\end{tikzpicture}
-\end{center}
-\vspace{10mm}
+            % Arrows
+            \draw[arrow] (output_on.east)                     -- (9.55, 17);
+            \draw[arrow] (output_off.west)                    -- (15.9, 17);
+            \draw[arrow] (direction.east)                     -- (0.15, 2.7);
+            \draw[arrow] (width.north)                        -- (6.4, 1.1);
+            \draw[arrow] ($(output_value.north) + (-1.2, 0)$) -- (10.6, 1.1);
+            \draw[arrow] (trigger.west)                       -- (14.6, 3.3);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Compass settings}
+    \label{fig:SensorCompass}
+\end{figure}
 
 ## Logic gates
 
@@ -383,52 +402,54 @@ header-includes: |
 - Output value: from $-1$ to $1$
 - Outputs
 
-\vspace{2mm}
-\begin{center}
-\begin{tikzpicture}
-    % Image in a node
-    \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=26em]{logic_gate}};
-    % Use the image as the bounding box of the tikzpicture for centering
-    \useasboundingbox (image.south east) rectangle (image.north west);
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=26em]{logic_gate}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
 
-    % Create scope with normalized axes
-    \begin{scope}[
-        x={($0.05*(image.south east)$)},
-        y={($0.05*(image.north west)$)}
-    ]
-        % Draw grid
-        %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
 
-        % Draw axes labels
-        %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
-        %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
-        % Nodes
-        \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
-        \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
-        \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
-        \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
-        \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
-        \node[annotation, below] (pause)         at (11.7, -1.5) {Pause};
-        \node[annotation, below] (duration)      at (15, -1.5)   {Duration};
-        \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
-        \node[annotation, right] (output_value)  at (21.5, 3.1)  {Output value};
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
+            \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (11.7, -1.5) {Pause};
+            \node[annotation, below] (duration)      at (15, -1.5)   {Duration};
+            \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
+            \node[annotation, right] (output_value)  at (21.5, 3.1)  {Output value};
 
-        % Arrows
-        \draw[arrow] (output_on.east)                   -- (8.8, 16.4);
-        \draw[arrow] (output_off.west)                  -- (13.35, 16.4);
-        \draw[arrow] (green_keybind.east)               -- (0.1, 4.5);
-        \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
-        \draw[arrow] (toggle.north)                     -- (0.5, 1.7);
-        \draw[arrow] (toggle.north)                     -- (4.9, 2.1);
-        \draw[arrow] ($(pause.north) + (0.8, 0)$)       -- (12.5, 0.3);
-        \draw[arrow] (duration.north)                   -- (13.5, 2.4);
-        \draw[arrow] (delay.west)                       -- (13.5, 5.5);
-        \draw[arrow] (output_value.west)                -- (16.4, 3.1);
-    \end{scope}
-\end{tikzpicture}
-\end{center}
-\vspace{10mm}
+            % Arrows
+            \draw[arrow] (output_on.east)                   -- (8.8, 16.4);
+            \draw[arrow] (output_off.west)                  -- (13.35, 16.4);
+            \draw[arrow] (green_keybind.east)               -- (0.1, 4.5);
+            \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
+            \draw[arrow] (toggle.north)                     -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)                     -- (4.9, 2.1);
+            \draw[arrow] ($(pause.north) + (0.8, 0)$)       -- (12.5, 0.3);
+            \draw[arrow] (duration.north)                   -- (13.5, 2.4);
+            \draw[arrow] (delay.west)                       -- (13.5, 5.5);
+            \draw[arrow] (output_value.west)                -- (16.4, 3.1);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Logic gate settings}
+    \label{fig:LogicGate}
+\end{figure}
 
 \clearpage
 
@@ -463,13 +484,15 @@ header-includes: |
 4) The gate sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
 
 - Full formula: $\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$
-  \tightlist <!-- Removes the spacing between the lists -->
-- Diagram made by Zoomah:
-  \vspace{1mm}
-  \begin{center}
-  \hspace{-4.5em}\includegraphics[width=36.9em]{output_value_diagram}
-  \end{center}
-- Example
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{output_value_diagram}
+    \caption{Output value calculation diagram made by Zoomah}
+    \label{fig:OutputValueDiagram}
+\end{figure}
+
+### Example
 
 An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output
 
@@ -512,84 +535,87 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
 - $n = \text{amount of cells}$
 - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
-- Diagram of the circuit:
-  \vspace{2mm}
-  \begin{tikzpicture}[trim left=2.1em]
-  % Nodes
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Nodes
 
-  % Cell 1
-  \node[node]       (OR_1)                          {Toggled OR gate\\with 1 frame\\delay (output)};
-  \node[node]       (AND_1)   [below = 5mm of OR_1] {AND gate};
-  \coordinate[above=16pt of OR_1]   (cell_1);
+        % Cell 1
+        \node[node]       (OR_1)                          {Toggled OR gate\\with 1 frame\\delay (output)};
+        \node[node]       (AND_1)   [below = 5mm of OR_1] {AND gate};
+        \coordinate[above=16pt of OR_1]   (cell_1);
 
-  % Hidden cell 1
-  \node[hiddenNode] (OR_h1)   [right = of OR_1]     {};
-  \node[hiddenNode] (AND_h1)  [right = of AND_1]    {};
+        % Hidden cell 1
+        \node[hiddenNode] (OR_h1)   [right = of OR_1]     {};
+        \node[hiddenNode] (AND_h1)  [right = of AND_1]    {};
 
-  % Cell k
-  \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\with 1 frame\\delay (output)};
-  \node[node]       (AND_k)   [right = of AND_h1]   {AND gate};
-  \coordinate[above=16pt of OR_k]   (cell_k);
+        % Cell k
+        \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\with 1 frame\\delay (output)};
+        \node[node]       (AND_k)   [right = of AND_h1]   {AND gate};
+        \coordinate[above=16pt of OR_k]   (cell_k);
 
-  % Cell k+1
-  \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\with 1 frame\\delay (output)};
-  \node[node]       (AND_k+1) [right = of AND_k]    {AND gate};
-  \coordinate[above=16pt of OR_k+1] (cell_k+1);
+        % Cell k+1
+        \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\with 1 frame\\delay (output)};
+        \node[node]       (AND_k+1) [right = of AND_k]    {AND gate};
+        \coordinate[above=16pt of OR_k+1] (cell_k+1);
 
-  % Hidden cell 2
-  \node[hiddenNode] (OR_h2)   [right = of OR_k+1]   {};
-  \node[hiddenNode] (AND_h2)  [right = of AND_k+1]  {};
+        % Hidden cell 2
+        \node[hiddenNode] (OR_h2)   [right = of OR_k+1]   {};
+        \node[hiddenNode] (AND_h2)  [right = of AND_k+1]  {};
 
-  % Cell n
-  \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\with 1 frame\\delay (output)};
-  \node[hiddenNode] (AND_n)   [right = of AND_h2]   {};
-  \coordinate[above=16pt of OR_n]   (cell_n);
+        % Cell n
+        \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\with 1 frame\\delay (output)};
+        \node[hiddenNode] (AND_n)   [right = of AND_h2]   {};
+        \coordinate[above=16pt of OR_n]   (cell_n);
 
-  % Input gate
-  \node[node] (input_pulse) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+        % Input gate
+        \node[node] (input_pulse) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
 
-  % Cell bounding boxes
-  \begin{scope}[on background layer]
-      \node[node,       fit=(OR_1)(AND_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-      \node[hiddenNode, fit=(OR_h1)(AND_h1)]             {$\cdots$};
-      \node[node,       fit=(OR_k)(AND_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-      \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-      \node[hiddenNode, fit=(OR_h2)(AND_h2)]             {$\cdots$};
-      \node[node,       fit=(OR_n)(AND_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
-  \end{scope}
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node,       fit=(OR_1)(AND_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(OR_h1)(AND_h1)]             {$\cdots$};
+            \node[node,       fit=(OR_k)(AND_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(OR_h2)(AND_h2)]             {$\cdots$};
+            \node[node,       fit=(OR_n)(AND_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
+        \end{scope}
 
-  % Arrows
+        % Arrows
 
-  % Cell 1
-  \draw[arrow] (AND_1.east)                   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
-  \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
-  \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
+        % Cell 1
+        \draw[arrow] (AND_1.east)                   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
+        \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
 
-  % Hidden cell 1
-  \draw[arrow] (AND_h1.east)                  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
+        % Hidden cell 1
+        \draw[arrow] (AND_h1.east)                  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
 
-  % Cell k
-  \draw[arrow] (AND_k.east)                   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
-  \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
-  \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
+        % Cell k
+        \draw[arrow] (AND_k.east)                   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
+        \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
 
-  % Cell k+1
-  \draw[arrow] (AND_k+1.east)                 -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
-  \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
-  \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
+        % Cell k+1
+        \draw[arrow] (AND_k+1.east)                 -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
+        \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
 
-  % Hidden cell 2
-  \draw[arrow] (AND_h2.east)                  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
+        % Hidden cell 2
+        \draw[arrow] (AND_h2.east)                  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
 
-  % Input gate
-  \coordinate  (input) at ($(input_pulse.north) + (0, 0.5)$);
-  \draw[line]  (input_pulse.north)            -- (input);
-  \draw[arrow] (input)                        -| (AND_1.south);
-  \draw[arrow] (input)                        -| (AND_h2.south);
-  \draw[arrow] (input -| AND_h1)              -- (AND_h1.south);
-  \draw[arrow] (input -| AND_k)               -- (AND_k.south);
-  \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
-  \end{tikzpicture}\vspace{1mm}
+        % Input gate
+        \coordinate  (input) at ($(input_pulse.north) + (0, 0.5)$);
+        \draw[line]  (input_pulse.north)            -- (input);
+        \draw[arrow] (input)                        -| (AND_1.south);
+        \draw[arrow] (input)                        -| (AND_h2.south);
+        \draw[arrow] (input -| AND_h1)              -- (AND_h1.south);
+        \draw[arrow] (input -| AND_k)               -- (AND_k.south);
+        \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
+    \end{tikzpicture}
+    \caption{Diagram of the general method counter}
+    \label{fig:CounterGeneral}
+\end{figure}
 - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
 - To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
 - Requires a startup pulse to one of the toggled OR gates to work (achieved with a 1 frame pulse generator)
@@ -606,116 +632,119 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
-- Diagram of the circuit:
-  \vspace{2mm}
-  \begin{tikzpicture}[trim left=2.1em]
-  % Nodes
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Nodes
 
-  % Cell 1
-  \node[node]       (ORs_1)                                        {All OR gates\\except the last};
-  \node[node]       (OR_final_1)    [below = 1.5mm of ORs_1]       {Last OR gate};
-  \node[node]       (ANDs_1)        [below = 1.5mm of OR_final_1]  {All AND gates};
-  \coordinate[above=16pt of ORs_1]       (cell_1);
+        % Cell 1
+        \node[node]       (ORs_1)                                        {All OR gates\\except the last};
+        \node[node]       (OR_final_1)    [below = 1.5mm of ORs_1]       {Last OR gate};
+        \node[node]       (ANDs_1)        [below = 1.5mm of OR_final_1]  {All AND gates};
+        \coordinate[above=16pt of ORs_1]       (cell_1);
 
-  % Hidden cell 1
-  \node[hiddenNode] (ORs_h1)        [right = of ORs_1]             {};
-  \node[hiddenNode] (OR_final_h1)   [right = of OR_final_1]        {};
-  \node[hiddenNode] (ANDs_h1)       [right = of ANDs_1]            {};
+        % Hidden cell 1
+        \node[hiddenNode] (ORs_h1)        [right = of ORs_1]             {};
+        \node[hiddenNode] (OR_final_h1)   [right = of OR_final_1]        {};
+        \node[hiddenNode] (ANDs_h1)       [right = of ANDs_1]            {};
 
-  % Cell k
-  \node[node]       (ORs_k)         [right = of ORs_h1]            {All OR gates\\except the last};
-  \node[node]       (OR_final_k)    [right = of OR_final_h1]       {Last OR gate};
-  \node[node]       (ANDs_k)        [right = of ANDs_h1]           {All AND gates};
-  \coordinate[above=16pt of ORs_k]       (cell_k);
+        % Cell k
+        \node[node]       (ORs_k)         [right = of ORs_h1]            {All OR gates\\except the last};
+        \node[node]       (OR_final_k)    [right = of OR_final_h1]       {Last OR gate};
+        \node[node]       (ANDs_k)        [right = of ANDs_h1]           {All AND gates};
+        \coordinate[above=16pt of ORs_k]       (cell_k);
 
-  % Cell k+1
-  \node[node]       (ORs_k+1)       [right = of ORs_k]             {All OR gates\\except the last};
-  \node[node]       (OR_final_k+1)  [right = of OR_final_k]        {Last OR gate};
-  \node[node]       (ANDs_k+1)      [right = of ANDs_k]            {All AND gates};
-  \coordinate[above=16pt of ORs_k+1]     (cell_k+1);
+        % Cell k+1
+        \node[node]       (ORs_k+1)       [right = of ORs_k]             {All OR gates\\except the last};
+        \node[node]       (OR_final_k+1)  [right = of OR_final_k]        {Last OR gate};
+        \node[node]       (ANDs_k+1)      [right = of ANDs_k]            {All AND gates};
+        \coordinate[above=16pt of ORs_k+1]     (cell_k+1);
 
-  % Hidden cell 2
-  \node[hiddenNode] (ORs_h2)        [right = of ORs_k+1]           {};
-  \node[hiddenNode] (OR_final_h2)   [right = of OR_final_k+1]      {};
-  \node[hiddenNode] (ANDs_h2)       [right = of ANDs_k+1]          {};
+        % Hidden cell 2
+        \node[hiddenNode] (ORs_h2)        [right = of ORs_k+1]           {};
+        \node[hiddenNode] (OR_final_h2)   [right = of OR_final_k+1]      {};
+        \node[hiddenNode] (ANDs_h2)       [right = of ANDs_k+1]          {};
 
-  % Cell n
-  \node[node]       (ORs_n)         [right = of ORs_h2]            {All OR gates\\except the last};
-  \node[hiddenNode] (OR_final_n)    [right = of OR_final_h2]       {};
-  \node[node]       (ANDs_n)        [right = of ANDs_h2]           {All AND gates};
-  \coordinate[above=16pt of ORs_n]       (cell_n);
+        % Cell n
+        \node[node]       (ORs_n)         [right = of ORs_h2]            {All OR gates\\except the last};
+        \node[hiddenNode] (OR_final_n)    [right = of OR_final_h2]       {};
+        \node[node]       (ANDs_n)        [right = of ANDs_h2]           {All AND gates};
+        \coordinate[above=16pt of ORs_n]       (cell_n);
 
-  % Input gate
-  \node[node]       (input_pulse) at ($(ANDs_k) + (0.45, -3.25)$)  {1 frame pulse\\generator (input)};
-  \node[node]       (input_OR)      [right = 1.5mm of input_pulse] {OR gate};
-  \coordinate[above=16pt of input_pulse] (input_cell);
+        % Input gate
+        \node[node]       (input_pulse) at ($(ANDs_k) + (0.45, -3.25)$)  {1 frame pulse\\generator (input)};
+        \node[node]       (input_OR)      [right = 1.5mm of input_pulse] {OR gate};
+        \coordinate[above=16pt of input_pulse] (input_cell);
 
-  % Cell bounding boxes
-  \begin{scope}[on background layer]
-      \node[node,       fit=(ORs_1)(ANDs_1)(OR_final_1)(cell_1),         label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-      \node[hiddenNode, fit=(ORs_h1)(ANDs_h1)(OR_final_h1)]              {$\cdots$};
-      \node[node,       fit=(ORs_k)(ANDs_k)(OR_final_k)(cell_k),         label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-      \node[node,       fit=(ORs_k+1)(ANDs_k+1)(OR_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-      \node[hiddenNode, fit=(ORs_h2)(ANDs_h2)(OR_final_h2)]              {$\cdots$};
-      \node[node,       fit=(ORs_n)(ANDs_n)(OR_final_n)(cell_n),         label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
-      \node[node,       fit=(input_pulse)(input_OR)(input_cell),         label={[anchor=north, yshift=-2.5pt]Input circuit}] {};
-  \end{scope}
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node,       fit=(ORs_1)(ANDs_1)(OR_final_1)(cell_1),         label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(ORs_h1)(ANDs_h1)(OR_final_h1)]              {$\cdots$};
+            \node[node,       fit=(ORs_k)(ANDs_k)(OR_final_k)(cell_k),         label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(ORs_k+1)(ANDs_k+1)(OR_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(ORs_h2)(ANDs_h2)(OR_final_h2)]              {$\cdots$};
+            \node[node,       fit=(ORs_n)(ANDs_n)(OR_final_n)(cell_n),         label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_{10} n}$}] {};
+            \node[node,       fit=(input_pulse)(input_OR)(input_cell),         label={[anchor=north, yshift=-2.5pt]Input circuit}] {};
+        \end{scope}
 
-  % Arrows
+        % Arrows
 
-  % Points between cells (top)
-  \coordinate (1-h1)    at ($(ORs_1.east)!0.5!(ORs_h1.west)   + (0, 1.75)$);
-  \coordinate (h1-k)    at ($(ORs_h1.east)!0.5!(ORs_k.west)   + (0, 1.75)$);
-  \coordinate (k-k+1)   at ($(ORs_k.east)!0.5!(ORs_k+1.west)  + (0, 1.75)$);
-  \coordinate (k+1-h2)  at ($(ORs_k+1.east)!0.5!(ORs_h2.west) + (0, 1.75)$);
-  \coordinate (h2-n)    at ($(ORs_h2.east)!0.5!(ORs_n.west)   + (0, 1.75)$);
-  \coordinate (n-)      at ($(ORs_n.east)                     + (0.5, 1.75)$);
-  % Points between cells (bottom)
-  \coordinate (1-h1-)   at ($(1-h1)                           - (0, 4.6)$);
-  \coordinate (h1-k-)   at ($(h1-k)                           - (0, 4.6)$);
-  \coordinate (k-k+1-)  at ($(k-k+1)                          - (0, 4.6)$);
-  \coordinate (k+1-h2-) at ($(k+1-h2)                         - (0, 4.6)$);
-  \coordinate (h2-n-)   at ($(h2-n)                           - (0, 4.6)$);
+        % Points between cells (top)
+        \coordinate (1-h1)    at ($(ORs_1.east)!0.5!(ORs_h1.west)   + (0, 1.75)$);
+        \coordinate (h1-k)    at ($(ORs_h1.east)!0.5!(ORs_k.west)   + (0, 1.75)$);
+        \coordinate (k-k+1)   at ($(ORs_k.east)!0.5!(ORs_k+1.west)  + (0, 1.75)$);
+        \coordinate (k+1-h2)  at ($(ORs_k+1.east)!0.5!(ORs_h2.west) + (0, 1.75)$);
+        \coordinate (h2-n)    at ($(ORs_h2.east)!0.5!(ORs_n.west)   + (0, 1.75)$);
+        \coordinate (n-)      at ($(ORs_n.east)                     + (0.5, 1.75)$);
+        % Points between cells (bottom)
+        \coordinate (1-h1-)   at ($(1-h1)                           - (0, 4.6)$);
+        \coordinate (h1-k-)   at ($(h1-k)                           - (0, 4.6)$);
+        \coordinate (k-k+1-)  at ($(k-k+1)                          - (0, 4.6)$);
+        \coordinate (k+1-h2-) at ($(k+1-h2)                         - (0, 4.6)$);
+        \coordinate (h2-n-)   at ($(h2-n)                           - (0, 4.6)$);
 
-  % Cell 1
-  \draw[line]  (ORs_1.east)         -- (ORs_1 -| 1-h1);
-  \draw[arrow] (OR_final_1.east)    -- (OR_final_1 -| 1-h1)      |- (ANDs_h1.west);
+        % Cell 1
+        \draw[line]  (ORs_1.east)         -- (ORs_1 -| 1-h1);
+        \draw[arrow] (OR_final_1.east)    -- (OR_final_1 -| 1-h1)      |- (ANDs_h1.west);
 
-  % Hidden cell 1
-  \draw[line]  (ORs_h1.east)        -- (ORs_h1 -| h1-k);
-  \draw[arrow] (OR_final_h1.east)   -- (OR_final_h1 -| h1-k)     |- (ANDs_k.west);
-  \draw[->-]   (ANDs_1 -| 1-h1)     -- (1-h1-) -- (h1-k-)        -- (h1-k |- ANDs_k);
-  \draw[->-]   (ORs_1  -| 1-h1)     -- (1-h1)  -- (h1-k)         -- (h1-k |- ORs_k);
+        % Hidden cell 1
+        \draw[line]  (ORs_h1.east)        -- (ORs_h1 -| h1-k);
+        \draw[arrow] (OR_final_h1.east)   -- (OR_final_h1 -| h1-k)     |- (ANDs_k.west);
+        \draw[->-]   (ANDs_1 -| 1-h1)     -- (1-h1-) -- (h1-k-)        -- (h1-k |- ANDs_k);
+        \draw[->-]   (ORs_1  -| 1-h1)     -- (1-h1)  -- (h1-k)         -- (h1-k |- ORs_k);
 
-  % Cell k
-  \draw[line]  (ORs_k.east)         -| (k-k+1);
-  \draw[arrow] (OR_final_k.east)    -- (OR_final_k -| k-k+1)     |- (ANDs_k+1.west);
-  \draw[->-]   (h1-k-)              -- (k-k+1-);
-  \draw[->-]   (h1-k)               -- (k-k+1);
-  \draw[line]  (ANDs_k -| k-k+1)    -- (k-k+1-);
+        % Cell k
+        \draw[line]  (ORs_k.east)         -| (k-k+1);
+        \draw[arrow] (OR_final_k.east)    -- (OR_final_k -| k-k+1)     |- (ANDs_k+1.west);
+        \draw[->-]   (h1-k-)              -- (k-k+1-);
+        \draw[->-]   (h1-k)               -- (k-k+1);
+        \draw[line]  (ANDs_k -| k-k+1)    -- (k-k+1-);
 
-  % Cell k+1
-  \draw[line]  (ORs_k+1.east)       -| (k+1-h2);
-  \draw[arrow] (OR_final_k+1.east)  -- (OR_final_k+1 -| k+1-h2)  |- (ANDs_h2.west);
-  \draw[->-]   (k-k+1-)             -- (k+1-h2-);
-  \draw[->-]   (k-k+1)              -- (k+1-h2);
+        % Cell k+1
+        \draw[line]  (ORs_k+1.east)       -| (k+1-h2);
+        \draw[arrow] (OR_final_k+1.east)  -- (OR_final_k+1 -| k+1-h2)  |- (ANDs_h2.west);
+        \draw[->-]   (k-k+1-)             -- (k+1-h2-);
+        \draw[->-]   (k-k+1)              -- (k+1-h2);
 
-  % Hidden cell 2
-  \draw[line]  (ORs_h2.east)        -- (ORs_h2 -| h2-n);
-  \draw[arrow] (OR_final_h2.east)   -- (OR_final_h2 -| h2-n)     |- (ANDs_n.west);
-  \draw[->-]   (ANDs_k+1 -| k+1-h2) -- (k+1-h2-) -- (h2-n-)      -- (h2-n |- ANDs_n);
-  \draw[->-]   (k+1-h2)             -- (h2-n);
+        % Hidden cell 2
+        \draw[line]  (ORs_h2.east)        -- (ORs_h2 -| h2-n);
+        \draw[arrow] (OR_final_h2.east)   -- (OR_final_h2 -| h2-n)     |- (ANDs_n.west);
+        \draw[->-]   (ANDs_k+1 -| k+1-h2) -- (k+1-h2-) -- (h2-n-)      -- (h2-n |- ANDs_n);
+        \draw[->-]   (k+1-h2)             -- (h2-n);
 
-  % Cell n
-  \draw[arrow] (ORs_n.east)         -- (ORs_n -| n-)             |- (input_OR.east);
-  \draw[->-]   (ORs_h2 -| h2-n)     -- (h2-n) -- (n-)            -- (n- |- ORs_n);
+        % Cell n
+        \draw[arrow] (ORs_n.east)         -- (ORs_n -| n-)             |- (input_OR.east);
+        \draw[->-]   (ORs_h2 -| h2-n)     -- (h2-n) -- (n-)            -- (n- |- ORs_n);
 
-  % Input gate
-  \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
-  \draw[arrow] (input_pulse.north)  -- (input)                   -| (ANDs_1.south);
-  \draw[line]  (input_OR.north)     |- (input);
-  \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
-  \end{tikzpicture}\vspace{1mm}
+        % Input gate
+        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
+        \draw[arrow] (input_pulse.north)  -- (input)                   -| (ANDs_1.south);
+        \draw[line]  (input_OR.north)     |- (input);
+        \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
+    \end{tikzpicture}
+    \caption{Diagram of the base 10 method counter}
+    \label{fig:CounterDecimal}
+\end{figure}
 - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
 - To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first OR gate of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
 - Might require a decoder (unless you want to show numbers on a screen)
@@ -735,104 +764,107 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 - Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
 - $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
 - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
-- Diagram of the circuit:
-  \vspace{2mm}
-  \begin{tikzpicture}[trim left=2.1em]
-  % Nodes
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Nodes
 
-  % Cell 1
-  \node[node]       (OR_1)                                         {Toggled OR gate\\(output)};
-  \node[node]       (AND_1)         [below = 5mm of OR_1]          {AND gate};
-  \coordinate[above=16pt of OR_1]        (cell_1);
+        % Cell 1
+        \node[node]       (OR_1)                                         {Toggled OR gate\\(output)};
+        \node[node]       (AND_1)         [below = 5mm of OR_1]          {AND gate};
+        \coordinate[above=16pt of OR_1]        (cell_1);
 
-  % Hidden cell 1
-  \node[hiddenNode] (OR_h1)         [right = of OR_1]              {};
-  \node[hiddenNode] (AND_h1)        [right = of AND_1]             {};
+        % Hidden cell 1
+        \node[hiddenNode] (OR_h1)         [right = of OR_1]              {};
+        \node[hiddenNode] (AND_h1)        [right = of AND_1]             {};
 
-  % Cell k
-  \node[node]       (OR_k)          [right = of OR_h1]             {Toggled OR gate\\(output)};
-  \node[node]       (AND_k)         [right = of AND_h1]            {AND gate};
-  \coordinate[above=16pt of OR_k]        (cell_k);
+        % Cell k
+        \node[node]       (OR_k)          [right = of OR_h1]             {Toggled OR gate\\(output)};
+        \node[node]       (AND_k)         [right = of AND_h1]            {AND gate};
+        \coordinate[above=16pt of OR_k]        (cell_k);
 
-  % Cell k+1
-  \node[node]       (OR_k+1)        [right = of OR_k]              {Toggled OR gate\\(output)};
-  \node[node]       (AND_k+1)       [right = of AND_k]             {AND gate};
-  \coordinate[above=16pt of OR_k+1]      (cell_k+1);
+        % Cell k+1
+        \node[node]       (OR_k+1)        [right = of OR_k]              {Toggled OR gate\\(output)};
+        \node[node]       (AND_k+1)       [right = of AND_k]             {AND gate};
+        \coordinate[above=16pt of OR_k+1]      (cell_k+1);
 
-  % Hidden cell 2
-  \node[hiddenNode] (OR_h2)         [right = of OR_k+1]            {};
-  \node[hiddenNode] (AND_h2)        [right = of AND_k+1]           {};
+        % Hidden cell 2
+        \node[hiddenNode] (OR_h2)         [right = of OR_k+1]            {};
+        \node[hiddenNode] (AND_h2)        [right = of AND_k+1]           {};
 
-  % Cell n
-  \node[node]       (OR_n)          [right = of OR_h2]             {Toggled OR gate\\(output)};
-  \node[node]       (AND_n)         [right = of AND_h2]            {AND gate};
-  \coordinate[above=16pt of OR_n]        (cell_n);
+        % Cell n
+        \node[node]       (OR_n)          [right = of OR_h2]             {Toggled OR gate\\(output)};
+        \node[node]       (AND_n)         [right = of AND_h2]            {AND gate};
+        \coordinate[above=16pt of OR_n]        (cell_n);
 
-  % Input circuit
-  \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)   {1 frame pulse\\generator (input)};
-  \node[node]       (input_NAND)    [right = 1.5mm of input_pulse] {NAND gate};
-  \coordinate[above=16pt of input_pulse] (input_cell);
+        % Input circuit
+        \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)   {1 frame pulse\\generator (input)};
+        \node[node]       (input_NAND)    [right = 1.5mm of input_pulse] {NAND gate};
+        \coordinate[above=16pt of input_pulse] (input_cell);
 
-  % Cell bounding boxes
-  \begin{scope}[on background layer]
-      \node[node,       fit=(OR_1)(AND_1)(cell_1),                 label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-      \node[hiddenNode, fit=(OR_h1)(AND_h1)]                       {$\cdots$};
-      \node[node,       fit=(OR_k)(AND_k)(cell_k),                 label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-      \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1),           label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-      \node[hiddenNode, fit=(OR_h2)(AND_h2)]                       {$\cdots$};
-      \node[node,       fit=(OR_n)(AND_n)(cell_n),                 label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_2 n}$}] {};
-      \node[node,       fit=(input_pulse)(input_NAND)(input_cell), label={[anchor=north, yshift=-2.5pt]Input Circuit}] {};
-  \end{scope}
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node,       fit=(OR_1)(AND_1)(cell_1),                 label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(OR_h1)(AND_h1)]                       {$\cdots$};
+            \node[node,       fit=(OR_k)(AND_k)(cell_k),                 label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1),           label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(OR_h2)(AND_h2)]                       {$\cdots$};
+            \node[node,       fit=(OR_n)(AND_n)(cell_n),                 label={[anchor=north, yshift=-2.5pt]Cell $\ceil{\log_2 n}$}] {};
+            \node[node,       fit=(input_pulse)(input_NAND)(input_cell), label={[anchor=north, yshift=-2.5pt]Input Circuit}] {};
+        \end{scope}
 
-  % Arrows
+        % Arrows
 
-  % Points between cells
-  \coordinate (1-h1)   at ($(OR_1.east)!0.5!(OR_h1.west)   + (0, 1.75)$);
-  \coordinate (h1-k)   at ($(OR_h1.east)!0.5!(OR_k.west)   + (0, 1.75)$);
-  \coordinate (k-k+1)  at ($(OR_k.east)!0.5!(OR_k+1.west)  + (0, 1.75)$);
-  \coordinate (k+1-h2) at ($(OR_k+1.east)!0.5!(OR_h2.west) + (0, 1.75)$);
-  \coordinate (h2-n)   at ($(OR_h2.east)!0.5!(OR_n.west)   + (0, 1.75)$);
-  \coordinate (n-)     at ($(OR_n.east)                    + (0.5, 1.75)$);
+        % Points between cells
+        \coordinate (1-h1)   at ($(OR_1.east)!0.5!(OR_h1.west)   + (0, 1.75)$);
+        \coordinate (h1-k)   at ($(OR_h1.east)!0.5!(OR_k.west)   + (0, 1.75)$);
+        \coordinate (k-k+1)  at ($(OR_k.east)!0.5!(OR_k+1.west)  + (0, 1.75)$);
+        \coordinate (k+1-h2) at ($(OR_k+1.east)!0.5!(OR_h2.west) + (0, 1.75)$);
+        \coordinate (h2-n)   at ($(OR_h2.east)!0.5!(OR_n.west)   + (0, 1.75)$);
+        \coordinate (n-)     at ($(OR_n.east)                    + (0.5, 1.75)$);
 
-  % Cell 1
-  \draw[arrow] (AND_1.north)       -- (OR_1.south);
-  \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1)     |- (AND_h1.west);
+        % Cell 1
+        \draw[arrow] (AND_1.north)       -- (OR_1.south);
+        \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1)     |- (AND_h1.west);
 
-  % Hidden cell 1
-  \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k)    |- (AND_k.west);
-  \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k)   -- (h1-k |- OR_k);
+        % Hidden cell 1
+        \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k)    |- (AND_k.west);
+        \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k)   -- (h1-k |- OR_k);
 
-  % Cell k
-  \draw[arrow] (AND_k.north)       -- (OR_k.south);
-  \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1)    |- (AND_k+1.west);
-  \draw[->-]   (h1-k)              -- (k-k+1);
-  \draw[line]  (OR_k -| k-k+1)     -- (k-k+1);
+        % Cell k
+        \draw[arrow] (AND_k.north)       -- (OR_k.south);
+        \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1)    |- (AND_k+1.west);
+        \draw[->-]   (h1-k)              -- (k-k+1);
+        \draw[line]  (OR_k -| k-k+1)     -- (k-k+1);
 
-  % Cell k+1
-  \draw[arrow] (AND_k+1.north)     -- (OR_k+1.south);
-  \draw[arrow] (OR_k+1.east)       -- (OR_k+1 -| k+1-h2) |- (AND_h2.west);
-  \draw[->-]   (k-k+1)             -- (k+1-h2);
-  \draw[line]  (OR_k+1 -| k+1-h2)  -- (k+1-h2);
+        % Cell k+1
+        \draw[arrow] (AND_k+1.north)     -- (OR_k+1.south);
+        \draw[arrow] (OR_k+1.east)       -- (OR_k+1 -| k+1-h2) |- (AND_h2.west);
+        \draw[->-]   (k-k+1)             -- (k+1-h2);
+        \draw[line]  (OR_k+1 -| k+1-h2)  -- (k+1-h2);
 
-  % Hidden cell 2
-  \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n)    |- (AND_n.west);
-  \draw[->-]   (k+1-h2)            -- (h2-n);
+        % Hidden cell 2
+        \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n)    |- (AND_n.west);
+        \draw[->-]   (k+1-h2)            -- (h2-n);
 
-  % Cell n
-  \draw[arrow] (AND_n.north)       -- (OR_n.south);
-  \draw[arrow] (OR_n.east)         -- (OR_n -| n-)       |- (input_NAND.east);
-  \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
+        % Cell n
+        \draw[arrow] (AND_n.north)       -- (OR_n.south);
+        \draw[arrow] (OR_n.east)         -- (OR_n -| n-)       |- (input_NAND.east);
+        \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
 
-  \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
-  \draw[->-]   (input_pulse.north) -- (input);
-  \draw[->-]   (input_NAND.north)  -- (input_NAND |- input);
-  \draw[arrow] (input)             -| (AND_1.south);
-  \draw[arrow] (input)             -| (AND_n.south);
-  \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
-  \draw[arrow] (input -| AND_k)    -| (AND_k.south);
-  \draw[arrow] (input -| AND_k+1)  -| (AND_k+1.south);
-  \draw[arrow] (input -| AND_h2)   -| (AND_h2.south);
-  \end{tikzpicture}\vspace{1mm}
+        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
+        \draw[->-]   (input_pulse.north) -- (input);
+        \draw[->-]   (input_NAND.north)  -- (input_NAND |- input);
+        \draw[arrow] (input)             -| (AND_1.south);
+        \draw[arrow] (input)             -| (AND_n.south);
+        \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
+        \draw[arrow] (input -| AND_k)    -| (AND_k.south);
+        \draw[arrow] (input -| AND_k+1)  -| (AND_k+1.south);
+        \draw[arrow] (input -| AND_h2)   -| (AND_h2.south);
+    \end{tikzpicture}
+    \caption{Diagram of the binary method counter}
+    \label{fig:CounterBinary}
+\end{figure}
 - To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
 - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gates. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
 - Might require a decoder
@@ -850,105 +882,108 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
 - Calculated for $n \geq 3$, for $n = 2$ a latch is always best
 
-\vspace{2mm}
-\hspace{-1.25cm}
-\begin{tabular}{|c|m{18.75em}|m{18.75em}|}
-    \cline{2-3}
-    \multicolumn{1}{c|}{} & \thead{1-way} & \thead{2-way} \\
-    \hline
-    % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
-    \rotatebox[origin=c]{90}{\thead{Without cycle}}
-    &
-    Doesn't require a decoder:
-    \begin{itemize}
-        \item For $n \leq 3$ use the general circuit
-        \item For $n > 3$ use the binary circuit
-    \end{itemize}
-    Doesn't require an individual decoder:
-    \begin{itemize}
-        \item For $n \leq 5$ use the general circuit
-        \item For $n > 5$ use the binary circuit
-    \end{itemize}
-    Requires an individual decoder:
-    \begin{itemize}
-        \item For $n \leq 14$ or $n = 17$ use the general circuit
-        \item For $n > 14$ and $n \neq 17$ use the binary circuit
-    \end{itemize}
-    Show values directly on a screen (only numbers for $n > 12$):
-    \begin{itemize}
-        \item For $n \leq 12$ use the general circuit
-        \item For $n > 12$ use the base 10 circuit
-        \newline
-    \end{itemize}
-    &
-    Doesn't require a decoder:
-    \begin{itemize}
-        \item For $n \leq 5$ use the general circuit
-        \item For $n > 5$ use the binary circuit
-    \end{itemize}
-    Doesn't require an individual decoder:
-    \begin{itemize}
-        \item For $n \leq 5$ use the general circuit
-        \item For $n > 5$ use the binary circuit
-    \end{itemize}
-    Requires an individual decoder:
-    \begin{itemize}
-        \item For $n \leq 10$ use the general circuit
-        \item For $n > 10$ use the binary circuit
-        \newline
-        \newline
-    \end{itemize}
-    Show values directly on a screen (only numbers for $n > 16$):
-    \begin{itemize}
-        \item For $n \leq 10$ use the general circuit
-        \item For $10 < n \leq 16$ use the binary circuit
-        \item For $n > 16$ use the base 10 circuit
-    \end{itemize} \\
-    \hline
-    \rotatebox[origin=c]{90}{\thead{With cycle}}
-    &
-    Doesn't require a decoder:
-    \begin{itemize}
-        \item Use the binary circuit
-    \end{itemize}
-    Doesn't require an individual decoder:
-    \begin{itemize}
-        \item Use the binary circuit
-    \end{itemize}
-    Requires an individual decoder:
-    \begin{itemize}
-        \item For $n \leq 11$ use the general circuit
-        \item For $n > 11$ use the binary circuit
-    \end{itemize}
-    Show values directly on a screen (only numbers for $n > 12$):
-    \begin{itemize}
-        \item For $n < 12$ use the general circuit
-        \item For $n = 12$ use the binary circuit
-        \item For $n > 12$ use the base 10 circuit
-        \newline
-    \end{itemize}
-    &
-    Doesn't require a decoder:
-    \begin{itemize}
-        \item Use the binary circuit
-    \end{itemize}
-    Doesn't require an individual decoder:
-    \begin{itemize}
-        \item Use the binary circuit
-    \end{itemize}
-    Requires an individual decoder:
-    \begin{itemize}
-        \item For $n \leq 3$ or $n = 5$ use the general circuit
-        \item For $n = 4$ or $n > 5$ use the binary circuit
-    \end{itemize}
-    Show values directly on a screen (only numbers for $n > 17$):
-    \begin{itemize}
-        \item For $n \leq 3$ or $n = 5$ use the general circuit
-        \item For $n = 4$ or $5 < n \leq 17$ use the binary circuit
-        \item For $n > 17$ use the base 10 circuit
-    \end{itemize} \\
-    \hline
-\end{tabular}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|m{18.75em}|m{18.75em}|}
+        \cline{2-3}
+        \multicolumn{1}{c|}{} & \thead{1-way} & \thead{2-way} \\
+        \hline
+        % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
+        \rotatebox[origin=c]{90}{\thead{Without cycle}}
+        &
+        Doesn't require a decoder:
+        \begin{itemize}
+            \item For $n \leq 3$ use the general circuit
+            \item For $n > 3$ use the binary circuit
+        \end{itemize}
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item For $n \leq 5$ use the general circuit
+            \item For $n > 5$ use the binary circuit
+        \end{itemize}
+        Requires an individual decoder:
+        \begin{itemize}
+            \item For $n \leq 14$ or $n = 17$ use the general circuit
+            \item For $n > 14$ and $n \neq 17$ use the binary circuit
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 12$):
+        \begin{itemize}
+            \item For $n \leq 12$ use the general circuit
+            \item For $n > 12$ use the base 10 circuit
+            \newline
+        \end{itemize}
+        &
+        Doesn't require a decoder:
+        \begin{itemize}
+            \item For $n \leq 5$ use the general circuit
+            \item For $n > 5$ use the binary circuit
+        \end{itemize}
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item For $n \leq 5$ use the general circuit
+            \item For $n > 5$ use the binary circuit
+        \end{itemize}
+        Requires an individual decoder:
+        \begin{itemize}
+            \item For $n \leq 10$ use the general circuit
+            \item For $n > 10$ use the binary circuit
+            \newline
+            \newline
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 16$):
+        \begin{itemize}
+            \item For $n \leq 10$ use the general circuit
+            \item For $10 < n \leq 16$ use the binary circuit
+            \item For $n > 16$ use the base 10 circuit
+        \end{itemize} \\
+        \hline
+        \rotatebox[origin=c]{90}{\thead{With cycle}}
+        &
+        Doesn't require a decoder:
+        \begin{itemize}
+            \item Use the binary circuit
+        \end{itemize}
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item Use the binary circuit
+        \end{itemize}
+        Requires an individual decoder:
+        \begin{itemize}
+            \item For $n \leq 11$ use the general circuit
+            \item For $n > 11$ use the binary circuit
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 12$):
+        \begin{itemize}
+            \item For $n < 12$ use the general circuit
+            \item For $n = 12$ use the binary circuit
+            \item For $n > 12$ use the base 10 circuit
+            \newline
+        \end{itemize}
+        &
+        Doesn't require a decoder:
+        \begin{itemize}
+            \item Use the binary circuit
+        \end{itemize}
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item Use the binary circuit
+        \end{itemize}
+        Requires an individual decoder:
+        \begin{itemize}
+            \item For $n \leq 3$ or $n = 5$ use the general circuit
+            \item For $n = 4$ or $n > 5$ use the binary circuit
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 17$):
+        \begin{itemize}
+            \item For $n \leq 3$ or $n = 5$ use the general circuit
+            \item For $n = 4$ or $5 < n \leq 17$ use the binary circuit
+            \item For $n > 17$ use the base 10 circuit
+        \end{itemize} \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of the different counter methods}
+    \label{table:CounterComparison}
+\end{table}
 
 Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and base 10 with cycle circuits, followed by the 1-way binary circuit with cycle, then by the base 10 circuit without cycle and lastly the binary circuit without cycle or with 2-way
 
@@ -957,28 +992,31 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 - Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
 - Doesn't work when the output block is an AND/XOR gate
 - Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
-- Diagram of the circuit:
-  \vspace{2mm}
-  \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
-  % Nodes
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
+        % Nodes
 
-  \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
-  \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
-  \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
-  \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
-  \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
-  \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
-  \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
+        \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
+        \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
+        \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
+        \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
+        \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
+        \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
+        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
 
-  % Arrows
+        % Arrows
 
-  \draw[arrow] (input_signal.east)  -- (output_blocks.west);
-  \draw[arrow] (input_signal.north) |- (XOR.west);
-  \draw[arrow] (XOR.east)           -| (output_blocks.north);
-  \draw[->-]   (input_toggle1.east) -- (toggles);
-  \draw[->-]   (input_toggle2.west) -- (toggles);
-  \draw[arrow] (toggles)            -- (XOR.north);
-  \end{tikzpicture}\vspace{1mm}
+        \draw[arrow] (input_signal.east)  -- (output_blocks.west);
+        \draw[arrow] (input_signal.north) |- (XOR.west);
+        \draw[arrow] (XOR.east)           -| (output_blocks.north);
+        \draw[->-]   (input_toggle1.east) -- (toggles);
+        \draw[->-]   (input_toggle2.west) -- (toggles);
+        \draw[arrow] (toggles)            -- (XOR.north);
+    \end{tikzpicture}
+    \caption{Diagram of the no-delay signal toggle}
+    \label{fig:NoDelaySignalToggle}
+\end{figure}
 - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
 
 ## Feedback Loop
@@ -994,42 +1032,46 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
 - Allows limiting the output signal of a feedback loop to the range $[0, 1]$
 - Diagram of the circuit:
-  \vspace{2mm}
-  \begin{tikzpicture}[trim left=-12em]
-  % Nodes
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[trim left=-12em]
+        % Nodes
 
-  \node[node] (feedback_top)                               {OR Gate};
-  \node[node] (feedback_bot) [below = 5mm of feedback_top] {OR Gate};
-  \coordinate (feedback_mid) at ($(feedback_top.west)!0.5!(feedback_bot.west)$);
+        \node[node] (feedback_top)                               {OR Gate};
+        \node[node] (feedback_bot) [below = 5mm of feedback_top] {OR Gate};
+        \coordinate (feedback_mid) at ($(feedback_top.west)!0.5!(feedback_bot.west)$);
 
-  \node[node] (input)        [left = of feedback_mid]      {Input Signal};
+        \node[node] (input)        [left = of feedback_mid]      {Input Signal};
 
-  \coordinate[above=16pt of feedback_top] (feedback);
+        \coordinate[above=16pt of feedback_top] (feedback);
 
-  \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
-  \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output value};
+        \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
+        \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output value};
 
-  \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output value\\(output)};
+        \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output value\\(output)};
 
-  % Bounding boxes
-  \begin{scope}[on background layer]
-      \node[node, fit=(feedback_top)(feedback_bot)(feedback), label={[anchor=north, yshift=-2.5pt]Feedback Loop}] {};
-  \end{scope}
+        % Bounding boxes
+        \begin{scope}[on background layer]
+            \node[node, fit=(feedback_top)(feedback_bot)(feedback), label={[anchor=north, yshift=-2.5pt]Feedback Loop}] {};
+        \end{scope}
 
-  % Arrows
+        % Arrows
 
-  \coordinate  (input_split) at ($(input.east) + (0.5, 0)$);
-  \draw[line]  (input.east)                    -- (input_split);
-  \draw[arrow] (input_split)                   |- (feedback_top.west);
-  \draw[arrow] (input_split)                   |- (feedback_bot.west);
-  \draw[arrow] ($(feedback_bot.north) + (2mm, 0)$)  -- ($(feedback_top.south) + (2mm, 0)$);
-  \draw[arrow] ($(feedback_top.south) + (-2mm, 0)$) -- ($(feedback_bot.north) + (-2mm, 0)$);
-  \draw[arrow] (C+1.west)                      -- (feedback_bot.east);
-  \draw[arrow] (C+1.north)                     -- (C-1.south);
-  \draw[arrow] (C-1.west |- feedback_top.east) |- (feedback_top.east);
-  \draw[arrow] (C-1.east)                      -- (output.west);
-  \draw[arrow] (feedback_bot.south) -- ($(feedback_bot.south) + (0, -0.5)$) -| (output);
-  \end{tikzpicture}\vspace{1mm}
+        \coordinate  (input_split) at ($(input.east) + (0.5, 0)$);
+        \draw[line]  (input.east)                    -- (input_split);
+        \draw[arrow] (input_split)                   |- (feedback_top.west);
+        \draw[arrow] (input_split)                   |- (feedback_bot.west);
+        \draw[arrow] ($(feedback_bot.north) + (2mm, 0)$)  -- ($(feedback_top.south) + (2mm, 0)$);
+        \draw[arrow] ($(feedback_top.south) + (-2mm, 0)$) -- ($(feedback_bot.north) + (-2mm, 0)$);
+        \draw[arrow] (C+1.west)                      -- (feedback_bot.east);
+        \draw[arrow] (C+1.north)                     -- (C-1.south);
+        \draw[arrow] (C-1.west |- feedback_top.east) |- (feedback_top.east);
+        \draw[arrow] (C-1.east)                      -- (output.west);
+        \draw[arrow] (feedback_bot.south) -- ($(feedback_bot.south) + (0, -0.5)$) -| (output);
+    \end{tikzpicture}
+    \caption{Diagram of the clamped feedback loop}
+    \label{fig:ClampedFeedbackLoop}
+\end{figure}
 - Note: the input signal is reversed. This means that a negative value increases the stored value while a positive value decreases it
 - Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
 - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=2911246646)
@@ -1080,7 +1122,6 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 - The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
 - A calculator using this data made by confusionextended can be found [\underline{here}](https://www.desmos.com/calculator/i70yadxqyy)
 
-\setlength\LTleft{-0.95cm}
 \begin{longtable}{|c|c|c !{\vrule width 3pt} c|c|c !{\vrule width 3pt} c|c|c|}
     \hline
     \thead{Output\\value} & \thead{Final\\angle} & \thead{Multiplier} & \thead{Output\\value} & \thead{Final\\angle} & \thead{Multiplier} & \thead{Output\\value} & \thead{Final\\angle} & \thead{Multiplier} \\
@@ -1163,27 +1204,32 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
     \hline
     \multicolumn{3}{c!{\vrule width 3pt}}{} & 0.490 & 06.005 & 0.06672222 & \multicolumn{3}{c}{} \\
     \cmidrule(l{-3pt}){4-6}
+    \caption{Raw data of the output value multiplier for hinges}
+    \label{table:OutputValueMultiplierData}
 \end{longtable}
 
-\vspace{-2mm}
-\hspace{-3.5em}
-\begin{tikzpicture}
-    \begin{axis}[
-        height=27.5em,
-        width=42em,
-        title={Multiplier as a function of the output value},
-        xlabel={Output value},
-        ylabel={Multiplier},
-        domain = 0:1,
-        xmin=0, xmax=1,
-        ymin=0, ymax=1,
-        minor tick num=1,
-        grid=both
-    ]
-        \addplot[color=blue, mark=*] file {Output_Value_to_Multiplier.dat} node[above left, midway] {$f(x)$};
-        \addplot[color=black, samples=3] {x} node[above left, midway] {$y=x$};
-    \end{axis}
-\end{tikzpicture}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            height=27.5em,
+            width=42em,
+            title={Multiplier as a function of the output value},
+            xlabel={Output value},
+            ylabel={Multiplier},
+            domain = 0:1,
+            xmin=0, xmax=1,
+            ymin=0, ymax=1,
+            minor tick num=1,
+            grid=both
+        ]
+            \addplot[color=blue, mark=*] file {Output_Value_to_Multiplier.dat} node[above left, midway] {$f(x)$};
+            \addplot[color=black, samples=3] {x} node[above left, midway] {$y=x$};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the multiplier for hinges as a function of the output value}
+    \label{fig:OutputValueMultiplierGraph}
+\end{figure}
 
 # Tips
 
