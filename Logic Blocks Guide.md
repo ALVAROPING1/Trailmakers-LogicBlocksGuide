@@ -89,9 +89,9 @@ header-includes: |
         % Style for lines
         line/.style={-, thick},
         % Style for arrows
-        arrow/.style={-Triangle, thick},
+        arrow/.style={->, thick},
         % Style for arrows with the tip on the middle
-        ->-/.style={line, decoration={markings, mark=at position 0.5 with {\arrow{Triangle}}}, postaction={decorate}},
+        ->-/.style={line, decoration={markings, mark=at position 0.5 with {\arrow{>}}}, postaction={decorate}},
     }
     % Custom to-paths
     \tikzset{
