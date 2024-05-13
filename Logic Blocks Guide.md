@@ -76,21 +76,23 @@ header-includes: |
     % Diagrams
     \usepackage{tikz}
     \usetikzlibrary{positioning, fit, calc, arrows.meta, backgrounds, decorations.markings}
-    % Basic node style
-    \tikzset{rectangleNode/.style={rectangle, draw=black, fill=white, thick, minimum height=6.6mm}}
-    % Node style for image annotations
-    \tikzset{annotation/.style={rectangleNode, align=left}}
-    % Node style for diagram nodes
-    \tikzset{node/.style={rectangleNode, align=center, minimum width=30.4mm}}
-    % Node style for hidden diagram nodes
-    \tikzset{hiddenNode/.style={rectangleNode, draw=none, fill=none, minimum width=5mm}}
-    % Style for lines
-    \tikzset{line/.style={-, thick}}
-    % Style for arrows
-    \tikzset{arrow/.style={-Triangle, thick}}
-    % Style for arrows with the tip on the middle
-    \tikzset{->-/.style={line, decoration={markings, mark=at position 0.5 with {\arrow{Triangle}}}, postaction={decorate}}}
-
+    % Node/line/arrow styles
+    \tikzset{
+        % Basic node
+        rectangleNode/.style={rectangle, draw=black, fill=white, thick, minimum height=6.6mm},
+        % Node for image annotations
+        annotation/.style={rectangleNode, align=left},
+        % Node for diagram nodes
+        node/.style={rectangleNode, align=center, minimum width=30.4mm},
+        % Node for hidden diagram nodes
+        hiddenNode/.style={rectangleNode, draw=none, fill=none, minimum width=5mm},
+        % Style for lines
+        line/.style={-, thick},
+        % Style for arrows
+        arrow/.style={-Triangle, thick},
+        % Style for arrows with the tip on the middle
+        ->-/.style={line, decoration={markings, mark=at position 0.5 with {\arrow{Triangle}}}, postaction={decorate}},
+    }
     % Custom to-paths
     \tikzset{
         % Vertical line through the end point
