@@ -1251,6 +1251,8 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
     \label{fig:OutputValueMultiplierGraph}
 \end{figure}
 
+\clearpage
+
 # Tips
 
 - If you want your system to not modify the input that passes through, configure all of the logic gates to have an output value of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
