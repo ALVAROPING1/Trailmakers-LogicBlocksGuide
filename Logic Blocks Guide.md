@@ -135,16 +135,24 @@ header-includes: |
 
 The goal of this document is to explain the logic system in the game [\underline{Trailmakers}](https://store.steampowered.com/app/585420/Trailmakers/). It also aims to act as a comprehensive technical reference manual for all related mechanics and behaviours. This document also contains a section about commonly used logic circuits and how to make them, to aid in the design and understanding of more complex logic circuits.
 
-# Settings
+# Logic Blocks
 
-## Distance sensor
+## Sensors
 
-- Range: in meters, $1 \text{ block} = 0.25 \text{ m}$
-  - Distance is measured from the center of the block, and only a single half of the detecting face detects objects
-- Output value: from $-1$ to $1$
+Sensors are a group of blocks that measure a physical property, like speed or angle, and create a boolean output based on it.
+
+### Distance Sensor
+
+Distance sensors check for objects within a straight line in front of them and a predefined distance. Only one half of the detecting face actually detects objects.
+
+Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
+
+- Range: in meters ($1 \text{ block} = 0.25 \text{ m}$), determines the maximum distance between an object and the sensor for it to be detected
+  - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
+- Output value: from $-1$ to $1$, explained in \nameref{output-value}
 - Trigger
-  - Normal: sends an output when it detects something
-  - Inverted: sends an output when it detects nothing
+  - Normal: sends an output when it detects an object
+  - Inverted: sends an output when it doesn't detect an object
 - Outputs
 
 \begin{figure}[H]
@@ -187,18 +195,22 @@ The goal of this document is to explain the logic system in the game [\underline
     \label{fig:SensorDistance}
 \end{figure}
 
-## Altitude Sensor
+### Altitude Sensor
+
+Altitude sensors measure the altitude of the block relative to a predefined frame of reference.
+
+Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 - Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 \text{ m}$
-- Output value: from $-1$ to $1$
-- Frame of reference
-  - Ignore waves: fixed altitude at the average sea level
-  - Relative to waves: altitude of the water below the sensor
-  - Outside of high seas, both options are equivalent
-  - On space sector, it's the max value while outside an atmosphere and close to the center of the planet while inside one
+- Output value: from $-1$ to $1$, explained in \nameref{output-value}
+- Frame of reference: position of the $0$ altitude point
+  - Ignore waves: fixed at the average sea level
+  - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
+  - Outside of high seas and when the wave setting is set to disabled, both options are equivalent
+  - On space sector, it's a "MAX" value while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
 - Trigger
-  - Normal: sends an output when it's above the altitude you set
-  - Below: sends an output when it's below the altitude you set
+  - Normal: sends an output when the altitude is above the configured value
+  - Below: sends an output when the altitude is below the configured value
 - Outputs
 
 \begin{figure}[H]
@@ -243,14 +255,17 @@ The goal of this document is to explain the logic system in the game [\underline
     \label{fig:SensorAltitude}
 \end{figure}
 
-## Speed Sensor
+### Speed Sensor
+
+Speed sensors measure the speed of the block in a given direction indicated by the arrow on the block.
+
+Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: in km/h or mph depending on the speed unit settings
-  - **IMPORTANT:** only detects the movement in the direction that the arrow points. The speed is measured from the position of the block
-- Output value: from $-1$ to $1$
+- Output value: from $-1$ to $1$, explained in \nameref{output-value}
 - Trigger
-  - Normal: sends an output when it goes faster than the speed you set
-  - Below: sends an output when it goes slower that the speed you set
+  - Normal: sends an output when the speed is above the configured value
+  - Below: sends an output when the speed is below the configured value
 - Outputs
 
 \begin{figure}[H]
@@ -293,15 +308,19 @@ The goal of this document is to explain the logic system in the game [\underline
     \label{fig:SensorSpeed}
 \end{figure}
 
-## Angle Sensor
+### Angle Sensor
 
-- Direction: in degrees, changes the position of the middle point of the activation threshold
-- Width: in degrees, changes the size of the activation threshold
-- Output value: from $-1$ to $1$
+Angle sensors measure the angle of the block relative to the direction of highest slope of the plane defined by the square faces of the block.
+
+Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
+
+- Direction: in degrees, determines the position of the middle point of the activation threshold
+- Width: in degrees, determines the size of the activation threshold
+- Output value: from $-1$ to $1$, explained in \nameref{output-value}
 - Trigger
-  - Normal: sends an output when the arrow is inside the activation threshold
-  - Outside: sends an output when the arrow is outside the activation threshold
-  - Note: the arrow will always try to point up no matter the orientation (in the direction of highest slope of the plane it is in)
+  - Normal: sends an output when the angle is inside of the activation threshold
+  - Outside: sends an output when the angle is outside the activation threshold
+  - Note: the arrow indicates the currently measured angle and will always try to point up no matter the orientation of the block (will point in the direction of highest slope of the plane it is in)
 - Outputs
 
 \begin{figure}[H]
@@ -346,15 +365,19 @@ The goal of this document is to explain the logic system in the game [\underline
     \label{fig:SensorAngle}
 \end{figure}
 
-## Compass
+### Compass
 
-- Direction: in degrees, changes the position of the middle point of the activation threshold
-- Width: in degrees, changes the size of the activation threshold
-- Output value: from $-1$ to $1$
+Compasses measure the angle of the block relative to the closest direction to the north in the plane defined by the square faces of the block.
+
+Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
+
+- Direction: in degrees, determines the position of the middle point of the activation threshold
+- Width: in degrees, determines the size of the activation threshold
+- Output value: from $-1$ to $1$, explained in \nameref{output-value}
 - Trigger
-  - Normal: sends an output when the arrow is inside the activation threshold
-  - Outside: sends an output when the arrow is outside the activation threshold
-  - Note: the arrow will always try to point north no matter the orientation
+  - Normal: sends an output when the angle is inside of the activation threshold
+  - Outside: sends an output when the angle is outside the activation threshold
+  - Note: the arrow indicates the currently measured angle and will always try to point north no matter the orientation of the block (will point in the direction closest to the north of the plane it is in)
 - Outputs
 
 \begin{figure}[H]
@@ -401,6 +424,8 @@ The goal of this document is to explain the logic system in the game [\underline
 
 ## Logic gates
 
+Logic gates are a group of blocks that take a set of boolean inputs, and create a boolean output based on their values.
+
 - Keybinds: green ($1$) and red ($-1$), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
   - Toggle: toggles **inputs**, when an input reaches a gate it will toggle on the color toggled (if there is, it's of the same color as the input and it's off), toggle it off (if there is, it's of the same color as the input and it's on, it will be toggled off after this pulse stops reaching the gate) or toggle the other color off and check again the other 2 rules (if it's not of the same color as the input and the other color it's toggled on)
     - If you want to toggle the output instead of the inputs, make the signal go through another gate with the toggle after the gate in which you want to toggle the output
@@ -411,7 +436,7 @@ The goal of this document is to explain the logic system in the game [\underline
   - Duration and pause (previously known as active and inactive time respectively): in seconds, setting the duration to a number different than $0$ and pause to $0$ will make it send a single pulse until turned off and on again. If both of them are not $0$ it will create a cycle which will be repeated until it's deactivated. The shortest length for a pulse is $1$ frame ($1/60 s$), any value lower than this won't send an output
   - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is 0 it ends after the duration ends)
   - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. To calculate that number just do $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
-- Output value: from $-1$ to $1$
+- Output value: from $-1$ to $1$, explained in \nameref{output-value}
 - Outputs
 
 \begin{figure}[H]
