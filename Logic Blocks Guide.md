@@ -1117,9 +1117,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
       except ValueError:
           print("Invalid input. Try again")
           continue
-      feedback_top, feedback_bottom = (
-          update(feedback_top, feedback_bottom, user_input)
-      )
+      feedback_top, feedback_bottom = update(feedback_top, feedback_bottom, user_input)
       print_state(feedback_top, feedback_bottom)
   ```
 
