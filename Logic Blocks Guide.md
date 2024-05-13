@@ -91,6 +91,12 @@ header-includes: |
     % Style for arrows with the tip on the middle
     \tikzset{->-/.style={line, decoration={markings, mark=at position 0.5 with {\arrow{Triangle}}}, postaction={decorate}}}
 
+    % Custom to-paths
+    \tikzset{
+        % Vertical line through the end point
+        *|/.style={/tikz/to path={(\tikztostart -| \tikztotarget) -- (\tikztotarget) \tikztonodes}}
+    }
+
     % Plot graphs
     \usepackage{pgfplots}
     \pgfplotsset{every axis plot/.append style={very thick}}
@@ -139,7 +145,7 @@ header-includes: |
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=16em]{distance_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{distance_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -193,7 +199,7 @@ header-includes: |
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=21em]{altitude_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{altitude_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -213,17 +219,17 @@ header-includes: |
             \node[annotation, left]  (output_on)       at (-1.5, 16.2) {Output (on)\\(will send an\\input to it)};
             \node[annotation, right] (output_off)      at (21.5, 16.2) {Output (off)\\(won't send an\\input to it)};
             \node[annotation, left]  (altitude)        at (-1.5, 2.5)  {Altitude};
-            \node[annotation, below] (output_value)    at (4.9, -1.5)  {Output value};
-            \node[annotation, below] (reference_frame) at (12.2, -1.5) {Frame of reference};
+            \node[annotation, below] (output_value)    at (4.25, -1.5)  {Output value};
+            \node[annotation, below] (reference_frame) at (12.75, -1.5) {Frame of reference};
             \node[annotation, right] (trigger)         at (21.5, -2.5) {Trigger below (on/off),\\currently off\\(normal trigger)};
 
             % Arrows
-            \draw[arrow] (output_on.east)                        -- (7.75, 16.2);
-            \draw[arrow] (output_off.west)                       -- (14.75, 16.2);
-            \draw[arrow] (altitude.east)                         -- (0.15, 2.5);
-            \draw[arrow] ($(output_value.north) + (1, 0)$)       -- (5.9, 0.6);
-            \draw[arrow] ($(reference_frame.north) + (-1.6, 0)$) -- (10.6, 1.55);
-            \draw[arrow] (trigger.west)                          -- (16.2, 1.7);
+            \draw[arrow] (output_on.east)            -- (7.75, 16.2);
+            \draw[arrow] (output_off.west)           -- (14.75, 16.2);
+            \draw[arrow] (altitude.east)             -- (0.15, 2.5);
+            \draw[arrow] (output_value.north)    to[*|] (5.9, 0.6);
+            \draw[arrow] (reference_frame.north) to[*|] (10.6, 1.55);
+            \draw[arrow] (trigger.west)              -- (16.2, 1.7);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -245,7 +251,7 @@ header-includes: |
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=15em]{speed_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{speed_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -296,7 +302,7 @@ header-includes: |
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=15em]{angle_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{angle_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -316,17 +322,17 @@ header-includes: |
             \node[annotation, left]  (output_on)    at (-1.5, 17.2) {Output (on)\\(will send an\\input to it)};
             \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
             \node[annotation, left]  (direction)    at (-1.5, 2)    {Direction};
-            \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
-            \node[annotation, below] (output_value) at (13.2, -1.5) {Output value};
+            \node[annotation, below] (width)        at (6.7, -1.5)  {Width};
+            \node[annotation, below] (output_value) at (12.5, -1.5) {Output value};
             \node[annotation, right] (trigger)      at (21.5, 3.5)  {Trigger outside (on/off),\\currently off\\(normal trigger)};
 
             % Arrows
-            \draw[arrow] (output_on.east)                     -- (7.2, 17.2);
-            \draw[arrow] (output_off.west)                    -- (13.45, 17);
-            \draw[arrow] (direction.east)                     -- (0.2, 2);
-            \draw[arrow] ($(width.north) + (0.2, 0)$)         -- (6.6, 0.7);
-            \draw[arrow] ($(output_value.north) + (-2.2, 0)$) -- (11, 0.7);
-            \draw[arrow] (trigger.west)                       -- (15.4, 2.25);
+            \draw[arrow] (output_on.east)         -- (7.2, 17.2);
+            \draw[arrow] (output_off.west)        -- (13.45, 17);
+            \draw[arrow] (direction.east)         -- (0.2, 2);
+            \draw[arrow] (width.north)            -- (6.7, 0.7);
+            \draw[arrow] (output_value.north) to[*|] (11, 0.7);
+            \draw[arrow] (trigger.west)           -- (15.4, 2.25);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -349,7 +355,7 @@ header-includes: |
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=21em]{compass}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{compass}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -370,16 +376,16 @@ header-includes: |
             \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
             \node[annotation, left]  (direction)    at (-1.5, 2.7)  {Direction};
             \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
-            \node[annotation, below] (output_value) at (11.8, -1.5) {Output value};
+            \node[annotation, below] (output_value) at (12.4, -1.5) {Output value};
             \node[annotation, right] (trigger)      at (21.5, 4)    {Trigger outside (on/off),\\currently off\\(normal trigger)};
 
             % Arrows
-            \draw[arrow] (output_on.east)                     -- (9.55, 17);
-            \draw[arrow] (output_off.west)                    -- (15.9, 17);
-            \draw[arrow] (direction.east)                     -- (0.15, 2.7);
-            \draw[arrow] (width.north)                        -- (6.4, 1.1);
-            \draw[arrow] ($(output_value.north) + (-1.2, 0)$) -- (10.6, 1.1);
-            \draw[arrow] (trigger.west)                       -- (14.6, 3.3);
+            \draw[arrow] (output_on.east)         -- (9.55, 17);
+            \draw[arrow] (output_off.west)        -- (15.9, 17);
+            \draw[arrow] (direction.east)         -- (0.15, 2.7);
+            \draw[arrow] (width.north)            -- (6.4, 1.1);
+            \draw[arrow] (output_value.north) to[*|] (10.6, 1.1);
+            \draw[arrow] (trigger.west)           -- (14.6, 3.3);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -536,7 +542,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 - $n = \text{amount of cells}$
 - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
 \begin{figure}[H]
-    \centering
+    \makebox[\textwidth][c]{
     \begin{tikzpicture}
         % Nodes
 
@@ -613,6 +619,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[arrow] (input -| AND_k)               -- (AND_k.south);
         \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
     \end{tikzpicture}
+    }
     \caption{Diagram of the general method counter}
     \label{fig:CounterGeneral}
 \end{figure}
@@ -633,7 +640,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 \begin{figure}[H]
-    \centering
+    \makebox[\textwidth][c]{
     \begin{tikzpicture}
         % Nodes
 
@@ -742,6 +749,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[line]  (input_OR.north)     |- (input);
         \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
     \end{tikzpicture}
+    }
     \caption{Diagram of the base 10 method counter}
     \label{fig:CounterDecimal}
 \end{figure}
@@ -765,7 +773,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 - $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
 - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 \begin{figure}[H]
-    \centering
+    \makebox[\textwidth][c]{
     \begin{tikzpicture}
         % Nodes
 
@@ -862,6 +870,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
         \draw[arrow] (input -| AND_k+1)  -| (AND_k+1.south);
         \draw[arrow] (input -| AND_h2)   -| (AND_h2.south);
     \end{tikzpicture}
+    }
     \caption{Diagram of the binary method counter}
     \label{fig:CounterBinary}
 \end{figure}
