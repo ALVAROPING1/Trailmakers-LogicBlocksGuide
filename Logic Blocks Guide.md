@@ -469,7 +469,7 @@ header-includes: |
   - More decimals can be achieved by using multiple gates: if the number is expressed in scientific notation as $\pm a \cdot 10^b$, $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals
 - It's the percentage of power that whatever it activates will use, applied to the value set in the settings (if applicable). Values modified for each block are in table \ref{table:OutputValueBlocks}
   - For hinges/wings the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
-  - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See section \nameref{OutputValueMultiplier} for more information
+  - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{OutputValueMultiplier} for more information
   - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
 \begin{table}[H]
     \centering
@@ -1134,6 +1134,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 - Credits to Precache for figuring out this circuit
 
 \clearpage
+\appendix
 
 # Output value to multiplier for hinges/wings with control surfaces {#OutputValueMultiplier}
 
