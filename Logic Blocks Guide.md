@@ -424,18 +424,28 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 ## Logic gates
 
-Logic gates are a group of blocks that take a set of boolean inputs, and create a boolean output based on their values.
+Logic gates are a group of blocks that take a set of boolean inputs, and create a boolean output based on their values. The conditions used are as follows:
+
+- AND gate: all inputs are on
+- OR gate: at least one input is on
+- XOR gate: only one input is on
+
+Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
 - Keybinds: green ($1$) and red ($-1$), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
   - Toggle: toggles **inputs**, when an input reaches a gate it will toggle on the color toggled (if there is, it's of the same color as the input and it's off), toggle it off (if there is, it's of the same color as the input and it's on, it will be toggled off after this pulse stops reaching the gate) or toggle the other color off and check again the other 2 rules (if it's not of the same color as the input and the other color it's toggled on)
     - If you want to toggle the output instead of the inputs, make the signal go through another gate with the toggle after the gate in which you want to toggle the output
-- Timers
+- Timers: allows to time the activation/deactivation of the block
   - The timers start as soon as the gate receives a **single input**, even if the gate doesn't meet the conditions to send an output
   - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one you wrote rounded to 8 decimal places. Due to a bug only up to 5 characters can be written, so depending on which value you write the number of decimals which can be used will vary
-  - Delay: in seconds, only applied when activating but not when deactivating. Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated only once per physics' frame
-  - Duration and pause (previously known as active and inactive time respectively): in seconds, setting the duration to a number different than $0$ and pause to $0$ will make it send a single pulse until turned off and on again. If both of them are not $0$ it will create a cycle which will be repeated until it's deactivated. The shortest length for a pulse is $1$ frame ($1/60 s$), any value lower than this won't send an output
+  - All values are specified in seconds
+  - Delay: amount of time between the block receives an input and the block activates
+    - Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated once per physics' frame at the same time
+  - Duration (previously active time): amount of time before the block automatically deactivates after it has been activated. A value of $0$ indicates that it will never deactivate automatically
+    - Shortest pulse length is $1$ frame ($1/60 s$), values smaller than this won't activate the block
+  - Pause (previously inactive time): amount of time before the block reactivates and the duration timer is restarted after the duration timer expires. A value of $0$ indicates that the block will never reactivate automatically. Ignored if the duration timer is $0$
   - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is 0 it ends after the duration ends)
-  - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. To calculate that number just do $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
+  - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. This value can be calculated by doing $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
 - Output value: from $-1$ to $1$, explained in \nameref{output-value}
 - Outputs
 
@@ -521,9 +531,6 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 ## How the output value is calculated
 
 1) The gate checks if its conditions are met
-   - AND gate: all inputs are on
-   - OR gate: at least 1 input is on
-   - XOR gate: only 1 input is on
 2) The gate adds up the output values of all of its inputs
    - If the result is $> 1$ it gets replaced with $1$
    - If the result is $< -1$ it gets replaced with $-1$
