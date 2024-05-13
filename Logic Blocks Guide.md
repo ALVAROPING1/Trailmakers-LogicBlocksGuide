@@ -467,17 +467,27 @@ header-includes: |
 - Goes from $-1$ to $1$
   - Due to a bug only up to 5 characters can be written, so depending on if the value is positive or negative you will only be able to use up to 4 or 3 decimals respectively
   - More decimals can be achieved by using multiple gates: if the number is expressed in scientific notation as $\pm a \cdot 10^b$, $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals
-- It's the percentage of power that whatever it activates will use, applied to the value set in the settings (if applicable)
-  - For engines it affects the max speed and acceleration (the torque)
-  - For thrusters/gimbals/propellers/underwater propellers/outboard boat engines/quantum rudder it affects the power
-  - For servos/hinges/large hinges/wings with control surfaces it affects the angle
-    - For hinges/wings the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
-    - It only works without hold position
-    - Hinges and wings are currently bugged resulting in angles way lower than they should be. There is a table at the end of this guide with the multiplier for each output value [\underline{here}](#OutputValue2Multiplier)
-  - For spinning servos/helicopter engines/pistons/gyro/gyro stabilizer it affects the speed
-    - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
-  - For tone generators it affects the volume
-  - For the rest of the blocks, it doesn't affect anything
+- It's the percentage of power that whatever it activates will use, applied to the value set in the settings (if applicable). Values modified for each block are in table \ref{table:OutputValueBlocks}
+  - For hinges/wings the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
+  - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See section \nameref{OutputValueMultiplier} for more information
+  - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{6cm}p{3cm}}
+        \toprule
+        Block & Value modified \\
+        \midrule
+        Engines & Max speed and acceleration (torque) \\
+        Thrusters, gimbals, propellers, boat engines, and quantum rudder & Power \\
+        Rotating servos, hinges, and wings with control surfaces (without hold position) & Angle \\
+        Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers & Speed \\
+        Tone generators & Volume \\
+        Other blocks & None \\
+        \bottomrule
+    \end{tabular}
+    \caption{Value modified by the output value for each block}
+    \label{table:OutputValueBlocks}
+\end{table}
 
 ## How the output value is calculated
 
@@ -1125,7 +1135,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
 \clearpage
 
-# Output value to multiplier for hinges/wings with control surfaces {#OutputValue2Multiplier}
+# Output value to multiplier for hinges/wings with control surfaces {#OutputValueMultiplier}
 
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 - The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
