@@ -437,8 +437,11 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
 - Keybinds: green (positive) and red (negative), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
-  - Toggle: toggles **inputs**, when an input reaches a gate it will toggle on the color toggled (if there is, it's of the same color as the input and it's off), toggle it off (if there is, it's of the same color as the input and it's on, it will be toggled off after this pulse stops reaching the gate) or toggle the other color off and check again the other 2 rules (if it's not of the same color as the input and the other color it's toggled on)
-    - If you want to toggle the output instead of the inputs, make the signal go through another gate with the toggle after the gate in which you want to toggle the output
+  - Toggle: toggles **inputs**
+    - When the sum of the inputs goes from $0$ to a different value, multiple things happen depending on the new value:
+      1) If the opposite sign of the input is toggled on, it is toggled off instantly
+      2) If the sign of the input has toggle enabled, it is toggled: if it was off it turns on, and if it was on it turns off (which will happen on the falling edge of the input). Otherwise, the gate is enabled normally
+    - To toggle the output instead of the inputs, make the signal go through another gate with the toggle
 - Timers: allows to time the activation/deactivation of the block
   - The timers start as soon as the gate receives a **single input**, even if the gate doesn't meet the conditions to send an output
   - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one you wrote rounded to 8 decimal places. Due to a bug only up to 5 characters can be written, so depending on which value you write the number of decimals which can be used will vary
