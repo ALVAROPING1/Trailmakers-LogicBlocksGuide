@@ -137,6 +137,8 @@ The goal of this document is to explain the logic system in the game [\underline
 
 # Logic Blocks
 
+Note: due to a bug, only up to 5 characters can be used on any configurable block value. Even though the UI rounds values 1-2 values, the values used are always the values that were typed.
+
 ## Sensors
 
 Sensors are a group of blocks that measure a physical property, like speed or angle, and create a boolean output based on it.
@@ -149,7 +151,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 - Range: in meters ($1 \text{ block} = 0.25 \text{ m}$), determines the maximum distance between an object and the sensor for it to be detected
   - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
-- Output value: from $-1$ to $1$, explained in \nameref{output-value}
+- Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
@@ -202,7 +204,7 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 - Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 \text{ m}$
-- Output value: from $-1$ to $1$, explained in \nameref{output-value}
+- Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
@@ -262,7 +264,7 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: in km/h or mph depending on the speed unit settings
-- Output value: from $-1$ to $1$, explained in \nameref{output-value}
+- Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
@@ -316,7 +318,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 - Direction: in degrees, determines the position of the middle point of the activation threshold
 - Width: in degrees, determines the size of the activation threshold
-- Output value: from $-1$ to $1$, explained in \nameref{output-value}
+- Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -373,7 +375,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 - Direction: in degrees, determines the position of the middle point of the activation threshold
 - Width: in degrees, determines the size of the activation threshold
-- Output value: from $-1$ to $1$, explained in \nameref{output-value}
+- Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -424,7 +426,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 ## Logic gates
 
-Logic gates are a group of blocks that take a set of boolean inputs, and create a boolean output based on their values. The conditions used are as follows:
+Logic gates are a group of blocks that take a set of boolean inputs, and create a boolean output based on their values. The conditions used are as follows, inputs will be discussed on \nameref{signals}:
 
 - AND gate: all inputs are on
 - OR gate: at least one input is on
@@ -432,7 +434,7 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 
 Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
-- Keybinds: green ($1$) and red ($-1$), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
+- Keybinds: green (positive) and red (negative), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
   - Toggle: toggles **inputs**, when an input reaches a gate it will toggle on the color toggled (if there is, it's of the same color as the input and it's off), toggle it off (if there is, it's of the same color as the input and it's on, it will be toggled off after this pulse stops reaching the gate) or toggle the other color off and check again the other 2 rules (if it's not of the same color as the input and the other color it's toggled on)
     - If you want to toggle the output instead of the inputs, make the signal go through another gate with the toggle after the gate in which you want to toggle the output
 - Timers: allows to time the activation/deactivation of the block
@@ -446,7 +448,7 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
   - Pause (previously inactive time): amount of time before the block reactivates and the duration timer is restarted after the duration timer expires. A value of $0$ indicates that the block will never reactivate automatically. Ignored if the duration timer is $0$
   - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is 0 it ends after the duration ends)
   - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. This value can be calculated by doing $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
-- Output value: from $-1$ to $1$, explained in \nameref{output-value}
+- Output value: multiplier of output signal created by the block, explained in \nameref{output-value-calculation}
 - Outputs
 
 \begin{figure}[H]
@@ -498,46 +500,18 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
     \label{fig:LogicGate}
 \end{figure}
 
-\clearpage
+### Output value calculation
 
-# Output Value
+These are the steps used by the game to determine the value attached to the output signal created by logic gates. For more information about signals, see \nameref{signals}
 
-- When something is activated, it acts as if you pressed the keybind. Positive values act as the green keybind and negative values act as the red keybind. For things that only have a green keybind, the absolute value will be used
-- Goes from $-1$ to $1$
-  - Due to a bug only up to 5 characters can be written, so depending on if the value is positive or negative you will only be able to use up to 4 or 3 decimals respectively
-  - More decimals can be achieved by using multiple gates: if the number is expressed in scientific notation as $\pm a \cdot 10^b$, $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals
-- It's the percentage of power that whatever it activates will use, applied to the value set in the settings (if applicable). Values modified for each block are in table \ref{table:OutputValueBlocks}
-  - For hinges/wings the speed depends on the max angle and not the angle achieved with the output value, resulting in faster speeds with fractional output value
-  - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{OutputValueMultiplier} for more information
-  - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
-\begin{table}[H]
-    \centering
-    \begin{tabular}{p{6cm}p{3cm}}
-        \toprule
-        Block & Value modified \\
-        \midrule
-        Engines & Max speed and acceleration (torque) \\
-        Thrusters, gimbals, propellers, boat engines, and quantum rudder & Power \\
-        Rotating servos, hinges, and wings with control surfaces (without hold position) & Angle \\
-        Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers & Speed \\
-        Tone generators & Volume \\
-        Other blocks & None \\
-        \bottomrule
-    \end{tabular}
-    \caption{Value modified by the output value for each block}
-    \label{table:OutputValueBlocks}
-\end{table}
+1) The gate checks if its conditions are met. If they aren't, the gate doesn't create an output
+2) The gate adds up the values of all of its inputs and clamps the result to the $[-1, 1]$ range
+   - Values smaller than $-1$ are replaced with $-1$, and values bigger than $1$ with $1$
+3) The gate multiplies the result by its output value setting
+4) The gate sends the result as its output value
 
-## How the output value is calculated
-
-1) The gate checks if its conditions are met
-2) The gate adds up the output values of all of its inputs
-   - If the result is $> 1$ it gets replaced with $1$
-   - If the result is $< -1$ it gets replaced with $-1$
-3) The gate multiplies the result by its output value
-4) The gate sends the result as its output value. On the steam version, the final output value must also be different from 0 to send an output
-
-- Full formula: $\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$
+This process can be described with the following formula:
+$$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$$
 
 \begin{figure}[H]
     \centering
@@ -546,9 +520,46 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
     \label{fig:OutputValueDiagram}
 \end{figure}
 
-### Example
+#### Example
 
 An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output
+
+# Signals
+
+Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals.
+
+- Input/output value: value in the range $[-1, 1]$ attached to each signal.
+  - The green keybind has a positive value while the red keybind has a negative one
+    - For input methods that don't support analog inputs (keyboards and normal buttons on controllers), the value is always $1$
+    - For input methods that support analog inputs (controller joysticks and triggers), the value is the one given by the input method normalized to the range $[0, 1]$
+  - They are represented in scientific notation as $\pm a \cdot 10^b$ where $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals.
+- Truthness value: value that determines if a signal is on or off
+  - On the steam version, a signal is on if its associated value is not $0$
+  - On other versions, the truthness depends whether the source that created it is triggered or not
+
+When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind additionally use the absolute value before interpreting the resulting value, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
+
+- For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the output value, resulting in faster speeds with fractional input values for the same final angle
+- Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{InputValueMultiplier} for more information
+- For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{6cm}p{3cm}}
+        \toprule
+        Block & Value modified \\
+        \midrule
+        Engines & Max speed and acceleration (torque) \\
+        Thrusters, gimbals, propellers, boat engines, and quantum rudder & Power (thrust) \\
+        Rotating servos, hinges, and wings with control surfaces (without hold position) & Angle \\
+        Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers & Speed \\
+        Tone generators & Volume \\
+        Logic gates & Output value \\
+        Other & None \\
+        \bottomrule
+    \end{tabular}
+    \caption{Value modified by the output value for each block}
+    \label{table:InputValueBlocks}
+\end{table}
 
 # Useful Circuits
 
@@ -1172,7 +1183,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 \clearpage
 \appendix
 
-# Output value to multiplier for hinges/wings with control surfaces {#OutputValueMultiplier}
+# Input value to multiplier for hinges/wings with control surfaces {#InputValueMultiplier}
 
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 - The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
