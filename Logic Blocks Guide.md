@@ -128,8 +128,10 @@ header-includes: |
     ```
 ---
 
+\pagenumbering{gobble}
 \lists
 \clearpage
+\pagenumbering{arabic}
 
 # Introduction
 
