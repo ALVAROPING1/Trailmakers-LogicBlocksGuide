@@ -151,7 +151,7 @@ Distance sensors check for objects within a straight line in front of them and a
 
 Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
-- Range: in meters ($1 \text{ block} = 0.25 \text{ m}$), determines the maximum distance between an object and the sensor for it to be detected
+- Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
 - Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
@@ -205,7 +205,7 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
-- Altitude: in meters above the frame of reference, $1 \text{ block} = 0.25 \text{ m}$
+- Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
 - Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
@@ -265,7 +265,7 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
-- Speed: in km/h or mph depending on the speed unit settings
+- Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
 - Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
   - Normal: sends an output when the speed is above the configured value
@@ -318,8 +318,8 @@ Angle sensors measure the angle of the block relative to the direction of highes
 
 Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
-- Direction: in degrees, determines the position of the middle point of the activation threshold
-- Width: in degrees, determines the size of the activation threshold
+- Direction: position of the middle point of the activation threshold, in degrees
+- Width: size of the activation threshold, in degrees
 - Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
@@ -375,8 +375,8 @@ Compasses measure the angle of the block relative to the closest direction to th
 
 Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
-- Direction: in degrees, determines the position of the middle point of the activation threshold
-- Width: in degrees, determines the size of the activation threshold
+- Direction: position of the middle point of the activation threshold, in degrees
+- Width: size of the activation threshold, in degrees
 - Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
