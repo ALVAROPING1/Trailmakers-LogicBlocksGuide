@@ -316,6 +316,60 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
     \label{fig:SensorSpeed}
 \end{figure}
 
+### Gravity Sensor
+
+Gravity sensors measure the gravity strength at the position of the block.
+
+Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
+
+- Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \frac{\text{m}}{\text{s}^2}$)
+- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Trigger
+  - Normal: sends an output when the gravity strength is above the configured value
+  - Below: sends an output when the gravity strength is below the configured value
+- Outputs
+
+<!-- TODO: update figure after the functionality/textures are finalized -->
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{speed_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)    at (-1.5, 15.4) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)   at (21.5, 15.3) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (speed)        at (-1.5, 2.1)  {Speed};
+            \node[annotation, below] (output_value) at (7.7, -1.5)  {Output value};
+            \node[annotation, right] (trigger)      at (21.5, 0)    {Trigger below (on/off),\\currently off\\(normal trigger)};
+
+            % Arrows
+            \draw[arrow] (output_on.east)     -- (5.25, 15.4);
+            \draw[arrow] (output_off.west)    -- (11.65, 15.3);
+            \draw[arrow] (speed.east)         -- (0.2, 2.1);
+            \draw[arrow] (output_value.north) -- (7.7, 0.45);
+            \draw[arrow] (trigger.west)       -- (12.7, 3.4);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Gravity Sensor settings}
+    \label{fig:SensorGravity}
+\end{figure}
+
 ### Angle Sensor
 
 Angle sensors measure the angle of the block relative to the direction of highest slope of the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the angle. The arrow will always try to point up no matter the orientation of the block (will point in the direction of highest slope of the plane it is in).
