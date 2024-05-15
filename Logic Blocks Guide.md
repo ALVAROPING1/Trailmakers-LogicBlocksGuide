@@ -435,6 +435,7 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 - AND gate: all inputs are on
 - OR gate: at least one input is on
 - XOR gate: only one input is on
+- NOR gate: all inputs are off
 
 Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
@@ -514,7 +515,7 @@ These are the steps used by the game to determine the value attached to the outp
 1) The gate checks if its conditions are met. If they aren't, the gate doesn't create an output
 2) The gate adds up the values of all of its inputs and clamps the result to the $[-1, 1]$ range
    - Values smaller than $-1$ are replaced with $-1$, and values bigger than $1$ with $1$
-3) The gate multiplies the result by its output value setting
+3) The gate multiplies the result by its output value setting. For NOR gates, their setting replaces the result (which would otherwise always be $0$)
 4) The gate sends the result as its output value
 
 This process can be described with the following formula:
