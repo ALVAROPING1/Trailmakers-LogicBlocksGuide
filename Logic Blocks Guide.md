@@ -501,7 +501,7 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
-    \caption{Logic gate settings}
+    \caption{Logic Gate settings}
     \label{fig:LogicGate}
 \end{figure}
 
