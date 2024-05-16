@@ -128,7 +128,7 @@ header-includes: |
     ```
 ---
 
-\pagenumbering{gobble}
+\pagenumbering{roman}
 \lists
 \clearpage
 \pagenumbering{arabic}
