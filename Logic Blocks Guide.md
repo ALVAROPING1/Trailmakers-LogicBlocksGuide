@@ -586,6 +586,269 @@ $$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\
 
 An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output
 
+## Math blocks
+
+<!-- TODO: determine how to group keybinds/toggle/timers explanations -->
+
+Math blocks are a group of blocks that take a set of numeric inputs and perform some operation to get an output based on their values, either numeric or boolean.
+
+### Comparison Logic Gate
+
+Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant.
+
+Their settings are shown in figure \ref{fig:Comparator} and are as follows:
+
+- Keybinds
+  - Toggle
+- Timers
+- Threshold: value used for the right hand side of the comparison
+- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Comparison mode: comparison operation to perform, possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
+- Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
+- Outputs
+
+<!-- TODO: update figure after the functionality/textures are finalized -->
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=26em]{logic_gate}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
+            \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (11.7, -1.5) {Pause};
+            \node[annotation, below] (duration)      at (15, -1.5)   {Duration};
+            \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
+            \node[annotation, right] (output_value)  at (21.5, 3.1)  {Output value};
+
+            % Arrows
+            \draw[arrow] (output_on.east)                   -- (8.8, 16.4);
+            \draw[arrow] (output_off.west)                  -- (13.35, 16.4);
+            \draw[arrow] (green_keybind.east)               -- (0.1, 4.5);
+            \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
+            \draw[arrow] (toggle.north)                     -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)                     -- (4.9, 2.1);
+            \draw[arrow] ($(pause.north) + (0.8, 0)$)       -- (12.5, 0.3);
+            \draw[arrow] (duration.north)                   -- (13.5, 2.4);
+            \draw[arrow] (delay.west)                       -- (13.5, 5.5);
+            \draw[arrow] (output_value.west)                -- (16.4, 3.1);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Comparator Logic Gate settings}
+    \label{fig:Comparator}
+\end{figure}
+
+### Accumulator
+
+Accumulators store and output a numeric value, and allow to increment/decrement it.
+
+Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
+
+- Keybinds
+  - Toggle
+- Timers
+- Minimum: minimum value that can be stored
+- Maximum: maximum value that can be stored
+- Scale: rate of change of the stored value, multiplied by the value of the input. If use steps is enabled, all inputs change the stored value by this amount
+- Use steps: whether to change the stored value continuously or only once per input activation (on the rising edge of the signal)
+- Comparison mode: comparison operation to perform, possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
+- Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
+- Outputs
+
+<!-- TODO: update figure after the functionality/textures are finalized -->
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=26em]{logic_gate}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
+            \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (11.7, -1.5) {Pause};
+            \node[annotation, below] (duration)      at (15, -1.5)   {Duration};
+            \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
+            \node[annotation, right] (output_value)  at (21.5, 3.1)  {Output value};
+
+            % Arrows
+            \draw[arrow] (output_on.east)                   -- (8.8, 16.4);
+            \draw[arrow] (output_off.west)                  -- (13.35, 16.4);
+            \draw[arrow] (green_keybind.east)               -- (0.1, 4.5);
+            \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
+            \draw[arrow] (toggle.north)                     -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)                     -- (4.9, 2.1);
+            \draw[arrow] ($(pause.north) + (0.8, 0)$)       -- (12.5, 0.3);
+            \draw[arrow] (duration.north)                   -- (13.5, 2.4);
+            \draw[arrow] (delay.west)                       -- (13.5, 5.5);
+            \draw[arrow] (output_value.west)                -- (16.4, 3.1);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Accumulator settings}
+    \label{fig:Accumulator}
+\end{figure}
+
+### Number Display
+
+Number displays show and output the sum of their inputs with an optional rounding, similar to how OR logic gates work.
+
+Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
+
+- Keybinds
+  - Toggle
+- Timers
+- Output rounding: rounding mode applied to the sum of the inputs, always done to an integer. Possible values are "disabled", "nearest", "floor" (closest smaller number), and "ceil" (closest bigger number)
+- Outputs
+
+<!-- TODO: update figure after the functionality/textures are finalized -->
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=26em]{logic_gate}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
+            \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (11.7, -1.5) {Pause};
+            \node[annotation, below] (duration)      at (15, -1.5)   {Duration};
+            \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
+            \node[annotation, right] (output_value)  at (21.5, 3.1)  {Output value};
+
+            % Arrows
+            \draw[arrow] (output_on.east)                   -- (8.8, 16.4);
+            \draw[arrow] (output_off.west)                  -- (13.35, 16.4);
+            \draw[arrow] (green_keybind.east)               -- (0.1, 4.5);
+            \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
+            \draw[arrow] (toggle.north)                     -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)                     -- (4.9, 2.1);
+            \draw[arrow] ($(pause.north) + (0.8, 0)$)       -- (12.5, 0.3);
+            \draw[arrow] (duration.north)                   -- (13.5, 2.4);
+            \draw[arrow] (delay.west)                       -- (13.5, 5.5);
+            \draw[arrow] (output_value.west)                -- (16.4, 3.1);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Number Display settings}
+    \label{fig:NumberDisplay}
+\end{figure}
+
+### Arithmetics Logic Block
+
+Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one.
+
+Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
+
+- Keybinds
+  - Toggle
+- Timers
+- Constant: constant value to use as the first operand
+- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
+- Outputs
+
+<!-- TODO: update figure after the functionality/textures are finalized -->
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=26em]{logic_gate}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
+            \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (11.7, -1.5) {Pause};
+            \node[annotation, below] (duration)      at (15, -1.5)   {Duration};
+            \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
+            \node[annotation, right] (output_value)  at (21.5, 3.1)  {Output value};
+
+            % Arrows
+            \draw[arrow] (output_on.east)                   -- (8.8, 16.4);
+            \draw[arrow] (output_off.west)                  -- (13.35, 16.4);
+            \draw[arrow] (green_keybind.east)               -- (0.1, 4.5);
+            \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
+            \draw[arrow] (toggle.north)                     -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)                     -- (4.9, 2.1);
+            \draw[arrow] ($(pause.north) + (0.8, 0)$)       -- (12.5, 0.3);
+            \draw[arrow] (duration.north)                   -- (13.5, 2.4);
+            \draw[arrow] (delay.west)                       -- (13.5, 5.5);
+            \draw[arrow] (output_value.west)                -- (16.4, 3.1);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Arithmetics Logic Block settings}
+    \label{fig:ArithmeticsBlock}
+\end{figure}
+
 # Signals
 
 Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals.
