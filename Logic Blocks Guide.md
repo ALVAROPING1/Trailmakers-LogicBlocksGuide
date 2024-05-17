@@ -493,23 +493,9 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 
 Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
-- Keybinds: green (positive) and red (negative), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
-  - Toggle: toggles **inputs**
-    - When the sum of the inputs goes from $0$ to a different value, multiple things happen depending on the new value:
-      1) If the opposite sign of the input is toggled on, it is toggled off instantly
-      2) If the sign of the input has toggle enabled, it is toggled: if it was off it turns on, and if it was on it turns off (which will happen on the falling edge of the input). Otherwise, the gate is enabled normally
-    - To toggle the output instead of the inputs, make the signal go through another gate with the toggle
-- Timers: allows to time the activation/deactivation of the block
-  - The timers start as soon as the gate receives a **single input**, even if the gate doesn't meet the conditions to send an output
-  - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one you wrote rounded to 8 decimal places. Due to a bug only up to 5 characters can be written, so depending on which value you write the number of decimals which can be used will vary
-  - All values are specified in seconds
-  - Delay: amount of time between the block receives an input and the block activates
-    - Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated once per physics' frame at the same time
-  - Duration (previously active time): amount of time before the block automatically deactivates after it has been activated. A value of $0$ indicates that it will never deactivate automatically
-    - Shortest pulse length is $1$ frame ($1/60 s$), values smaller than this won't activate the block
-  - Pause (previously inactive time): amount of time before the block reactivates and the duration timer is restarted after the duration timer expires. A value of $0$ indicates that the block will never reactivate automatically. Ignored if the duration timer is $0$
-  - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is 0 it ends after the duration ends)
-  - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. This value can be calculated by doing $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Output value: multiplier of output signal created by the block, explained in \nameref{output-value-calculation}
 - Outputs
 
@@ -588,8 +574,6 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
 ## Math blocks
 
-<!-- TODO: determine how to group keybinds/toggle/timers explanations -->
-
 Math blocks are a group of blocks that take a set of numeric inputs and perform some operation to get an output based on their values, either numeric or boolean.
 
 ### Comparison Logic Gate
@@ -598,9 +582,9 @@ Comparison logic gates calculate the boolean value of a predefined comparison an
 
 Their settings are shown in figure \ref{fig:Comparator} and are as follows:
 
-- Keybinds
-  - Toggle
-- Timers
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Threshold: value used for the right hand side of the comparison
 - Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Comparison mode: comparison operation to perform, possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
@@ -663,9 +647,9 @@ Accumulators store and output a numeric value, and allow to increment/decrement 
 
 Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
-- Keybinds
-  - Toggle
-- Timers
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Minimum: minimum value that can be stored
 - Maximum: maximum value that can be stored
 - Scale: rate of change of the stored value, multiplied by the value of the input. If use steps is enabled, all inputs change the stored value by this amount
@@ -730,9 +714,9 @@ Number displays show and output the sum of their inputs with an optional roundin
 
 Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
-- Keybinds
-  - Toggle
-- Timers
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Output rounding: rounding mode applied to the sum of the inputs, always done to an integer. Possible values are "disabled", "nearest", "floor" (closest smaller number), and "ceil" (closest bigger number)
 - Outputs
 
@@ -792,9 +776,9 @@ Arithmetics logic blocks perform an arithmetic binary operation with a constant 
 
 Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 
-- Keybinds
-  - Toggle
-- Timers
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
 - Outputs
@@ -849,14 +833,58 @@ Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows
     \label{fig:ArithmeticsBlock}
 \end{figure}
 
+# Common block settings
+
+These are settings shared by all blocks in the game that can be activated with inputs
+
+## Keybinds
+
+Keybinds are the most common input to activate a block, and all blocks that can be activated have either a single keybind (green) or two keybinds (green and red).
+
+- All keybinds on a single block act as a single input for each seat
+  - An and gate with a green and a red keybind configured will send an output when just pressing one of the 2 keybinds, but will require someone in each seat that has control over it pressing the keybind to send an output
+  - If no keybinds are configured, the input isn't taken into account. This only makes a difference in AND gates, which would otherwise be impossible to trigger without keybinds
+- The green keybind has a positive value while the red keybind has a negative one. For more information about input values, see \nameref{signals}
+  - For input methods that don't support analog inputs (keyboards and normal buttons on controllers), the value is always $1$
+  - For input methods that support analog inputs (controller joysticks and triggers), the value is the one given by the input method normalized to the range $[0, 1]$
+
+## Toggle
+
+Toggle allows to make inputs alternate the activation state of a block between on and off without requiring a continuous input signal to remain active.
+
+- There is a toggle setting associated with positive inputs (below the green keybind) and another with negative ones (below the red keybind)
+- Toggles **inputs**
+  - When the sum of the inputs goes from $0$ to a different value, multiple things happen depending on the new value:
+    1) If the opposite sign of the input is toggled on, it is toggled off instantly
+    2) If the sign of the input has toggle enabled, it is toggled: if it was off it turns on, and if it was on it turns off (which will happen on the falling edge of the input). Otherwise, the gate is enabled normally
+  - To toggle the output instead of the inputs, make the signal go through another gate with the toggle
+
+## Timers
+
+Timers are a group of settings that allow to automate the activation/deactivation of a block after a set amount of time.
+
+- The timers start as soon as the block receives a **single input**. For logic gates, this still applies even if the gate doesn't meet the conditions to send an output
+- The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one written rounded to 8 decimal places. Due to a bug, only up to 5 characters can be written, so depending on the exact value the number of decimals which can be used will vary
+- All values are specified in seconds
+- Delay: amount of time between the block receives an input and the block activates
+  - Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated once per physics' frame at the same time
+- Duration (previously active time): amount of time before the block automatically deactivates after it has been activated
+  - A value of $0$ indicates that it will never deactivate automatically
+  - Shortest pulse length is $1$ frame ($1/60 s$), values smaller than this won't activate the block
+- Pause (previously inactive time): amount of time before the block reactivates and the duration timer is restarted, after the duration timer expires
+  - A value of $0$ indicates that the block will never reactivate automatically
+  - It's ignored if the duration timer is $0$
+- The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is $0$ it ends after the duration ends)
+- In the case of the delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames, which can be calculated with $\text{seconds} \cdot 60$
+  - If this number is not an integer, it will be rounded down to the nearest integer
+  - If this number is an integer, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames
+  - Pause timers aren't subject to this, and the exact time in seconds is used for them
+
 # Signals
 
 Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals.
 
 - Input/output value: value in the range $[-1, 1]$ attached to each signal.
-  - The green keybind has a positive value while the red keybind has a negative one
-    - For input methods that don't support analog inputs (keyboards and normal buttons on controllers), the value is always $1$
-    - For input methods that support analog inputs (controller joysticks and triggers), the value is the one given by the input method normalized to the range $[0, 1]$
   - They are represented in scientific notation as $\pm a \cdot 10^b$ where $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals.
 - Truthness value: value that determines if a signal is on or off
   - On the steam version, a signal is on if its associated value is not $0$
