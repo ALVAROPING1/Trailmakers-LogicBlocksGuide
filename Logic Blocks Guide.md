@@ -574,7 +574,7 @@ An AND gate with an output value of $0.5$ has 2 inputs, one of them has an outpu
 
 ## Math blocks
 
-Math blocks are a group of blocks that take a set of numeric inputs and perform some operation to get an output based on their values, either numeric or boolean.
+Math blocks are a group of blocks that take a set of numeric inputs and perform some operation to get an output based on their values, either numeric or boolean. They are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range before interpreting it.
 
 ### Comparison Logic Gate
 
@@ -884,8 +884,9 @@ Timers are a group of settings that allow to automate the activation/deactivatio
 
 Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals.
 
-- Input/output value: value in the range $[-1, 1]$ attached to each signal.
-  - They are represented in scientific notation as $\pm a \cdot 10^b$ where $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals.
+- Input/output value: value attached to each signal, usually in the range $[-1, 1]$.
+  - \nameref{math-blocks} are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range
+  - They are represented in scientific notation as $\pm a \cdot 10^b$ where $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals <!-- TODO: figure out new representation, likely just a double -->
 - Truthness value: value that determines if a signal is on or off
   - On the steam version, a signal is on if its associated value is not $0$
   - On other versions, the truthness depends whether the source that created it is triggered or not
