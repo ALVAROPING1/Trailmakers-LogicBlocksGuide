@@ -649,10 +649,10 @@ Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
-- Timers: see \nameref{timers}
+- Timers: see \nameref{timers} <!-- NOTE: currently does nothing. I assume this is a bug -->
 - Value bounds: minimum/maximum value that can be stored, the stored value will be clamped to the range defined by these bounds
 - Scale: rate of change of the stored value, used to scale the value of the input
-- Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
+- Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal) <!-- NOTE: without use steps, the value seems to be updated twice on the first activation frame. I assume it's a bug -->
 - Comparison mode: comparison operation to perform, possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
 - Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
 - Outputs
@@ -715,7 +715,7 @@ Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
-- Timers: see \nameref{timers}
+- Timers: see \nameref{timers} <!-- NOTE: currently does nothing. I assume this is a bug -->
 - Output rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled" (displays $2$ decimals), "nearest", "floor" (closest smaller number), and "ceil" (closest bigger number)
 - Outputs
 
@@ -777,7 +777,7 @@ Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
-- Timers: see \nameref{timers}
+- Timers: see \nameref{timers} <!-- NOTE: currently does nothing. I assume this is a bug -->
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
   - Attempting to perform a division by $0$ (by having multiple different on inputs whose sum is $0$) results in a "N/A" value
