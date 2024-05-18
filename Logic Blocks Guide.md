@@ -891,14 +891,14 @@ Signals are the method used to communicate different logic blocks between eachot
   - On the steam version, a signal is on if its associated value is not $0$
   - On other versions, the truthness depends whether the source that created it is triggered or not
 
-When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind additionally use the absolute value before interpreting the resulting value, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
+When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the RGB lights, additionally use the absolute value before interpreting the resulting value, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
 
 - For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the output value, resulting in faster speeds with fractional input values for the same final angle
 - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{InputValueMultiplier} for more information
 - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
 \begin{table}[H]
     \centering
-    \begin{tabular}{p{6cm}p{3cm}}
+    \begin{tabular}{p{6cm}p{7.1cm}}
         \toprule
         Block & Value modified \\
         \midrule
@@ -907,7 +907,8 @@ When a block receives a set of inputs, it determines how it is activated based o
         Rotating servos, hinges, and wings with control surfaces (without hold position) & Angle \\
         Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers & Speed \\
         Tone generators & Volume \\
-        Logic gates & Output value \\
+        Logic gates and math blocks & Output value \\
+        RGB Lights & Hue of the HSV color (positive inputs) or brightness of a greyscale color (negative inputs) \\
         Other & None \\
         \bottomrule
     \end{tabular}
