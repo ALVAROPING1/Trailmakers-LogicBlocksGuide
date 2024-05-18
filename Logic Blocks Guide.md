@@ -771,7 +771,7 @@ Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
 ### Arithmetics Logic Block
 
-Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one.
+Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one. The result is always $0$ when the block has no active inputs
 
 Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 
@@ -780,6 +780,7 @@ Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows
 - Timers: see \nameref{timers}
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
+  - Attempting to perform a division by $0$ (by having multiple different on inputs whose sum is $0$) results in a "N/A" value
 - Outputs
 
 <!-- TODO: update figure after the functionality/textures are finalized -->
