@@ -716,7 +716,7 @@ Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-- Output rounding: rounding mode applied to the sum of the inputs, always done to an integer. Possible values are "disabled", "nearest", "floor" (closest smaller number), and "ceil" (closest bigger number)
+- Output rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled" (displays $2$ decimals), "nearest", "floor" (closest smaller number), and "ceil" (closest bigger number)
 - Outputs
 
 <!-- TODO: update figure after the functionality/textures are finalized -->
