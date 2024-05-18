@@ -652,8 +652,8 @@ Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 - Timers: see \nameref{timers}
 - Minimum: minimum value that can be stored
 - Maximum: maximum value that can be stored
-- Scale: rate of change of the stored value, multiplied by the value of the input
-- Use steps: whether to change the stored value continuously (in which case the scale is change per second) or only once per input activation (on the rising edge of the signal)
+- Scale: rate of change of the stored value, used to scale the value of the input
+- Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
 - Comparison mode: comparison operation to perform, possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
 - Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
 - Outputs
