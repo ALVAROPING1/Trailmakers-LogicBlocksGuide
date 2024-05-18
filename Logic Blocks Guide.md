@@ -862,7 +862,7 @@ Toggle allows to make inputs alternate the activation state of a block between o
 
 Timers are a group of settings that allow to automate the activation/deactivation of a block after a set amount of time.
 
-- The timers start as soon as the block receives a **single input**. For logic gates, this still applies even if the gate doesn't meet the conditions to send an output
+- Timers apply to the inputs of the block and are shared by all of them, and start as soon as the block receives a **single input**. For logic blocks, this still applies even if the block doesn't meet its conditions to send an output
 - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one written rounded to 8 decimal places. Due to a bug, only up to 5 characters can be written, so depending on the exact value the number of decimals which can be used will vary
 - All values are specified in seconds
 - Delay: amount of time between the block receives an input and the block activates
