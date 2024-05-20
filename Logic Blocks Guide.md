@@ -959,7 +959,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|c|m{18.75em}|m{18.75em}|}
+    \begin{tabular}{|c|m{20em}|m{20em}|}
         \cline{2-3}
         \multicolumn{1}{c|}{} & \thead{1-way} & \thead{2-way} \\
         \hline
