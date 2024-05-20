@@ -925,13 +925,6 @@ When a block receives a set of inputs, it determines how it is activated based o
 
 This section contains commonly used logic circuits and how to make them, to aid in the design and understanding of more complex logic circuits.
 
-## NOR/NOT Gate
-
-- Inverts the state of the input
-- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
-- If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
-- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
-
 ## Pulse generator/Rising edge detector
 
 - Sends a pulse of a specific length (usually a single frame which is $1/60 s$) when the input goes from off to on
@@ -947,16 +940,74 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - Stores a single bit of information
 - Made by activating toggle on an OR gate, requires the input to be a pulse to be easily controlled by other gates (use a pulse generator for this)
 
-## Counter
+## Counter {#AccumulatorCounter}
 
 - Can store the value of a variable with $n$ possible values
+- The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
+- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is least complex depends on the situation
+
+<!-- TODO: reimplement with accumulators+comparators -->
+
+### General Circuit (Base $N$)
+
+### Decimal (Base $10$)
+
+### Binary (Base $2$)
+
+### When to use each method
+
+## No-Delay Signal Toggle
+
+- Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
+- Doesn't work when the output block is an AND/XOR gate
+- Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
+        % Nodes
+
+        \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
+        \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
+        \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
+        \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
+        \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
+        \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
+        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
+
+        % Arrows
+
+        \draw[arrow] (input_signal.east)  -- (output_blocks.west);
+        \draw[arrow] (input_signal.north) |- (XOR.west);
+        \draw[arrow] (XOR.east)           -| (output_blocks.north);
+        \draw[->-]   (input_toggle1.east) -- (toggles);
+        \draw[->-]   (input_toggle2.west) -- (toggles);
+        \draw[arrow] (toggles)            -- (XOR.north);
+    \end{tikzpicture}
+    \caption{Diagram of the no-delay signal toggle}
+    \label{fig:NoDelaySignalToggle}
+\end{figure}
+- [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
+
+# Historical Circuits
+
+This section contains old circuits that were previously in \nameref{useful-circuits}, but have since been superseded by new blocks. They are kept here for historical reasons and in case they are seen in older circuits.
+
+## NOR/NOT Gate
+
+- Superseded by the NOR gate block
+- Inverts the state of the input
+- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
+- If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
+- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
+
+## Counter
+
+- Superseded by implementations based on a combination of accumulators and comparator blocks, as explained in \nameref{AccumulatorCounter}. This section contains implementations with logic gates only
 - Depending on how it's made, it can be 1 or 2 way and have cycle or not
   - 1-way: the value can only be increased
   - 2-way: the value can be both increased and decreased
   - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
   - Base designs are 1-way without cycle
-- The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
-- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is least complex depends on the situation
 
 ### General Circuit (Base $N$)
 
@@ -1417,40 +1468,9 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and decimal with cycle circuits, followed by the 1-way binary circuit with cycle, then by the decimal circuit without cycle and lastly the binary circuit without cycle or with 2-way
 
-## No-Delay Signal Toggle
-
-- Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
-- Doesn't work when the output block is an AND/XOR gate
-- Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
-        % Nodes
-
-        \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
-        \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
-        \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
-        \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
-        \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
-        \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
-        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
-
-        % Arrows
-
-        \draw[arrow] (input_signal.east)  -- (output_blocks.west);
-        \draw[arrow] (input_signal.north) |- (XOR.west);
-        \draw[arrow] (XOR.east)           -| (output_blocks.north);
-        \draw[->-]   (input_toggle1.east) -- (toggles);
-        \draw[->-]   (input_toggle2.west) -- (toggles);
-        \draw[arrow] (toggles)            -- (XOR.north);
-    \end{tikzpicture}
-    \caption{Diagram of the no-delay signal toggle}
-    \label{fig:NoDelaySignalToggle}
-\end{figure}
-- [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
-
 ## Feedback Loop
 
+- Superseded by accumulators
 - Allows to store an analog value in the range $[-1, 1]$
 - Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
 - Each frame the input is active, the stored value increases by the value of the input
@@ -1541,6 +1561,7 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
   ```
 
 - Credits to Precache for figuring out this circuit
+
 
 \clearpage
 \appendix
