@@ -568,6 +568,8 @@ When a block receives a set of inputs, it determines how it is activated based o
 
 # Useful Circuits
 
+This section contains commonly used logic circuits and how to make them, to aid in the design and understanding of more complex logic circuits.
+
 ## NOR/NOT Gate
 
 - Inverts the state of the input
@@ -1190,8 +1192,10 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 
 # Input value to multiplier for hinges/wings with control surfaces {#InputValueMultiplier}
 
+Due to a bug, the angle by which hinges/wings/other blocks with the "steering help" setting rotate doesn't scale linearly with the input value. This section contains the multipliers used for many input values, found experimentally. Some notes about this process:
+
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
-- The multiplier was calculated by doing $\text{multiplier} = \frac{\text{final angle}}{90}$
+- The multiplier was calculated with $\text{multiplier} = \frac{\text{final angle}}{90}$
 - A calculator using this data made by confusionextended can be found [\underline{here}](https://www.desmos.com/calculator/i70yadxqyy)
 
 \begin{longtable}{|c|c|c !{\vrule width 3pt} c|c|c !{\vrule width 3pt} c|c|c|}
