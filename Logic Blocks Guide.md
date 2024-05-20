@@ -601,9 +601,9 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
   - Base designs are 1-way without cycle
 - The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
-- There are 3 ways of doing it: general circuit, base 10 and binary. Which one is least complex depends on the situation
+- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is least complex depends on the situation
 
-### General Circuit
+### General Circuit (Base $N$)
 
 - $n = \text{amount of cells}$
 - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
@@ -700,7 +700,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - Takes 3 frames to update
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
 
-### Base 10
+### Decimal (Base $10$)
 
 - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
@@ -816,7 +816,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
         \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
     \end{tikzpicture}
     }
-    \caption{Diagram of the base 10 method counter}
+    \caption{Diagram of the decimal method counter}
     \label{fig:CounterDecimal}
 \end{figure}
 - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
@@ -833,7 +833,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - Takes 3 frames to update with cycle and 4 frames otherwise
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
 
-### Binary
+### Binary (Base $2$)
 
 - Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
 - $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
@@ -984,7 +984,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
         Show values directly on a screen (only numbers for $n > 12$):
         \begin{itemize}
             \item For $n \leq 12$ use the general circuit
-            \item For $n > 12$ use the base 10 circuit
+            \item For $n > 12$ use the decimal circuit
             \newline
         \end{itemize}
         &
@@ -1009,7 +1009,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
         \begin{itemize}
             \item For $n \leq 10$ use the general circuit
             \item For $10 < n \leq 16$ use the binary circuit
-            \item For $n > 16$ use the base 10 circuit
+            \item For $n > 16$ use the decimal circuit
         \end{itemize} \\
         \hline
         \rotatebox[origin=c]{90}{\thead{With cycle}}
@@ -1031,7 +1031,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
         \begin{itemize}
             \item For $n < 12$ use the general circuit
             \item For $n = 12$ use the binary circuit
-            \item For $n > 12$ use the base 10 circuit
+            \item For $n > 12$ use the decimal circuit
             \newline
         \end{itemize}
         &
@@ -1052,7 +1052,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
         \begin{itemize}
             \item For $n \leq 3$ or $n = 5$ use the general circuit
             \item For $n = 4$ or $5 < n \leq 17$ use the binary circuit
-            \item For $n > 17$ use the base 10 circuit
+            \item For $n > 17$ use the decimal circuit
         \end{itemize} \\
         \hline
     \end{tabular}
@@ -1060,7 +1060,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
     \label{table:CounterComparison}
 \end{table}
 
-Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and base 10 with cycle circuits, followed by the 1-way binary circuit with cycle, then by the base 10 circuit without cycle and lastly the binary circuit without cycle or with 2-way
+Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and decimal with cycle circuits, followed by the 1-way binary circuit with cycle, then by the decimal circuit without cycle and lastly the binary circuit without cycle or with 2-way
 
 ## No-Delay Signal Toggle
 
