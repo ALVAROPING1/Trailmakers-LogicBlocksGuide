@@ -887,7 +887,9 @@ Signals are the method used to communicate different logic blocks between eachot
 
 - Input/output value: value attached to each signal, usually in the range $[-1, 1]$.
   - \nameref{math-blocks} are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range
-  - They are represented in scientific notation as $\pm a \cdot 10^b$ where $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals <!-- TODO: figure out new representation, likely just a double -->
+  - They are represented with a standard [\underline{IEEE 754 single-precision floating-point number}](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
+  - A $\pm \text{infinity}$ value is used to denote values too big to be represented (with an absolute value bigger than $(2 - 2^{-37}) \cdot 2^{127} \approx 3.4028235 \cdot 10^{38}$), which is interpreted as an arbitrarily large number
+    - [\underline{How operations with $\pm \infty$ are performed}](https://en.wikipedia.org/wiki/Extended_real_number_line#Arithmetic_operations)
 - Truthness value: value that determines if a signal is on or off
   - On the steam version, a signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
   - On other versions, the truthness depends whether the source that created it is triggered or not
