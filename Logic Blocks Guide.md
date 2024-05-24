@@ -892,7 +892,7 @@ Signals are the method used to communicate different logic blocks between eachot
     - [\underline{How operations with $\pm \infty$ are performed}](https://en.wikipedia.org/wiki/Extended_real_number_line#Arithmetic_operations)
 - Truthness value: value that determines if a signal is on or off
   - On the steam version, a signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
-  - On other versions, the truthness depends whether the source that created it is triggered or not
+  - On other versions, the truthness depends whether the source that created it is triggered or not, but an off signal is always interpreted as having a value of $0$
 
 When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the RGB lights, additionally use the absolute value before interpreting the resulting value, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
 
