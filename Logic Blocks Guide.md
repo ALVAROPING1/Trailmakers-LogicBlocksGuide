@@ -772,7 +772,7 @@ Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
 ### Arithmetics Logic Block
 
-Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one. The result is always $0$ when the block has no active inputs <!-- NOTE: only block which can be activated with sum(inputs) = 0 -->
+Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one.
 
 Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 
