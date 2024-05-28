@@ -126,6 +126,10 @@ header-includes: |
         \end{center}
     }
     \makeatother
+
+    % Maximum non-infinity IEEE float value
+    \newcommand{\maxFloat}{(2 - 2^{-37})}
+    \newcommand{\maxFloatApprox}{3.403 \cdot 10^{38}}
     ```
 ---
 
@@ -886,10 +890,8 @@ Timers are a group of settings that allow to automate the activation/deactivatio
 Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals.
 
 - Input/output value: value attached to each signal, usually in the range $[-1, 1]$.
-  - \nameref{math-blocks} are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range
+  - \nameref{math-blocks} are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range, instead they use the range $[-\maxFloat, \maxFloat] \approx [-\maxFloatApprox, \maxFloatApprox]$
   - They are represented with a standard [\underline{IEEE 754 single-precision floating-point number}](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
-  - A $\pm \text{infinity}$ value is used to denote values too big to be represented (with an absolute value bigger than $(2 - 2^{-37}) \cdot 2^{127} \approx 3.4028235 \cdot 10^{38}$), which is interpreted as an arbitrarily large number
-    - [\underline{How operations with $\pm \infty$ are performed}](https://en.wikipedia.org/wiki/Extended_real_number_line#Arithmetic_operations)
 - Truthness value: value that determines if a signal is on or off
   - On the steam version, a signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
   - On other versions, the truthness depends whether the source that created it is triggered or not, but an off signal is always interpreted as having a value of $0$
