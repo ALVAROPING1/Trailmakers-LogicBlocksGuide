@@ -649,7 +649,7 @@ Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
-- Timers: see \nameref{timers} <!-- NOTE: currently duration/pause do nothing with use steps. Without use steps, if the pause is 0 but duration isn't, the duration timer is also ignored. I assume this is a bug -->
+- Timers: see \nameref{timers}
 - Value bounds: minimum/maximum value that can be stored, the stored value will be clamped to the range defined by these bounds
 - Scale: rate of change of the stored value, used to scale the value of the input
 - Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
