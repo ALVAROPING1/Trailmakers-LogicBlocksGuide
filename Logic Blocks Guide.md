@@ -326,7 +326,7 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 
 Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
-- Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \frac{\text{m}}{\text{s}^2}$)
+- Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
 - Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Trigger
   - Normal: sends an output when the gravity strength is above the configured value
