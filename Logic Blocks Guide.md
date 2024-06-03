@@ -141,6 +141,8 @@ The goal of this document is to explain the logic system in the game [\underline
 
 Logic blocks are a group of blocks that allow to obtain and process information, which in turn can be used to automate tasks or create more complex control schemes for creations, and more generally, perform any finite sequence of steps (known as executing an algorithm).
 
+All logic blocks, with the exception of distance sensors, have a display with an arrow pointing away from the center of the block representing the value of their output signal. This arrow is empty when there is no output ($0$ value), and green/red when the output is positive/negative. Blocks which can take other signals as inputs (\nameref{logic-gates}) additionally have a second arrow pointing to the center of the block representing the input signals, which works like the output arrow but using the value of the sum of the input signals.
+
 Note: due to a bug, only up to 5 characters can be used on any configurable block value. Even though the UI rounds values 1-2 values, the values used are always the values that were typed.
 
 ## Sensors
@@ -149,7 +151,7 @@ Sensors are a group of blocks that measure a physical property, like speed or an
 
 ### Distance Sensor
 
-Distance sensors check for objects within a straight line in front of them and a predefined distance. Only one half of the detecting face actually detects objects.
+Distance sensors check for objects within a straight line in front of them and a predefined distance. Only one half of the detecting face actually detects objects. The detecting face glows white when the sensor creates an output, and stays off otherwise.
 
 Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
@@ -203,7 +205,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 ### Altitude Sensor
 
-Altitude sensors measure the altitude of the block relative to a predefined frame of reference.
+Altitude sensors measure the altitude of the block relative to a predefined frame of reference. They have a display which shows the currently measured altitude rounded to the nearest integer, or "N/A" in build mode.
 
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
@@ -263,7 +265,7 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 ### Speed Sensor
 
-Speed sensors measure the speed of the block in a given direction indicated by the arrow on the block.
+Speed sensors measure the speed of the block in a given direction indicated by the arrow on the block. They have a display which shows the currently measured speed as a bar indicator, which is full when the speed is higher than or equal to the trigger speed and empty when the speed is negative or $0$.
 
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
@@ -316,7 +318,7 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 ### Angle Sensor
 
-Angle sensors measure the angle of the block relative to the direction of highest slope of the plane defined by the square faces of the block.
+Angle sensors measure the angle of the block relative to the direction of highest slope of the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the angle. The arrow will always try to point up no matter the orientation of the block (will point in the direction of highest slope of the plane it is in).
 
 Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
@@ -326,7 +328,6 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
-  - Note: the arrow indicates the currently measured angle and will always try to point up no matter the orientation of the block (will point in the direction of highest slope of the plane it is in)
 - Outputs
 
 \begin{figure}[H]
@@ -373,7 +374,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 ### Compass
 
-Compasses measure the angle of the block relative to the closest direction to the north in the plane defined by the square faces of the block.
+Compasses measure the angle of the block relative to the closest direction to the north in the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a red section representing the activation threshold, and an output arrow and cardinal direction letters representing the angle. The arrow will always try to point north no matter the orientation of the block (will point in the direction closest to the north of the plane it is in).
 
 Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
@@ -383,7 +384,6 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
-  - Note: the arrow indicates the currently measured angle and will always try to point north no matter the orientation of the block (will point in the direction closest to the north of the plane it is in)
 - Outputs
 
 \begin{figure}[H]
