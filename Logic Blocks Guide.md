@@ -139,6 +139,8 @@ The goal of this document is to explain the logic system in the game [\underline
 
 # Logic Blocks
 
+Logic blocks are a group of blocks that allow to obtain and process information, which in turn can be used to automate tasks or create more complex control schemes for creations, and more generally, perform any finite sequence of steps (known as executing an algorithm).
+
 Note: due to a bug, only up to 5 characters can be used on any configurable block value. Even though the UI rounds values 1-2 values, the values used are always the values that were typed.
 
 ## Sensors
