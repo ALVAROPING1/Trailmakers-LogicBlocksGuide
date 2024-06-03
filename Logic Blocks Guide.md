@@ -145,7 +145,7 @@ The goal of this document is to explain the logic system in the game [\underline
 
 Logic blocks are a group of blocks that allow to obtain and process information, which in turn can be used to automate tasks or create more complex control schemes for creations, and more generally, perform any finite sequence of steps (known as executing an algorithm).
 
-All logic blocks, with the exception of distance sensors, have a display with an arrow pointing away from the center of the block representing the value of their output signal. This arrow is empty when there is no output ($0$ value), and green/red when the output is positive/negative. Blocks which can take other signals as inputs (\nameref{logic-gates}) additionally have a second arrow pointing to the center of the block representing the input signals, which works like the output arrow but using the value of the sum of the input signals.
+All logic blocks, with the exception of distance/gravity sensors and number displays, have a display with an arrow pointing away from the center of the block representing the value of their output signal. This arrow is empty when there is no output ($0$ value), and green/red when the output is positive/negative. Blocks which can take other signals as inputs (\nameref{logic-gates} and \nameref{math-blocks}), with the exception of number displays, additionally have a second arrow pointing to the center of the block representing the input signals, which works like the output arrow but using the value of the sum of the input signals.
 
 Note: due to a bug, only up to 5 characters can be used on any configurable block value. Even though the UI rounds values 1-2 values, the values used are always the values that were typed.
 
@@ -322,7 +322,7 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 ### Gravity Sensor
 
-Gravity sensors measure the gravity strength at the position of the block.
+Gravity sensors measure the gravity strength at the position of the block. They have a display which shows the currently measured gravity as a bar indicator, which is full when the gravity is higher than or equal to the trigger gravity and empty when the gravity is $0$.
 
 Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
@@ -582,7 +582,7 @@ Math blocks are a group of blocks that take a set of numeric inputs and perform 
 
 ### Comparison Logic Gate
 
-Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant.
+Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode.
 
 Their settings are shown in figure \ref{fig:Comparator} and are as follows:
 
@@ -647,7 +647,7 @@ Their settings are shown in figure \ref{fig:Comparator} and are as follows:
 
 ### Accumulator
 
-Accumulators store and output a numeric value, and allow to increment/decrement it.
+Accumulators store and output a numeric value, and allow to increment/decrement it. They have a display which shows the currently stored value as a bar indicator, which is full when the value is the maximum and empty when it is the minimum. Additionally, the bar indicator is white when the value is 0, and green/red when it is positive/negative.
 
 Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
@@ -713,7 +713,7 @@ Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
 ### Number Display
 
-Number displays show and output the sum of their inputs with an optional rounding, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range). If the result of the sum is outside of the $[-1000, 1000]$ range, it's displayed in scientific notation with $1$ decimal of precision. The value displayed is only updated when the block is active (sum of the inputs isn't $0$), although the output value of the block is always updated.
+Number displays show and output the sum of their inputs with an optional rounding, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range). If the result of the sum is outside of the $[-1000, 1000]$ range, it's displayed in scientific notation with $1$ decimal of precision regardless of the rounding mode. The value displayed is only updated when the block is active (sum of the inputs isn't $0$), although the output value of the block is always updated.
 
 Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
@@ -776,7 +776,7 @@ Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
 ### Arithmetics Logic Block
 
-Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one.
+Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one. They have a display which shows the currently selected operation.
 
 Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 
