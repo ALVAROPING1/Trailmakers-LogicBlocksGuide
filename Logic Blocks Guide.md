@@ -896,7 +896,7 @@ Signals are the method used to communicate different logic blocks between eachot
   - On the steam version, a signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
   - On other versions, the truthness depends whether the source that created it is triggered or not, but an off signal is always interpreted as having a value of $0$
 
-When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the gyro stabilizer and RGB lights, additionally use the absolute value before interpreting the resulting value, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
+When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the gyro stabilizer and hue light panels, additionally use the absolute value before interpreting the resulting value, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
 
 - For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the output value, resulting in faster speeds with fractional input values for the same final angle
 - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{InputValueMultiplier} for more information
@@ -913,7 +913,7 @@ When a block receives a set of inputs, it determines how it is activated based o
         Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers & Speed \\
         Tone generators & Volume \\
         Logic gates and math blocks & Output value \\
-        RGB Lights & Hue of the HSV color (positive inputs) or brightness of a greyscale color (negative inputs) \\
+        Hue light panels & Hue of the HSV color (positive inputs) or brightness of a greyscale color (negative inputs) \\
         Other & None \\
         \bottomrule
     \end{tabular}
