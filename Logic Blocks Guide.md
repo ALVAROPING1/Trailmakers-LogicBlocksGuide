@@ -713,7 +713,7 @@ Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
 ### Number Display
 
-Number displays show and output the sum of their inputs with an optional rounding, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range). If the result of the sum is outside of the $[-1000, 1000]$ range, it's displayed in scientific notation with $1$ decimal of precision regardless of the rounding mode. The value displayed is only updated when the block is active (sum of the inputs isn't $0$), although the output value of the block is always updated.
+Number displays show and output the sum of their inputs with an optional rounding, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range). If the result of the sum is outside of the $[-1000, 1000]$ range, it's displayed in scientific notation with $1$ decimal of precision regardless of the rounding mode.
 
 Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
