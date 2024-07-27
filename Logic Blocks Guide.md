@@ -814,9 +814,9 @@ Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)     at (-1.5, 16.0) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)    at (21.5, 16.0) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (red_keybind)   at (-1.5, 4.5)  {Red keybind};
+            \node[annotation, left]  (output_on)     at (-1.0, 16.0) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.0, 16.0) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (red_keybind)   at (-1.0, 4.5)  {Red keybind};
             \node[annotation, left]  (green_keybind) at (-1.0, 9.25) {Green keybind};
             \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
             \node[annotation, below] (pause)         at (9.9, -1.5)  {Pause};
