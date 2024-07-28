@@ -1292,8 +1292,8 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
         \begin{axis}[
             height=27.5em,
             width=42em,
-            title={Multiplier as a function of the output value},
-            xlabel={Output value},
+            title={Multiplier as a function of the input value},
+            xlabel={Input value},
             ylabel={Multiplier},
             domain = 0:1,
             xmin=0, xmax=1,
@@ -1305,7 +1305,7 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
             \addplot[color=black, samples=3] {x} node[above left, midway] {$y=x$};
         \end{axis}
     \end{tikzpicture}
-    \caption{Graph of the multiplier for hinges as a function of the output value}
+    \caption{Graph of the multiplier for hinges as a function of the input value}
     \label{fig:OutputValueMultiplierGraph}
 \end{figure}
 
