@@ -106,9 +106,11 @@ header-includes: |
     % Images location
     \graphicspath{ {img/} }
 
-    % Ceiling function
     \usepackage{mathtools}
+    % Ceiling function
     \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+    % Absolute value function
+    \DeclarePairedDelimiter{\abs}{|}{|}
 
     % Title command
     \makeatletter
@@ -844,6 +846,119 @@ Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows
     \label{fig:ArithmeticsBlock}
 \end{figure}
 
+### Hue Light Panel
+
+Hue light panels are lights with configurable color determined from their input value.
+
+Their settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Saturation: saturation of the color of the light. Ignored when the input value is negative
+- Brightness: brightness of the color of the light
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=28em]{hue_light_panel}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (green_keybind) at (-1.0, 11)   {Green keybind};
+            \node[annotation, left]  (toggle)        at (-1.0, 3.75) {Green toggle};
+            \node[annotation, below] (pause)         at (8.0, -1.5)  {Pause};
+            \node[annotation, below] (duration)      at (4.5, -1.5)  {Duration};
+            \node[annotation, below] (delay)         at (1.5, -1.5)  {Delay};
+            \node[annotation, below] (saturation)    at (11.5, -1.5) {Saturation};
+            \node[annotation, right] (brightness)    at (21.5, 4.5)  {Brightness};
+
+            % Arrows
+            \draw[arrow] (green_keybind.east)  -- (0.1, 8.0);
+            \draw[arrow] (toggle.east)         -- (0.1, 3.75);
+            \draw[arrow] (pause.north)     to[*|] (8.5, 0.5);
+            \draw[arrow] (duration.north)      -- (5.9, 3.0);
+            \draw[arrow] (delay.north)         -- (5.9, 5.75);
+            \draw[arrow] (saturation.north)    -- (11.5, 1.9);
+            \draw[arrow] (brightness.west)     -- (15.8, 4.5);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Hue Light Panel settings}
+    \label{fig:HueLightPanel}
+\end{figure}
+
+#### Color Calculation
+
+The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure \ref{fig:HueLightPanelColor} shows an example of the resulting colors for inputs in the range $[-1, 1]$ with saturation and brightness set to $1$.
+
+$$\operatorname{color}(x) = \begin{cases}
+    \operatorname{HSV}(360(x \bmod{1}), S, B)          & x > 0 \\
+    \text{Off (Black)}                                 & x = 0 \\
+    \operatorname{greyscale}(\min(\abs{x}, 1) \cdot B) & x < 0 \\
+\end{cases}$$
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \pgfmathsetlengthmacro\MajorTickLength{
+          \pgfkeysvalueof{/pgfplots/major tick length} * 2
+        }
+        \pgfmathsetlengthmacro\MinorTickLength{
+          \pgfkeysvalueof{/pgfplots/minor tick length} * 2
+        }
+        \begin{axis}[
+            height=2.5cm,
+            width=\linewidth,
+            axis on top=true,
+            axis y line=none,
+            xtick distance=1/6,
+            every x tick/.style={thick},
+            tick align=center,
+            major tick length=\MajorTickLength,
+            minor tick length=\MinorTickLength,
+            minor tick num=1,
+            xmin=-1, xmax=1,
+            ymin=-0.1, ymax=0.1,
+            samples=500,
+            xlabel={Input value},
+        ]
+            \addplot[
+                mesh,
+                line width=1cm,
+                domain=0:1,
+                variable=\u,
+                mesh/color input=explicit mathparse,
+                point meta={symbolic={Hsb=deg(u * 2 * pi),1,1}}
+            ] ({u},0);
+            \addplot[
+                mesh,
+                line width=1cm,
+                domain=-1:0,
+                variable=\u,
+                mesh/color input=explicit mathparse,
+                point meta={symbolic={Hsb=0,0,-u}}
+            ] ({u},0);
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Resulting colors with $\text{saturation} = \text{brightness} = 1$}
+    \label{fig:HueLightPanelColor}
+\end{figure}
+
 # Common block settings
 
 These are settings shared by all blocks in the game that can be activated with inputs
@@ -918,8 +1033,8 @@ When a block receives a set of inputs, it determines how it is activated based o
         Rotating servos, hinges, and wings with control surfaces (without hold position) & Angle \\
         Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers & Speed \\
         Tone generators & Volume \\
-        Logic gates and math blocks & Output value \\
-        Hue light panels & Hue of the HSV color (positive inputs) or brightness of a greyscale color (negative inputs) \\
+        Logic gates and math blocks & Output value (see \nameref{logic-gates} and \nameref{math-blocks}) \\
+        Hue light panels & Color (see \nameref{hue-light-panel}) \\
         Other & None \\
         \bottomrule
     \end{tabular}
