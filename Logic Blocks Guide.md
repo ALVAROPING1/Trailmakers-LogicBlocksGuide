@@ -1229,7 +1229,7 @@ This section contains old circuits that were previously in \nameref{useful-circu
 
 ### Decimal (Base $10$)
 
-- $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
+- $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 \begin{figure}[H]
@@ -1353,17 +1353,17 @@ This section contains old circuits that were previously in \nameref{useful-circu
   - Has a complexity of $n$ gates
 - Requires a startup pulse to one of the toggled OR gates on each cell to work (achieved with a 1 frame pulse generator)
 - Complexity
-  - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
-  - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
-  - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
-  - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
+  - 1-way: $2 \ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 20 \ceil*{\log_{10} n} - 19$
+  - 1-way+cycle: $2 \ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 20 \ceil*{\log_{10} n} - 19$
+  - 2-way: $3 \ceil*{ \frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 30 \ceil*{\log_{10} n} - 28$
+  - 2-way+cycle: $3 \ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 30 \ceil*{\log_{10} n} - 28$
 - Takes 3 frames to update with cycle and 4 frames otherwise
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
 
 ### Binary (Base $2$)
 
 - Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
-- $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
+- $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_2 n}$
 - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 \begin{figure}[H]
     \makebox[\textwidth][c]{
@@ -1471,12 +1471,12 @@ This section contains old circuits that were previously in \nameref{useful-circu
 - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gates. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
 - Might require a decoder
   - To create it, add a NOT gate to each cell and replace the NAND gate of the input circuit with an OR gate like in the 2-way version (if using the 1-way versions). Then, take $n$ AND gates and assign each of them a different combination of either the OR or NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
-  - Has a complexity of $\ceil{\log_2 n} + n - 1$ for the 1-way version, $\ceil{\log_2 n} + n$ for the 1-way+cycle version and $n$ for the 2-way versions
+  - Has a complexity of $\ceil*{\log_2 n} + n - 1$ for the 1-way version, $\ceil*{\log_2 n} + n$ for the 1-way+cycle version and $n$ for the 2-way versions
 - Complexity
-  - 1-way: $2 \ceil{\log_2 n} + 3$
-  - 1-way+cycle: $2 \ceil{\log_2 n}$
-  - 2-way: $4 \ceil{\log_2 n} + 4$
-  - 2-way+cycle: $4 \ceil{\log_2 n}$
+  - 1-way: $2 \ceil*{\log_2 n} + 3$
+  - 1-way+cycle: $2 \ceil*{\log_2 n}$
+  - 2-way: $4 \ceil*{\log_2 n} + 4$
+  - 2-way+cycle: $4 \ceil*{\log_2 n}$
 - Takes 3 frames to update for 1-way+cycle and 4 frames otherwise
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
 
