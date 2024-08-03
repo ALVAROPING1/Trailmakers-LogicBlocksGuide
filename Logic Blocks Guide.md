@@ -653,7 +653,7 @@ Their settings are shown in figure \ref{fig:Comparator} and are as follows:
 
 ### Accumulator
 
-Accumulators store and output a numeric value, and allow to increment/decrement it. They have a display which shows the currently stored value as a bar indicator, which is full when the value is the maximum and empty when it is the minimum. Additionally, the bar indicator is white when the value is 0, and green/red when it is positive/negative.
+Accumulators store and output a numeric value, and allow to increment/decrement it between some bounds. They are always initialized to the value closest to $0$ within the defined bounds. They have a display which shows the currently stored value as a bar indicator, which is full when the value is the maximum and empty when it is the minimum. Additionally, the bar indicator is white when the value is 0, and green/red when it is positive/negative.
 
 Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
