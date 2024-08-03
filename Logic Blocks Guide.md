@@ -593,6 +593,7 @@ Their settings are shown in figure \ref{fig:Comparator} and are as follows:
 - Threshold: value used for the right hand side of the comparison
 - Output value: value of the output signal created by the block, discussed in \nameref{signals}
 - Comparison mode: comparison operation to perform, possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
+  - The total input is rounded to 3 decimal places before performing the comparison
 - Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
 - Outputs
 
