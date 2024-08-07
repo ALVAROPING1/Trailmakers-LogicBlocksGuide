@@ -1689,7 +1689,6 @@ This section contains old circuits that were previously in \nameref{useful-circu
 
 - Credits to Precache for figuring out this circuit
 
-
 \clearpage
 \appendix
 
