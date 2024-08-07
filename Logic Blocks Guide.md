@@ -907,7 +907,7 @@ Their settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
 
 #### Color Calculation
 
-The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure \ref{fig:HueLightPanelColor} shows an example of the resulting colors for inputs in the range $[-1, 1]$ with saturation and brightness set to $1$.
+The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure \ref{fig:HueLightPanelColor} shows an example of the resulting colors for inputs in the range $[-1, 1]$ with saturation and brightness set to $1$. Inputs smaller than $-1$ result in white, while inputs greater than $1$ result in the colors for the $[0, 1]$ range being repeated.
 
 $$\operatorname{color}(x) = \begin{cases}
     \operatorname{HSV}(360(x \bmod{1}), S, B)          & x > 0 \\
@@ -958,7 +958,7 @@ $$\operatorname{color}(x) = \begin{cases}
             ] ({u},0);
         \end{axis}
     \end{tikzpicture}
-    \caption{Resulting colors with $\text{saturation} = \text{brightness} = 1$}
+    \caption{Hue light panel color with $\text{saturation} = \text{brightness} = 1$ for inputs in the range $[-1, 1]$}
     \label{fig:HueLightPanelColor}
 \end{figure}
 
