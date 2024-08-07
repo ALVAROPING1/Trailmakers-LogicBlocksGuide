@@ -583,7 +583,7 @@ Math blocks are a group of blocks that take a set of numeric inputs and perform 
 
 ### Comparison Logic Gate
 
-Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode.
+Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode. They are also sometimes referred to as comparators
 
 Their settings are shown in figure \ref{fig:Comparator} and are as follows:
 
@@ -1062,76 +1062,21 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - Stores a single bit of information
 - Made by activating toggle on an OR gate, requires the input to be a pulse to be easily controlled by other gates (use a pulse generator for this)
 
-## Counter {#AccumulatorCounter}
-
-- Can store the value of a variable with $n$ possible values
-- The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
-- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is least complex depends on the situation
-
-<!-- TODO: reimplement with accumulators+comparators -->
-
-### General Circuit (Base $N$)
-
-### Decimal (Base $10$)
-
-### Binary (Base $2$)
-
-### When to use each method
-
-## No-Delay Signal Toggle
-
-- Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
-- Doesn't work when the output block is an AND/XOR gate
-- Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
-        % Nodes
-
-        \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
-        \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
-        \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
-        \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
-        \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
-        \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
-        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
-
-        % Arrows
-
-        \draw[arrow] (input_signal.east)  -- (output_blocks.west);
-        \draw[arrow] (input_signal.north) |- (XOR.west);
-        \draw[arrow] (XOR.east)           -| (output_blocks.north);
-        \draw[->-]   (input_toggle1.east) -- (toggles);
-        \draw[->-]   (input_toggle2.west) -- (toggles);
-        \draw[arrow] (toggles)            -- (XOR.north);
-    \end{tikzpicture}
-    \caption{Diagram of the no-delay signal toggle}
-    \label{fig:NoDelaySignalToggle}
-\end{figure}
-- [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
-
-# Historical Circuits
-
-This section contains old circuits that were previously in \nameref{useful-circuits}, but have since been superseded by new blocks. They are kept here for historical reasons and in case they are seen in older circuits.
-
-## NOR/NOT Gate
-
-- Superseded by the NOR gate block
-- Inverts the state of the input
-- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
-- If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
-- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
-
 ## Counter
 
-- Superseded by implementations based on a combination of accumulators and comparator blocks, as explained in \nameref{AccumulatorCounter}. This section contains implementations with logic gates only
+- Can store the value of a variable with $n$ possible values
 - Depending on how it's made, it can be 1 or 2 way and have cycle or not
   - 1-way: the value can only be increased
   - 2-way: the value can be both increased and decreased
   - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
-  - Base designs are 1-way without cycle
+  - Base designs described are 1-way without cycle, with the modifications needed to implement 2-way or cycle being explained afterwards
+- The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
+- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is least complex depends on the situation
+  - The general circuit and decimal methods can be implemented using logic gates or accumulators. Generally accumulator-based counters are less complex, but logic gate based designs will still be described as they can be less complex under some circumstances (like needing a counter which only changes its value when a function of its current value is true)
 
 ### General Circuit (Base $N$)
+
+#### Logic Gates Implementation
 
 - $n = \text{amount of cells}$
 - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
@@ -1214,7 +1159,7 @@ This section contains old circuits that were previously in \nameref{useful-circu
         \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
     \end{tikzpicture}
     }
-    \caption{Diagram of the general method counter}
+    \caption{Diagram of the general method counter (logic gates implementation)}
     \label{fig:CounterGeneral}
 \end{figure}
 - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
@@ -1228,7 +1173,33 @@ This section contains old circuits that were previously in \nameref{useful-circu
 - Takes 3 frames to update
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
 
+#### Accumulators Implementation
+
+- $n = \text{amount of comparators}$
+- The output is encoded as the active comparator
+- Made by choosing $n$ equally spaced numbers, configuring an accumulator to use steps and setting its minimum, maximum, and scale settings to go through those numbers as the value is changed, and connecting the accumulator to $n$ comparators set to equality with each of the chosen numbers
+  - The minimum/maximum must be the minimum/maximum chosen numbers, and the scale their spacing. Additionally, in order for the comparators to work, $\text{spacing} \geq 0.001$ must hold
+  - If $\text{minimum} \leq 0 \leq \text{maximum}$, $0$ should be within the chosen numbers. Otherwise, the counter needs to be pushed to its minimum/maximum value to initialize it
+  - For simplicity, the integers from $0$ to $n-1$ are usually used by setting the minimum/maximum values to $0$/$n-1$ respectively and the scale to $1$, but other configurations can be useful in certain circumstances
+    - Using a negative minimum value allows the initial value to not be the lowest value, which might be useful for 2-way counters
+    - Using (positive) scale values closer to $0$ allows to increase the amount of stored values beyond $101$
+    - Using different minimum/maximum values might reduce the complexity if analog value outputs are wanted by avoiding having to perform transformation of the value ranges
+  - The value can be increased/decreased by sending a $\pm 1$ input to the accumulator (the circuit is the same for 1 and 2-way)
+- To add cycle, connect the comparator with the biggest threshold to an AND gate with the positive accumulator input as its second input. Connect that AND gate to an arithmetic logic block set to multiplication with a $-1000$ constant and $0.02$ duration, and that arithmetic logic block to the accumulator
+  - The normal input to the accumulator must come from a 1 frame pulse generator
+  - If using the circuit as 2-way, repeat the process with the comparator with the smallest threshold and the negative input of the accumulator. The AND gate should have an additional $-1$ always on input to avoid issues with analog values. The arithmetic logic block can be reused
+- Complexity
+  - 1-way: $n+1$
+  - 1-way+cycle: $n+3$
+  - 2-way: $n+1$
+  - 2-way+cycle: $n+4$
+- Takes 2 frames to update without cycle, and 3 frames otherwise
+<!-- TODO: add examples -->
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
+
 ### Decimal (Base $10$)
+
+#### Logic Gates Implementation
 
 - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
@@ -1344,7 +1315,7 @@ This section contains old circuits that were previously in \nameref{useful-circu
         \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
     \end{tikzpicture}
     }
-    \caption{Diagram of the decimal method counter}
+    \caption{Diagram of the decimal method counter (logic gates implementation)}
     \label{fig:CounterDecimal}
 \end{figure}
 - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
@@ -1359,6 +1330,28 @@ This section contains old circuits that were previously in \nameref{useful-circu
   - 2-way: $3 \ceil*{ \frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 30 \ceil*{\log_{10} n} - 28$
   - 2-way+cycle: $3 \ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 30 \ceil*{\log_{10} n} - 28$
 - Takes 3 frames to update with cycle and 4 frames otherwise
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
+
+#### Accumulator Implementation
+
+- $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
+- Each cell is the general circuit implemented with accumulators for $n=10$ with cycle, without use steps, and with scale set to $60 \cdot \text{spacing}$, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
+- The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Made by connecting the last comparator of each cell to the AND gate from the cycle circuit of all following cells, and the AND gate from the cycle circuit of each cell to the accumulator of the next cell.
+  - Requires a different input circuit: the positive input should be in a 1 frame pulse generator connected to an AND gate connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells. All comparators except the last on each cell should be connected to an OR gate connected to the AND gate from the input circuit
+- To add cycle, add cycle to the last cell and remove all the gates in the input circuit except the pulse generator, which should be connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells
+- To make it 2-way, duplicate the input circuit but connect all comparators except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first comparator of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
+  - The AND gate in the cycle circuit of all cells should have a $-1000$ always on input instead of a $-1$ one. This can be achieved with an arithmetic logic block set to addition with a $-1000$ constant
+- Might require a decoder (unless you want to show numbers on a screen)
+  - To create it, take $n$ AND gates and assign a different combination of 1 comparator from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
+  - Has a complexity of $n$ gates
+- Complexity
+  - 1-way: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 13 \ceil*{\log_{10} n} - 9$
+  - 1-way+cycle: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 13 \ceil*{\log_{10} n} - 9$
+  - 2-way: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 14 \ceil*{\log_{10} n} - 7$
+  - 2-way+cycle: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 14 \ceil*{\log_{10} n} - 8$
+- Takes 3 frames to update
+<!-- TODO: add examples -->
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
 
 ### Binary (Base $2$)
@@ -1494,93 +1487,54 @@ This section contains old circuits that were previously in \nameref{useful-circu
         % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
         \rotatebox[origin=c]{90}{\thead{Without cycle}}
         &
-        Doesn't require a decoder:
-        \begin{itemize}
-            \item For $n \leq 3$ use the general circuit
-            \item For $n > 3$ use the binary circuit
-        \end{itemize}
         Doesn't require an individual decoder:
-        \begin{itemize}
-            \item For $n \leq 5$ use the general circuit
-            \item For $n > 5$ use the binary circuit
-        \end{itemize}
-        Requires an individual decoder:
-        \begin{itemize}
-            \item For $n \leq 14$ or $n = 17$ use the general circuit
-            \item For $n > 14$ and $n \neq 17$ use the binary circuit
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 12$):
-        \begin{itemize}
-            \item For $n \leq 12$ use the general circuit
-            \item For $n > 12$ use the decimal circuit
-            \newline
-        \end{itemize}
-        &
-        Doesn't require a decoder:
-        \begin{itemize}
-            \item For $n \leq 5$ use the general circuit
-            \item For $n > 5$ use the binary circuit
-        \end{itemize}
-        Doesn't require an individual decoder:
-        \begin{itemize}
-            \item For $n \leq 5$ use the general circuit
-            \item For $n > 5$ use the binary circuit
-        \end{itemize}
-        Requires an individual decoder:
         \begin{itemize}
             \item For $n \leq 10$ use the general circuit
             \item For $n > 10$ use the binary circuit
+            \newline
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 18$):
+        \begin{itemize}
+            \item For $n \leq 18$ use the general circuit
+            \item For $n > 18$ use the decimal circuit
+        \end{itemize}
+        &
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item For $n \leq 23$ use the general circuit
+            \item For $n > 23$ use either the binary or decimal circuit
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 23$):
+        \begin{itemize}
+            \item For $n \leq 23$ use the general circuit
+            \item For $n > 23$ use the decimal circuit
+        \end{itemize} \\
+        \hline
+        \rotatebox[origin=c]{90}{\thead{With cycle}}
+        &
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item Use the binary circuit
             \newline
             \newline
         \end{itemize}
         Show values directly on a screen (only numbers for $n > 16$):
         \begin{itemize}
-            \item For $n \leq 10$ use the general circuit
-            \item For $10 < n \leq 16$ use the binary circuit
+            \item For $n \leq 16$ use the general circuit
             \item For $n > 16$ use the decimal circuit
-        \end{itemize} \\
-        \hline
-        \rotatebox[origin=c]{90}{\thead{With cycle}}
-        &
-        Doesn't require a decoder:
-        \begin{itemize}
-            \item Use the binary circuit
-        \end{itemize}
-        Doesn't require an individual decoder:
-        \begin{itemize}
-            \item Use the binary circuit
-        \end{itemize}
-        Requires an individual decoder:
-        \begin{itemize}
-            \item For $n \leq 11$ use the general circuit
-            \item For $n > 11$ use the binary circuit
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 12$):
-        \begin{itemize}
-            \item For $n < 12$ use the general circuit
-            \item For $n = 12$ use the binary circuit
-            \item For $n > 12$ use the decimal circuit
             \newline
         \end{itemize}
         &
-        Doesn't require a decoder:
-        \begin{itemize}
-            \item Use the binary circuit
-        \end{itemize}
         Doesn't require an individual decoder:
         \begin{itemize}
-            \item Use the binary circuit
+            \item For $n \leq 12$ use the general circuit
+            \item For $n > 12$ use either the binary or decimal circuit
         \end{itemize}
-        Requires an individual decoder:
+        Show values directly on a screen (only numbers for $n > 16$):
         \begin{itemize}
-            \item For $n \leq 3$ or $n = 5$ use the general circuit
-            \item For $n = 4$ or $n > 5$ use the binary circuit
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 17$):
-        \begin{itemize}
-            \item For $n \leq 3$ or $n = 5$ use the general circuit
-            \item For $n = 4$ or $5 < n \leq 17$ use the binary circuit
-            \item For $n > 17$ use the decimal circuit
+            \item For $n \leq 18$ use the general circuit
+            \item For $n > 18$ use the decimal circuit
+            \newline
         \end{itemize} \\
         \hline
     \end{tabular}
@@ -1588,7 +1542,56 @@ This section contains old circuits that were previously in \nameref{useful-circu
     \label{table:CounterComparison}
 \end{table}
 
-Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and decimal with cycle circuits, followed by the 1-way binary circuit with cycle, then by the decimal circuit without cycle and lastly the binary circuit without cycle or with 2-way
+Notes:
+
+- All mentions of the general and decimal circuits refer to the accumulator-based implementations
+- If an individual decoder is needed, the general circuit is always best
+- For 2-way without an individual decoder, decimal and binary circuits are very close in terms of complexity. Use their complexity formulas to figure out which is best for your use case. If they have the same complexity, decimal is better due to being faster
+- This is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, refer to the circuits' descriptions to compare the speed for the needed use case
+
+## No-Delay Signal Toggle
+
+- Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
+- Doesn't work when the output block is an AND/XOR gate
+- Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
+        % Nodes
+
+        \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
+        \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
+        \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
+        \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
+        \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
+        \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
+        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
+
+        % Arrows
+
+        \draw[arrow] (input_signal.east)  -- (output_blocks.west);
+        \draw[arrow] (input_signal.north) |- (XOR.west);
+        \draw[arrow] (XOR.east)           -| (output_blocks.north);
+        \draw[->-]   (input_toggle1.east) -- (toggles);
+        \draw[->-]   (input_toggle2.west) -- (toggles);
+        \draw[arrow] (toggles)            -- (XOR.north);
+    \end{tikzpicture}
+    \caption{Diagram of the no-delay signal toggle}
+    \label{fig:NoDelaySignalToggle}
+\end{figure}
+- [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
+
+# Historical Circuits
+
+This section contains old circuits that were previously in \nameref{useful-circuits}, but have since been superseded by new blocks. They are kept here for historical reasons and in case they are seen in older circuits.
+
+## NOR/NOT Gate
+
+- Superseded by the NOR gate block
+- Inverts the state of the input
+- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
+- If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
+- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
 
 ## Feedback Loop
 
