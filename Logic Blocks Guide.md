@@ -888,7 +888,7 @@ Their settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
             \node[annotation, below] (duration)      at (4.5, -1.5)  {Duration};
             \node[annotation, below] (delay)         at (1.5, -1.5)  {Delay};
             \node[annotation, below] (saturation)    at (11.5, -1.5) {Saturation};
-            \node[annotation, right] (brightness)    at (21.5, 4.5)  {Brightness};
+            \node[annotation, right] (brightness)    at (21.0, 4.5)  {Brightness};
 
             % Arrows
             \draw[arrow] (green_keybind.east)  -- (0.1, 8.0);
