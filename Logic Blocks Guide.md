@@ -1205,6 +1205,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 #### Logic Gates Implementation
 
+- Works best when $n$ is of the form $c \cdot 10^k$ where $c$ is an integer in the range $[1, 9]$ and k is any positive integer. If it isn't, more gates are needed to cap the value at $n$
 - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
@@ -1339,6 +1340,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 #### Accumulator Implementation
 
+- Works best when $n$ is of the form $c \cdot 10^k$ where $c$ is an integer in the range $[1, 9]$ and k is any positive integer. If it isn't, more gates are needed to cap the value at $n$
 - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
 - Each cell is the general circuit implemented with accumulators for $n=10$ with cycle and without use steps, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
