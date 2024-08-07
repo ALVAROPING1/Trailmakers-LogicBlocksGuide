@@ -1082,6 +1082,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 - $n = \text{amount of cells}$
 - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
+- Diagram of the circuit:
 \begin{figure}[H]
     \makebox[\textwidth][c]{
     \begin{tikzpicture}
@@ -1207,6 +1208,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Diagram of the circuit:
 \begin{figure}[H]
     \makebox[\textwidth][c]{
     \begin{tikzpicture}
@@ -1362,6 +1364,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
 - $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_2 n}$
 - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Diagram of the circuit:
 \begin{figure}[H]
     \makebox[\textwidth][c]{
     \begin{tikzpicture}
