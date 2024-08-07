@@ -1187,6 +1187,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
     - Using (positive) scale values closer to $0$ allows to increase the amount of stored values beyond $101$
     - Using different minimum/maximum values might reduce the complexity if analog value outputs are wanted by avoiding having to perform transformation of the value ranges
   - The value can be increased/decreased by sending a $\pm 1$ input to the accumulator (the circuit is the same for 1 and 2-way)
+  - In some cases, it might be useful to not enable use steps and set the scale to $60 \cdot \text{spacing}$. This allows to change the stored value on each frame, but requires an extra 1 frame pulse generator for the input to get the normal input behaviour
 - To add cycle, connect the comparator with the biggest threshold to an AND gate with the positive accumulator input as its second input. Connect that AND gate to an arithmetic logic block set to multiplication with a $-1000$ constant and $0.02$ duration, and that arithmetic logic block to the accumulator
   - The normal input to the accumulator must come from a 1 frame pulse generator
   - If using the circuit as 2-way, repeat the process with the comparator with the smallest threshold and the negative input of the accumulator. The AND gate should have an additional $-1$ always on input to avoid issues with analog values. The arithmetic logic block can be reused
@@ -1337,7 +1338,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 #### Accumulator Implementation
 
 - $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
-- Each cell is the general circuit implemented with accumulators for $n=10$ with cycle, without use steps, and with scale set to $60 \cdot \text{spacing}$, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
+- Each cell is the general circuit implemented with accumulators for $n=10$ with cycle and without use steps, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 - Made by connecting the last comparator of each cell to the AND gate from the cycle circuit of all following cells, and the AND gate from the cycle circuit of each cell to the accumulator of the next cell.
   - Requires a different input circuit: the positive input should be in a 1 frame pulse generator connected to an AND gate connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells. All comparators except the last on each cell should be connected to an OR gate connected to the AND gate from the input circuit
