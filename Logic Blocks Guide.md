@@ -795,6 +795,7 @@ Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
   - Attempting to perform a division by $0$ (by having multiple different on inputs whose sum is $0$) results in an output of $0$
+  - If the operation is addition or subtraction, the constant value is used as output when there are no inputs. For other operations, $0$ is used instead
 - Outputs
 
 \begin{figure}[H]
