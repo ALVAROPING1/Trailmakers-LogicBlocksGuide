@@ -113,6 +113,7 @@ header-includes: |
     % Title command
     \makeatletter
     \renewcommand{\maketitle}{
+        \pagenumbering{roman}
         \begin{center}
             \LARGE\underline{\@title}\\
             \vspace{1mm}
@@ -128,7 +129,6 @@ header-includes: |
     ```
 ---
 
-\pagenumbering{roman}
 \lists
 \clearpage
 \pagenumbering{arabic}
