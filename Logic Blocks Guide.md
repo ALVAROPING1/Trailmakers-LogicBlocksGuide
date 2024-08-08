@@ -167,7 +167,6 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 - Trigger
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -225,7 +224,6 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 - Trigger
   - Normal: sends an output when the altitude is above the configured value
   - Below: sends an output when the altitude is below the configured value
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -280,7 +278,6 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 - Trigger
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -333,7 +330,6 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 - Trigger
   - Normal: sends an output when the gravity strength is above the configured value
   - Below: sends an output when the gravity strength is below the configured value
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -387,7 +383,6 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -443,7 +438,6 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -502,7 +496,6 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
 - Output value: multiplier of output signal created by the block, explained in \nameref{output-value-calculation}
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -596,7 +589,6 @@ Its settings are shown in figure \ref{fig:Comparator} and are as follows:
 - Comparison mode: comparison operation to perform, possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
   - The total input is rounded to 3 decimal places before performing the comparison
 - Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -665,7 +657,6 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
 - Value bounds: minimum/maximum value that can be stored, the stored value will be clamped to the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
 - Scale: rate of change of the stored value, used to scale the value of the input
 - Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -732,7 +723,6 @@ Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 - Timers: see \nameref{timers}
 - Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled" (displays $2$ decimals), "nearest", "floor" (closest smaller number), and "ceil" (closest bigger number)
   - If disabled, the number is displayed with 2 decimals of precision. Otherwise, it's displayed as an integer
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -796,7 +786,6 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
   - Attempting to perform a division by $0$ (by having multiple different on inputs whose sum is $0$) results in an output of $0$
   - If the operation is addition or subtraction, the constant value is used as output when there are no inputs. For other operations, $0$ is used instead
-- Outputs
 
 \begin{figure}[H]
     \centering
