@@ -1061,7 +1061,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 ## Counter
 
-- Can store the value of a variable with $n$ possible values
+- Stores the value of a variable with $n$ possible (discrete) values
 - Depending on how it's made, it can be 1 or 2 way and have cycle or not
   - 1-way: the value can only be increased
   - 2-way: the value can be both increased and decreased
