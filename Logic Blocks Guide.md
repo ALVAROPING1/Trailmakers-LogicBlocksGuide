@@ -163,7 +163,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Trigger
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
@@ -215,7 +215,7 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 - Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
@@ -274,7 +274,7 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Trigger
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
@@ -326,7 +326,7 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
 - Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Trigger
   - Normal: sends an output when the gravity strength is above the configured value
   - Below: sends an output when the gravity strength is below the configured value
@@ -379,7 +379,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -434,7 +434,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Trigger
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -585,7 +585,7 @@ Its settings are shown in figure \ref{fig:Comparator} and are as follows:
 - Timers: see \nameref{timers}
   - Due to a bug, the duration timer is ignored unless pause isn't 0
 - Threshold: value used for the right hand side of the comparison
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Comparison mode: comparison operation to perform, possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
   - The total input is rounded to 3 decimal places before performing the comparison
 - Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
@@ -1015,7 +1015,7 @@ Signals are the method used to communicate different logic blocks between eachot
 
 When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the gyro stabilizer and hue light panels, additionally use the absolute value before interpreting it, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
 
-- For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the output value, resulting in faster speeds with fractional input values for the same final angle
+- For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the input value, resulting in faster speeds with fractional input values for the same final angle
 - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{InputValueMultiplier} for more information
 - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
 \begin{table}[H]
@@ -1025,7 +1025,7 @@ When a block receives a set of inputs, it determines how it is activated based o
         Block & Value modified \\
         \midrule
         Engines & Max speed and acceleration (torque) \\
-        Thrusters, gimbals, propellers, boat engines, and quantum rudder & Power (thrust) \\
+        Thrusters, gimbals, propellers, boat engines, and quantum rudders & Power (thrust) \\
         Rotating servos, hinges, and wings with control surfaces (without hold position) & Angle \\
         Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers & Speed \\
         Tone generators & Volume \\
@@ -1034,7 +1034,7 @@ When a block receives a set of inputs, it determines how it is activated based o
         Other & None \\
         \bottomrule
     \end{tabular}
-    \caption{Value modified by the output value for each block}
+    \caption{Value modified by the input value for each block}
     \label{table:InputValueBlocks}
 \end{table}
 
@@ -1604,7 +1604,7 @@ This section contains old circuits that were previously in \nameref{useful-circu
 - Allows to store an analog value in the range $[-1, 1]$
 - Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
 - Each frame the input is active, the stored value increases by the value of the input
-  - With a close to 0 output value as input, the circuit can be used to generate an analog output value
+  - With a close to 0 input value, the circuit can be used to generate an analog output value
 - One of the OR gates can be replaced with an XOR to add a reset input. In this case, the normal input should go to the OR gate only and the reset input must be 2 different signals connected to the XOR gate
   - Be aware that this method adds a 1 frame jitter to the stored signal
 
@@ -1785,7 +1785,7 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
     \hline
     \multicolumn{3}{c!{\vrule width 3pt}}{} & 0.490 & 06.005 & 0.06672222 & \multicolumn{3}{c}{} \\
     \cmidrule(l{-3pt}){4-6}
-    \caption{Raw data of the output value multiplier for hinges}
+    \caption{Raw data of the input value multiplier for hinges}
     \label{table:OutputValueMultiplierData}
 \end{longtable}
 
