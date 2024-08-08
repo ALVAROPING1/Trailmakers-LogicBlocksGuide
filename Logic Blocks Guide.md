@@ -951,6 +951,8 @@ $$\operatorname{color}(x) = \begin{cases}
     \label{fig:HueLightPanelColor}
 \end{figure}
 
+\clearpage
+
 # Common block settings
 
 These are settings shared by all blocks in the game that can be activated with input signals
@@ -998,6 +1000,8 @@ Timers are a group of settings that allow to automate the activation/deactivatio
   - If this number is an integer, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames
   - Pause timers aren't subject to this, and the exact time in seconds is used for them
 
+\clearpage
+
 # Signals
 
 Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals.
@@ -1033,6 +1037,8 @@ When a block receives a set of inputs, it determines how it is activated based o
     \caption{Value modified by the output value for each block}
     \label{table:InputValueBlocks}
 \end{table}
+
+\clearpage
 
 # Useful Circuits
 
@@ -1577,6 +1583,8 @@ Notes:
     \label{fig:NoDelaySignalToggle}
 \end{figure}
 - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
+
+\clearpage
 
 # Historical Circuits
 
