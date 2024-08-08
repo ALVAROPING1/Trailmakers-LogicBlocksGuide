@@ -953,7 +953,7 @@ $$\operatorname{color}(x) = \begin{cases}
 
 # Common block settings
 
-These are settings shared by all blocks in the game that can be activated with inputs
+These are settings shared by all blocks in the game that can be activated with input signals
 
 ## Keybinds
 
