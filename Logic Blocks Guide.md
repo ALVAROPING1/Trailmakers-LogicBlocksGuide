@@ -585,7 +585,7 @@ Math blocks are a group of blocks that take a set of numeric inputs and perform 
 
 Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode. They are also sometimes referred to as comparators
 
-Their settings are shown in figure \ref{fig:Comparator} and are as follows:
+Its settings are shown in figure \ref{fig:Comparator} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
@@ -657,7 +657,7 @@ Their settings are shown in figure \ref{fig:Comparator} and are as follows:
 
 Accumulators store and output a numeric value, and allow to increment/decrement it between some bounds. They are always initialized to the value closest to $0$ within the defined bounds. They have a display which shows the currently stored value as a bar indicator, which is full when the value is the maximum and empty when it is the minimum. Additionally, the bar indicator is white when the value is 0, and green/red when it is positive/negative.
 
-Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
+Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
@@ -725,7 +725,7 @@ Their settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
 Number displays show and output the sum of their inputs with an optional rounding, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range). If the result of the sum is outside of the $[-1000, 1000]$ range, it's displayed in scientific notation with $1$ decimal of precision regardless of the rounding mode.
 
-Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
+Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
@@ -787,7 +787,7 @@ Their settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
 Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one. They have a display which shows the currently selected operation.
 
-Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
+Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
@@ -853,7 +853,7 @@ Their settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows
 
 Hue light panels are lights with configurable color determined from their input value.
 
-Their settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
+Its settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
