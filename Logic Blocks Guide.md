@@ -714,7 +714,7 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
 ### Number Display
 
-Number displays show and output the sum of their inputs with an optional rounding, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range). If the result of the sum is outside of the $[-1000, 1000]$ range, it's displayed in scientific notation with $1$ decimal of precision regardless of the rounding mode.
+Number displays output the sum of their inputs, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range), and display it with an optional rounding. If the result of the sum is outside of the $[-1000, 1000]$ range, it's displayed in scientific notation with $1$ decimal of precision regardless of the rounding mode.
 
 Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
@@ -722,7 +722,7 @@ Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
 - Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled" (displays $2$ decimals), "nearest", "floor" (closest smaller number), and "ceil" (closest bigger number)
-  - If disabled, the number is displayed with 2 decimals of precision. Otherwise, it's displayed as an integer
+  - If disabled, the number is displayed with 2 decimals of precision.
 
 \begin{figure}[H]
     \centering
