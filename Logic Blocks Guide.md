@@ -1479,8 +1479,6 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 ### When to use each method
 
-- Calculated for $n \geq 3$, for $n = 2$ a latch is always best
-
 \begin{table}[H]
     \centering
     \begin{tabular}{|c|m{20em}|m{20em}|}
@@ -1551,6 +1549,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 Notes:
 
+- Calculated for $n \geq 3$, for $n = 2$ a latch is always best
 - All mentions of the general and decimal circuits refer to the accumulator-based implementations
 - If an individual decoder is needed, the general circuit is always best
 - For 2-way without an individual decoder, decimal and binary circuits are very close in terms of complexity. Use their complexity formulas to figure out which is best for your use case. If they have the same complexity, decimal is better due to being faster
