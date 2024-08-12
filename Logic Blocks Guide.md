@@ -1183,15 +1183,15 @@ This section contains commonly used logic circuits and how to make them, to aid 
     - Using (positive) scale values closer to $0$ allows to increase the amount of stored values beyond $101$
     - Using different minimum/maximum values might reduce the complexity if analog value outputs are wanted by avoiding having to perform transformation of the value ranges
   - The value can be increased/decreased by sending a $\pm 1$ input to the accumulator (the circuit is the same for 1 and 2-way)
-  - In some cases, it might be useful to not enable use steps and set the scale to $60 \cdot \text{spacing}$. This allows to change the stored value on each frame, but requires an extra 1 frame pulse generator for the input to get the normal input behaviour
+  - In some cases, it might be useful to not enable use steps and set the scale to $60 \cdot \text{spacing}$. This allows to change the stored value on each frame, but requires the input to come from a  1 frame pulse generator to get the normal input behaviour
 - To add cycle, connect the comparator with the biggest threshold to an AND gate with the positive accumulator input as its second input. Connect that AND gate to an arithmetic logic block set to multiplication with a $-1000$ constant and $0.02$ duration, and that arithmetic logic block to the accumulator
   - The normal input to the accumulator must come from a 1 frame pulse generator
   - If using the circuit as 2-way, repeat the process with the comparator with the smallest threshold and the negative input of the accumulator. The AND gate should have an additional $-1$ always on input to avoid issues with analog values. The arithmetic logic block can be reused
 - Complexity
   - 1-way: $n+1$
-  - 1-way+cycle: $n+3$
+  - 1-way+cycle: $n+4$
   - 2-way: $n+1$
-  - 2-way+cycle: $n+4$
+  - 2-way+cycle: $n+5$
 - Takes 2 frames to update without cycle, and 3 frames otherwise
 <!-- TODO: add examples -->
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
@@ -1520,23 +1520,27 @@ This section contains commonly used logic circuits and how to make them, to aid 
             \item Use the binary circuit
             \newline
             \newline
+            \newline
+            \newline
+            \newline
         \end{itemize}
-        Show values directly on a screen (only numbers for $n > 16$):
+        Show values directly on a screen (only numbers for $n > 15$):
         \begin{itemize}
-            \item For $n \leq 16$ use the general circuit
-            \item For $n > 16$ use the decimal circuit
+            \item For $n \leq 15$ use the general circuit
+            \item For $n > 15$ use the decimal circuit
             \newline
         \end{itemize}
         &
         Doesn't require an individual decoder:
         \begin{itemize}
-            \item For $n \leq 12$ use the general circuit
-            \item For $n > 12$ use either the binary or decimal circuit
+            \item For $n = 4$, $n = 8$, or $11 < n \leq 32$ use the binary circuit
+            \item For $4 < n \leq 7$ or $8 < n \leq 11$ use the general circuit
+            \item For $n > 32$ use either the binary or decimal circuit
         \end{itemize}
-        Show values directly on a screen (only numbers for $n > 16$):
+        Show values directly on a screen (only numbers for $n > 17$):
         \begin{itemize}
-            \item For $n \leq 18$ use the general circuit
-            \item For $n > 18$ use the decimal circuit
+            \item For $n \leq 17$ use the general circuit
+            \item For $n > 17$ use the decimal circuit
             \newline
         \end{itemize} \\
         \hline
