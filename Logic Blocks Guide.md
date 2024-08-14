@@ -1187,7 +1187,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - In some cases, it might be useful to not enable use steps and set the scale to $60 \cdot \text{spacing}$. This allows to change the stored value on each frame, but requires the input to come from a  1 frame pulse generator to get the normal input behaviour
 - To add cycle, connect the comparator with the biggest threshold to an AND gate with the positive accumulator input as its second input. Connect that AND gate to an arithmetic logic block set to multiplication with a $-1000$ constant and $0.02$ duration, and that arithmetic logic block to the accumulator
   - The normal input to the accumulator must come from a 1 frame pulse generator
-  - If using the circuit as 2-way, repeat the process with the comparator with the smallest threshold and the negative input of the accumulator. The AND gate should have an additional $-1$ always on input to avoid issues with analog values. The arithmetic logic block can be reused
+  - If using the circuit as 2-way, repeat the process with the comparator with the smallest threshold and the negative input of the accumulator. The AND gate should have an additional $-2$ always on input (which can be achieved with an arithmetic logic block set to addition with a $-1000$ constant). The arithmetic logic block and input pulse generator can be reused, using negative inputs to reduce the value
 - Complexity
   - 1-way: $n+1$
   - 1-way+cycle: $n+4$
@@ -1344,7 +1344,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - Requires a different input circuit: the positive input should be in a 1 frame pulse generator connected to an AND gate connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells. All comparators except the last on each cell should be connected to an OR gate connected to the AND gate from the input circuit
 - To add cycle, add cycle to the last cell and remove all the gates in the input circuit except the pulse generator, which should be connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells
 - To make it 2-way, duplicate the input circuit but connect all comparators except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first comparator of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
-  - The AND gate in the cycle circuit of all cells should have a $-1000$ always on input instead of a $-1$ one. This can be achieved with an arithmetic logic block set to addition with a $-1000$ constant
+  - The AND gate from the second input circuit should have a $-1$ output value
 - Might require a decoder (unless you want to show numbers on a screen)
   - To create it, take $n$ AND gates and assign a different combination of 1 comparator from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
   - Has a complexity of $n$ gates
