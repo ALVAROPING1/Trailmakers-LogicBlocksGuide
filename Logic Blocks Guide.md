@@ -657,7 +657,7 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
 - Value bounds: minimum/maximum value that can be stored, the stored value will be clamped to the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
 - Scale: rate of change of the stored value, used to scale the value of the input
 - Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
-  - Due to a bug, enabling this causes the accumulator to always be initialized to $0$ even if it's outside of the value bounds. If it is outside of them, the first input will make the value go to the closest to $0$ within the bounds
+  - Due to a bug, enabling this causes the accumulator to always be initialized to $0$ even if it's outside of the value bounds. In these cases, the first input will make the value go to the closest to $0$ within the bounds
 
 \begin{figure}[H]
     \centering
@@ -722,7 +722,7 @@ Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-- Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled" (displays $2$ decimals), "nearest", "floor" (closest smaller number), and "ceil" (closest bigger number)
+- Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled" (displays $2$ decimals), "nearest", "floor" (closest smaller integer), and "ceil" (closest bigger integer)
   - If the number is outside of the $[-1000, 1000]$ range, it's always displayed in scientific notation with $1$ decimal of precision
 
 \begin{figure}[H]
@@ -785,7 +785,7 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Timers: see \nameref{timers}
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
-  - Attempting to perform a division by $0$ (by having multiple different on inputs whose sum is $0$) results in an output of $0$
+  - Attempting to perform a division by $0$ results in an output of $0$
   - If the operation is addition or subtraction, the constant value is used as output when there are no inputs. For other operations, $0$ is used instead
 
 \begin{figure}[H]
@@ -897,7 +897,7 @@ Its settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
 
 #### Color Calculation
 
-The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure \ref{fig:HueLightPanelColor} shows an example of the resulting colors for inputs in the range $[-1, 1]$ with saturation and brightness set to $1$. Inputs smaller than $-1$ result in white, while inputs greater than $1$ result in the colors for the $[0, 1]$ range being repeated.
+The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure \ref{fig:HueLightPanelColor} shows an example of the resulting colors for inputs in the range $[-1, 1]$ with $\text{saturation} = \text{brightness} = 1$. Inputs smaller than $-1$ result in white, while inputs greater than $1$ result in the $[0, 1]$ range being repeated.
 
 $$\operatorname{color}(x) = \begin{cases}
     \operatorname{HSV}(360(x \bmod{1}), S, B)          & x > 0 \\
