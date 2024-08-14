@@ -164,7 +164,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
-- Trigger
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
 
@@ -221,7 +221,7 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
   - Outside of high seas and when the wave setting is set to disabled, both options are equivalent
   - On space sector, it's a "MAX" value while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
-- Trigger
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the altitude is above the configured value
   - Below: sends an output when the altitude is below the configured value
 
@@ -275,7 +275,7 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
-- Trigger
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
 
@@ -327,7 +327,7 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
 - Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
-- Trigger
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the gravity strength is above the configured value
   - Below: sends an output when the gravity strength is below the configured value
 
@@ -380,7 +380,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
-- Trigger
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
 
@@ -435,7 +435,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
-- Trigger
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
 
