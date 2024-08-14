@@ -1,3 +1,4 @@
 pdf-engine: lualatex
 standalone: true
 strip-comments: true
+number-sections: true
