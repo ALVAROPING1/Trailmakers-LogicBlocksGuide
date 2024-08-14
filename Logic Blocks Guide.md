@@ -1194,8 +1194,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - 2-way: $n+1$
   - 2-way+cycle: $n+5$
 - Takes 2 frames to update without cycle, and 3 frames otherwise
-<!-- TODO: add examples -->
-- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309036414), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309036347), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309036504) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309036241)
 
 ### Decimal (Base $10$)
 
@@ -1354,8 +1353,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - 2-way: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 14 \ceil*{\log_{10} n} - 7$
   - 2-way+cycle: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 14 \ceil*{\log_{10} n} - 8$
 - Takes 3 frames to update
-<!-- TODO: add examples -->
-- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309037356), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309037285), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309037105) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309037186)
 
 ### Binary (Base $2$)
 
