@@ -548,7 +548,7 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
 ### Output value calculation
 
-These are the steps used by the game to determine the value attached to the output signal created by logic gates. For more information about signals, see \nameref{signals}
+These are the steps used by the game to determine the value attached to the output signal created by logic gates. For more information about signals, see \nameref{signals}.
 
 1) The gate checks if its conditions are met. If they aren't, the gate doesn't create an output
 2) The gate adds up the values of all of its inputs and clamps the result to the $[-1, 1]$ range
@@ -568,7 +568,7 @@ $$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\
 
 #### Example
 
-An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output
+An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output.
 
 ## Math blocks
 
@@ -576,7 +576,7 @@ Math blocks are a group of blocks that take a set of numeric inputs and perform 
 
 ### Comparison Logic Gate
 
-Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode. They are also sometimes referred to as comparators
+Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode. They are also sometimes referred to as comparators.
 
 Its settings are shown in figure \ref{fig:Comparator} and are as follows:
 
@@ -956,7 +956,7 @@ $$\operatorname{color}(x) = \begin{cases}
 
 # Common block settings
 
-These are settings shared by all blocks in the game that can be activated with input signals
+These are settings shared by all blocks in the game that can be activated with input signals.
 
 ## Keybinds
 
