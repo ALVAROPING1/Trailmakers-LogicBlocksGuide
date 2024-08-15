@@ -106,9 +106,11 @@ header-includes: |
     % Images location
     \graphicspath{ {img/} }
 
-    % Ceiling function
     \usepackage{mathtools}
+    % Ceiling function
     \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+    % Absolute value function
+    \DeclarePairedDelimiter{\abs}{|}{|}
 
     % Title command
     \makeatletter
@@ -126,6 +128,10 @@ header-includes: |
         \end{center}
     }
     \makeatother
+
+    % Maximum non-infinity IEEE float value
+    \newcommand{\maxFloat}{(2 - 2^{-37})}
+    \newcommand{\maxFloatApprox}{3.403 \cdot 10^{38}}
     ```
 ---
 
@@ -141,7 +147,7 @@ The goal of this document is to explain the logic system in the game [\underline
 
 Logic blocks are a group of blocks that allow to obtain and process information, which in turn can be used to automate tasks or create more complex control schemes for creations, and more generally, perform any finite sequence of steps (known as executing an algorithm).
 
-All logic blocks, with the exception of distance sensors, have a display with an arrow pointing away from the center of the block representing the value of their output signal. This arrow is empty when there is no output ($0$ value), and green/red when the output is positive/negative. Blocks which can take other signals as inputs (\nameref{logic-gates}) additionally have a second arrow pointing to the center of the block representing the input signals, which works like the output arrow but using the value of the sum of the input signals.
+All logic blocks, with the exception of distance/gravity sensors and number displays, have a display with an arrow pointing away from the center of the block representing the value of their output signal. This arrow is empty when there is no output ($0$ value), and green/red when the output is positive/negative. On gravity sensors, this arrow is replaced with a weight icon, which has the same functionality (although it is white when there is no output). Blocks which can take other signals as inputs (\nameref{logic-gates} and \nameref{math-blocks}), with the exception of number displays, additionally have a second arrow pointing to the center of the block representing the input signals, which works like the output arrow but using the value of the sum of the input signals.
 
 Note: due to a bug, only up to 5 characters can be used on any configurable block value. Even though the UI rounds values 1-2 values, the values used are always the values that were typed.
 
@@ -157,11 +163,10 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
-- Trigger
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -210,16 +215,15 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 - Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
   - Outside of high seas and when the wave setting is set to disabled, both options are equivalent
   - On space sector, it's a "MAX" value while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
-- Trigger
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the altitude is above the configured value
   - Below: sends an output when the altitude is below the configured value
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -270,11 +274,10 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
-- Trigger
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -316,6 +319,58 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
     \label{fig:SensorSpeed}
 \end{figure}
 
+### Gravity Sensor
+
+Gravity sensors measure the gravity strength at the position of the block. They have a display which shows the currently measured gravity as a bar indicator, which is full when the gravity is higher than or equal to the trigger gravity and empty when the gravity is $0$.
+
+Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
+
+- Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the gravity strength is above the configured value
+  - Below: sends an output when the gravity strength is below the configured value
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{gravity_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)    at (-1.5, 16.5) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)   at (21.5, 16.5) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (threshold)    at (-1.5, 2.1)  {Threshold};
+            \node[annotation, below] (output_value) at (9.0, -1.5)  {Output value};
+            \node[annotation, right] (trigger)      at (21.5, -2.0) {Trigger below (on/off),\\currently off\\(normal trigger)};
+
+            % Arrows
+            \draw[arrow] (output_on.east)     -- (5.25, 16.5);
+            \draw[arrow] (output_off.west)    -- (14.5, 16.5);
+            \draw[arrow] (threshold.east)     -- (0.2, 2.1);
+            \draw[arrow] (output_value.north) -- (9.0, 0.45);
+            \draw[arrow] (trigger.west)       -- (14.6, 1.75);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Gravity Sensor settings}
+    \label{fig:SensorGravity}
+\end{figure}
+
 ### Angle Sensor
 
 Angle sensors measure the angle of the block relative to the direction of highest slope of the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the angle. The arrow will always try to point up no matter the orientation of the block (will point in the direction of highest slope of the plane it is in).
@@ -324,11 +379,10 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
-- Trigger
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -380,11 +434,10 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: value of the output signal created by the block, discussed in \nameref{signals}
-- Trigger
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -435,28 +488,14 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 - AND gate: all inputs are on
 - OR gate: at least one input is on
 - XOR gate: only one input is on
+- NOR gate: all inputs are off
 
 Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
-- Keybinds: green (positive) and red (negative), they act as the same input (an and gate with a green and a red keybind will send an output even when just pressing one of the 2 keybinds), but act as a different input for each seat (an and gate with a keybind will require someone in each seat that has control over it pressing the keybind to send an output)
-  - Toggle: toggles **inputs**
-    - When the sum of the inputs goes from $0$ to a different value, multiple things happen depending on the new value:
-      1) If the opposite sign of the input is toggled on, it is toggled off instantly
-      2) If the sign of the input has toggle enabled, it is toggled: if it was off it turns on, and if it was on it turns off (which will happen on the falling edge of the input). Otherwise, the gate is enabled normally
-    - To toggle the output instead of the inputs, make the signal go through another gate with the toggle
-- Timers: allows to time the activation/deactivation of the block
-  - The timers start as soon as the gate receives a **single input**, even if the gate doesn't meet the conditions to send an output
-  - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one you wrote rounded to 8 decimal places. Due to a bug only up to 5 characters can be written, so depending on which value you write the number of decimals which can be used will vary
-  - All values are specified in seconds
-  - Delay: amount of time between the block receives an input and the block activates
-    - Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated once per physics' frame at the same time
-  - Duration (previously active time): amount of time before the block automatically deactivates after it has been activated. A value of $0$ indicates that it will never deactivate automatically
-    - Shortest pulse length is $1$ frame ($1/60 s$), values smaller than this won't activate the block
-  - Pause (previously inactive time): amount of time before the block reactivates and the duration timer is restarted after the duration timer expires. A value of $0$ indicates that the block will never reactivate automatically. Ignored if the duration timer is $0$
-  - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is 0 it ends after the duration ends)
-  - In the case of delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames. This value can be calculated by doing $\text{seconds} \cdot 60$. If this number is not an integer, it will be rounded down to the nearest integer. If this number is an integer however, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames. Pause timers aren't subject to this, and the exact time in seconds is used for them
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Output value: multiplier of output signal created by the block, explained in \nameref{output-value-calculation}
-- Outputs
 
 \begin{figure}[H]
     \centering
@@ -509,12 +548,12 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
 ### Output value calculation
 
-These are the steps used by the game to determine the value attached to the output signal created by logic gates. For more information about signals, see \nameref{signals}
+These are the steps used by the game to determine the value attached to the output signal created by logic gates. For more information about signals, see \nameref{signals}.
 
 1) The gate checks if its conditions are met. If they aren't, the gate doesn't create an output
 2) The gate adds up the values of all of its inputs and clamps the result to the $[-1, 1]$ range
    - Values smaller than $-1$ are replaced with $-1$, and values bigger than $1$ with $1$
-3) The gate multiplies the result by its output value setting
+3) The gate multiplies the result by its output value setting. For NOR gates, their setting replaces the result (which would otherwise always be $0$)
 4) The gate sends the result as its output value
 
 This process can be described with the following formula:
@@ -529,55 +568,482 @@ $$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\
 
 #### Example
 
-An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output
+An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 \cdot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output.
+
+## Math blocks
+
+Math blocks are a group of blocks that take a set of numeric inputs and perform some operation to get an output based on their values, either numeric or boolean. They are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range before interpreting it.
+
+### Comparison Logic Gate
+
+Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode. They are also sometimes referred to as comparators.
+
+Its settings are shown in figure \ref{fig:Comparator} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+  - Due to a bug, the duration timer is ignored unless pause isn't 0
+- Threshold: value used for the right hand side of the comparison
+- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Comparison mode: comparison operation to perform. Possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
+  - The total input is rounded to 3 decimal places before performing the comparison
+- Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=35em]{comparison_logic_gate}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.0, 16.4)   {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.0, 16.4)   {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (red_keybind)   at (-1.0, 4.6)    {Red keybind};
+            \node[annotation, left]  (green_keybind) at (-1.0, 9.5)    {Green keybind};
+            \node[annotation, below] (toggle)        at (0.35, -1.5)   {Green/red toggle};
+            \node[annotation, below] (pause)         at (9.25, -1.5)   {Pause};
+            \node[annotation, below] (duration)      at (6.75, -1.5)   {Duration};
+            \node[annotation, below] (delay)         at (4.25, -1.5)   {Delay};
+            \node[annotation, below] (threshold)     at (12.0, -1.5)   {Threshold};
+            \node[annotation, below] (comparison_mode) at (16.25, -1.5) {Comparison mode};
+            \node[annotation, right] (clamp)         at (21.0, 0.0)    {Clamp input};
+            \node[annotation, right] (output_value)  at (21.0, 9.5)    {Output value};
+
+            % Arrows
+            \draw[arrow] (output_on.east)            -- (9.6, 16.4);
+            \draw[arrow] (output_off.west)           -- (13.1, 16.4);
+            \draw[arrow] (red_keybind.east)          -- (0.1, 4.6);
+            \draw[arrow] (green_keybind.east)        -- (3.7, 5.75);
+            \draw[arrow] (toggle.north)              -- (0.35, 1.7);
+            \draw[arrow] (toggle.north)              -- (3.7, 2.25);
+            \draw[arrow] (pause.north)               -- (9.25, 0.3);
+            \draw[arrow] (duration.north)            -- (7.5, 2.1);
+            \draw[arrow] (delay.north)               -- (7.5, 4.1);
+            \draw[arrow] (threshold.north)       to[*|] (11.25, 1.25);
+            \draw[arrow] (comparison_mode.north) to[*|] (15.25, 2.2);
+            \draw[arrow] (clamp.west)                -- (18.3, 2.25);
+            \draw[arrow] (output_value.west)         -- (14.05, 5.5);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Comparator Logic Gate settings}
+    \label{fig:Comparator}
+\end{figure}
+
+### Accumulator
+
+Accumulators store and output a numeric value, and allow to increment/decrement it between some bounds. They are always initialized to the value closest to $0$ within the defined bounds. They have a display which shows the currently stored value as a bar indicator, which is full when the value is the maximum and empty when it is the minimum. Additionally, the bar indicator is white when the value is 0, and green/red when it is positive/negative.
+
+Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Value bounds: minimum/maximum value that can be stored, the stored value will be clamped to the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
+- Scale: rate of change of the stored value, used to scale the value of the input
+- Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
+  - Due to a bug, enabling this causes the accumulator to always be initialized to $0$ even if it's outside of the value bounds. In these cases, the first input will make the value go to the closest to $0$ within the bounds
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=33em]{accumulator}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.0, 16.0) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.0, 16.0) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (red_keybind)   at (-1.0, 4.6)  {Red keybind};
+            \node[annotation, left]  (green_keybind) at (-1.0, 9.25) {Green keybind};
+            \node[annotation, below] (toggle)        at (0.35, -1.5) {Green/red toggle};
+            \node[annotation, below] (pause)         at (9.85, -1.5) {Pause};
+            \node[annotation, below] (duration)      at (7.25, -1.5) {Duration};
+            \node[annotation, below] (delay)         at (4.65, -1.5) {Delay};
+            \node[annotation, below] (bounds)        at (13.0, -1.5) {Value bounds};
+            \node[annotation, below] (scale)         at (16.1, -1.5) {Scale};
+            \node[annotation, right] (steps)         at (21.0, 0.0)  {Use steps};
+
+            % Arrows
+            \draw[arrow] (output_on.east)            -- (9.95, 16.0);
+            \draw[arrow] (output_off.west)           -- (13.5, 16.0);
+            \draw[arrow] (red_keybind.east)          -- (0.1, 4.6);
+            \draw[arrow] (green_keybind.east)        -- (3.9, 5.75);
+            \draw[arrow] (toggle.north)              -- (0.35, 1.7);
+            \draw[arrow] (toggle.north)              -- (3.9, 2.25);
+            \draw[arrow] (pause.north)               -- (9.85, 0.3);
+            \draw[arrow] (duration.north)            -- (8.0, 2.1);
+            \draw[arrow] (delay.north)               -- (8.0, 4.1);
+            \draw[arrow] (bounds.north)              -- (12.0, 1.25);
+            \draw[arrow] (bounds.north)              -- (14.0, 1.25);
+            \draw[arrow] (scale.north)               -- (16.1, 1.25);
+            \draw[arrow] (steps.west)                -- (18.0, 2.25);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Accumulator settings}
+    \label{fig:Accumulator}
+\end{figure}
+
+### Number Display
+
+Number displays output the sum of their inputs, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range), and display it with an optional rounding.
+
+Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled" (displays $2$ decimals), "nearest", "floor" (closest smaller integer), and "ceil" (closest bigger integer)
+  - If the number is outside of the $[-1000, 1000]$ range, it's always displayed in scientific notation with $1$ decimal of precision
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=28em]{number_display}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.5, 16.0) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.5, 16.0) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (red_keybind)   at (-1.5, 4.5)  {Red keybind};
+            \node[annotation, below] (green_keybind) at (7.0, -1.5)  {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (11.25, -1.5) {Pause};
+            \node[annotation, below] (duration)      at (14.5, -1.5) {Duration};
+            \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
+            \node[annotation, right] (rounding)      at (21.5, 3.1)  {Rounding};
+
+            % Arrows
+            \draw[arrow] (output_on.east)          -- (8.5, 16.0);
+            \draw[arrow] (output_off.west)         -- (13.0, 16.0);
+            \draw[arrow] (red_keybind.east)        -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.north)     -- (7.0, 3.3);
+            \draw[arrow] (toggle.north)            -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)            -- (4.5, 2.0);
+            \draw[arrow] (pause.north)         to[*|] (11.5, 0.3);
+            \draw[arrow] (duration.north)          -- (12.5, 2.4);
+            \draw[arrow] (delay.west)              -- (12.5, 5.25);
+            \draw[arrow] (rounding.west)           -- (16.65, 3.1);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Number Display settings}
+    \label{fig:NumberDisplay}
+\end{figure}
+
+### Arithmetics Logic Block
+
+Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one. They have a display which shows the currently selected operation.
+
+Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Constant: constant value to use as the first operand
+- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
+  - Attempting to perform a division by $0$ results in an output of $0$
+  - If the operation is addition or subtraction, the constant value is used as output when there are no inputs. For other operations, $0$ is used instead
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=33em]{arithmetic_logic_block}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.0, 16.0) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.0, 16.0) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (red_keybind)   at (-1.0, 4.5)  {Red keybind};
+            \node[annotation, left]  (green_keybind) at (-1.0, 9.25) {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (9.9, -1.5)  {Pause};
+            \node[annotation, below] (duration)      at (7.25, -1.5) {Duration};
+            \node[annotation, below] (delay)         at (4.65, -1.5) {Delay};
+            \node[annotation, below] (constant)      at (12.5, -1.5) {Constant};
+            \node[annotation, below] (operation)     at (15.75, -1.5) {Operation};
+
+            % Arrows
+            \draw[arrow] (output_on.east)          -- (9.35, 16.0);
+            \draw[arrow] (output_off.west)         -- (13.05, 16.0);
+            \draw[arrow] (red_keybind.east)        -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.east)      -- (4.0, 5.5);
+            \draw[arrow] (toggle.north)            -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)            -- (4.0, 2.0);
+            \draw[arrow] (pause.north)         to[*|] (10.25, 0.3);
+            \draw[arrow] (duration.north)          -- (8.25, 2.1);
+            \draw[arrow] (delay.north)             -- (8.25, 4.1);
+            \draw[arrow] (constant.north)      to[*|] (12.4, 1.25);
+            \draw[arrow] (operation.north)     to[*|] (15.5, 2.2);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Arithmetics Logic Block settings}
+    \label{fig:ArithmeticsBlock}
+\end{figure}
+
+### Hue Light Panel
+
+Hue light panels are lights with configurable color determined from their input value.
+
+Its settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Saturation: saturation of the color of the light. Ignored when the input value is negative
+- Brightness: brightness of the color of the light
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=28em]{hue_light_panel}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (green_keybind) at (-1.0, 11)   {Green keybind};
+            \node[annotation, left]  (toggle)        at (-1.0, 3.75) {Green toggle};
+            \node[annotation, below] (pause)         at (8.0, -1.5)  {Pause};
+            \node[annotation, below] (duration)      at (4.5, -1.5)  {Duration};
+            \node[annotation, below] (delay)         at (1.5, -1.5)  {Delay};
+            \node[annotation, below] (saturation)    at (11.5, -1.5) {Saturation};
+            \node[annotation, right] (brightness)    at (21.0, 4.5)  {Brightness};
+
+            % Arrows
+            \draw[arrow] (green_keybind.east)  -- (0.1, 8.0);
+            \draw[arrow] (toggle.east)         -- (0.1, 3.75);
+            \draw[arrow] (pause.north)     to[*|] (8.5, 0.5);
+            \draw[arrow] (duration.north)      -- (5.9, 3.0);
+            \draw[arrow] (delay.north)         -- (5.9, 5.75);
+            \draw[arrow] (saturation.north)    -- (11.5, 1.9);
+            \draw[arrow] (brightness.west)     -- (15.8, 4.5);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Hue Light Panel settings}
+    \label{fig:HueLightPanel}
+\end{figure}
+
+#### Color Calculation
+
+The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure \ref{fig:HueLightPanelColor} shows an example of the resulting colors for inputs in the range $[-1, 1]$ with $\text{saturation} = \text{brightness} = 1$. Inputs smaller than $-1$ result in white, while inputs greater than $1$ result in the $[0, 1]$ range being repeated.
+
+$$\operatorname{color}(x) = \begin{cases}
+    \operatorname{HSV}(360(x \bmod{1}), S, B)          & x > 0 \\
+    \text{Off (Black)}                                 & x = 0 \\
+    \operatorname{greyscale}(\min(\abs{x}, 1) \cdot B) & x < 0 \\
+\end{cases}$$
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \pgfmathsetlengthmacro\MajorTickLength{
+          \pgfkeysvalueof{/pgfplots/major tick length} * 2
+        }
+        \pgfmathsetlengthmacro\MinorTickLength{
+          \pgfkeysvalueof{/pgfplots/minor tick length} * 2
+        }
+        \begin{axis}[
+            height=2.5cm,
+            width=\linewidth,
+            axis on top=true,
+            axis y line=none,
+            xtick distance=1/6,
+            every x tick/.style={thick},
+            tick align=center,
+            major tick length=\MajorTickLength,
+            minor tick length=\MinorTickLength,
+            minor tick num=1,
+            xmin=-1, xmax=1,
+            ymin=-0.1, ymax=0.1,
+            samples=500,
+            xlabel={Input value},
+        ]
+            \addplot[
+                mesh,
+                line width=1cm,
+                domain=0:1,
+                variable=\u,
+                mesh/color input=explicit mathparse,
+                point meta={symbolic={Hsb=deg(u * 2 * pi),1,1}}
+            ] ({u},0);
+            \addplot[
+                mesh,
+                line width=1cm,
+                domain=-1:0,
+                variable=\u,
+                mesh/color input=explicit mathparse,
+                point meta={symbolic={Hsb=0,0,-u}}
+            ] ({u},0);
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Hue light panel color with $\text{saturation} = \text{brightness} = 1$ for inputs in the range $[-1, 1]$}
+    \label{fig:HueLightPanelColor}
+\end{figure}
+
+\clearpage
+
+# Common block settings
+
+These are settings shared by all blocks in the game that can be activated with input signals.
+
+## Keybinds
+
+Keybinds are the most common input to activate a block, and all blocks that can be activated have either a single keybind (green) or two keybinds (green and red).
+
+- All keybinds on a single block act as a single input for each seat
+  - An and gate with a green and a red keybind configured will send an output when just pressing one of the 2 keybinds, but will require someone in each seat that has control over it pressing the keybind to send an output
+  - If no keybinds are configured, the input isn't taken into account. This only makes a difference in AND gates, which would otherwise be impossible to trigger without keybinds
+- The green keybind has a positive value while the red keybind has a negative one. For more information about input values, see \nameref{signals}
+  - For input methods that don't support analog inputs (keyboards and normal buttons on controllers), the value is always $1$
+  - For input methods that support analog inputs (controller joysticks and triggers), the value is the one given by the input method normalized to the range $[0, 1]$
+
+## Toggle
+
+Toggle allows to make inputs alternate the activation state of a block between on and off without requiring a continuous input signal to remain active.
+
+- There is a toggle setting associated with positive inputs (below the green keybind) and another with negative ones (below the red keybind)
+- Toggles **inputs**
+  - When the sum of the inputs goes from $0$ to a different value, multiple things happen depending on the new value:
+    1) If the opposite sign of the input is toggled on, it is toggled off instantly
+    2) If the sign of the input has toggle enabled, it is toggled: if it was off it turns on, and if it was on it turns off (which will happen on the falling edge of the input). Otherwise, the gate is enabled normally
+  - To toggle the output instead of the inputs, make the signal go through another gate with the toggle
+
+## Timers
+
+Timers are a group of settings that allow to automate the activation/deactivation of a block after a set amount of time.
+
+- Timers apply to the inputs of the block and are shared by all of them, and start as soon as the block receives a **single input**. For logic blocks, this still applies even if the block doesn't meet its conditions to send an output
+- The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one written rounded to 8 decimal places. Due to a bug, only up to 5 characters can be written, so depending on the exact value the number of decimals which can be used will vary
+- All values are specified in seconds
+- Delay: amount of time between the block receives an input and the block activates
+  - Note: each logic gate has an extra delay of $1/60 s$ due to the state of all the logic gates being updated once per physics' frame at the same time
+- Duration (previously active time): amount of time before the block automatically deactivates after it has been activated
+  - A value of $0$ indicates that it will never deactivate automatically
+  - Shortest pulse length is $1$ frame ($1/60 s$), values smaller than this won't activate the block
+- Pause (previously inactive time): amount of time before the block reactivates and the duration timer is restarted, after the duration timer expires
+  - A value of $0$ indicates that the block will never reactivate automatically
+  - It's ignored if the duration timer is $0$
+- The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is $0$ it ends after the duration ends)
+- In the case of the delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames, which can be calculated with $\text{seconds} \cdot 60$
+  - If this number is not an integer, it will be rounded down to the nearest integer
+  - If this number is an integer, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames
+  - Pause timers aren't subject to this, and the exact time in seconds is used for them
+
+\clearpage
 
 # Signals
 
 Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals.
 
-- Input/output value: value in the range $[-1, 1]$ attached to each signal.
-  - The green keybind has a positive value while the red keybind has a negative one
-    - For input methods that don't support analog inputs (keyboards and normal buttons on controllers), the value is always $1$
-    - For input methods that support analog inputs (controller joysticks and triggers), the value is the one given by the input method normalized to the range $[0, 1]$
-  - They are represented in scientific notation as $\pm a \cdot 10^b$ where $a$ can be any number such that $0 \leq a \leq 10$ with up to 7 decimals while $b$ can be any integer such that $-81 \leq b \leq -1$. If $a$ has more than 7 decimals, it will be rounded to 7 decimals.
+- Input/output value: value attached to each signal, usually in the range $[-1, 1]$.
+  - \nameref{math-blocks} are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range, instead they use the range $[-\maxFloat, \maxFloat] \approx [-\maxFloatApprox, \maxFloatApprox]$
+  - They are represented with a standard [\underline{IEEE 754 single-precision floating-point number}](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
 - Truthness value: value that determines if a signal is on or off
-  - On the steam version, a signal is on if its associated value is not $0$
-  - On other versions, the truthness depends whether the source that created it is triggered or not
+  - On the steam version, a signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
+  - On other versions, the truthness depends whether the source that created it is triggered or not, but an off signal is always interpreted as having a value of $0$
 
-When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind additionally use the absolute value before interpreting the resulting value, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
+When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the gyro stabilizer and hue light panels, additionally use the absolute value before interpreting it, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
 
-- For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the output value, resulting in faster speeds with fractional input values for the same final angle
+- For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the input value, resulting in faster speeds with fractional input values for the same final angle
 - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{InputValueMultiplier} for more information
 - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
 \begin{table}[H]
     \centering
-    \begin{tabular}{p{6cm}p{3cm}}
+    \begin{tabular}{p{6cm}p{7.1cm}}
         \toprule
         Block & Value modified \\
         \midrule
         Engines & Max speed and acceleration (torque) \\
-        Thrusters, gimbals, propellers, boat engines, and quantum rudder & Power (thrust) \\
+        Thrusters, gimbals, propellers, boat engines, and quantum rudders & Power (thrust) \\
         Rotating servos, hinges, and wings with control surfaces (without hold position) & Angle \\
         Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers & Speed \\
         Tone generators & Volume \\
-        Logic gates & Output value \\
+        Logic gates and math blocks & Output value (see \nameref{logic-gates} and \nameref{math-blocks}) \\
+        Hue light panels & Color (see \nameref{hue-light-panel}) \\
         Other & None \\
         \bottomrule
     \end{tabular}
-    \caption{Value modified by the output value for each block}
+    \caption{Value modified by the input value for each block}
     \label{table:InputValueBlocks}
 \end{table}
+
+\clearpage
 
 # Useful Circuits
 
 This section contains commonly used logic circuits and how to make them, to aid in the design and understanding of more complex logic circuits.
-
-## NOR/NOT Gate
-
-- Inverts the state of the input
-- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
-- If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
-- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
 
 ## Pulse generator/Rising edge detector
 
@@ -596,19 +1062,23 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 ## Counter
 
-- Can store the value of a variable with $n$ possible values
+- Stores the value of a variable with $n$ possible (discrete) values
 - Depending on how it's made, it can be 1 or 2 way and have cycle or not
   - 1-way: the value can only be increased
   - 2-way: the value can be both increased and decreased
   - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
-  - Base designs are 1-way without cycle
+  - Base designs described are 1-way without cycle, with the modifications needed to implement 2-way or cycle being explained afterwards
 - The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
 - There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is least complex depends on the situation
+  - The general circuit and decimal methods can be implemented using logic gates or accumulators. Generally accumulator-based counters are less complex, but logic gate based designs will still be described as they can be less complex under some circumstances (like needing a counter which only changes its value when a function of its current value is true)
 
 ### General Circuit (Base $N$)
 
+#### Logic Gates Implementation
+
 - $n = \text{amount of cells}$
 - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
+- Diagram of the circuit:
 \begin{figure}[H]
     \makebox[\textwidth][c]{
     \begin{tikzpicture}
@@ -688,7 +1158,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
         \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
     \end{tikzpicture}
     }
-    \caption{Diagram of the general method counter}
+    \caption{Diagram of the general method counter (logic gates implementation)}
     \label{fig:CounterGeneral}
 \end{figure}
 - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
@@ -702,11 +1172,39 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - Takes 3 frames to update
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134486907), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134487841), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2075055361) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134489564)
 
+#### Accumulators Implementation
+
+- $n = \text{amount of comparators}$
+- The output is encoded as the active comparator
+- Made by choosing $n$ equally spaced numbers, configuring an accumulator to use steps and setting its minimum, maximum, and scale settings to go through those numbers as the value is changed, and connecting the accumulator to $n$ comparators set to equality with each of the chosen numbers
+  - The minimum/maximum must be the minimum/maximum chosen numbers, and the scale their spacing. Additionally, in order for the comparators to work, $\text{spacing} \geq 0.001$ must hold
+  - If $\text{minimum} \leq 0 \leq \text{maximum}$, $0$ should be within the chosen numbers. Otherwise, the counter needs to be pushed to its minimum/maximum value to initialize it
+  - For simplicity, the integers from $0$ to $n-1$ are usually used by setting the minimum/maximum values to $0$/$n-1$ respectively and the scale to $1$, but other configurations can be useful in certain circumstances
+    - Using a negative minimum value allows the initial value to not be the lowest value, which might be useful for 2-way counters
+    - Using (positive) scale values closer to $0$ allows to increase the amount of stored values beyond $101$
+    - Using different minimum/maximum values might reduce the complexity if analog value outputs are wanted by avoiding having to perform transformation of the value ranges
+  - The value can be increased/decreased by sending a $\pm 1$ input to the accumulator (the circuit is the same for 1 and 2-way)
+  - In some cases, it might be useful to not enable use steps and set the scale to $60 \cdot \text{spacing}$. This allows to change the stored value on each frame, but requires the input to come from a  1 frame pulse generator to get the normal input behaviour
+- To add cycle, connect the comparator with the biggest threshold to an AND gate with the positive accumulator input as its second input. Connect that AND gate to an arithmetic logic block set to multiplication with a $-1000$ constant and $0.02$ duration, and that arithmetic logic block to the accumulator
+  - The normal input to the accumulator must come from a 1 frame pulse generator
+  - If using the circuit as 2-way, repeat the process with the comparator with the smallest threshold and the negative input of the accumulator. The AND gate should have an additional $-2$ always on input (which can be achieved with an arithmetic logic block set to addition with a $-1000$ constant). The arithmetic logic block and input pulse generator can be reused, using negative inputs to reduce the value
+- Complexity
+  - 1-way: $n+1$
+  - 1-way+cycle: $n+4$
+  - 2-way: $n+1$
+  - 2-way+cycle: $n+5$
+- Takes 2 frames to update without cycle, and 3 frames otherwise
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309036414), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309036347), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309036504) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309036241)
+
 ### Decimal (Base $10$)
 
-- $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_{10} n}$
+#### Logic Gates Implementation
+
+- Works best when $n$ is of the form $c \cdot 10^k$ where $c$ is an integer in the range $[1, 9]$ and k is any positive integer. If it isn't, more gates are needed to cap the value at $n$
+- $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Diagram of the circuit:
 \begin{figure}[H]
     \makebox[\textwidth][c]{
     \begin{tikzpicture}
@@ -818,7 +1316,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
         \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
     \end{tikzpicture}
     }
-    \caption{Diagram of the decimal method counter}
+    \caption{Diagram of the decimal method counter (logic gates implementation)}
     \label{fig:CounterDecimal}
 \end{figure}
 - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
@@ -828,18 +1326,41 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - Has a complexity of $n$ gates
 - Requires a startup pulse to one of the toggled OR gates on each cell to work (achieved with a 1 frame pulse generator)
 - Complexity
-  - 1-way: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
-  - 1-way+cycle: $2 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 20 \ceil{\log_{10} n} - 19$
-  - 2-way: $3 \ceil[\Big]{ \frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
-  - 2-way+cycle: $3 \ceil[\Big]{\frac{n}{10^{\ceil{\log_{10} n} - 1}}} + 30 \ceil{\log_{10} n} - 28$
+  - 1-way: $2 \ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 20 \ceil*{\log_{10} n} - 19$
+  - 1-way+cycle: $2 \ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 20 \ceil*{\log_{10} n} - 19$
+  - 2-way: $3 \ceil*{ \frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 30 \ceil*{\log_{10} n} - 28$
+  - 2-way+cycle: $3 \ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 30 \ceil*{\log_{10} n} - 28$
 - Takes 3 frames to update with cycle and 4 frames otherwise
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134491881), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134492935), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134494676) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134496082)
+
+#### Accumulator Implementation
+
+- Works best when $n$ is of the form $c \cdot 10^k$ where $c$ is an integer in the range $[1, 9]$ and k is any positive integer. If it isn't, more gates are needed to cap the value at $n$
+- $n = 10^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_{10} n}$
+- Each cell is the general circuit implemented with accumulators for $n=10$ with cycle and without use steps, except for the last cell which can have any value $2 \leq n \leq 10$ and doesn't need to have cycle
+- The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Made by connecting the last comparator of each cell to the AND gate from the cycle circuit of all following cells, and the AND gate from the cycle circuit of each cell to the accumulator of the next cell.
+  - Requires a different input circuit: the positive input should be in a 1 frame pulse generator connected to an AND gate connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells. All comparators except the last on each cell should be connected to an OR gate connected to the AND gate from the input circuit
+- To add cycle, add cycle to the last cell and remove all the gates in the input circuit except the pulse generator, which should be connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells
+- To make it 2-way, duplicate the input circuit but connect all comparators except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first comparator of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
+  - The AND gate from the second input circuit should have a $-1$ output value
+- Might require a decoder (unless you want to show numbers on a screen)
+  - To create it, take $n$ AND gates and assign a different combination of 1 comparator from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
+  - Has a complexity of $n$ gates
+- Complexity
+  - 1-way: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 13 \ceil*{\log_{10} n} - 9$
+  - 1-way+cycle: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 13 \ceil*{\log_{10} n} - 9$
+  - 2-way: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 14 \ceil*{\log_{10} n} - 7$
+  - 2-way+cycle: $\ceil*{\frac{n}{10^{\ceil*{\log_{10} n} - 1}}} + 14 \ceil*{\log_{10} n} - 8$
+- Takes 3 frames to update
+- Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309037356), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309037285), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309037105) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=3309037186)
 
 ### Binary (Base $2$)
 
 - Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
-- $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil{\log_2 n}$
+- $n = 2^\text{amount of cells}; \text{ amount of cells} = \ceil*{\log_2 n}$
 - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Diagram of the circuit:
 \begin{figure}[H]
     \makebox[\textwidth][c]{
     \begin{tikzpicture}
@@ -946,18 +1467,16 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gates. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
 - Might require a decoder
   - To create it, add a NOT gate to each cell and replace the NAND gate of the input circuit with an OR gate like in the 2-way version (if using the 1-way versions). Then, take $n$ AND gates and assign each of them a different combination of either the OR or NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
-  - Has a complexity of $\ceil{\log_2 n} + n - 1$ for the 1-way version, $\ceil{\log_2 n} + n$ for the 1-way+cycle version and $n$ for the 2-way versions
+  - Has a complexity of $\ceil*{\log_2 n} + n - 1$ for the 1-way version, $\ceil*{\log_2 n} + n$ for the 1-way+cycle version and $n$ for the 2-way versions
 - Complexity
-  - 1-way: $2 \ceil{\log_2 n} + 3$
-  - 1-way+cycle: $2 \ceil{\log_2 n}$
-  - 2-way: $4 \ceil{\log_2 n} + 4$
-  - 2-way+cycle: $4 \ceil{\log_2 n}$
+  - 1-way: $2 \ceil*{\log_2 n} + 3$
+  - 1-way+cycle: $2 \ceil*{\log_2 n}$
+  - 2-way: $4 \ceil*{\log_2 n} + 4$
+  - 2-way+cycle: $4 \ceil*{\log_2 n}$
 - Takes 3 frames to update for 1-way+cycle and 4 frames otherwise
 - Example blueprints: [\underline{1-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134497489), [\underline{1-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134498845), [\underline{2-way}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500019) and [\underline{2-way+cycle}](https://steamcommunity.com/sharedfiles/filedetails/?id=2134500705)
 
 ### When to use each method
-
-- Calculated for $n \geq 3$, for $n = 2$ a latch is always best
 
 \begin{table}[H]
     \centering
@@ -968,93 +1487,58 @@ This section contains commonly used logic circuits and how to make them, to aid 
         % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
         \rotatebox[origin=c]{90}{\thead{Without cycle}}
         &
-        Doesn't require a decoder:
-        \begin{itemize}
-            \item For $n \leq 3$ use the general circuit
-            \item For $n > 3$ use the binary circuit
-        \end{itemize}
         Doesn't require an individual decoder:
-        \begin{itemize}
-            \item For $n \leq 5$ use the general circuit
-            \item For $n > 5$ use the binary circuit
-        \end{itemize}
-        Requires an individual decoder:
-        \begin{itemize}
-            \item For $n \leq 14$ or $n = 17$ use the general circuit
-            \item For $n > 14$ and $n \neq 17$ use the binary circuit
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 12$):
-        \begin{itemize}
-            \item For $n \leq 12$ use the general circuit
-            \item For $n > 12$ use the decimal circuit
-            \newline
-        \end{itemize}
-        &
-        Doesn't require a decoder:
-        \begin{itemize}
-            \item For $n \leq 5$ use the general circuit
-            \item For $n > 5$ use the binary circuit
-        \end{itemize}
-        Doesn't require an individual decoder:
-        \begin{itemize}
-            \item For $n \leq 5$ use the general circuit
-            \item For $n > 5$ use the binary circuit
-        \end{itemize}
-        Requires an individual decoder:
         \begin{itemize}
             \item For $n \leq 10$ use the general circuit
             \item For $n > 10$ use the binary circuit
             \newline
-            \newline
         \end{itemize}
-        Show values directly on a screen (only numbers for $n > 16$):
+        Show values directly on a screen (only numbers for $n > 18$):
         \begin{itemize}
-            \item For $n \leq 10$ use the general circuit
-            \item For $10 < n \leq 16$ use the binary circuit
-            \item For $n > 16$ use the decimal circuit
+            \item For $n \leq 18$ use the general circuit
+            \item For $n > 18$ use the decimal circuit
+        \end{itemize}
+        &
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item For $n \leq 23$ use the general circuit
+            \item For $n > 23$ use either the binary or decimal circuit
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 23$):
+        \begin{itemize}
+            \item For $n \leq 23$ use the general circuit
+            \item For $n > 23$ use the decimal circuit
         \end{itemize} \\
         \hline
         \rotatebox[origin=c]{90}{\thead{With cycle}}
         &
-        Doesn't require a decoder:
-        \begin{itemize}
-            \item Use the binary circuit
-        \end{itemize}
         Doesn't require an individual decoder:
         \begin{itemize}
             \item Use the binary circuit
+            \newline
+            \newline
+            \newline
+            \newline
+            \newline
         \end{itemize}
-        Requires an individual decoder:
+        Show values directly on a screen (only numbers for $n > 15$):
         \begin{itemize}
-            \item For $n \leq 11$ use the general circuit
-            \item For $n > 11$ use the binary circuit
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 12$):
-        \begin{itemize}
-            \item For $n < 12$ use the general circuit
-            \item For $n = 12$ use the binary circuit
-            \item For $n > 12$ use the decimal circuit
+            \item For $n \leq 15$ use the general circuit
+            \item For $n > 15$ use the decimal circuit
             \newline
         \end{itemize}
         &
-        Doesn't require a decoder:
-        \begin{itemize}
-            \item Use the binary circuit
-        \end{itemize}
         Doesn't require an individual decoder:
         \begin{itemize}
-            \item Use the binary circuit
-        \end{itemize}
-        Requires an individual decoder:
-        \begin{itemize}
-            \item For $n \leq 3$ or $n = 5$ use the general circuit
-            \item For $n = 4$ or $n > 5$ use the binary circuit
+            \item For $n = 4$, $n = 8$, or $11 < n \leq 32$ use the binary circuit
+            \item For $4 < n \leq 7$ or $8 < n \leq 11$ use the general circuit
+            \item For $n > 32$ use either the binary or decimal circuit
         \end{itemize}
         Show values directly on a screen (only numbers for $n > 17$):
         \begin{itemize}
-            \item For $n \leq 3$ or $n = 5$ use the general circuit
-            \item For $n = 4$ or $5 < n \leq 17$ use the binary circuit
+            \item For $n \leq 17$ use the general circuit
             \item For $n > 17$ use the decimal circuit
+            \newline
         \end{itemize} \\
         \hline
     \end{tabular}
@@ -1062,7 +1546,13 @@ This section contains commonly used logic circuits and how to make them, to aid 
     \label{table:CounterComparison}
 \end{table}
 
-Note: this is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, the fastest is the general and decimal with cycle circuits, followed by the 1-way binary circuit with cycle, then by the decimal circuit without cycle and lastly the binary circuit without cycle or with 2-way
+Notes:
+
+- Calculated for $n \geq 3$, for $n = 2$ a latch is always best
+- All mentions of the general and decimal circuits refer to the accumulator-based implementations
+- If an individual decoder is needed, the general circuit is always best
+- For 2-way without an individual decoder, decimal and binary circuits are very close in terms of complexity. Use their complexity formulas to figure out which is best for your use case. If they have the same complexity, decimal is better due to being faster
+- This is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, refer to the circuits' descriptions to compare the speed for the needed use case
 
 ## No-Delay Signal Toggle
 
@@ -1096,12 +1586,27 @@ Note: this is just based on the amount of logic gates each circuit uses (unless 
 \end{figure}
 - [\underline{Example blueprint}](https://steamcommunity.com/sharedfiles/filedetails/?id=3054610284)
 
+\clearpage
+
+# Historical Circuits
+
+This section contains old circuits that were previously in \nameref{useful-circuits}, but have since been superseded by new blocks. They are kept here for historical reasons and in case they are seen in older circuits.
+
+## NOR/NOT Gate
+
+- Superseded by the NOR gate block
+- Inverts the state of the input
+- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
+- If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
+- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
+
 ## Feedback Loop
 
+- Superseded by accumulators
 - Allows to store an analog value in the range $[-1, 1]$
 - Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
 - Each frame the input is active, the stored value increases by the value of the input
-  - With a close to 0 output value as input, the circuit can be used to generate an analog output value
+  - With a close to 0 input value, the circuit can be used to generate an analog output value
 - One of the OR gates can be replaced with an XOR to add a reset input. In this case, the normal input should go to the OR gate only and the reset input must be 2 different signals connected to the XOR gate
   - Be aware that this method adds a 1 frame jitter to the stored signal
 
@@ -1282,7 +1787,7 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
     \hline
     \multicolumn{3}{c!{\vrule width 3pt}}{} & 0.490 & 06.005 & 0.06672222 & \multicolumn{3}{c}{} \\
     \cmidrule(l{-3pt}){4-6}
-    \caption{Raw data of the output value multiplier for hinges}
+    \caption{Raw data of the input value multiplier for hinges}
     \label{table:OutputValueMultiplierData}
 \end{longtable}
 
