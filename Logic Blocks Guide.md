@@ -657,7 +657,7 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
 - Value bounds: minimum/maximum value that can be stored, the stored value will be clamped to the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
 - Scale: rate of change of the stored value, used to scale the value of the input
 - Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
-  - Due to a bug, enabling this causes the accumulator to always be initialized to $0$ even if it's outside of the value bounds. In these cases, the first input will make the value go to the closest to $0$ within the bounds
+  - Due to a bug, if $0$ isn't within the allowed range, enabling this causes the first input to be ignored
 
 \begin{figure}[H]
     \centering
