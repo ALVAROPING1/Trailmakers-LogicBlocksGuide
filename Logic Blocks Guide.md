@@ -1011,8 +1011,7 @@ Signals are the method used to communicate different logic blocks between eachot
   - \nameref{math-blocks} are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range, instead they use the range $[-\maxFloat, \maxFloat] \approx [-\maxFloatApprox, \maxFloatApprox]$
   - They are represented with a standard [\underline{IEEE 754 single-precision floating-point number}](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
 - Truthness value: value that determines if a signal is on or off
-  - On the steam version, a signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
-  - On other versions, the truthness depends whether the source that created it is triggered or not, but an off signal is always interpreted as having a value of $0$
+  - A signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
 
 When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the gyro stabilizer and hue light panels, additionally use the absolute value before interpreting it, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
 
