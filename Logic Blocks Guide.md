@@ -583,7 +583,6 @@ Its settings are shown in figure \ref{fig:Comparator} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-  - Due to a bug, the duration timer is ignored unless pause isn't 0
 - Threshold: value used for the right hand side of the comparison
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Comparison mode: comparison operation to perform. Possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
