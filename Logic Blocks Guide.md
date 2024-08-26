@@ -1015,6 +1015,7 @@ When a block receives a set of inputs, it determines how it is activated based o
 
 - For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the input value, resulting in faster speeds with fractional input values for the same final angle
 - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{InputValueMultiplier} for more information
+- For rotating servos, an angle of "infinity" actually represents $360$ degrees
 - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
 \begin{table}[H]
     \centering
