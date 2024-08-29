@@ -993,6 +993,7 @@ Timers are a group of settings that allow to automate the activation/deactivatio
 - Pause (previously inactive time): amount of time before the block reactivates and the duration timer is restarted, after the duration timer expires
   - A value of $0$ indicates that the block will never reactivate automatically
   - It's ignored if the duration timer is $0$
+- During the delay/pause timers, the block is deactivated by overriding the input value with $0$
 - The order of the timers is as follows: delay $\rightarrow$ duration $\rightarrow$ pause $\rightarrow$ back to duration (if pause is $0$ it ends after the duration ends)
 - In the case of the delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames, which can be calculated with $\text{seconds} \cdot 60$
   - If this number is not an integer, it will be rounded down to the nearest integer
