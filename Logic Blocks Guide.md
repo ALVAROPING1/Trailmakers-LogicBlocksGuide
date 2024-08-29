@@ -1706,7 +1706,7 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
 
 \begin{longtable}{|c|c|c !{\vrule width 3pt} c|c|c !{\vrule width 3pt} c|c|c|}
     \hline
-    \thead{Output\\value} & \thead{Final\\angle} & \thead{Multiplier} & \thead{Output\\value} & \thead{Final\\angle} & \thead{Multiplier} & \thead{Output\\value} & \thead{Final\\angle} & \thead{Multiplier} \\
+    \thead{Input\\value} & \thead{Final\\angle} & \thead{Multiplier} & \thead{Input\\value} & \thead{Final\\angle} & \thead{Multiplier} & \thead{Input\\value} & \thead{Final\\angle} & \thead{Multiplier} \\
     \HLine{2pt}
     1.000 & 90.000 & 1.00000000 & 0.810 & 31.275 & 0.34750000 & 0.480 & 05.640 & 0.06266667 \\
     \hline
@@ -1787,7 +1787,7 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
     \multicolumn{3}{c!{\vrule width 3pt}}{} & 0.490 & 06.005 & 0.06672222 & \multicolumn{3}{c}{} \\
     \cmidrule(l{-3pt}){4-6}
     \caption{Raw data of the input value multiplier for hinges}
-    \label{table:OutputValueMultiplierData}
+    \label{table:InputValueMultiplierData}
 \end{longtable}
 
 \begin{figure}[H]
@@ -1810,7 +1810,7 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
         \end{axis}
     \end{tikzpicture}
     \caption{Graph of the multiplier for hinges as a function of the input value}
-    \label{fig:OutputValueMultiplierGraph}
+    \label{fig:InputValueMultiplierGraph}
 \end{figure}
 
 \clearpage
