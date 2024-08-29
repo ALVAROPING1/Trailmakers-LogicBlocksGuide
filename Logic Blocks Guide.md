@@ -961,7 +961,7 @@ These are settings shared by all blocks in the game that can be activated with i
 Keybinds are the most common input to activate a block, and all blocks that can be activated have either a single keybind (green) or two keybinds (green and red).
 
 - All keybinds on a single block act as a single input for each seat
-  - An and gate with a green and a red keybind configured will send an output when just pressing one of the 2 keybinds, but will require someone in each seat that has control over it pressing the keybind to send an output
+  - An AND gate with a green and a red keybind configured will send an output when just pressing one of the 2 keybinds, but will require someone in each seat that has control over it pressing the keybind to send an output
   - If no keybinds are configured, the input isn't taken into account. This only makes a difference in AND gates, which would otherwise be impossible to trigger without keybinds
 - The green keybind has a positive value while the red keybind has a negative one. For more information about input values, see \nameref{signals}
   - For input methods that don't support analog inputs (keyboards and normal buttons on controllers), the value is always $1$
