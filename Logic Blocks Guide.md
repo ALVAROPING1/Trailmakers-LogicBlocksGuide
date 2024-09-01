@@ -1016,6 +1016,7 @@ When a block receives a set of inputs, it determines how it is activated based o
 
 - For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the input value, resulting in faster speeds with fractional input values for the same final angle
 - Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{InputValueMultiplier} for more information
+- Due to a bug, close to 0 inputs in servos with hold position also result in lower speeds as well. See appendix \nameref{InputValueSpeed} for more information
 - For rotating servos, an angle of "infinity" actually represents $360$ degrees
 - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
 \begin{table}[H]
@@ -1811,6 +1812,81 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
     \end{tikzpicture}
     \caption{Graph of the multiplier for hinges as a function of the input value}
     \label{fig:InputValueMultiplierGraph}
+\end{figure}
+
+\clearpage
+
+# Input value to speed for servos with hold position {#InputValueSpeed}
+
+Due to a bug, the speed at which rotating servos with hold position rotate changes with the input value when small values are used. This section contains the speed multipliers used for many input values, found experimentally. Some notes about this process:
+
+- Speed is the speed required on a servo with an input value of $1$ to match the speed of a servo with a speed being tested and the given input value, with an error of $\pm 0.00005$ speed units for speeds lower than $1$ and an error of $\pm 0.0005$ otherwise
+  - To compare the speeds of the servos, they were run continuously for $3$ min and the final angle was compared
+  - Servos with a configured speed of $1$ and $2$ were tested, with other speeds being checked to verify the results
+- $f_a(x)$ represents the resulting speed of a servo with $a$ speed and $x$ input value
+- The resulting speed can be approximated by $\hat{f}_a(x) = \min(\frac{x}{0.0153}, a)$
+
+\begin{longtable}{|c|c !{\vrule width 3pt} c|c !{\vrule width 3pt} c|c !{\vrule width 3pt} c|c|}
+    \hline
+    \multicolumn{4}{|c !{\vrule width 3pt}}{\thead{Speed 1}} & \multicolumn{4}{c|}{\thead{Speed 2}} \\
+    \HLine{2pt}
+    \thead{Input\\value} & \thead{Final\\speed} & \thead{Input\\value} & \thead{Final\\speed} & \thead{Input\\value} & \thead{Final\\speed} & \thead{Input\\value} & \thead{Final\\speed} \\
+    \HLine{2pt}
+    0.0350 & 1.0000 & 0.0110 & 0.7231 & 0.0350 & 2.0000 & 0.0275 & 1.806  \\
+    \hline
+    0.0200 & 1.0000 & 0.0100 & 0.6580 & 0.0340 & 2.0000 & 0.0250 & 1.645  \\
+    \hline
+    0.0160 & 1.0000 & 0.0090 & 0.5928 & 0.0330 & 2.0000 & 0.0225 & 1.485  \\
+    \hline
+    0.0155 & 1.0000 & 0.0080 & 0.5275 & 0.0320 & 2.0000 & 0.0200 & 1.323  \\
+    \hline
+    0.0154 & 1.0000 & 0.0070 & 0.4620 & 0.0310 & 2.0000 & 0.0175 & 1.161  \\
+    \hline
+    0.0153 & 1.0000 & 0.0060 & 0.3964 & 0.0306 & 2.0000 & 0.0150 & 0.9973 \\
+    \hline
+    0.0152 & 0.9950 & 0.0050 & 0.3306 & 0.0305 & 1.996  & 0.0125 & 0.8332 \\
+    \hline
+    0.0151 & 0.9885 & 0.0040 & 0.2648 & 0.0304 & 1.990  & 0.0100 & 0.6683 \\
+    \hline
+    0.0150 & 0.9821 & 0.0030 & 0.1987 & 0.0303 & 1.984  & 0.0075 & 0.5024 \\
+    \hline
+    0.0140 & 0.9175 & 0.0020 & 0.1326 & 0.0302 & 1.977  & 0.0050 & 0.3358 \\
+    \hline
+    0.0130 & 0.8528 & 0.0010 & 0.0663 & 0.0301 & 1.971  & 0.0025 & 0.1682 \\
+    \hline
+    0.0120 & 0.7880 & 0.0000 & 0.0000 & 0.0300 & 1.965  & 0.0000 & 0.0000 \\
+    \hline
+    \caption{Raw data of the input value speed for servos with hold position}
+    \label{table:InputValueSpeedData}
+\end{longtable}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            height=27.5em,
+            width=42em,
+            title={Speed as a function of the input value},
+            xlabel={Input value},
+            ylabel={Speed},
+            domain = 0:0.035,
+            xmin=0, xmax=0.035,
+            ymin=0, ymax=2,
+            minor tick num=1,
+            grid=both,
+            xticklabel style={
+                /pgf/number format/fixed,
+                /pgf/number format/precision = 3
+            },
+            scaled x ticks = false
+        ]
+            \addplot[color=blue, mark=*] file {Input_Value_to_Speed1.dat} node[below right, midway] {$f_1(x)$};
+            \addplot[color=red, mark=*]  file {Input_Value_to_Speed2.dat} node[above left, midway] {$f_2(x)$};
+            \addplot[color=black, samples=3] {x/0.0153} node[above left, midway] {$y=x/0.0153$};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the speed for servos with hold position as a function of the input value}
+    \label{fig:InputValueSpeedGraph}
 \end{figure}
 
 \clearpage
