@@ -1806,7 +1806,7 @@ Due to a bug, the angle by which hinges/wings/other blocks with the "steering he
             minor tick num=1,
             grid=both
         ]
-            \addplot[color=blue, mark=*] file {Output_Value_to_Multiplier.dat} node[above left, midway] {$f(x)$};
+            \addplot[color=blue, mark=*] file {data/Input_Value_Multiplier.dat} node[above left, midway] {$f(x)$};
             \addplot[color=black, samples=3] {x} node[above left, midway] {$y=x$};
         \end{axis}
     \end{tikzpicture}
@@ -1880,8 +1880,8 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
             },
             scaled x ticks = false
         ]
-            \addplot[color=blue, mark=*] file {Input_Value_to_Speed1.dat} node[below right, midway] {$f_1(x)$};
-            \addplot[color=red, mark=*]  file {Input_Value_to_Speed2.dat} node[above left, midway] {$f_2(x)$};
+            \addplot[color=blue, mark=*] file {data/Input_Value_Speed1.dat} node[below right, midway] {$f_1(x)$};
+            \addplot[color=red, mark=*]  file {data/Input_Value_Speed2.dat} node[above left, midway] {$f_2(x)$};
             \addplot[color=black, samples=3] {x/0.0153} node[above left, midway] {$y=x/0.0153$};
         \end{axis}
     \end{tikzpicture}
