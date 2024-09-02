@@ -720,7 +720,9 @@ Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-- Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled" (displays $2$ decimals), "nearest", "floor" (closest smaller integer), and "ceil" (closest bigger integer)
+- Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled", "nearest", "floor" (closest smaller integer), and "ceil" (closest bigger integer)
+  - When rounding is disabled, numbers are rounded to $2$ decimals using the nearest mode, rounding numbers ending in $0.005$ away from $0$
+  - For the "nearest" mode, numbers with a fractional part of $0.5$ are rounded to the closest even integer
   - If the number is outside of the $[-1000, 1000]$ range, it's always displayed in scientific notation with $1$ decimal of precision
 
 \begin{figure}[H]
