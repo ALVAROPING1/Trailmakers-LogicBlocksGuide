@@ -149,7 +149,7 @@ Logic blocks are a group of blocks that allow to obtain and process information,
 
 All logic blocks, with the exception of distance/gravity sensors and number displays, have a display with an arrow pointing away from the center of the block representing the value of their output signal. This arrow is empty when there is no output ($0$ value), and green/red when the output is positive/negative. On gravity sensors, this arrow is replaced with a weight icon, which has the same functionality (although it is white when there is no output). Blocks which can take other signals as inputs (\nameref{logic-gates} and \nameref{math-blocks}), with the exception of number displays, additionally have a second arrow pointing to the center of the block representing the input signals, which works like the output arrow but using the value of the sum of the input signals.
 
-Note: due to a bug, only up to 5 characters can be used on any configurable block value. Even though the UI rounds values 1-2 values, the values used are always the values that were typed.
+Note: due to a bug, only up to 5 characters can be used on any configurable block value. Even though the UI rounds values 1-2 decimals, the values used are always the values that were typed, with the exception of values in the range $(-0.0001, 0.0001)$ which get rounded to $0$.
 
 ## Sensors
 
