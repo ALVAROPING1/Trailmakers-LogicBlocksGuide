@@ -488,7 +488,7 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 - AND gate: all inputs are on
 - OR gate: at least one input is on
 - XOR gate: only one input is on
-- NOR gate: all inputs are off
+- NOR gate: sum of inputs is $0$
 
 Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 
