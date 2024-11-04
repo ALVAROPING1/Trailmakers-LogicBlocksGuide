@@ -157,13 +157,18 @@ Sensors are a group of blocks that measure a physical property, like speed or an
 
 ### Distance Sensor
 
-Distance sensors check for objects within a straight line in front of them and a predefined distance. Only one half of the detecting face actually detects objects. The detecting face glows white when the sensor creates an output, and stays off otherwise.
+Distance sensors check for objects within a straight line in front of them and a predefined distance. Objects are detected with a raycast from a point in the detecting face. The detecting face glows white when the sensor creates an output, and stays off otherwise.
 
 Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Sensor offset: position from which the detecting face sends the raycast to detect blocks
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output the value selected in the "Output value" setting
+  - Measurement: output the distance to the detected object multiplied by the "Output value" setting. Same as "Trigger" when inverted trigger is used
+  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using the "Range" setting
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
@@ -215,7 +220,11 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 - Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output the value selected in the "Output value" setting
+  - Measurement: output the current altitude multiplied by the "Output value" setting
+  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using the "Altitude" setting if trigger below is used
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
@@ -326,7 +335,11 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
 - Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output the value selected in the "Output value" setting
+  - Measurement: output the current gravity multiplied by the "Output value" setting
+  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using the "Altitude" setting if trigger below is used. If trigger below isn't used, the value is divided by the "Altitude setting"
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the gravity strength is above the configured value
   - Below: sends an output when the gravity strength is below the configured value
@@ -379,7 +392,11 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output the value selected in the "Output value" setting
+  - Measurement: output the current angle (from the center of the activation threshold to the output arrow) multiplied by the "Output value" setting
+  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using half of the "Width" setting if normal trigger is used. If trigger outside is used, the value is <!-- TODO: explain this once the behaviour is fixed -->
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -434,7 +451,11 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output the value selected in the "Output value" setting
+  - Measurement: output the current angle (from the center of the activation threshold to the output arrow) multiplied by the "Output value" setting
+  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using half of the "Width" setting if normal trigger is used. If trigger outside is used, the value is <!-- TODO: explain this once the behaviour is fixed -->
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -495,7 +516,7 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-- Output value: multiplier of output signal created by the block, explained in \nameref{output-value-calculation}
+- Output value: multiplier of the output signal created by the block, explained in \nameref{output-value-calculation}
 
 \begin{figure}[H]
     \centering
@@ -712,9 +733,79 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
     \label{fig:Accumulator}
 \end{figure}
 
+### Randomizer
+
+Randomizers generate and output random values. They have a display which shows <!-- TODO: add what the display shows once the graphics are added -->.
+
+Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Value bounds: minimum/maximum value that can be generated, the generated values will be in the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
+- Random mode: mode in which the values are generated
+  - Output on input: outputs a random value generated on each frame when it the block is activated, and $0$ otherwise
+  - Change on input: outputs a random value generated on each frame when it the block is activated, and the last generated value (initialized to $0$) otherwise
+  - Input defines range: <!-- TODO: add explanation once it works -->
+  - -Change, +Output: when the block is activated with a negative input, generates and stores a random value on each frame, and outputs the last generated value (initialized to $0$) when it is activated with a positive input
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=33em]{accumulator}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.0, 16.0) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.0, 16.0) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (red_keybind)   at (-1.0, 4.6)  {Red keybind};
+            \node[annotation, left]  (green_keybind) at (-1.0, 9.25) {Green keybind};
+            \node[annotation, below] (toggle)        at (0.35, -1.5) {Green/red toggle};
+            \node[annotation, below] (pause)         at (9.85, -1.5) {Pause};
+            \node[annotation, below] (duration)      at (7.25, -1.5) {Duration};
+            \node[annotation, below] (delay)         at (4.65, -1.5) {Delay};
+            \node[annotation, below] (bounds)        at (13.0, -1.5) {Value bounds};
+            \node[annotation, below] (scale)         at (16.1, -1.5) {Scale};
+            \node[annotation, right] (steps)         at (21.0, 0.0)  {Use steps};
+
+            % Arrows
+            \draw[arrow] (output_on.east)            -- (9.95, 16.0);
+            \draw[arrow] (output_off.west)           -- (13.5, 16.0);
+            \draw[arrow] (red_keybind.east)          -- (0.1, 4.6);
+            \draw[arrow] (green_keybind.east)        -- (3.9, 5.75);
+            \draw[arrow] (toggle.north)              -- (0.35, 1.7);
+            \draw[arrow] (toggle.north)              -- (3.9, 2.25);
+            \draw[arrow] (pause.north)               -- (9.85, 0.3);
+            \draw[arrow] (duration.north)            -- (8.0, 2.1);
+            \draw[arrow] (delay.north)               -- (8.0, 4.1);
+            \draw[arrow] (bounds.north)              -- (12.0, 1.25);
+            \draw[arrow] (bounds.north)              -- (14.0, 1.25);
+            \draw[arrow] (scale.north)               -- (16.1, 1.25);
+            \draw[arrow] (steps.west)                -- (18.0, 2.25);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Randomizer settings}
+    \label{fig:Randomizer}
+\end{figure}
+
 ### Number Display
 
-Number displays output the sum of their inputs, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range), and display it with an optional rounding.
+Number displays output the sum of their inputs, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range), and display it with an optional rounding. They display "N/A" in build mode.
 
 Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
@@ -785,9 +876,9 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
 - Constant: constant value to use as the first operand
-- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
+- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^\text{constant}$), and exponentiation ($\text{constant}^x$)
   - Attempting to perform a division by $0$ results in an output of $0$
-  - If the operation is addition or subtraction, the constant value is used as output when there are no inputs. For other operations, $0$ is used instead
+  - If the operation is addition or subtraction, the constant value is used as output when there are no inputs. For other operations, $0$ is used instead <!-- TODO: re-check behaviour for power/exponentiation once one is decided -->
 
 \begin{figure}[H]
     \centering
@@ -838,6 +929,133 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
     \vspace{1cm}
     \caption{Arithmetics Logic Block settings}
     \label{fig:ArithmeticsBlock}
+\end{figure}
+
+### Functions Logic Block
+
+Functions logic blocks perform a unary operation with the sum of their inputs and output the result. They have a display which shows the currently selected operation.
+
+Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Function: unary operation to perform. Possible values are absolute value, sign, sine, cosine, and square root
+  <!-- - Attempting to perform the square root of a negative number results in an output of TODO: test when the crash is fixed -->
+
+<!-- TODO: add diagram -->
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=33em]{arithmetic_logic_block}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.0, 16.0) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.0, 16.0) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (red_keybind)   at (-1.0, 4.5)  {Red keybind};
+            \node[annotation, left]  (green_keybind) at (-1.0, 9.25) {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (9.9, -1.5)  {Pause};
+            \node[annotation, below] (duration)      at (7.25, -1.5) {Duration};
+            \node[annotation, below] (delay)         at (4.65, -1.5) {Delay};
+            \node[annotation, below] (constant)      at (12.5, -1.5) {Constant};
+            \node[annotation, below] (operation)     at (15.75, -1.5) {Operation};
+
+            % Arrows
+            \draw[arrow] (output_on.east)          -- (9.35, 16.0);
+            \draw[arrow] (output_off.west)         -- (13.05, 16.0);
+            \draw[arrow] (red_keybind.east)        -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.east)      -- (4.0, 5.5);
+            \draw[arrow] (toggle.north)            -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)            -- (4.0, 2.0);
+            \draw[arrow] (pause.north)         to[*|] (10.25, 0.3);
+            \draw[arrow] (duration.north)          -- (8.25, 2.1);
+            \draw[arrow] (delay.north)             -- (8.25, 4.1);
+            \draw[arrow] (constant.north)      to[*|] (12.4, 1.25);
+            \draw[arrow] (operation.north)     to[*|] (15.5, 2.2);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Functions Logic Block settings}
+    \label{fig:FunctionsBlock}
+\end{figure}
+
+### Aggregate Logic Block
+
+Aggregate logic blocks perform a (variadic) aggregation operation with their inputs and output the result. They have a display which shows the currently selected operation.
+
+Its settings are shown in figure \ref{fig:AggregateBlock} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Aggregate function: aggregate operation to perform. Possible values are sum, product, minimum, and maximum
+
+<!-- TODO: add diagram -->
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=33em]{arithmetic_logic_block}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-1.0, 16.0) {Output (on)\\(will send an\\input to it)};
+            \node[annotation, right] (output_off)    at (21.0, 16.0) {Output (off)\\(won't send an\\input to it)};
+            \node[annotation, left]  (red_keybind)   at (-1.0, 4.5)  {Red keybind};
+            \node[annotation, left]  (green_keybind) at (-1.0, 9.25) {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (pause)         at (9.9, -1.5)  {Pause};
+            \node[annotation, below] (duration)      at (7.25, -1.5) {Duration};
+            \node[annotation, below] (delay)         at (4.65, -1.5) {Delay};
+            \node[annotation, below] (constant)      at (12.5, -1.5) {Constant};
+            \node[annotation, below] (operation)     at (15.75, -1.5) {Operation};
+
+            % Arrows
+            \draw[arrow] (output_on.east)          -- (9.35, 16.0);
+            \draw[arrow] (output_off.west)         -- (13.05, 16.0);
+            \draw[arrow] (red_keybind.east)        -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.east)      -- (4.0, 5.5);
+            \draw[arrow] (toggle.north)            -- (0.5, 1.7);
+            \draw[arrow] (toggle.north)            -- (4.0, 2.0);
+            \draw[arrow] (pause.north)         to[*|] (10.25, 0.3);
+            \draw[arrow] (duration.north)          -- (8.25, 2.1);
+            \draw[arrow] (delay.north)             -- (8.25, 4.1);
+            \draw[arrow] (constant.north)      to[*|] (12.4, 1.25);
+            \draw[arrow] (operation.north)     to[*|] (15.5, 2.2);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Aggregate Logic Block settings}
+    \label{fig:AggregateBlock}
 \end{figure}
 
 ### Hue Light Panel
