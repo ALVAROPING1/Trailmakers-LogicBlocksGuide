@@ -167,8 +167,9 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 - Sensor offset: position from which the detecting face sends the raycast to detect blocks
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the distance to the detected object multiplied by the "Output value" setting. Same as "Trigger" when inverted trigger is used
-  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using the "Range" setting
+  - Measurement: output the distance to the detected object multiplied by the "Output value" setting
+    - Same as "Trigger" when inverted trigger is used
+  - Normalized: output $\frac{\text{measurement}}{\text{range}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
@@ -224,7 +225,7 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output the value selected in the "Output value" setting
   - Measurement: output the current altitude multiplied by the "Output value" setting
-  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using the "Altitude" setting if trigger below is used
+  - Normalized: output $\frac{\text{measurement}}{\text{altitude}}$ if trigger below is used, otherwise output measurement
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
@@ -339,7 +340,7 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output the value selected in the "Output value" setting
   - Measurement: output the current gravity multiplied by the "Output value" setting
-  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using the "Altitude" setting if trigger below is used. If trigger below isn't used, the value is divided by the "Altitude setting"
+  - Normalized: output $\frac{\text{measurement}}{\text{threshold}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the gravity strength is above the configured value
   - Below: sends an output when the gravity strength is below the configured value
@@ -396,7 +397,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output the value selected in the "Output value" setting
   - Measurement: output the current angle (from the center of the activation threshold to the output arrow) multiplied by the "Output value" setting
-  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using half of the "Width" setting if normal trigger is used. If trigger outside is used, the value is <!-- TODO: explain this once the behaviour is fixed -->
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if normal trigger is used. If trigger outside is used, the value is <!-- TODO: explain this once the behaviour is fixed -->
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -455,7 +456,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output the value selected in the "Output value" setting
   - Measurement: output the current angle (from the center of the activation threshold to the output arrow) multiplied by the "Output value" setting
-  - Normalized: same as "Measurement", but normalizing the output to the $[-1, 1]$ range using half of the "Width" setting if normal trigger is used. If trigger outside is used, the value is <!-- TODO: explain this once the behaviour is fixed -->
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if normal trigger is used. If trigger outside is used, the value is <!-- TODO: explain this once the behaviour is fixed -->
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
