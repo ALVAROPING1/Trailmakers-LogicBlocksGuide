@@ -157,7 +157,7 @@ Sensors are a group of blocks that measure a physical property, like speed or an
 
 ### Distance Sensor
 
-Distance sensors check for objects within a straight line in front of them and a predefined distance. Objects are detected with a raycast from a point in the detecting face. The detecting face glows white when the sensor creates an output, and stays off otherwise.
+Distance sensors check for objects within a straight line in front of them and a predefined distance. Objects are detected with a raycast from a point in the detecting face, indicated by a red dot. The detecting face glows white when the sensor creates an output, and stays off otherwise.
 
 Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
