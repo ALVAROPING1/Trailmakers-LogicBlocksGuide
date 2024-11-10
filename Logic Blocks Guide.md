@@ -285,6 +285,10 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output the value selected in the "Output value" setting
+  - Measurement: output the current speed in m/s multiplied by the "Output value" setting
+  - Normalized: output $\frac{\text{measurement}}{\text{speed (in m/s)}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
