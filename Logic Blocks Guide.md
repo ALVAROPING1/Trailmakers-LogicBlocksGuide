@@ -736,7 +736,7 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
 
 ### Randomizer
 
-Randomizers generate and output random values. They have a display which shows <!-- TODO: add what the display shows once the graphics are added -->.
+Randomizers generate and output random values.
 
 Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
 
@@ -747,7 +747,7 @@ Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
 - Random mode: mode in which the values are generated
   - Output on input: outputs a random value generated on each frame when it the block is activated, and $0$ otherwise
   - Change on input: outputs a random value generated on each frame when it the block is activated, and the last generated value (initialized to $0$) otherwise
-  - Input defines range: <!-- TODO: add explanation once it works -->
+  - Input defines range: outputs a random value generated on each frame between $0$ and the input value, <!-- TODO: explain better, taking value bounds into account-->
   - -Change, +Output: when the block is activated with a negative input, generates and stores a random value on each frame, and outputs the last generated value (initialized to $0$) when it is activated with a positive input
 
 \begin{figure}[H]
@@ -879,7 +879,8 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^\text{constant}$), and exponentiation ($\text{constant}^x$)
   - Attempting to perform a division by $0$ results in an output of $0$
-  - If the operation is addition or subtraction, the constant value is used as output when there are no inputs. For other operations, $0$ is used instead <!-- TODO: re-check behaviour for power/exponentiation once one is decided -->
+  - Attempting to perform $0^0$ results in $1$ when the operation is power and $0$ when the operation is exponentiation
+  - When there are no inputs, the operation is performed using an input of $0$
 
 \begin{figure}[H]
     \centering
@@ -942,7 +943,7 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
 - Function: unary operation to perform. Possible values are absolute value, sign, sine, cosine, and square root
-  <!-- - Attempting to perform the square root of a negative number results in an output of TODO: test when the crash is fixed -->
+  - Attempting to perform the square root of a negative number results in an output of $0$
 
 <!-- TODO: add diagram -->
 \begin{figure}[H]
