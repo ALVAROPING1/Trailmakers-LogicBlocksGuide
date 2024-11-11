@@ -225,7 +225,7 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output the value selected in the "Output value" setting
   - Measurement: output the current altitude in meters multiplied by the "Output value" setting
-  - Normalized: output $\frac{\text{measurement}}{\text{altitude}}$ if trigger below is used, otherwise output measurement
+  - Normalized: output $\frac{\text{measurement}}{\text{altitude}}$
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
