@@ -948,11 +948,11 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
 - Timers: see \nameref{timers}
 - Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, and arctangent
   - Attempting to perform the square root of a negative number results in an output of $0$ <!-- TODO: check output of other undefined operations once arcsine/arccosine crashes are fixed -->
-  - Trigonometric functions use [\underline{radians}](https://en.wikipedia.org/wiki/Radian) as the angle unit
+  - Trigonometric functions use degrees as the angle unit
   - Inverse trigonometric functions output the value in their [\underline{principal branch}](https://en.wikipedia.org/wiki/Principal_branch)
-    - For arcsine: $-\frac{\pi}{2} \leq \arcsin(x) \leq \frac{\pi}{2}$
-    - For arccosine: $0 \leq \arccos(x) \leq \pi$
-    - For arctangent: $-\frac{\pi}{2} < \arcsin(x) < \frac{\pi}{2}$
+    - For arcsine: $-90º \leq \arcsin(x) \leq 90º$
+    - For arccosine: $0º \leq \arccos(x) \leq 180º$
+    - For arctangent: $-90º < \arcsin(x) < 90º$
 
 <!-- TODO: add diagram -->
 \begin{figure}[H]
