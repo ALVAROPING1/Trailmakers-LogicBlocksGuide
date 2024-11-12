@@ -150,7 +150,7 @@ Logic blocks are a group of blocks that allow to obtain and process information,
 All logic blocks, with the exception of distance/gravity sensors and number displays, have a display with an arrow pointing away from the center of the block representing the value of their output signal. This arrow is empty when there is no output ($0$ value), and green/red when the output is positive/negative. On gravity sensors, this arrow is replaced with a weight icon, which has the same functionality (although it is white when there is no output). Blocks which can take other signals as inputs (\nameref{logic-gates} and \nameref{math-blocks}), with the exception of number displays, additionally have a second arrow pointing to the center of the block representing the input signals, which works like the output arrow but using the value of the sum of the input signals.
 
 Note: due to a bug, only up to 5 characters can be used on any configurable block value. Even though the UI rounds values 1-2 decimals, the values used are always the values that were typed, with the exception of values in the range $(-0.0001, 0.0001)$ which get rounded to $0$.
-
+<!-- TODO: update all settings diagrams -->
 ## Sensors
 
 Sensors are a group of blocks that measure a physical property, like speed or angle, and create a boolean output based on it.
@@ -400,8 +400,8 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the current angle (from the center of the activation threshold to the output arrow) in degrees multiplied by the "Output value" setting
-  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if normal trigger is used. If trigger outside is used, the value is <!-- TODO: explain this once the behaviour is fixed -->
+  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees multiplied by the "Output value" setting
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -459,8 +459,8 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the current angle (from the center of the activation threshold to the output arrow) in degrees multiplied by the "Output value" setting
-  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if normal trigger is used. If trigger outside is used, the value is <!-- TODO: explain this once the behaviour is fixed -->
+  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees multiplied by the "Output value" setting
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -752,7 +752,7 @@ Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
   - Output on input: outputs a random value generated on each frame when it the block is activated, and $0$ otherwise
   - Change on input: outputs a random value generated on each frame when it the block is activated, and the last generated value (initialized to $0$) otherwise
   - Input defines range: outputs a random value generated on each frame between $0$ and the input value, <!-- TODO: explain better, taking value bounds into account-->
-  - -Change, +Output: when the block is activated with a negative input, generates and stores a random value on each frame, and outputs the last generated value (initialized to $0$) when it is activated with a positive input
+  - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to $0$) when it is activated with a positive input
 
 \begin{figure}[H]
     \centering
