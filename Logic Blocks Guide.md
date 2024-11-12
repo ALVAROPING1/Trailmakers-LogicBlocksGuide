@@ -947,7 +947,7 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
 - Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, and arctangent
-  - Attempting to perform the square root of a negative number results in an output of $0$ <!-- TODO: check output of other undefined operations once arcsine/arccosine crashes are fixed -->
+  - Attempting to perform an undefined operation (square root of a negative number, or arcsine/arccosine of a number outside of the $[-1, 1]$ range) results in an output of $0$
   - Trigonometric functions use degrees as the angle unit
   - Inverse trigonometric functions output the value in their [\underline{principal branch}](https://en.wikipedia.org/wiki/Principal_branch)
     - For arcsine: $-90º \leq \arcsin(x) \leq 90º$
