@@ -130,7 +130,7 @@ header-includes: |
     \makeatother
 
     % Maximum non-infinity IEEE float value
-    \newcommand{\maxFloat}{(2 - 2^{-37})}
+    \newcommand{\maxFloat}{(2 - 2^{-23}) \cdot 2^{127}}
     \newcommand{\maxFloatApprox}{3.403 \cdot 10^{38}}
     ```
 ---
