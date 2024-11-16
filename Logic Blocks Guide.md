@@ -165,11 +165,11 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
-- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
 - Sensor offset: position from which the detecting face sends the raycast to detect blocks
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output scale" setting
-  - Measurement: output the distance to the detected object in meters multiplied by the "Output scale" setting
+  - Trigger: output 1
+  - Measurement: output the distance to the detected object in meters
     - Same as "Trigger" when inverted trigger is used
   - Normalized: output $\frac{\text{measurement}}{\text{range}}$
 - Trigger: condition used to determine when to send an output
@@ -227,10 +227,10 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 - Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
-- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output scale" setting
-  - Measurement: output the current altitude in meters multiplied by the "Output scale" setting
+  - Trigger: output 1
+  - Measurement: output the current altitude in meters
   - Normalized: output $\frac{\text{measurement}}{\text{altitude}}$
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
@@ -292,10 +292,10 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
-- Output scale: value of the output signal created by the block, explained in \nameref{signals}
+- Output scale: value of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output scale" setting
-  - Measurement: output the current speed in m/s multiplied by the "Output scale" setting
+  - Trigger: output 1
+  - Measurement: output the current speed in m/s
   - Normalized: output $\frac{\text{measurement}}{\text{speed (in m/s)}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the speed is above the configured value
@@ -350,10 +350,10 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
 - Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
-- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output scale" setting
-  - Measurement: output the current gravity relative to the normal gravity multiplied by the "Output scale" setting
+  - Trigger: output 1
+  - Measurement: output the current gravity relative to the normal gravity
   - Normalized: output $\frac{\text{measurement}}{\text{threshold}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the gravity strength is above the configured value
@@ -409,10 +409,10 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output scale" setting
-  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees multiplied by the "Output scale" setting
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees
   - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
@@ -470,10 +470,10 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output scale" setting
-  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees multiplied by the "Output scale" setting
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees
   - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
