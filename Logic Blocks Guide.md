@@ -132,6 +132,8 @@ header-includes: |
     % Maximum non-infinity IEEE float value
     \newcommand{\maxFloat}{(2 - 2^{-23}) \cdot 2^{127}}
     \newcommand{\maxFloatApprox}{3.403 \cdot 10^{38}}
+
+    \usepackage{gensymb} % \degree symbol
     ```
 ---
 
@@ -950,9 +952,9 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
   - Attempting to perform an undefined operation (square root of a negative number, or arcsine/arccosine of a number outside of the $[-1, 1]$ range) results in an output of $0$
   - Trigonometric functions use degrees as the angle unit
   - Inverse trigonometric functions output the value in their [\underline{principal branch}](https://en.wikipedia.org/wiki/Principal_branch)
-    - For arcsine: $-90º \leq \arcsin(x) \leq 90º$
-    - For arccosine: $0º \leq \arccos(x) \leq 180º$
-    - For arctangent: $-90º < \arcsin(x) < 90º$
+    - For arcsine: $-90\degree \leq \arcsin(x) \leq 90\degree$
+    - For arccosine: $0\degree \leq \arccos(x) \leq 180\degree$
+    - For arctangent: $-90\degree < \arcsin(x) < 90\degree$
 
 <!-- TODO: add diagram -->
 \begin{figure}[H]
