@@ -165,11 +165,11 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
-- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
 - Sensor offset: position from which the detecting face sends the raycast to detect blocks
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the distance to the detected object in meters multiplied by the "Output value" setting
+  - Trigger: output the value selected in the "Output scale" setting
+  - Measurement: output the distance to the detected object in meters multiplied by the "Output scale" setting
     - Same as "Trigger" when inverted trigger is used
   - Normalized: output $\frac{\text{measurement}}{\text{range}}$
 - Trigger: condition used to determine when to send an output
@@ -227,10 +227,10 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 - Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
-- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the current altitude in meters multiplied by the "Output value" setting
+  - Trigger: output the value selected in the "Output scale" setting
+  - Measurement: output the current altitude in meters multiplied by the "Output scale" setting
   - Normalized: output $\frac{\text{measurement}}{\text{altitude}}$
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
@@ -292,10 +292,10 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output scale: value of the output signal created by the block, explained in \nameref{signals}
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the current speed in m/s multiplied by the "Output value" setting
+  - Trigger: output the value selected in the "Output scale" setting
+  - Measurement: output the current speed in m/s multiplied by the "Output scale" setting
   - Normalized: output $\frac{\text{measurement}}{\text{speed (in m/s)}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the speed is above the configured value
@@ -350,10 +350,10 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
 - Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
-- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the current gravity relative to the normal gravity multiplied by the "Output value" setting
+  - Trigger: output the value selected in the "Output scale" setting
+  - Measurement: output the current gravity relative to the normal gravity multiplied by the "Output scale" setting
   - Normalized: output $\frac{\text{measurement}}{\text{threshold}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the gravity strength is above the configured value
@@ -409,10 +409,10 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees multiplied by the "Output value" setting
+  - Trigger: output the value selected in the "Output scale" setting
+  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees multiplied by the "Output scale" setting
   - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
@@ -470,10 +470,10 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: multiplier of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block, explained in \nameref{signals}
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
-  - Trigger: output the value selected in the "Output value" setting
-  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees multiplied by the "Output value" setting
+  - Trigger: output the value selected in the "Output scale" setting
+  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees multiplied by the "Output scale" setting
   - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
@@ -537,7 +537,7 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-- Output value: multiplier of the output signal created by the block, explained in \nameref{output-value-calculation}
+- Output scale: multiplier of the output signal created by the block, explained in \nameref{output-value-calculation}
 
 \begin{figure}[H]
     \centering
@@ -591,8 +591,8 @@ These are the steps used by the game to determine the value attached to the outp
 1) The gate checks if its conditions are met. If they aren't, the gate doesn't create an output
 2) The gate adds up the values of all of its inputs and clamps the result to the $[-1, 1]$ range
    - Values smaller than $-1$ are replaced with $-1$, and values bigger than $1$ with $1$
-3) The gate multiplies the result by its output value setting. For NOR gates, their setting replaces the result (which would otherwise always be $0$)
-4) The gate sends the result as its output value
+3) The gate multiplies the result by its Output scale setting. For NOR gates, their setting replaces the result (which would otherwise always be $0$)
+4) The gate sends the result as its output scale
 
 This process can be described with the following formula:
 $$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$$
@@ -1547,7 +1547,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - Requires a different input circuit: the positive input should be in a 1 frame pulse generator connected to an AND gate connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells. All comparators except the last on each cell should be connected to an OR gate connected to the AND gate from the input circuit
 - To add cycle, add cycle to the last cell and remove all the gates in the input circuit except the pulse generator, which should be connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells
 - To make it 2-way, duplicate the input circuit but connect all comparators except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first comparator of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
-  - The AND gate from the second input circuit should have a $-1$ output value
+  - The AND gate from the second input circuit should have a $-1$ output scale
 - Might require a decoder (unless you want to show numbers on a screen)
   - To create it, take $n$ AND gates and assign a different combination of 1 comparator from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
   - Has a complexity of $n$ gates
@@ -1774,7 +1774,7 @@ Notes:
         \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
         \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
         \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
-        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
+        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output scale};
 
         % Arrows
 
@@ -1832,9 +1832,9 @@ This section contains old circuits that were previously in \nameref{useful-circu
         \coordinate[above=16pt of feedback_top] (feedback);
 
         \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
-        \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output value};
+        \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output scale};
 
-        \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output value\\(output)};
+        \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output scale\\(output)};
 
         % Bounding boxes
         \begin{scope}[on background layer]
@@ -2126,7 +2126,7 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 
 # Tips
 
-- If you want your system to not modify the input that passes through, configure all of the logic gates to have an output value of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
+- If you want your system to not modify the input that passes through, configure all of the logic gates to have an output scale of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
 - Arithmetics logic blocks can be used to get always on signals with a constant value by using the addition operation with the desired constant. The signal can be toggled by setting the operation to multiplication and using a $+1$ input
 - Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
 - If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
