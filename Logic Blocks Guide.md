@@ -901,9 +901,9 @@ Its settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
 The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure \ref{fig:HueLightPanelColor} shows an example of the resulting colors for inputs in the range $[-1, 1]$ with $\text{saturation} = \text{brightness} = 1$. Inputs smaller than $-1$ result in the $[-1, 0]$ range being repeated, while inputs greater than $1$ result in the $[0, 1]$ range being repeated.
 
 $$\operatorname{color}(x) = \begin{cases}
-    \operatorname{HSV}(360(x \bmod{1}), S, B)          & x > 0 \\
-    \text{Off (Black)}                                 & x = 0 \\
-    \operatorname{greyscale}(1 - (x \bmod{1}) \cdot B) & x < 0 \\
+    \operatorname{HSV}(360(x \bmod{1}), S, B)            & (x > 0) \\
+    \text{Off (Black)}                                   & (x = 0) \\
+    \operatorname{greyscale}((1 - (x \bmod{1})) \cdot B) & (x < 0) \\
 \end{cases}$$
 
 \begin{figure}[H]
