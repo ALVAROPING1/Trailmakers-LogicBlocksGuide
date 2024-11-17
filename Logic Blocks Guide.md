@@ -753,9 +753,10 @@ Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
 - Timers: see \nameref{timers}
 - Value bounds: minimum/maximum value that can be generated, the generated values will be in the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
 - Random mode: mode in which the values are generated
-  - Output on input: outputs a random value generated on each frame when it the block is activated, and $0$ otherwise
-  - Change on input: outputs a random value generated on each frame when it the block is activated, and the last generated value (initialized to $0$) otherwise
-  - Input defines range: outputs a random value generated on each frame between $0$ and the input value, <!-- TODO: explain better, taking value bounds into account-->
+  - Output on input: outputs a random value generated on each frame when it is activated, and $0$ otherwise
+  - Change on input: outputs a random value generated on each frame when it is activated, and the last generated value (initialized to $0$) otherwise
+  - Input defines range: outputs a random value generated on each frame in the intersection between the value bounds and the range $[\min(0, input), \max(0, input)]$ when the block is activated, and the last generated value (initialized to $0$) otherwise
+    - If the intersection is empty, the value bounds range is used instead
   - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to $0$) when it is activated with a positive input
 
 \begin{figure}[H]
