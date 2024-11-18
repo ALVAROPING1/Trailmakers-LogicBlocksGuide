@@ -412,7 +412,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
-  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
   - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
@@ -473,7 +473,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
-  - Measurement: output the current signed angle (positive for counterclockwise) from the closest edge of the activation threshold to the output arrow in degrees
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
   - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
@@ -755,9 +755,9 @@ Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
 - Random mode: mode in which the values are generated
   - Output on input: outputs a random value generated on each frame when it is activated, and $0$ otherwise
   - Change on input: outputs a random value generated on each frame when it is activated, and the last generated value (initialized to $0$) otherwise
-  - Input defines range: outputs a random value generated on each frame in the intersection between the value bounds and the range $[\min(0, input), \max(0, input)]$ when the block is activated, and the last generated value (initialized to $0$) otherwise
+  - Input defines range: outputs a random value generated on each frame in the intersection between the value bounds and the range $[\min(0, input), \max(0, input)]$ when the block is activated, and the last generated value (initialized to a random value within the value bounds) otherwise
     - If the intersection is empty, the value bounds range is used instead
-  - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to $0$) when it is activated with a positive input
+  - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to a random value within the value bounds) when it is activated with a positive input
 
 \begin{figure}[H]
     \centering
