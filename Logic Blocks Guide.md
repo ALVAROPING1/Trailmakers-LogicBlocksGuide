@@ -937,7 +937,7 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-- Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, and arctangent
+- Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, arctangent, floor, ceiling, and rounding
   - Attempting to perform an undefined operation (square root of a negative number, or arcsine/arccosine of a number outside of the $[-1, 1]$ range) results in an output of $0$
   - Trigonometric functions use degrees as the angle unit
   - Inverse trigonometric functions output the value in their [\underline{principal branch}](https://en.wikipedia.org/wiki/Principal_branch)
