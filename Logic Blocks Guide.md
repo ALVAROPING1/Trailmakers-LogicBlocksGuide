@@ -164,7 +164,7 @@ Distance sensors check for objects within a straight line in front of them and a
 Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
-  - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
+  - Distance is measured from the surface of the detecting face
 - Output scale: multiplier of the output signal created by the block
 - Sensor offset: position from which the detecting face sends the raycast to detect blocks
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
