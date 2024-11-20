@@ -944,6 +944,7 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
     - For arcsine: $-90\degree \leq \arcsin(x) \leq 90\degree$
     - For arccosine: $0\degree \leq \arccos(x) \leq 180\degree$
     - For arctangent: $-90\degree < \arcsin(x) < 90\degree$
+  - For the rounding function, numbers with a fractional part of $0.5$ are rounded to the closest even integer
 
 \begin{figure}[H]
     \centering
