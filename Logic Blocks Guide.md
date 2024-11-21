@@ -751,6 +751,7 @@ Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+  - Note: due to a bug, all timers are ignored when the random mode is "input defines range"
 - Value bounds: minimum/maximum value that can be generated, the generated values will be in the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
 - Random mode: mode in which the values are generated
   - Output on input: outputs a random value generated on each frame when it is activated, and $0$ otherwise
@@ -1000,6 +1001,7 @@ Its settings are shown in figure \ref{fig:AggregateBlock} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+  - Note: due to a bug, all timers are ignored when the function isn't sum
 - Aggregate function: aggregate operation to perform. Possible values are sum, product, minimum, and maximum
 
 \begin{figure}[H]
