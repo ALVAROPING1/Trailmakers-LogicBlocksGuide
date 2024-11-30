@@ -236,7 +236,7 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
   - Outside of high seas and when the wave setting is set to disabled, both options are equivalent
-  - On space sector, it's a "MAX" value while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
+  - On space sector, it's a "MAX" value (equivalent to $2001$ m) while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the altitude is above the configured value
   - Below: sends an output when the altitude is below the configured value
