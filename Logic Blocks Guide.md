@@ -132,6 +132,8 @@ header-includes: |
     % Maximum non-infinity IEEE float value
     \newcommand{\maxFloat}{(2 - 2^{-23}) \cdot 2^{127}}
     \newcommand{\maxFloatApprox}{3.403 \cdot 10^{38}}
+
+    \usepackage{gensymb} % \degree symbol
     ```
 ---
 
@@ -157,13 +159,19 @@ Sensors are a group of blocks that measure a physical property, like speed or an
 
 ### Distance Sensor
 
-Distance sensors check for objects within a straight line in front of them and a predefined distance. Only one half of the detecting face actually detects objects. The detecting face glows white when the sensor creates an output, and stays off otherwise.
+Distance sensors check for objects within a straight line in front of them and a predefined distance. Objects are detected with a raycast from a point in the detecting face, indicated by a red dot. The detecting face glows white when the sensor creates an output, and stays off otherwise.
 
 Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
-  - Distance is measured from the center of the block, meaning the distance between the object and the side of the block is half a block ($0.125 \text{ m}$) shorter than the distance measured
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+  - Distance is measured from the surface of the detecting face
+- Output scale: multiplier of the output signal created by the block
+- Sensor offset: position from which the detecting face sends the raycast to detect blocks
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the distance to the detected object in meters
+    - Same as "Trigger" when inverted trigger is used
+  - Normalized: output $\frac{\text{measurement}}{\text{range}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
@@ -172,7 +180,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{distance_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.7cm]{distance_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -189,18 +197,22 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)    at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)   at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (range)        at (-1.5, 3)    {Range};
-            \node[annotation, below] (output_value) at (8.5, -1.5)  {Output value};
-            \node[annotation, right] (trigger)      at (21.5, 0)    {Invert trigger (on/off),\\currently off\\(normal trigger)};
+            \node[annotation, left]  (output_on)    at (-1, 16)      {Output (on)};
+            \node[annotation, right] (output_off)   at (21, 16)      {Output (off)};
+            \node[annotation, left]  (range)        at (-1, 3)       {Range};
+            \node[annotation, below] (output_value) at (3.75, -1.5)  {Output scale};
+            \node[annotation, below] (offset)       at (9.2, -1.5)   {Sensor offset};
+            \node[annotation, below] (mode)         at (14.75, -1.5) {Output mode};
+            \node[annotation, right] (trigger)      at (21, 0)       {Invert trigger};
 
             % Arrows
-            \draw[arrow] (output_on.east)     -- (4.4, 16.4);
-            \draw[arrow] (output_off.west)    -- (9.8, 16.4);
-            \draw[arrow] (range.east)         -- (0.3, 3);
-            \draw[arrow] (output_value.north) -- (8.5, 0.7);
-            \draw[arrow] (trigger.west)       -- (14, 4.5);
+            \draw[arrow] (output_on.east)         -- (5.7, 16);
+            \draw[arrow] (output_off.west)        -- (13.5, 16);
+            \draw[arrow] (range.east)             -- (0.15, 3);
+            \draw[arrow] (output_value.north) to[*|] (5, 1);
+            \draw[arrow] (output_value.north) to[*|] (8.4, 1);
+            \draw[arrow] (mode.north)             -- (12.5, 1.7);
+            \draw[arrow] (trigger.west)           -- (17.2, 2.1);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -215,12 +227,16 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 - Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current altitude in meters
+  - Normalized: output $\frac{\text{measurement}}{\text{altitude}}$
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
   - Outside of high seas and when the wave setting is set to disabled, both options are equivalent
-  - On space sector, it's a "MAX" value while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
+  - On space sector, it's a "MAX" value (equivalent to $2001$ m) while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the altitude is above the configured value
   - Below: sends an output when the altitude is below the configured value
@@ -229,7 +245,7 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{altitude_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.7cm]{altitude_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -246,20 +262,22 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)       at (-1.5, 16.2) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)      at (21.5, 16.2) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (altitude)        at (-1.5, 2.5)  {Altitude};
-            \node[annotation, below] (output_value)    at (4.25, -1.5)  {Output value};
-            \node[annotation, below] (reference_frame) at (12.75, -1.5) {Frame of reference};
-            \node[annotation, right] (trigger)         at (21.5, -2.5) {Trigger below (on/off),\\currently off\\(normal trigger)};
+            \node[annotation, left]  (output_on)       at (-1, 16)     {Output (on)};
+            \node[annotation, right] (output_off)      at (21, 16)     {Output (off)};
+            \node[annotation, left]  (altitude)        at (-1, 3)      {Altitude};
+            \node[annotation, below] (output_value)    at (4.25, -1.5) {Output scale};
+            \node[annotation, below] (mode)            at (11.5, -1.5) {Output mode};
+            \node[annotation, below] (reference_frame) at (19.5, -1.5) {Frame of reference};
+            \node[annotation, right] (trigger)         at (21, 3)      {Trigger below};
 
             % Arrows
-            \draw[arrow] (output_on.east)            -- (7.75, 16.2);
-            \draw[arrow] (output_off.west)           -- (14.75, 16.2);
-            \draw[arrow] (altitude.east)             -- (0.15, 2.5);
-            \draw[arrow] (output_value.north)    to[*|] (5.9, 0.6);
-            \draw[arrow] (reference_frame.north) to[*|] (10.6, 1.55);
-            \draw[arrow] (trigger.west)              -- (16.2, 1.7);
+            \draw[arrow] (output_on.east)            -- (6.8, 16);
+            \draw[arrow] (output_off.west)           -- (16, 16);
+            \draw[arrow] (altitude.east)             -- (0.15, 3);
+            \draw[arrow] (output_value.north)    to[*|] (5.9, 1);
+            \draw[arrow] (mode.north)                -- (11.5, 1.7);
+            \draw[arrow] (reference_frame.north) to[*|] (15.85, 0.4);
+            \draw[arrow] (trigger.west)              -- (19.3, 3);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -274,7 +292,11 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output scale: value of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current speed in m/s
+  - Normalized: output $\frac{\text{measurement}}{\text{speed (in m/s)}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
@@ -283,7 +305,7 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{speed_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=5cm]{speed_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -300,18 +322,20 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)    at (-1.5, 15.4) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)   at (21.5, 15.3) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (speed)        at (-1.5, 2.1)  {Speed};
-            \node[annotation, below] (output_value) at (7.7, -1.5)  {Output value};
-            \node[annotation, right] (trigger)      at (21.5, 0)    {Trigger below (on/off),\\currently off\\(normal trigger)};
+            \node[annotation, left]  (output_on)       at (-1, 16)     {Output (on)};
+            \node[annotation, right] (output_off)      at (21, 16)     {Output (off)};
+            \node[annotation, left]  (altitude)        at (-1, 3)      {Altitude};
+            \node[annotation, below] (output_value)    at (4.25, -1.5) {Output scale};
+            \node[annotation, below] (mode)            at (11.5, -1.5) {Output mode};
+            \node[annotation, right] (trigger)         at (21, 0)      {Trigger below};
 
             % Arrows
-            \draw[arrow] (output_on.east)     -- (5.25, 15.4);
-            \draw[arrow] (output_off.west)    -- (11.65, 15.3);
-            \draw[arrow] (speed.east)         -- (0.2, 2.1);
-            \draw[arrow] (output_value.north) -- (7.7, 0.45);
-            \draw[arrow] (trigger.west)       -- (12.7, 3.4);
+            \draw[arrow] (output_on.east)         -- (6.8, 16);
+            \draw[arrow] (output_off.west)        -- (16, 16);
+            \draw[arrow] (altitude.east)          -- (0.15, 3);
+            \draw[arrow] (output_value.north) to[*|] (5.9, 1);
+            \draw[arrow] (mode.north)             -- (11.5, 1.7);
+            \draw[arrow] (trigger.west)           -- (16.5, 2.1);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -326,7 +350,11 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
 - Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current gravity relative to the normal gravity
+  - Normalized: output $\frac{\text{measurement}}{\text{threshold}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the gravity strength is above the configured value
   - Below: sends an output when the gravity strength is below the configured value
@@ -335,7 +363,7 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{gravity_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.75cm]{gravity_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -352,18 +380,20 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)    at (-1.5, 16.5) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)   at (21.5, 16.5) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (threshold)    at (-1.5, 2.1)  {Threshold};
-            \node[annotation, below] (output_value) at (9.0, -1.5)  {Output value};
-            \node[annotation, right] (trigger)      at (21.5, -2.0) {Trigger below (on/off),\\currently off\\(normal trigger)};
+            \node[annotation, left]  (output_on)    at (-1, 16)     {Output (on)};
+            \node[annotation, right] (output_off)   at (21, 16)     {Output (off)};
+            \node[annotation, left]  (altitude)     at (-1, 3)      {Altitude};
+            \node[annotation, below] (output_value) at (4.25, -1.5) {Output scale};
+            \node[annotation, below] (mode)         at (11.5, -1.5) {Output mode};
+            \node[annotation, right] (trigger)      at (21, 0)      {Trigger below};
 
             % Arrows
-            \draw[arrow] (output_on.east)     -- (5.25, 16.5);
-            \draw[arrow] (output_off.west)    -- (14.5, 16.5);
-            \draw[arrow] (threshold.east)     -- (0.2, 2.1);
-            \draw[arrow] (output_value.north) -- (9.0, 0.45);
-            \draw[arrow] (trigger.west)       -- (14.6, 1.75);
+            \draw[arrow] (output_on.east)         -- (6.8, 16);
+            \draw[arrow] (output_off.west)        -- (16, 16);
+            \draw[arrow] (altitude.east)          -- (0.15, 3);
+            \draw[arrow] (output_value.north) to[*|] (5.9, 1);
+            \draw[arrow] (mode.north)             -- (11.5, 1.7);
+            \draw[arrow] (trigger.west)           -- (16.5, 2.1);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -379,7 +409,11 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -388,7 +422,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{angle_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.75cm]{angle_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -405,20 +439,22 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)    at (-1.5, 17.2) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (direction)    at (-1.5, 2)    {Direction};
-            \node[annotation, below] (width)        at (6.7, -1.5)  {Width};
-            \node[annotation, below] (output_value) at (12.5, -1.5) {Output value};
-            \node[annotation, right] (trigger)      at (21.5, 3.5)  {Trigger outside (on/off),\\currently off\\(normal trigger)};
+            \node[annotation, left]  (output_on)    at (-1, 17)    {Output (on)};
+            \node[annotation, right] (output_off)   at (21, 17)    {Output (off)};
+            \node[annotation, left]  (direction)    at (-1, 3)     {Direction};
+            \node[annotation, below] (width)        at (4.1, -1.5) {Width};
+            \node[annotation, below] (output_value) at (8.4, -1.5) {Output scale};
+            \node[annotation, below] (mode)         at (14, -1.5)  {Output mode};
+            \node[annotation, right] (trigger)      at (21, 0)     {Trigger outside};
 
             % Arrows
-            \draw[arrow] (output_on.east)         -- (7.2, 17.2);
-            \draw[arrow] (output_off.west)        -- (13.45, 17);
-            \draw[arrow] (direction.east)         -- (0.2, 2);
-            \draw[arrow] (width.north)            -- (6.7, 0.7);
-            \draw[arrow] (output_value.north) to[*|] (11, 0.7);
-            \draw[arrow] (trigger.west)           -- (15.4, 2.25);
+            \draw[arrow] (output_on.east)         -- (7.1, 17);
+            \draw[arrow] (output_off.west)        -- (12.4, 17);
+            \draw[arrow] (direction.east)         -- (0.15, 3);
+            \draw[arrow] (width.north)        to[*|] (5, 1);
+            \draw[arrow] (output_value.north)     -- (8.4, 1);
+            \draw[arrow] (mode.north)             -- (12.5, 1.7);
+            \draw[arrow] (trigger.west)           -- (17.3, 2.1);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -434,7 +470,11 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
-- Output value: value of the output signal created by the block, explained in \nameref{signals}
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -443,7 +483,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=20em]{compass}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=5cm]{compass}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -460,20 +500,22 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)    at (-1.5, 17)   {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)   at (21.5, 17)   {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (direction)    at (-1.5, 2.7)  {Direction};
-            \node[annotation, below] (width)        at (6.4, -1.5)  {Width};
-            \node[annotation, below] (output_value) at (12.4, -1.5) {Output value};
-            \node[annotation, right] (trigger)      at (21.5, 4)    {Trigger outside (on/off),\\currently off\\(normal trigger)};
+            \node[annotation, left]  (output_on)    at (-1, 17.2)  {Output (on)};
+            \node[annotation, right] (output_off)   at (21, 17.2)  {Output (off)};
+            \node[annotation, left]  (direction)    at (-1, 3)     {Direction};
+            \node[annotation, below] (width)        at (4.1, -1.5) {Width};
+            \node[annotation, below] (output_value) at (8.4, -1.5) {Output scale};
+            \node[annotation, below] (mode)         at (14, -1.5)  {Output mode};
+            \node[annotation, right] (trigger)      at (21, 0)     {Trigger outside};
 
             % Arrows
-            \draw[arrow] (output_on.east)         -- (9.55, 17);
-            \draw[arrow] (output_off.west)        -- (15.9, 17);
-            \draw[arrow] (direction.east)         -- (0.15, 2.7);
-            \draw[arrow] (width.north)            -- (6.4, 1.1);
-            \draw[arrow] (output_value.north) to[*|] (10.6, 1.1);
-            \draw[arrow] (trigger.west)           -- (14.6, 3.3);
+            \draw[arrow] (output_on.east)         -- (8.1, 17.2);
+            \draw[arrow] (output_off.west)        -- (13.5, 17.2);
+            \draw[arrow] (direction.east)         -- (0.15, 3);
+            \draw[arrow] (width.north)        to[*|] (5, 1);
+            \draw[arrow] (output_value.north)     -- (8.4, 1);
+            \draw[arrow] (mode.north)             -- (12.5, 1.7);
+            \draw[arrow] (trigger.west)           -- (17.3, 2.1);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -495,13 +537,13 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-- Output value: multiplier of output signal created by the block, explained in \nameref{output-value-calculation}
+- Output scale: multiplier of the output signal created by the block, explained in \nameref{output-value-calculation}
 
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=26em]{logic_gate}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=5cm]{logic_gate}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -518,27 +560,23 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)     at (-1.5, 16.4) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)    at (21.5, 16.4) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (green_keybind) at (-1.5, 4.5)  {Green keybind};
-            \node[annotation, below] (red_keybind)   at (7.4, -1.5)  {Red keybind};
-            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
-            \node[annotation, below] (pause)         at (11.7, -1.5) {Pause};
-            \node[annotation, below] (duration)      at (15, -1.5)   {Duration};
-            \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
-            \node[annotation, right] (output_value)  at (21.5, 3.1)  {Output value};
+            \node[annotation, left]  (output_on)     at (-0.75, 16.2) {Output (on)};
+            \node[annotation, right] (output_off)    at (20.75, 16.2) {Output (off)};
+            \node[annotation, left]  (red_keybind)   at (-0.75, 4.5)  {Red keybind};
+            \node[annotation, below] (green_keybind) at (7.4, -1.5)   {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)     {Green/red toggle};
+            \node[annotation, below] (timers)        at (12, -1.5)    {Timers};
+            \node[annotation, below] (output_value)  at (15.4, -1.5)  {Output scale};
 
             % Arrows
-            \draw[arrow] (output_on.east)                   -- (8.8, 16.4);
-            \draw[arrow] (output_off.west)                  -- (13.35, 16.4);
-            \draw[arrow] (green_keybind.east)               -- (0.1, 4.5);
-            \draw[arrow] ($(red_keybind.north) + (1.2, 0)$) -- (8.6, 3.5);
-            \draw[arrow] (toggle.north)                     -- (0.5, 1.7);
-            \draw[arrow] (toggle.north)                     -- (4.9, 2.1);
-            \draw[arrow] ($(pause.north) + (0.8, 0)$)       -- (12.5, 0.3);
-            \draw[arrow] (duration.north)                   -- (13.5, 2.4);
-            \draw[arrow] (delay.west)                       -- (13.5, 5.5);
-            \draw[arrow] (output_value.west)                -- (16.4, 3.1);
+            \draw[arrow] (output_on.east)      -- (7.4, 16.2);
+            \draw[arrow] (output_off.west)     -- (13.2, 16.2);
+            \draw[arrow] (red_keybind.east)    -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.north) -- (7.4, 3.1);
+            \draw[arrow] (toggle.north)        -- (0.5, 1.5);
+            \draw[arrow] (toggle.north)        -- (4.9, 2.1);
+            \draw[arrow] (timers.north)        -- (12, 0.3);
+            \draw[arrow] (output_value.north)  -- (15.4, 1);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -553,8 +591,8 @@ These are the steps used by the game to determine the value attached to the outp
 1) The gate checks if its conditions are met. If they aren't, the gate doesn't create an output
 2) The gate adds up the values of all of its inputs and clamps the result to the $[-1, 1]$ range
    - Values smaller than $-1$ are replaced with $-1$, and values bigger than $1$ with $1$
-3) The gate multiplies the result by its output value setting. For NOR gates, their setting replaces the result (which would otherwise always be $0$)
-4) The gate sends the result as its output value
+3) The gate multiplies the result by its Output scale setting. For NOR gates, their setting replaces the result (which would otherwise always be $0$)
+4) The gate sends the result as its output scale
 
 This process can be described with the following formula:
 $$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$$
@@ -594,7 +632,7 @@ Its settings are shown in figure \ref{fig:Comparator} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=35em]{comparison_logic_gate}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.5cm]{comparison_logic_gate}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -611,33 +649,29 @@ Its settings are shown in figure \ref{fig:Comparator} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)     at (-1.0, 16.4)   {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)    at (21.0, 16.4)   {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (red_keybind)   at (-1.0, 4.6)    {Red keybind};
-            \node[annotation, left]  (green_keybind) at (-1.0, 9.5)    {Green keybind};
-            \node[annotation, below] (toggle)        at (0.35, -1.5)   {Green/red toggle};
-            \node[annotation, below] (pause)         at (9.25, -1.5)   {Pause};
-            \node[annotation, below] (duration)      at (6.75, -1.5)   {Duration};
-            \node[annotation, below] (delay)         at (4.25, -1.5)   {Delay};
-            \node[annotation, below] (threshold)     at (12.0, -1.5)   {Threshold};
-            \node[annotation, below] (comparison_mode) at (16.25, -1.5) {Comparison mode};
-            \node[annotation, right] (clamp)         at (21.0, 0.0)    {Clamp input};
-            \node[annotation, right] (output_value)  at (21.0, 9.5)    {Output value};
+            \node[annotation, left]  (output_on)     at (-0.5, 16)    {Output (on)};
+            \node[annotation, right] (output_off)    at (20.5, 16)    {Output (off)};
+            \node[annotation, left]  (red_keybind)   at (-0.5, 4.5)   {Red keybind};
+            \node[annotation, below] (green_keybind) at (5.25, -1.5)  {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)     {Green/red toggle};
+            \node[annotation, below] (timers)        at (8.5, -1.5)   {Timers};
+            \node[annotation, below] (threshold)     at (11.25, -1.5) {Threshold};
+            \node[annotation, below] (mode)          at (15.25, -1.5) {Comparison mode};
+            \node[annotation, right] (clamp)         at (20.5, 0)     {Clamp input};
+            \node[annotation, right] (output_value)  at (20.5, 9.5)   {Output value};
 
             % Arrows
-            \draw[arrow] (output_on.east)            -- (9.6, 16.4);
-            \draw[arrow] (output_off.west)           -- (13.1, 16.4);
-            \draw[arrow] (red_keybind.east)          -- (0.1, 4.6);
-            \draw[arrow] (green_keybind.east)        -- (3.7, 5.75);
-            \draw[arrow] (toggle.north)              -- (0.35, 1.7);
-            \draw[arrow] (toggle.north)              -- (3.7, 2.25);
-            \draw[arrow] (pause.north)               -- (9.25, 0.3);
-            \draw[arrow] (duration.north)            -- (7.5, 2.1);
-            \draw[arrow] (delay.north)               -- (7.5, 4.1);
-            \draw[arrow] (threshold.north)       to[*|] (11.25, 1.25);
-            \draw[arrow] (comparison_mode.north) to[*|] (15.25, 2.2);
-            \draw[arrow] (clamp.west)                -- (18.3, 2.25);
-            \draw[arrow] (output_value.west)         -- (14.05, 5.5);
+            \draw[arrow] (output_on.east)          -- (8.55, 16);
+            \draw[arrow] (output_off.west)         -- (12.7, 16);
+            \draw[arrow] (red_keybind.east)        -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.north)     -- (5.25, 3.1);
+            \draw[arrow] (toggle.north)            -- (0.35, 1.5);
+            \draw[arrow] (toggle.north)            -- (3.7, 2.1);
+            \draw[arrow] (timers.north)        to[*|] (9, 0.3);
+            \draw[arrow] (threshold.north)         -- (11.25, 1);
+            \draw[arrow] (mode.north)              -- (15.25, 1.7);
+            \draw[arrow] (clamp.west)              -- (18.45, 2.1);
+            \draw[arrow] (output_value.west)       -- (14.05, 5.5);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -662,7 +696,7 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=33em]{accumulator}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.5cm]{accumulator}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -679,32 +713,28 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)     at (-1.0, 16.0) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)    at (21.0, 16.0) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (red_keybind)   at (-1.0, 4.6)  {Red keybind};
-            \node[annotation, left]  (green_keybind) at (-1.0, 9.25) {Green keybind};
-            \node[annotation, below] (toggle)        at (0.35, -1.5) {Green/red toggle};
-            \node[annotation, below] (pause)         at (9.85, -1.5) {Pause};
-            \node[annotation, below] (duration)      at (7.25, -1.5) {Duration};
-            \node[annotation, below] (delay)         at (4.65, -1.5) {Delay};
-            \node[annotation, below] (bounds)        at (13.0, -1.5) {Value bounds};
-            \node[annotation, below] (scale)         at (16.1, -1.5) {Scale};
-            \node[annotation, right] (steps)         at (21.0, 0.0)  {Use steps};
+            \node[annotation, left]  (output_on)     at (-0.5, 16)   {Output (on)};
+            \node[annotation, right] (output_off)    at (20.5, 16)   {Output (off)};
+            \node[annotation, left]  (red_keybind)   at (-0.5, 4.5)  {Red keybind};
+            \node[annotation, below] (green_keybind) at (5.5, -1.5)  {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (timers)        at (9.5, -1.5)  {Timers};
+            \node[annotation, below] (bounds)        at (13.2, -1.5) {Value bounds};
+            \node[annotation, below] (scale)         at (16.4, -1.5) {Scale};
+            \node[annotation, right] (steps)         at (20.5, 0)    {Use steps};
 
             % Arrows
-            \draw[arrow] (output_on.east)            -- (9.95, 16.0);
-            \draw[arrow] (output_off.west)           -- (13.5, 16.0);
-            \draw[arrow] (red_keybind.east)          -- (0.1, 4.6);
-            \draw[arrow] (green_keybind.east)        -- (3.9, 5.75);
-            \draw[arrow] (toggle.north)              -- (0.35, 1.7);
-            \draw[arrow] (toggle.north)              -- (3.9, 2.25);
-            \draw[arrow] (pause.north)               -- (9.85, 0.3);
-            \draw[arrow] (duration.north)            -- (8.0, 2.1);
-            \draw[arrow] (delay.north)               -- (8.0, 4.1);
-            \draw[arrow] (bounds.north)              -- (12.0, 1.25);
-            \draw[arrow] (bounds.north)              -- (14.0, 1.25);
-            \draw[arrow] (scale.north)               -- (16.1, 1.25);
-            \draw[arrow] (steps.west)                -- (18.0, 2.25);
+            \draw[arrow] (output_on.east)          -- (9.2, 16);
+            \draw[arrow] (output_off.west)         -- (13.75, 16);
+            \draw[arrow] (red_keybind.east)        -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.north)     -- (5.5, 3.1);
+            \draw[arrow] (toggle.north)            -- (0.35, 1.5);
+            \draw[arrow] (toggle.north)            -- (3.9, 2.1);
+            \draw[arrow] (timers.north)        to[*|] (10, 0.3);
+            \draw[arrow] (bounds.north)            -- (12.2, 1);
+            \draw[arrow] (bounds.north)            -- (14.2, 1);
+            \draw[arrow] (scale.north)             -- (16.4, 1);
+            \draw[arrow] (steps.west)              -- (18.3, 2.1);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -712,9 +742,74 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
     \label{fig:Accumulator}
 \end{figure}
 
+### Randomizer
+
+Randomizers generate and output random values.
+
+Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Value bounds: minimum/maximum value that can be generated, the generated values will be in the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
+- Random mode: mode in which the values are generated
+  - Output on input: outputs a random value generated on each frame when it is activated, and $0$ otherwise
+  - Change on input: outputs a random value generated on each frame when it is activated, and the last generated value (initialized to $0$) otherwise
+  - Input defines range: outputs a random value generated on each frame in the intersection between the value bounds and the range $[\min(inputs), \max(inputs)]$ when the block is activated, and the last generated value (initialized to a random value within the value bounds) otherwise
+    - If the intersection is empty, the value bounds range is used instead
+  - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to a random value within the value bounds) when it is activated with a positive input
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.5cm]{randomizer}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-0.5, 16)    {Output (on)};
+            \node[annotation, right] (output_off)    at (20.5, 16)    {Output (off)};
+            \node[annotation, left]  (red_keybind)   at (-0.5, 4.5)   {Red keybind};
+            \node[annotation, below] (green_keybind) at (5.5, -1.5)   {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)     {Green/red toggle};
+            \node[annotation, below] (timers)        at (9.25, -1.5)  {Timers};
+            \node[annotation, below] (bounds)        at (12.25, -1.5) {Value bounds};
+            \node[annotation, below] (mode)          at (16.0, -1.5)  {Random mode};
+
+            % Arrows
+            \draw[arrow] (output_on.east)      -- (8.55, 16);
+            \draw[arrow] (output_off.west)     -- (12.75, 16);
+            \draw[arrow] (red_keybind.east)    -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.north) -- (5.5, 3.1);
+            \draw[arrow] (toggle.north)        -- (0.35, 1.5);
+            \draw[arrow] (toggle.north)        -- (3.65, 2.1);
+            \draw[arrow] (timers.north)        -- (9.25, 0.3);
+            \draw[arrow] (bounds.north)        -- (11.25, 1);
+            \draw[arrow] (bounds.north)        -- (13.25, 1);
+            \draw[arrow] (mode.north)          -- (16.0, 1.7);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Randomizer settings}
+    \label{fig:Randomizer}
+\end{figure}
+
 ### Number Display
 
-Number displays output the sum of their inputs, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range), and display it with an optional rounding.
+Number displays output the sum of their inputs, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range), and display it with an optional rounding. They display "N/A" in build mode.
 
 Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 
@@ -730,7 +825,7 @@ Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=28em]{number_display}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=5cm]{number_display}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -747,27 +842,23 @@ Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)     at (-1.5, 16.0) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)    at (21.5, 16.0) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (red_keybind)   at (-1.5, 4.5)  {Red keybind};
-            \node[annotation, below] (green_keybind) at (7.0, -1.5)  {Green keybind};
-            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
-            \node[annotation, below] (pause)         at (11.25, -1.5) {Pause};
-            \node[annotation, below] (duration)      at (14.5, -1.5) {Duration};
-            \node[annotation, right] (delay)         at (21.5, 10)   {Delay};
-            \node[annotation, right] (rounding)      at (21.5, 3.1)  {Rounding};
+            \node[annotation, left]  (output_on)     at (-0.75, 16.25) {Output (on)};
+            \node[annotation, right] (output_off)    at (20.75, 16.25) {Output (off)};
+            \node[annotation, left]  (red_keybind)   at (-0.75, 4.5)   {Red keybind};
+            \node[annotation, below] (green_keybind) at (7.0, -1.5)    {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)      {Green/red toggle};
+            \node[annotation, below] (timers)        at (11.5, -1.5)   {Timers};
+            \node[annotation, below] (rounding)      at (14.5, -1.5)   {Rounding};
 
             % Arrows
-            \draw[arrow] (output_on.east)          -- (8.5, 16.0);
-            \draw[arrow] (output_off.west)         -- (13.0, 16.0);
-            \draw[arrow] (red_keybind.east)        -- (0.1, 4.5);
-            \draw[arrow] (green_keybind.north)     -- (7.0, 3.3);
-            \draw[arrow] (toggle.north)            -- (0.5, 1.7);
-            \draw[arrow] (toggle.north)            -- (4.5, 2.0);
-            \draw[arrow] (pause.north)         to[*|] (11.5, 0.3);
-            \draw[arrow] (duration.north)          -- (12.5, 2.4);
-            \draw[arrow] (delay.west)              -- (12.5, 5.25);
-            \draw[arrow] (rounding.west)           -- (16.65, 3.1);
+            \draw[arrow] (output_on.east)      -- (6.85, 16.25);
+            \draw[arrow] (output_off.west)     -- (12.15, 16.25);
+            \draw[arrow] (red_keybind.east)    -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.north) -- (7.0, 3.1);
+            \draw[arrow] (toggle.north)        -- (0.5, 1.5);
+            \draw[arrow] (toggle.north)        -- (4.5, 2.0);
+            \draw[arrow] (timers.north)        -- (11.5, 0.3);
+            \draw[arrow] (rounding.north)      -- (14.5, 1.7);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -785,15 +876,16 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
 - Constant: constant value to use as the first operand
-- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, and division
+- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^\text{constant}$), and exponentiation ($\text{constant}^x$)
   - Attempting to perform a division by $0$ results in an output of $0$
-  - If the operation is addition or subtraction, the constant value is used as output when there are no inputs. For other operations, $0$ is used instead
+  - Attempting to perform $0^0$ results in $1$ when the operation is power and $0$ when the operation is exponentiation
+  - When there are no inputs, the operation is performed using an input of $0$
 
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=33em]{arithmetic_logic_block}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.5cm]{arithmetic_logic_block}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -810,34 +902,149 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)     at (-1.0, 16.0) {Output (on)\\(will send an\\input to it)};
-            \node[annotation, right] (output_off)    at (21.0, 16.0) {Output (off)\\(won't send an\\input to it)};
-            \node[annotation, left]  (red_keybind)   at (-1.0, 4.5)  {Red keybind};
-            \node[annotation, left]  (green_keybind) at (-1.0, 9.25) {Green keybind};
-            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
-            \node[annotation, below] (pause)         at (9.9, -1.5)  {Pause};
-            \node[annotation, below] (duration)      at (7.25, -1.5) {Duration};
-            \node[annotation, below] (delay)         at (4.65, -1.5) {Delay};
-            \node[annotation, below] (constant)      at (12.5, -1.5) {Constant};
+            \node[annotation, left]  (output_on)     at (-0.75, 16)   {Output (on)};
+            \node[annotation, right] (output_off)    at (20.75, 16)   {Output (off)};
+            \node[annotation, left]  (red_keybind)   at (-0.75, 4.5)  {Red keybind};
+            \node[annotation, below] (green_keybind) at (6, -1.5)     {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)     {Green/red toggle};
+            \node[annotation, below] (timers)        at (9.5, -1.5)   {Timers};
+            \node[annotation, below] (constant)      at (12.5, -1.5)  {Constant};
             \node[annotation, below] (operation)     at (15.75, -1.5) {Operation};
 
             % Arrows
-            \draw[arrow] (output_on.east)          -- (9.35, 16.0);
-            \draw[arrow] (output_off.west)         -- (13.05, 16.0);
+            \draw[arrow] (output_on.east)          -- (9.4, 16);
+            \draw[arrow] (output_off.west)         -- (14.1, 16);
             \draw[arrow] (red_keybind.east)        -- (0.1, 4.5);
-            \draw[arrow] (green_keybind.east)      -- (4.0, 5.5);
-            \draw[arrow] (toggle.north)            -- (0.5, 1.7);
-            \draw[arrow] (toggle.north)            -- (4.0, 2.0);
-            \draw[arrow] (pause.north)         to[*|] (10.25, 0.3);
-            \draw[arrow] (duration.north)          -- (8.25, 2.1);
-            \draw[arrow] (delay.north)             -- (8.25, 4.1);
-            \draw[arrow] (constant.north)      to[*|] (12.4, 1.25);
-            \draw[arrow] (operation.north)     to[*|] (15.5, 2.2);
+            \draw[arrow] (green_keybind.north)     -- (6, 3.1);
+            \draw[arrow] (toggle.north)            -- (0.35, 1.5);
+            \draw[arrow] (toggle.north)            -- (3.95, 2.1);
+            \draw[arrow] (timers.north)        to[*|] (10, 0.3);
+            \draw[arrow] (constant.north)          -- (12.5, 1);
+            \draw[arrow] (operation.north)     to[*|] (15.5, 1.7);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
     \caption{Arithmetics Logic Block settings}
     \label{fig:ArithmeticsBlock}
+\end{figure}
+
+### Functions Logic Block
+
+Functions logic blocks perform a unary operation with the sum of their inputs and output the result. They have a display which shows the currently selected operation.
+
+Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, arctangent, floor, ceiling, and rounding
+  - Attempting to perform an undefined operation (square root of a negative number, or arcsine/arccosine of a number outside of the $[-1, 1]$ range) results in an output of $0$
+  - Trigonometric functions use degrees as the angle unit
+  - Inverse trigonometric functions output the value in their [\underline{principal branch}](https://en.wikipedia.org/wiki/Principal_branch)
+    - For arcsine: $-90\degree \leq \arcsin(x) \leq 90\degree$
+    - For arccosine: $0\degree \leq \arccos(x) \leq 180\degree$
+    - For arctangent: $-90\degree < \arcsin(x) < 90\degree$
+  - For the rounding function, numbers with a fractional part of $0.5$ are rounded to the closest even integer
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=5cm]{functions_block}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-0.75, 16)  {Output (on)};
+            \node[annotation, right] (output_off)    at (20.75, 16)  {Output (off)};
+            \node[annotation, left]  (red_keybind)   at (-0.75, 4.5) {Red keybind};
+            \node[annotation, below] (green_keybind) at (6.5, -1.5)  {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (timers)        at (11.3, -1.5) {Timers};
+            \node[annotation, below] (function)      at (14.5, -1.5) {Function};
+
+            % Arrows
+            \draw[arrow] (output_on.east)      -- (7.9, 16);
+            \draw[arrow] (output_off.west)     -- (13.1, 16);
+            \draw[arrow] (red_keybind.east)    -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.north) -- (6.5, 3.1);
+            \draw[arrow] (toggle.north)        -- (0.35, 1.5);
+            \draw[arrow] (toggle.north)        -- (4.5, 2.1);
+            \draw[arrow] (timers.north)        -- (11.3, 0.3);
+            \draw[arrow] (function.north)      -- (14.5, 1.7);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Functions Logic Block settings}
+    \label{fig:FunctionsBlock}
+\end{figure}
+
+### Aggregate Logic Block
+
+Aggregate logic blocks perform a (variadic) aggregation operation with their inputs and output the result. They have a display which shows the currently selected operation.
+
+Its settings are shown in figure \ref{fig:AggregateBlock} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Aggregate function: aggregate operation to perform. Possible values are sum, product, minimum, and maximum
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=5cm]{aggregate_block}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.south east)$)},
+            y={($0.05*(image.north west)$)}
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [below] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (output_on)     at (-0.75, 16)  {Output (on)};
+            \node[annotation, right] (output_off)    at (20.75, 16)  {Output (off)};
+            \node[annotation, left]  (red_keybind)   at (-0.75, 4.5) {Red keybind};
+            \node[annotation, below] (green_keybind) at (6.5, -1.5)  {Green keybind};
+            \node[annotation, below] (toggle)        at (1, -1.5)    {Green/red toggle};
+            \node[annotation, below] (timers)        at (11, -1.5)   {Timers};
+            \node[annotation, below] (function)      at (15, -1.5)   {Aggregate function};
+
+            % Arrows
+            \draw[arrow] (output_on.east)      -- (7.9, 16);
+            \draw[arrow] (output_off.west)     -- (13.1, 16);
+            \draw[arrow] (red_keybind.east)    -- (0.1, 4.5);
+            \draw[arrow] (green_keybind.north) -- (6.5, 3.1);
+            \draw[arrow] (toggle.north)        -- (0.35, 1.5);
+            \draw[arrow] (toggle.north)        -- (4.4, 2.1);
+            \draw[arrow] (timers.north)        -- (11, 0.3);
+            \draw[arrow] (function.north)      -- (15, 1.7);
+        \end{scope}
+    \end{tikzpicture}
+    \vspace{1cm}
+    \caption{Aggregate Logic Block settings}
+    \label{fig:AggregateBlock}
 \end{figure}
 
 ### Hue Light Panel
@@ -856,7 +1063,7 @@ Its settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[width=28em]{hue_light_panel}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=5cm]{hue_light_panel}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -873,22 +1080,18 @@ Its settings are shown in figure \ref{fig:HueLightPanel} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (green_keybind) at (-1.0, 11)   {Green keybind};
-            \node[annotation, left]  (toggle)        at (-1.0, 3.75) {Green toggle};
-            \node[annotation, below] (pause)         at (8.0, -1.5)  {Pause};
-            \node[annotation, below] (duration)      at (4.5, -1.5)  {Duration};
-            \node[annotation, below] (delay)         at (1.5, -1.5)  {Delay};
-            \node[annotation, below] (saturation)    at (11.5, -1.5) {Saturation};
-            \node[annotation, right] (brightness)    at (21.0, 4.5)  {Brightness};
+            \node[annotation, left]  (green_keybind) at (-1, 4.5)     {Green keybind};
+            \node[annotation, below] (toggle)        at (0.5, -1.5)   {Toggle};
+            \node[annotation, below] (timers)        at (8.25, -1.5)  {Timers};
+            \node[annotation, below] (saturation)    at (11.75, -1.5) {Saturation};
+            \node[annotation, right] (brightness)    at (21.0, 3)     {Brightness};
 
             % Arrows
-            \draw[arrow] (green_keybind.east)  -- (0.1, 8.0);
-            \draw[arrow] (toggle.east)         -- (0.1, 3.75);
-            \draw[arrow] (pause.north)     to[*|] (8.5, 0.5);
-            \draw[arrow] (duration.north)      -- (5.9, 3.0);
-            \draw[arrow] (delay.north)         -- (5.9, 5.75);
-            \draw[arrow] (saturation.north)    -- (11.5, 1.9);
-            \draw[arrow] (brightness.west)     -- (15.8, 4.5);
+            \draw[arrow] (green_keybind.east) -- (0.1, 4.5);
+            \draw[arrow] (toggle.north)       -- (0.5, 1.5);
+            \draw[arrow] (timers.north)       -- (8.25, 0.3);
+            \draw[arrow] (saturation.north)   -- (11.75, 1);
+            \draw[arrow] (brightness.west)    -- (16.15, 3);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
@@ -1346,7 +1549,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - Requires a different input circuit: the positive input should be in a 1 frame pulse generator connected to an AND gate connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells. All comparators except the last on each cell should be connected to an OR gate connected to the AND gate from the input circuit
 - To add cycle, add cycle to the last cell and remove all the gates in the input circuit except the pulse generator, which should be connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells
 - To make it 2-way, duplicate the input circuit but connect all comparators except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first comparator of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
-  - The AND gate from the second input circuit should have a $-1$ output value
+  - The AND gate from the second input circuit should have a $-1$ output scale
 - Might require a decoder (unless you want to show numbers on a screen)
   - To create it, take $n$ AND gates and assign a different combination of 1 comparator from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
   - Has a complexity of $n$ gates
@@ -1573,7 +1776,7 @@ Notes:
         \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
         \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
         \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
-        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output value};
+        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output scale};
 
         % Arrows
 
@@ -1631,9 +1834,9 @@ This section contains old circuits that were previously in \nameref{useful-circu
         \coordinate[above=16pt of feedback_top] (feedback);
 
         \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
-        \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output value};
+        \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output scale};
 
-        \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output value\\(output)};
+        \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output scale\\(output)};
 
         % Bounding boxes
         \begin{scope}[on background layer]
@@ -1925,7 +2128,7 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 
 # Tips
 
-- If you want your system to not modify the input that passes through, configure all of the logic gates to have an output value of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
+- If you want your system to not modify the input that passes through, configure all of the logic gates to have an output scale of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
 - Arithmetics logic blocks can be used to get always on signals with a constant value by using the addition operation with the desired constant. The signal can be toggled by setting the operation to multiplication and using a $+1$ input
 - Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
 - If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
