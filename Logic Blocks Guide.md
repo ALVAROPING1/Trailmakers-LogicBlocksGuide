@@ -166,7 +166,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the surface of the detecting face
 - Output scale: multiplier of the output signal created by the block
-- Sensor offset: position from which the detecting face sends the raycast to detect blocks
+- Sensor offset: horizontal position from which the detecting face sends the raycast to detect objects
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the distance to the detected object in meters
