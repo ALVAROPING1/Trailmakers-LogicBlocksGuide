@@ -756,7 +756,7 @@ Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
   - Output on input: outputs a random value generated on each frame when it is activated, and $0$ otherwise
   - Change on input: outputs a random value generated on each frame when it is activated, and the last generated value (initialized to $0$) otherwise
   - Input defines range: outputs a random value generated on each frame in the intersection between the value bounds and the range $[\min(\text{inputs}), \max(\text{inputs})]$ when the block is activated, and the last generated value (initialized to a random value within the value bounds) otherwise
-    - If the intersection is empty, the value bounds range is used instead
+    - If the intersection is empty, the value bounds range is used instead if any of the inputs isn't 0, otherwise the output is always 0
   - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to a random value within the value bounds) when it is activated with a positive input
 
 \begin{figure}[H]
