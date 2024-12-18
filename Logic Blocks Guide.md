@@ -363,7 +363,7 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.75cm]{gravity_sensor}};
+        \node[anchor=south west, inner sep=0] (image) at (0,0) {\includegraphics[height=4.65cm]{gravity_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
