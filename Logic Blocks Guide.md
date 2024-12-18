@@ -171,7 +171,6 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
   - Trigger: output 1
   - Measurement: output the distance to the detected object in meters
     - Same as "Trigger" when inverted trigger is used
-    - Note: due to a bug, when the measurement is in the range $[\text{range} - 0.25, \text{range}]$, the measured value is "range" instead of the actual distance
   - Normalized: output $\frac{\text{measurement}}{\text{range}}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
@@ -878,11 +877,9 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Timers: see \nameref{timers}
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^\text{constant}$), and exponentiation ($\text{constant}^x$)
-  - Attempting to perform a division by $0$ results in an output of $0$
+  - Attempting to perform a division by $0$, $\text{constant}^x$ with $\text{constant} < 0$, or $x^\text{constant}$ with $\abs{\text{constant}} < 1$ results in an output of $0$
   - Attempting to perform $0^0$ results in $1$ when the operation is power and $0$ when the operation is exponentiation
   - When there are no inputs, the operation is performed using an input of $0$
-  - Note: due to a bug, when the operation is power, $\abs{constant} < 1$, and the input is negative, the output is $-\maxFloatApprox$
-  - Note: due to a bug, when the operation is exponentiation, $constant < 0$, and the input isn't an integer, the output is $-\maxFloatApprox$
 
 \begin{figure}[H]
     \centering
@@ -996,7 +993,7 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
 
 ### Aggregate Logic Block
 
-Aggregate logic blocks perform a (variadic) aggregation operation with their inputs and output the result if the sum of the inputs isn't 0. They have a display which shows the currently selected operation. Note: due to a bug, when the function isn't sum, under certain conditions, the output can be updated instantly without the normal signal propagation delay.
+Aggregate logic blocks perform a (variadic) aggregation operation with their inputs and output the result. They have a display which shows the currently selected operation. Note: due to a bug, when the function isn't sum, under certain conditions, the output can be updated instantly without the normal signal propagation delay.
 
 Its settings are shown in figure \ref{fig:AggregateBlock} and are as follows:
 
