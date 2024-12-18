@@ -993,7 +993,7 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
 
 ### Aggregate Logic Block
 
-Aggregate logic blocks perform a (variadic) aggregation operation with their inputs and output the result. They have a display which shows the currently selected operation. Note: due to a bug, when the function isn't sum, under certain conditions, the output can be updated instantly without the normal signal propagation delay.
+Aggregate logic blocks perform a (variadic) aggregation operation with their inputs and output the result. They have a display which shows the currently selected operation. Note: due to a bug, when the function isn't sum, the output is updated instantly without the normal signal propagation delay.
 
 Its settings are shown in figure \ref{fig:AggregateBlock} and are as follows:
 
