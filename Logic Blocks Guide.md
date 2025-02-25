@@ -324,7 +324,7 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
             % Nodes
             \node[annotation, left]  (output_on)       at (-1, 16)     {Output (on)};
             \node[annotation, right] (output_off)      at (21, 16)     {Output (off)};
-            \node[annotation, left]  (altitude)        at (-1, 3)      {Altitude};
+            \node[annotation, left]  (speed)           at (-1, 3)      {Speed};
             \node[annotation, below] (output_value)    at (4.25, -1.5) {Output scale};
             \node[annotation, below] (mode)            at (11.5, -1.5) {Output mode};
             \node[annotation, right] (trigger)         at (21, 0)      {Trigger below};
@@ -332,7 +332,7 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
             % Arrows
             \draw[arrow] (output_on.east)         -- (6.8, 16);
             \draw[arrow] (output_off.west)        -- (16, 16);
-            \draw[arrow] (altitude.east)          -- (0.15, 3);
+            \draw[arrow] (speed.east)             -- (0.15, 3);
             \draw[arrow] (output_value.north) to[*|] (5.9, 1);
             \draw[arrow] (mode.north)             -- (11.5, 1.7);
             \draw[arrow] (trigger.west)           -- (16.5, 2.1);
