@@ -175,6 +175,8 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
+- Blocks only: whether to trigger only when blocks are detected
+  - If enabled, raycast stops at the first obstacle regardless of what it is, but if it's not a block the output will be the same as no detection
 
 \begin{figure}[H]
     \centering
@@ -197,22 +199,24 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
             %\foreach \y in {0,1,...,20} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, left]  (output_on)    at (-1, 16)      {Output (on)};
-            \node[annotation, right] (output_off)   at (21, 16)      {Output (off)};
-            \node[annotation, left]  (range)        at (-1, 3)       {Range};
-            \node[annotation, below] (output_value) at (3.75, -1.5)  {Output scale};
-            \node[annotation, below] (offset)       at (9.2, -1.5)   {Sensor offset};
-            \node[annotation, below] (mode)         at (14.75, -1.5) {Output mode};
-            \node[annotation, right] (trigger)      at (21, 0)       {Invert trigger};
+            \node[annotation, left]  (output_on)    at (-1, 15.3)    {Output (on)};
+            \node[annotation, right] (output_off)   at (21, 15.3)    {Output (off)};
+            \node[annotation, left]  (range)        at (-1, 2.2)     {Range};
+            \node[annotation, below] (output_value) at (3.4, -1.5)   {Output scale};
+            \node[annotation, below] (offset)       at (8.85, -1.5)  {Sensor offset};
+            \node[annotation, below] (mode)         at (14.4, -1.5)  {Output mode};
+            \node[annotation, below] (blocks)       at (19.7, -1.5)  {Blocks only};
+            \node[annotation, right] (trigger)      at (21, 2.4)     {Invert trigger};
 
             % Arrows
-            \draw[arrow] (output_on.east)         -- (5.7, 16);
-            \draw[arrow] (output_off.west)        -- (13.5, 16);
-            \draw[arrow] (range.east)             -- (0.15, 3);
-            \draw[arrow] (output_value.north) to[*|] (5, 1);
-            \draw[arrow] (output_value.north) to[*|] (8.4, 1);
-            \draw[arrow] (mode.north)             -- (12.5, 1.7);
-            \draw[arrow] (trigger.west)           -- (17.2, 2.1);
+            \draw[arrow] (output_on.east)         -- (5.8, 15.3);
+            \draw[arrow] (output_off.west)        -- (13.2, 15.3);
+            \draw[arrow] (range.east)             -- (0.15, 2.2);
+            \draw[arrow] (output_value.north) to[*|] (5, 0.5);
+            \draw[arrow] (offset.north)       to[*|] (8.4, 0.5);
+            \draw[arrow] (mode.north)         to[*|] (12.7, 1.3);
+            \draw[arrow] (blocks.north)           -- (16.9, 0.2);
+            \draw[arrow] (trigger.west)           -- (19.3, 2.4);
         \end{scope}
     \end{tikzpicture}
     \vspace{1cm}
