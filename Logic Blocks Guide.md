@@ -881,7 +881,7 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Timers: see \nameref{timers}
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^\text{constant}$), and exponentiation ($\text{constant}^x$)
-  - Attempting to perform a division by $0$, $\text{constant}^x$ with $\text{constant} < 0$, or $x^\text{constant}$ with $\abs{\text{constant}} < 1$ results in an output of $0$
+  - Attempting to perform a division by $0$ or $a^b$ with $a < 0$ and $b \notin \mathbb{Z}$ results in an output of $0$
   - Attempting to perform $0^0$ results in $1$ when the operation is power and $0$ when the operation is exponentiation
   - When there are no inputs, the operation is performed using an input of $0$
 
