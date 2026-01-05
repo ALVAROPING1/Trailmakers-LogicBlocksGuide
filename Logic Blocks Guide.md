@@ -163,6 +163,9 @@ Distance sensors check for objects within a straight line in front of them and a
 
 Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the surface of the detecting face, although the raycast used starts at the center of the block. This allows it to measure negative distances in the range $[-0.125, 0]$ m, which correspond with the distance between the center of the block and the surface of the detecting face
 - Output scale: multiplier of the output signal created by the block
@@ -232,6 +235,9 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
 - Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
@@ -299,6 +305,9 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 
 Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
 - Output scale: value of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
@@ -359,6 +368,9 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 
 Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
 - Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
@@ -419,6 +431,9 @@ Angle sensors measure the angle of the block relative to the direction of highes
 
 Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
 - Output scale: multiplier of the output signal created by the block
