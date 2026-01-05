@@ -231,7 +231,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 
 ### Altitude Sensor
 
-Altitude sensors measure the altitude of the block relative to a predefined frame of reference. They have a display which shows the currently measured altitude rounded to the nearest integer, or "N/A" in build mode.
+Altitude sensors measure the altitude of the block relative to a predefined frame of reference. They have a display which shows the currently measured altitude rounded to the nearest integer.
 
 Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
