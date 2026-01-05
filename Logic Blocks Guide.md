@@ -175,6 +175,8 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
 - Blocks only: whether to trigger only when blocks are detected
   - If enabled, raycast stops at the first obstacle regardless of what it is, but if it's not a block the output will be the same as no detection
 
@@ -244,6 +246,8 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the altitude is above the configured value
   - Below: sends an output when the altitude is below the configured value
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
 
 \begin{figure}[H]
     \centering
@@ -304,6 +308,8 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
 
 \begin{figure}[H]
     \centering
@@ -362,6 +368,8 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the gravity strength is above the configured value
   - Below: sends an output when the gravity strength is below the configured value
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
 
 \begin{figure}[H]
     \centering
@@ -422,6 +430,8 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
 
 \begin{figure}[H]
     \centering
@@ -484,6 +494,8 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
 
 \begin{figure}[H]
     \centering
