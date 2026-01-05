@@ -299,6 +299,31 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
     \label{fig:SensorAltitude}
 \end{figure}
 
+### Position Sensor
+
+Position sensors measure the horizontal position of the block on a chosen axis. They have a display which shows the currently measured position rounded to the nearest integer.
+
+Its settings are shown in figure \ref{fig:SensorLatitude} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Latitude: latitude threshold to trigger, in meters ($1 \text{ block} = 0.25 \text{ m}$) <!-- TODO: Update name -->
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current position in meters
+  - Normalized: output $\frac{\text{measurement}}{\text{latitude}}$ if $\text{latitude} \not = 0$ (same as measurement otherwise)
+- Mode: horizontal axis in which to measure the position, either latitude or longitude
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the altitude is above the configured value
+  - Below: sends an output when the altitude is below the configured value
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+- Relative: determines whether the position measured is absolute or relative to the initial position of the sensor when it was spawned
+
+<!-- TODO: add diagram -->
+
 ### Speed Sensor
 
 Speed sensors measure the speed of the block in a given direction indicated by the arrow on the block. They have a display which shows the currently measured speed as a bar indicator, which is full when the speed is higher than or equal to the trigger speed and empty when the speed is negative or $0$.
