@@ -155,7 +155,7 @@ Note: due to a bug, only up to 5 characters can be used on any configurable bloc
 
 ## Sensors
 
-Sensors are a group of blocks that measure a physical property, like speed or angle, and create a boolean output based on it.
+Sensors are a group of blocks that measure a physical property, like speed or angle, and create either a boolean or real output based on it.
 
 ### Distance Sensor
 
