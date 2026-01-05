@@ -171,7 +171,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
   - Trigger: output 1
   - Measurement: output the distance to the detected object in meters
     - Same as "Trigger" when inverted trigger is used
-  - Normalized: output $\frac{\text{measurement}}{\text{range}}$
+  - Normalized: output $\frac{\text{measurement}}{\text{range}}$ if $\text{distance} \not = 0$ ($0$ otherwise)
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when it detects an object
   - Inverted: sends an output when it doesn't detect an object
@@ -235,7 +235,7 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the current altitude in meters
-  - Normalized: output $\frac{\text{measurement}}{\text{altitude}}$
+  - Normalized: output $\frac{\text{measurement}}{\text{altitude}}$ if $\text{altitude} \not = 0$ (same as measurement otherwise)
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
@@ -300,7 +300,7 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the current speed in m/s
-  - Normalized: output $\frac{\text{measurement}}{\text{speed (in m/s)}}$
+  - Normalized: output $\frac{\text{measurement}}{\text{speed (in m/s)}}$ if $\text{speed} \not = 0$ (same as measurement otherwise)
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the speed is above the configured value
   - Below: sends an output when the speed is below the configured value
@@ -358,7 +358,7 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the current gravity relative to the normal gravity
-  - Normalized: output $\frac{\text{measurement}}{\text{threshold}}$
+  - Normalized: output $\frac{\text{measurement}}{\text{threshold}}$ if $\text{threshold} \not = 0$ (same as measurement otherwise)
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the gravity strength is above the configured value
   - Below: sends an output when the gravity strength is below the configured value
@@ -417,7 +417,8 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
-  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if $\text{witdth} \not = 0$ ($0$ otherwise)
+    - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - \text{width}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
@@ -478,7 +479,8 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
-  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if $\text{witdth} \not = 0$ ($0$ otherwise)
+    - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - \text{width}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
