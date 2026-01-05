@@ -1214,6 +1214,46 @@ $$\operatorname{color}(x) = \begin{cases}
     \label{fig:HueLightPanelColor}
 \end{figure}
 
+### RC Blocks
+
+RC blocks are a pair of blocks that allow to send and receive logic signals between different creations.
+
+#### Radio Sender Block
+
+Radio sender blocks transmit their input value to other radio receiver blocks on the same channel and isolation level.
+
+Its settings are shown in figure \ref{fig:RCSender} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Channel: RC channel in which to emit the signal
+- Channel isolation: visibility type of the channel
+  - None: channel is shared by all players
+  - Team: channel is shared by all players of the same team. Different teams won't see each other's signals
+  - Player: channel is different for each player. Different players won't see each other's signals
+  - The player/team of the RC block is determined by the player who owns (spawned) the creation
+
+<!-- TODO: add diagram -->
+
+#### Radio Receiver Block
+
+Radio receiver blocks receive signals from radio sender blocks on the same channel and isolation level, and output their sum.
+
+Its settings are shown in figure \ref{fig:RCReceiver} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Channel: RC channel in which to receive the signals
+- Channel isolation: visibility type of the channel
+  - None: channel is shared by all players
+  - Team: channel is shared by all players of the same team. Different teams won't see each other's signals
+  - Player: channel is different for each player. Different players won't see each other's signals
+  - The player/team of the RC block is determined by the player who owns (spawned) the creation
+
+<!-- TODO: add diagram -->
+
 \clearpage
 
 # Common block settings
