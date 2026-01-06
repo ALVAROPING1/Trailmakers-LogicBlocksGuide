@@ -166,6 +166,7 @@ Its settings are shown in figure \ref{fig:SensorDistance} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 \text{ block} = 0.25 \text{ m}$)
   - Distance is measured from the surface of the detecting face, although the raycast used starts at the center of the block. This allows it to measure negative distances in the range $[-0.125, 0]$ m, which correspond with the distance between the center of the block and the surface of the detecting face
 - Output scale: multiplier of the output signal created by the block
@@ -238,6 +239,7 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 \text{ block} = 0.25 \text{ m}$)
 - Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
@@ -308,6 +310,7 @@ Its settings are shown in figure \ref{fig:SensorLatitude} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Latitude: latitude threshold to trigger, in meters ($1 \text{ block} = 0.25 \text{ m}$) <!-- TODO: Update name -->
 - Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
@@ -333,6 +336,7 @@ Its settings are shown in figure \ref{fig:SensorSpeed} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
 - Output scale: value of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
@@ -396,6 +400,7 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 \text{m}/\text{s}^2$)
 - Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
@@ -459,6 +464,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Direction: position of the middle point of the activation threshold, in degrees
 - Width: size of the activation threshold, in degrees
 - Output scale: multiplier of the output signal created by the block
@@ -595,6 +601,7 @@ Their settings are shown in figure \ref{fig:LogicGate} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Output scale: multiplier of the output signal created by the block, explained in \nameref{output-value-calculation}
 
 \begin{figure}[H]
@@ -679,6 +686,7 @@ Its settings are shown in figure \ref{fig:Comparator} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Threshold: value used for the right hand side of the comparison
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
 - Comparison mode: comparison operation to perform. Possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
@@ -746,6 +754,7 @@ Its settings are shown in figure \ref{fig:Accumulator} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Value bounds: minimum/maximum value that can be stored, the stored value will be clamped to the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
 - Scale: rate of change of the stored value, used to scale the value of the input
 - Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $1/60$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
@@ -809,6 +818,7 @@ Its settings are shown in figure \ref{fig:Randomizer} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Value bounds: minimum/maximum value that can be generated, the generated values will be in the range $[\min(\text{minimum}, \text{maximum}), \enspace \max(\text{minimum}, \text{maximum})]$
 - Random mode: mode in which the values are generated
   - Output on input: outputs a random value generated on each frame when it is activated, and $0$ otherwise
@@ -874,6 +884,7 @@ Its settings are shown in figure \ref{fig:NumberDisplay} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled", "nearest", "floor" (closest smaller integer), and "ceil" (closest bigger integer)
   - When rounding is disabled, numbers are rounded to $2$ decimals using the nearest mode, rounding numbers ending in $0.005$ away from $0$
   - For the "nearest" mode, numbers with a fractional part of $0.5$ are rounded to the closest even integer
@@ -933,6 +944,7 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Constant: constant value to use as the first operand
 - Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^\text{constant}$), and exponentiation ($\text{constant}^x$)
   - Attempting to perform a division by $0$ or $a^b$ with $a < 0$ and $b \notin \mathbb{Z}$ results in an output of $0$
@@ -1058,6 +1070,7 @@ Its settings are shown in figure \ref{fig:AggregateBlock} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
 - Aggregate function: aggregate operation to perform. Possible values are sum, product, minimum, and maximum
 
 \begin{figure}[H]
@@ -1238,7 +1251,7 @@ Its settings are shown in figure \ref{fig:RCSender} and are as follows:
 
 #### Radio Receiver Block
 
-Radio receiver blocks receive signals from radio sender blocks on the same channel and isolation level, and output their sum.
+Radio receiver blocks receive signals from radio sender blocks on the same channel and isolation level, and output their sum. The logic channel of the output is always 0.
 
 Its settings are shown in figure \ref{fig:RCReceiver} and are as follows:
 
@@ -1308,13 +1321,16 @@ Timers are a group of settings that allow to automate the activation/deactivatio
 
 # Signals
 
-Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals.
+Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals. Signals are made up of 3 important properties:
 
 - Input/output value: value attached to each signal, usually in the range $[-1, 1]$.
   - \nameref{math-blocks} are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range, instead they use the range $[-\maxFloat, \maxFloat] \approx [-\maxFloatApprox, \maxFloatApprox]$
   - They are represented with a standard [\underline{IEEE 754 single-precision floating-point number}](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
 - Truthness value: value that determines if a signal is on or off
   - A signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
+- Logic channel: tag added to signals to be able to group them. Its exact value is meaningless as it's only ever used to determine how to group signals received by a single block into multiple different groups. The value of each group is the sum of the signals within that group received. Most blocks ignore it, but some blocks can treat each group differently.
+  - Keybinds always use the C0 channel
+  - Toggle/timers state is shared by all channels
 
 When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the gyro stabilizer and hue light panels, additionally use the absolute value before interpreting it, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
 
