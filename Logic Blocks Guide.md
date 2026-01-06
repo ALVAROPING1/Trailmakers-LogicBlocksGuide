@@ -946,10 +946,11 @@ Its settings are shown in figure \ref{fig:ArithmeticsBlock} and are as follows:
 - Timers: see \nameref{timers}
 - Logic output channel: tag added to the output signal, see \nameref{signals}
 - Constant: constant value to use as the first operand
-- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^\text{constant}$), and exponentiation ($\text{constant}^x$)
+- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^\text{constant}$), exponentiation ($\text{constant}^x$), and variable division
   - Attempting to perform a division by $0$ or $a^b$ with $a < 0$ and $b \notin \mathbb{Z}$ results in an output of $0$
   - Attempting to perform $0^0$ results in $1$ when the operation is power and $0$ when the operation is exponentiation
   - When there are no inputs, the operation is performed using an input of $0$
+  - Variable division uses the logic channel 0 for its first input (numerator) and logic channel 1 for its second input (denominator)
 
 \begin{figure}[H]
     \centering
@@ -1007,14 +1008,16 @@ Its settings are shown in figure \ref{fig:FunctionsBlock} and are as follows:
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
-- Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, arctangent, floor, ceiling, and rounding
-  - Attempting to perform an undefined operation (square root of a negative number, or arcsine/arccosine of a number outside of the $[-1, 1]$ range) results in an output of $0$
+- Logic output channel: tag added to the output signal, see \nameref{signals}
+- Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, arctangent, floor, ceiling, rounding, arctan2, $\log_2$, $\log_e$, and $\log_{10}$
+  - Attempting to perform an undefined operation (square root of a negative number, arcsine/arccosine of a number outside of the $[-1, 1]$ range, or logarithm of a negative value) results in an output of $0$
   - Trigonometric functions use degrees as the angle unit
   - Inverse trigonometric functions output the value in their [\underline{principal branch}](https://en.wikipedia.org/wiki/Principal_branch)
     - For arcsine: $-90\degree \leq \arcsin(x) \leq 90\degree$
     - For arccosine: $0\degree \leq \arccos(x) \leq 180\degree$
     - For arctangent: $-90\degree < \arctan(x) < 90\degree$
   - For the rounding function, numbers with a fractional part of $0.5$ are rounded to the closest even integer
+  - Arctan2 uses the logic channel 0 for its first input ($y$) and logic channel 1 for its second input ($x$)
 
 \begin{figure}[H]
     \centering
