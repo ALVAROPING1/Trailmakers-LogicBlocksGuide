@@ -1236,7 +1236,7 @@ RC blocks are a pair of blocks that allow to send and receive logic signals betw
 
 #### Radio Sender
 
-Radio senders transmit their input value to other radio receivers on the same channel and isolation level.
+Radio senders transmit their input value to other radio receivers on the same channel and isolation level. The logic output of radio senders is always 0.
 
 Its settings are shown in figure \ref{fig:RCSender} and are as follows:
 
@@ -1254,7 +1254,7 @@ Its settings are shown in figure \ref{fig:RCSender} and are as follows:
 
 #### Radio Receiver
 
-Radio receivers gather signals from radio senders on the same channel and isolation level, and output their sum. The logic channel of the output is always 0.
+Radio receivers gather signals from radio senders on the same channel and isolation level, and output their sum. The logic channel of the output is always 0. Logic inputs to the radio receiver are ignored, only radio senders are taken into account.
 
 Its settings are shown in figure \ref{fig:RCReceiver} and are as follows:
 
