@@ -1234,9 +1234,9 @@ $$\operatorname{color}(x) = \begin{cases}
 
 RC blocks are a pair of blocks that allow to send and receive logic signals between different creations.
 
-#### Radio Sender Block
+#### Radio Sender
 
-Radio sender blocks transmit their input value to other radio receiver blocks on the same channel and isolation level.
+Radio senders transmit their input value to other radio receivers on the same channel and isolation level.
 
 Its settings are shown in figure \ref{fig:RCSender} and are as follows:
 
@@ -1252,9 +1252,9 @@ Its settings are shown in figure \ref{fig:RCSender} and are as follows:
 
 <!-- TODO: add diagram -->
 
-#### Radio Receiver Block
+#### Radio Receiver
 
-Radio receiver blocks receive signals from radio sender blocks on the same channel and isolation level, and output their sum. The logic channel of the output is always 0.
+Radio receivers gather signals from radio senders on the same channel and isolation level, and output their sum. The logic channel of the output is always 0.
 
 Its settings are shown in figure \ref{fig:RCReceiver} and are as follows:
 
