@@ -1338,7 +1338,7 @@ Signals are the method used to communicate different logic blocks between eachot
 When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the gyro stabilizer and hue light panels, additionally use the absolute value before interpreting it, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in table \ref{table:InputValueBlocks}. Some important notes:
 
 - For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the input value, resulting in faster speeds with fractional input values for the same final angle
-- Due to a bug, fractional inputs in hinges/wings result in angles way lower than they should be. See appendix \nameref{InputValueMultiplier} for more information
+- By default, the response of hinges/wings to fractional inputs is not linear, resulting in smaller angles. See appendix \nameref{InputValueMultiplier} for more information
 - Due to a bug, close to 0 inputs in servos with hold position also result in lower speeds as well. See appendix \nameref{InputValueSpeed} for more information
 - For rotating servos, an angle of "infinity" actually represents $360$ degrees
 - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
@@ -2022,7 +2022,7 @@ This section contains old circuits that were previously in \nameref{useful-circu
 
 # Input value to multiplier for hinges/wings with control surfaces {#InputValueMultiplier}
 
-Due to a bug, the angle by which hinges/wings/other blocks with the "steering help" setting rotate doesn't scale linearly with the input value. This section contains the multipliers used for many input values, found experimentally. Some notes about this process:
+By default, the angle by which hinges/wings/other blocks with the "steering help" setting rotate doesn't scale linearly with the input value. The angle is smaller than what a linear relationship would result in, to improve steering on controller. In hinges, this can be adjusted with the steering mode setting, where a "linear" value results in a linear relationship while any other value results in the non-linear relationship. This section contains the multipliers used for many input values in the non-linear relationship, found experimentally. Some notes about this process:
 
 - Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
 - The multiplier was calculated with $\text{multiplier} = \frac{\text{final angle}}{90}$
