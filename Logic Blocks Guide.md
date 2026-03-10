@@ -1518,7 +1518,7 @@ Signals are the method used to communicate different logic blocks between eachot
   - They are represented with a standard [\underline{IEEE 754 single-precision floating-point number}](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
 - Truthness value: value that determines if a signal is on or off
   - A signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
-- Logic channel: tag added to signals to be able to group them. Its exact value is meaningless as it's only ever used to determine how to group signals received by a single block into multiple different groups. The value of each group is the sum of the signals within that group received. Most blocks ignore it, but some blocks can treat each group differently.
+- Logic channel: tag added to signals to be able to group them. Its exact value is meaningless, as it's only ever used to determine how to group signals received by a single block. The value of each group is the sum of the signals within that group received. Most blocks ignore it, but some blocks can treat each group differently.
   - Keybinds always use the C0 channel
   - Toggle/timers state is shared by all channels
 
