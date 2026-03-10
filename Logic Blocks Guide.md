@@ -770,7 +770,7 @@ These are the steps used by the game to determine the value attached to the outp
 2) The gate adds up the values of all of its inputs and clamps the result to the $[-1, 1]$ range
    - Values smaller than $-1$ are replaced with $-1$, and values bigger than $1$ with $1$
 3) The gate multiplies the result by its Output scale setting. For NOR gates, their setting replaces the result (which would otherwise always be $0$)
-4) The gate sends the result as its output scale
+4) The gate sends the result as its output value
 
 This process can be described with the following formula:
 $$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$$
