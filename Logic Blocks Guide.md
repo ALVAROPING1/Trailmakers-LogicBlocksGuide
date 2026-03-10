@@ -1482,6 +1482,7 @@ Toggle allows to make inputs alternate the activation state of a block between o
   - When the sum of the inputs goes from $0$ to a different value, multiple things happen depending on the new value:
     1) If the opposite sign of the input is toggled on, it is toggled off instantly
     2) If the sign of the input has toggle enabled, it is toggled: if it was off it turns on, and if it was on it turns off (which will happen on the falling edge of the input). Otherwise, the gate is enabled normally
+  - Toggle retains the value of the last non-$0$ sum of inputs while active
   - To toggle the output instead of the inputs, make the signal go through another gate with the toggle
 
 ## Timers
