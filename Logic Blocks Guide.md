@@ -853,7 +853,7 @@ Its settings are shown in figure \ref{fig:Comparator} and are as follows:
             \draw[arrow] (clamp.east)        -- (0.4, 23.5);
         \end{scope}
     \end{tikzpicture}
-    \caption{Comparator Logic Gate settings}
+    \caption{Comparison Logic Gate settings}
     \label{fig:Comparator}
 \end{figure}
 
