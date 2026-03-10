@@ -773,7 +773,7 @@ These are the steps used by the game to determine the value attached to the outp
 4) The gate sends the result as its output value
 
 This process can be described with the following formula:
-$$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \sum{\text{inputs}}$$
+$$\text{output} = \text{output\_value} \cdot \operatorname{boolean\_operation}(\text{inputs}) \cdot \operatorname{clamp}\left(\sum{\text{inputs}}\right)$$
 
 \begin{figure}[H]
     \centering
