@@ -325,18 +325,18 @@ Its settings are shown in figure \ref{fig:SensorAltitude} and are as follows:
 
 Position sensors measure the horizontal position of the block on a chosen axis. They have a display which shows the currently measured position rounded to the nearest integer.
 
-Its settings are shown in figure \ref{fig:SensorLatitude} and are as follows:
+Its settings are shown in figure \ref{fig:SensorPosition} and are as follows:
 
 - Keybinds: see \nameref{keybinds}
 - Toggle: see \nameref{toggle}
 - Timers: see \nameref{timers}
 - Logic output channel: tag added to the output signal, see \nameref{signals}
-- Latitude: latitude threshold to trigger, in meters ($1 \text{ block} = 0.25 \text{ m}$) <!-- TODO: Update name -->
+- Threshold: position threshold to trigger, in meters ($1 \text{ block} = 0.25 \text{ m}$)
 - Output scale: multiplier of the output signal created by the block
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the current position in meters
-  - Normalized: output $\frac{\text{measurement}}{\text{latitude}}$ if $\text{latitude} \not = 0$ (same as measurement otherwise)
+  - Normalized: output $\frac{\text{measurement}}{\text{threshold}}$ if $\text{threshold} \not = 0$ (same as measurement otherwise)
 - Mode: horizontal axis in which to measure the position, either latitude or longitude
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the altitude is above the configured value
