@@ -802,7 +802,7 @@ Its settings are shown in figure \ref{fig:Comparator} and are as follows:
 - Logic output channel: tag added to the output signal, see \nameref{signals}
 - Threshold: value used for the right hand side of the comparison
 - Output value: value of the output signal created by the block, explained in \nameref{signals}
-- Comparison mode: comparison operation to perform. Possible values are "less than", "less than or equal", "greater than", "greater than or equal", "equal", and "not equal"
+- Comparison mode: comparison operation to perform. Possible values are "less than", "less equals", "greater than", "greater equals", "equal", and "not equal"
   - When the mode is set to "greater than or equal", the total input is rounded to 3 decimal places before performing the comparison, using the nearest mode and rounding numbers with a fractional part of $0.5$ up
   - For the "equal" and "not equal" modes, numbers are compared with a tolerance of $\varepsilon = 0.0005$ (the numbers are equal if their difference is $< \varepsilon$)
 - Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
