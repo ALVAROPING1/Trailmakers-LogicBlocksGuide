@@ -565,7 +565,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
-  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if $\text{witdth} \not = 0$ ($0$ otherwise)
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if $\text{width} \not = 0$ ($0$ otherwise)
     - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - \text{width}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
@@ -639,7 +639,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 - Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
   - Trigger: output 1
   - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
-  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if $\text{witdth} \not = 0$ ($0$ otherwise)
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if $\text{width} \not = 0$ ($0$ otherwise)
     - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - \text{width}$
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the angle is inside of the activation threshold
