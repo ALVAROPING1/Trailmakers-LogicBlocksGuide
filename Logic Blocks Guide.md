@@ -701,6 +701,85 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
     \label{fig:SensorCompass}
 \end{figure}
 
+### Aiming Sensor
+
+Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the angle. The arrow will always try to point in the direction of the camera no matter the orientation of the block (will point in the direction closest to the camera direction of the plane it is in).
+
+Its settings are shown in figure \ref{fig:SensorCamera} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
+- Direction: position of the middle point of the activation threshold, in degrees
+- Width: size of the activation threshold, in degrees
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if $\text{width} \not = 0$ ($0$ otherwise)
+    - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - \text{width}$
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the angle is inside of the activation threshold
+  - Outside: sends an output when the angle is outside the activation threshold
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+
+<!-- TODO: -->
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{angle_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (direction)    at (-1, 9.9)  {Direction};
+            \node[annotation, left]  (width)        at (-1, 12.2) {Width};
+            \node[annotation, left]  (output_value) at (-1, 14.6) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 17.7) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 21.3) {Output mode};
+            \node[annotation, right] (channel)      at (9,  23.2) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 24.2) {Trigger outside};
+            \node[annotation, right] (mute)         at (9,  25.3) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (direction.east)    -- (0.4, 9.9);
+            \draw[arrow] (width.east)        -- (0.4, 12.2);
+            \draw[arrow] (output_value.east) -- (0.4, 14.6);
+            \draw[arrow] (timers.east)       -- (0.4, 16.7);
+            \draw[arrow] (timers.east)       -- (0.4, 17.7);
+            \draw[arrow] (timers.east)       -- (0.4, 18.9);
+            \draw[arrow] (mode.east)         -- (0.4, 21.3);
+            \draw[arrow] (channel.west)      -- (7.7, 23.2);
+            \draw[arrow] (trigger.east)      -- (0.4, 24.2);
+            \draw[arrow] (mute.west)         -- (5.3, 25.3);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Aiming Sensor settings}
+    \label{fig:SensorCamera}
+\end{figure}
+
 ## Logic gates
 
 Logic gates are a group of blocks that take a set of boolean inputs, and create a boolean output based on their values. The conditions used are as follows, inputs will be discussed on \nameref{signals}:
