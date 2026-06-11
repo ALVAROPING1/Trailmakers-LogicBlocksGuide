@@ -552,7 +552,7 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
 ### Angle Sensor
 
-Angle sensors measure the angle of the block relative to the direction of highest slope of the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the angle. The arrow will always try to point up no matter the orientation of the block (will point in the direction of highest slope of the plane it is in).
+Angle sensors measure the angle of the block relative to the closest direction to the up direction in the plane defined by the square faces of the block. This is done by projecting the up direction vector onto the plane (resulting in the direction of highest slope), and comparing a vector fixed to the block against that projection. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the projected direction.
 
 Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
@@ -630,7 +630,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 ### Compass
 
-Compasses measure the angle of the block relative to the closest direction to the north in the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a red section representing the activation threshold, and an output arrow and cardinal direction letters representing the angle. The arrow will always try to point north no matter the orientation of the block (will point in the direction closest to the north of the plane it is in).
+Compasses measure the angle of the block relative to the closest direction to the north in the plane defined by the square faces of the block. This is done by projecting the north vector onto the plane, and comparing a vector fixed to the block against that projection. They have a display which shows the currently measured angle, with a red section representing the activation threshold, and an output arrow and cardinal direction letters representing the projected direction.
 
 Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
@@ -704,7 +704,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 ### Aiming Sensor
 
-Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the angle. The arrow will always try to point in the direction of the camera no matter the orientation of the block (will point in the direction closest to the camera direction of the plane it is in).
+Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. This is done by projecting the camera direction vector onto the plane, and comparing a vector fixed to the block against that projection. They have a display which shows the currently measured angle, with a light blue section representing the activation threshold and an output arrow representing the projected direction.
 
 Its settings are shown in figure \ref{fig:SensorCamera} and are as follows:
 
