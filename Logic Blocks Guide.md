@@ -9,6 +9,7 @@ toc-depth: 3
 
 linkcolor: hyperlinkBlue
 urlcolor: hyperlinkBlue
+toccolor: black
 
 geometry: "top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm"
 
