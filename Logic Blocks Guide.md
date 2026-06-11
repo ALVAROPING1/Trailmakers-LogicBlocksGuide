@@ -726,12 +726,11 @@ Its settings are shown in figure \ref{fig:SensorCamera} and are as follows:
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
-<!-- TODO: -->
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
         % Image in a node
-        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{angle_sensor}};
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{aiming_sensor}};
         % Use the image as the bounding box of the tikzpicture for centering
         \useasboundingbox (image.south east) rectangle (image.north west);
 
@@ -749,32 +748,32 @@ Its settings are shown in figure \ref{fig:SensorCamera} and are as follows:
             %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
 
             % Nodes
-            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
-            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
-            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
-            \node[annotation, left]  (direction)    at (-1, 9.9)  {Direction};
-            \node[annotation, left]  (width)        at (-1, 12.2) {Width};
-            \node[annotation, left]  (output_value) at (-1, 14.6) {Output scale};
-            \node[annotation, left]  (timers)       at (-1, 17.7) {Timers};
-            \node[annotation, left]  (mode)         at (-1, 21.3) {Output mode};
-            \node[annotation, right] (channel)      at (9,  23.2) {Output channel};
-            \node[annotation, left]  (trigger)      at (-1, 24.2) {Trigger outside};
-            \node[annotation, right] (mute)         at (9,  25.3) {Mute on input};
+            \node[annotation, right] (output_off)   at (21, 11.2) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 13.5) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 6.1)  {Keybinds/toggles};
+            \node[annotation, left]  (direction)    at (-1, 10.5) {Direction};
+            \node[annotation, left]  (width)        at (-1, 13.1) {Width};
+            \node[annotation, left]  (output_value) at (-1, 15.7) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 20.1) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 24.6) {Output mode};
+            \node[annotation, right] (channel)      at (9,  26.5) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 27.9) {Trigger outside};
+            \node[annotation, right] (mute)         at (9,  28.9) {Mute on input};
 
             % Arrows
-            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
-            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
-            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
-            \draw[arrow] (direction.east)    -- (0.4, 9.9);
-            \draw[arrow] (width.east)        -- (0.4, 12.2);
-            \draw[arrow] (output_value.east) -- (0.4, 14.6);
-            \draw[arrow] (timers.east)       -- (0.4, 16.7);
-            \draw[arrow] (timers.east)       -- (0.4, 17.7);
-            \draw[arrow] (timers.east)       -- (0.4, 18.9);
-            \draw[arrow] (mode.east)         -- (0.4, 21.3);
-            \draw[arrow] (channel.west)      -- (7.7, 23.2);
-            \draw[arrow] (trigger.east)      -- (0.4, 24.2);
-            \draw[arrow] (mute.west)         -- (5.3, 25.3);
+            \draw[arrow] (output_off.west)   -- (17.6, 11.2);
+            \draw[arrow] (output_on.west)    -- (17.6, 13.5);
+            \draw[arrow] (keybinds.east)     -- (0.1, 6.1);
+            \draw[arrow] (direction.east)    -- (0.1, 10.5);
+            \draw[arrow] (width.east)        -- (0.1, 13.1);
+            \draw[arrow] (output_value.east) -- (0.1, 15.7);
+            \draw[arrow] (timers.east)       -- (0.1, 18.9);
+            \draw[arrow] (timers.east)       -- (0.1, 20.1);
+            \draw[arrow] (timers.east)       -- (0.1, 21.3);
+            \draw[arrow] (mode.east)         -- (0.1, 24.6);
+            \draw[arrow] (channel.west)      -- (7.4, 26.5);
+            \draw[arrow] (trigger.east)      -- (0.1, 27.9);
+            \draw[arrow] (mute.west)         -- (5.0, 28.9);
         \end{scope}
     \end{tikzpicture}
     \caption{Aiming Sensor settings}
