@@ -9,6 +9,7 @@ toc-depth: 3
 
 linkcolor: hyperlinkBlue
 urlcolor: hyperlinkBlue
+toccolor: black
 
 geometry: "top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm"
 
@@ -551,7 +552,7 @@ Its settings are shown in figure \ref{fig:SensorGravity} and are as follows:
 
 ### Angle Sensor
 
-Angle sensors measure the angle of the block relative to the direction of highest slope of the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the angle. The arrow will always try to point up no matter the orientation of the block (will point in the direction of highest slope of the plane it is in).
+Angle sensors measure the angle of the block relative to the closest direction to the up direction in the plane defined by the square faces of the block. This is done by projecting the up direction vector onto the plane (resulting in the direction of highest slope), and comparing a vector fixed to the block against that projection. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the projected direction.
 
 Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
@@ -629,7 +630,7 @@ Its settings are shown in figure \ref{fig:SensorAngle} and are as follows:
 
 ### Compass
 
-Compasses measure the angle of the block relative to the closest direction to the north in the plane defined by the square faces of the block. They have a display which shows the currently measured angle, with a red section representing the activation threshold, and an output arrow and cardinal direction letters representing the angle. The arrow will always try to point north no matter the orientation of the block (will point in the direction closest to the north of the plane it is in).
+Compasses measure the angle of the block relative to the closest direction to the north in the plane defined by the square faces of the block. This is done by projecting the north vector onto the plane, and comparing a vector fixed to the block against that projection. They have a display which shows the currently measured angle, with a red section representing the activation threshold, and an output arrow and cardinal direction letters representing the projected direction.
 
 Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
@@ -699,6 +700,84 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
     \end{tikzpicture}
     \caption{Compass settings}
     \label{fig:SensorCompass}
+\end{figure}
+
+### Aiming Sensor
+
+Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. This is done by projecting the camera direction vector onto the plane, and comparing a vector fixed to the block against that projection. The camera direction used is always that of the player who owns (spawned) the creation. They have a display which shows the currently measured angle, with a light blue section representing the activation threshold and an output arrow representing the projected direction.
+
+Its settings are shown in figure \ref{fig:SensorCamera} and are as follows:
+
+- Keybinds: see \nameref{keybinds}
+- Toggle: see \nameref{toggle}
+- Timers: see \nameref{timers}
+- Logic output channel: tag added to the output signal, see \nameref{signals}
+- Direction: position of the middle point of the activation threshold, in degrees
+- Width: size of the activation threshold, in degrees
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
+  - Normalized: output $\frac{\text{measurement}}{\text{width}/2}$ if $\text{width} \not = 0$ ($0$ otherwise)
+    - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - \text{width}$
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the angle is inside of the activation threshold
+  - Outside: sends an output when the angle is outside the activation threshold
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{aiming_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.2) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 13.5) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 6.1)  {Keybinds/toggles};
+            \node[annotation, left]  (direction)    at (-1, 10.5) {Direction};
+            \node[annotation, left]  (width)        at (-1, 13.1) {Width};
+            \node[annotation, left]  (output_value) at (-1, 15.7) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 20.1) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 24.6) {Output mode};
+            \node[annotation, right] (channel)      at (9,  26.5) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 27.9) {Trigger outside};
+            \node[annotation, right] (mute)         at (9,  28.9) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (17.6, 11.2);
+            \draw[arrow] (output_on.west)    -- (17.6, 13.5);
+            \draw[arrow] (keybinds.east)     -- (0.1, 6.1);
+            \draw[arrow] (direction.east)    -- (0.1, 10.5);
+            \draw[arrow] (width.east)        -- (0.1, 13.1);
+            \draw[arrow] (output_value.east) -- (0.1, 15.7);
+            \draw[arrow] (timers.east)       -- (0.1, 18.9);
+            \draw[arrow] (timers.east)       -- (0.1, 20.1);
+            \draw[arrow] (timers.east)       -- (0.1, 21.3);
+            \draw[arrow] (mode.east)         -- (0.1, 24.6);
+            \draw[arrow] (channel.west)      -- (7.4, 26.5);
+            \draw[arrow] (trigger.east)      -- (0.1, 27.9);
+            \draw[arrow] (mute.west)         -- (5.0, 28.9);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Aiming Sensor settings}
+    \label{fig:SensorCamera}
 \end{figure}
 
 ## Logic gates
