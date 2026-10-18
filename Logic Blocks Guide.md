@@ -1606,7 +1606,7 @@ When a block receives a set of inputs, it determines how it is activated based o
 - For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the input value, resulting in faster speeds with fractional input values for the same final angle
 - By default, the response of hinges/wings to fractional inputs is not linear, resulting in smaller angles. See appendix \nameref{InputValueMultiplier} for more information
 - Due to a bug, close to 0 inputs in servos with hold position also result in lower speeds as well. See appendix \nameref{InputValueSpeed} for more information
-- For rotating servos, an angle of "infinity" actually represents $360$ degrees
+- For rotating servos, an angle of "infinity" actually represents $360\degree$
 - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
 \begin{table}[H]
     \centering
@@ -2290,7 +2290,7 @@ This section contains old circuits that were previously in \nameref{useful-circu
 
 By default, the angle by which hinges/wings/other blocks with the "steering help" setting rotate doesn't scale linearly with the input value. The angle is smaller than what a linear relationship would result in, to improve steering on controller. In hinges, this can be adjusted with the steering mode setting, where a "linear" value results in a linear relationship while any other value results in the non-linear relationship. This section contains the multipliers used for many input values in the non-linear relationship, found experimentally. Some notes about this process:
 
-- Final angle is the resulting angle of the hinge measured with a max angle of $90$ degrees and an error of $\pm 0.005$ degrees
+- Final angle is the resulting angle of the hinge measured with a max angle of $90\degree$ and an error of $\pm 0.005\degree$
 - The multiplier was calculated with $\text{multiplier} = \frac{\text{final angle}}{90}$
 - A calculator using this data made by confusionextended can be found [\underline{here}](https://www.desmos.com/calculator/i70yadxqyy)
 
