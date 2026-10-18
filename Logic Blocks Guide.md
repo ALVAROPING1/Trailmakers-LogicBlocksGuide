@@ -704,7 +704,7 @@ Its settings are shown in figure \ref{fig:SensorCompass} and are as follows:
 
 ### Aiming Sensor
 
-Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. This is done by projecting the camera direction vector onto the plane, and comparing a vector fixed to the block against that projection. The camera direction used is always that of the player who owns (spawned) the creation. They have a display which shows the currently measured angle, with a light blue section representing the activation threshold and an output arrow representing the projected direction.
+Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. This is done by projecting the camera direction vector onto the plane, and comparing a vector fixed to the block against that projection. The camera direction used is always that of the player who owns (spawned) the creation, although with an upwards pitch offset explained in appendix \nameref{AimingServoPitch}. They have a display which shows the currently measured angle, with a light blue section representing the activation threshold and an output arrow representing the projected direction.
 
 Its settings are shown in figure \ref{fig:SensorCamera} and are as follows:
 
@@ -2505,6 +2505,220 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
     \hline
     \caption{Raw data of the input value speed for servos with hold position}
     \label{table:InputValueSpeedData}
+\end{longtable}
+
+\clearpage
+
+# Aiming sensor pitch measurement {#AimingServoPitch}
+
+When aiming sensors are used to measure the pitch of the camera, their output is offset from the real camera pitch angle. This section contains the measured values for many camera angles, found experimentally. Some notes about this process:
+
+- Measurements were done using a camera block on a hinge to set the camera pitch to known values, and then taking the measurement from an aiming sensor at the base
+- Aiming servos with verticality checks disabled have a similar behavior, although their angle measurement ends up being a lot more noisy
+- Angle measurements are in degrees and have an error of $\pm 0.0005\degree$
+- The average error between the measured pitch and the camera pitch is $8.096\degree$
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            height=27.5em,
+            width=42em,
+            title={Measured pitch as a function of actual pitch},
+            xlabel={Real pitch},
+            ylabel={Measured pitch},
+            domain = -90:90,
+            xmin=-90, xmax=90,
+            ymin=-90, ymax=100,
+            minor tick num=1,
+            grid=both,
+            scaled x ticks = false,
+            clip marker paths=true % Draw plots in order
+        ]
+            \addplot[color=blue, mark=*] file {data/Aiming_Sensor_Pitch.dat} node[above left, midway] {$f(x)$};
+            \addplot[color=black, samples=3] {x} node[below right, midway] {$y=x$};
+            \addplot[color=red, samples=3] {x+8.096} node[above left, pos=0.75] {$y=x+8.096$};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the pitch measured by aiming sensors as a function of the real camera pitch}
+    \label{fig:AimingSensorPitchGraph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            height=27.5em,
+            width=42em,
+            title={Error in measured pitch as a function of actual pitch},
+            xlabel={Real pitch},
+            ylabel={Error},
+            domain = -90:90,
+            xmin=-90, xmax=90,
+            ymin=7.8, ymax=8.4,
+            minor tick num=1,
+            grid=both,
+            scaled x ticks = false
+        ]
+            \addplot[color=blue, mark=*, thin] table[x index=0,y expr = \thisrowno{1} - \thisrowno{0}]{data/Aiming_Sensor_Pitch.dat};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the error in pitch measured by aiming sensors as a function of the real camera pitch}
+    \label{fig:AimingSensorPitchGraphError}
+\end{figure}
+
+\begin{longtable}{|c|c !{\vrule width 3pt} c|c !{\vrule width 3pt} c|c !{\vrule width 3pt} c|c !{\vrule width 3pt} c|c|}
+    \hline
+    \thead{Pitch} & \thead{Output} & \thead{Pitch} & \thead{Output} & \thead{Pitch} & \thead{Output} & \thead{Pitch} & \thead{Output} & \thead{Pitch} & \thead{Output} \\
+    \HLine{2pt}
+    -90.0 & -81.905 & -54.0 & -45.975 & -18.0 & -9.693 & 18.5 & 26.589 & 54.5 & 62.518 \\
+    \hline
+    -89.5 & -81.552 & -53.5 & -45.271 & -17.5 & -9.341 & 19.0 & 26.941 & 55.0 & 63.223 \\
+    \hline
+    -89.0 & -80.848 & -53.0 & -44.919 & -17.0 & -8.989 & 19.5 & 27.646 & 55.5 & 63.575 \\
+    \hline
+    -88.5 & -80.496 & -52.5 & -44.566 & -16.5 & -8.284 & 20.0 & 27.997 & 56.0 & 63.927 \\
+    \hline
+    -88.0 & -79.791 & -52.0 & -43.862 & -16.0 & -7.932 & 20.5 & 28.702 & 56.5 & 64.632 \\
+    \hline
+    -87.5 & -79.439 & -51.5 & -43.509 & -15.5 & -7.228 & 21.0 & 29.054 & 57.0 & 64.984 \\
+    \hline
+    -87.0 & -79.087 & -51.0 & -42.805 & -15.0 & -6.875 & 21.5 & 29.406 & 57.5 & 65.689 \\
+    \hline
+    -86.5 & -78.383 & -50.5 & -42.453 & -14.5 & -6.171 & 22.0 & 30.111 & 58.0 & 66.041 \\
+    \hline
+    -86.0 & -78.030 & -50.0 & -41.748 & -14.0 & -5.819 & 22.5 & 30.464 & 58.5 & 66.745 \\
+    \hline
+    -85.5 & -77.326 & -49.5 & -41.396 & -13.5 & -5.466 & 23.0 & 31.168 & 59.0 & 67.097 \\
+    \hline
+    -85.0 & -76.973 & -49.0 & -41.044 & -13.0 & -4.762 & 23.5 & 31.520 & 59.5 & 67.450 \\
+    \hline
+    -84.5 & -76.268 & -48.5 & -40.339 & -12.5 & -4.409 & 24.0 & 31.872 & 60.0 & 68.154 \\
+    \hline
+    -84.0 & -75.917 & -48.0 & -39.987 & -12.0 & -3.705 & 24.5 & 32.576 & 60.5 & 68.507 \\
+    \hline
+    -83.5 & -75.565 & -47.5 & -39.283 & -11.5 & -3.352 & 25.0 & 32.929 & 61.0 & 69.211 \\
+    \hline
+    -83.0 & -74.860 & -47.0 & -38.930 & -11.0 & -3.001 & 25.5 & 33.633 & 61.5 & 69.563 \\
+    \hline
+    -82.5 & -74.507 & -46.5 & -38.226 & -10.5 & -2.296 & 26.0 & 33.986 & 62.0 & 70.268 \\
+    \hline
+    -82.0 & -73.803 & -46.0 & -37.874 & -10.0 & -1.944 & 26.5 & 34.691 & 62.5 & 70.619 \\
+    \hline
+    -81.5 & -73.450 & -45.5 & -37.521 & -9.5  & -1.239 & 27.0 & 35.042 & 63.0 & 70.972 \\
+    \hline
+    -81.0 & -73.099 & -45.0 & -36.817 & -9.0  & -0.887 & 27.5 & 35.395 & 63.5 & 71.676 \\
+    \hline
+    -80.5 & -72.394 & -44.5 & -36.465 & -8.5  & -0.182 & 28.0 & 36.099 & 64.0 & 72.029 \\
+    \hline
+    -80.0 & -72.042 & -44.0 & -35.760 & -8.0  &  0.170 & 28.5 & 36.452 & 64.5 & 72.734 \\
+    \hline
+    -79.5 & -71.337 & -43.5 & -35.408 & -7.5  &  0.522 & 29.0 & 37.156 & 65.0 & 73.086 \\
+    \hline
+    -79.0 & -70.985 & -43.0 & -35.056 & -7.0  &  1.226 & 29.5 & 37.508 & 65.5 & 73.438 \\
+    \hline
+    -78.5 & -70.281 & -42.5 & -34.351 & -6.5  &  1.578 & 30.0 & 38.213 & 66.0 & 74.142 \\
+    \hline
+    -78.0 & -69.928 & -42.0 & -33.999 & -6.0  &  2.283 & 30.5 & 38.565 & 66.5 & 74.495 \\
+    \hline
+    -77.5 & -69.576 & -41.5 & -33.295 & -5.5  &  2.635 & 31.0 & 38.917 & 67.0 & 75.199 \\
+    \hline
+    -77.0 & -68.872 & -41.0 & -32.942 & -5.0  &  3.340 & 31.5 & 39.621 & 67.5 & 75.552 \\
+    \hline
+    -76.5 & -68.519 & -40.5 & -32.237 & -4.5  &  3.692 & 32.0 & 39.974 & 68.0 & 76.256 \\
+    \hline
+    -76.0 & -67.815 & -40.0 & -31.885 & -4.0  &  4.044 & 32.5 & 40.679 & 68.5 & 76.608 \\
+    \hline
+    -75.5 & -67.462 & -39.5 & -31.533 & -3.5  &  4.749 & 33.0 & 41.031 & 69.0 & 76.960 \\
+    \hline
+    -75.0 & -66.758 & -39.0 & -30.828 & -3.0  &  5.101 & 33.5 & 41.383 & 69.5 & 77.664 \\
+    \hline
+    -74.5 & -66.405 & -38.5 & -30.476 & -2.5  &  5.805 & 34.0 & 42.087 & 70.0 & 78.017 \\
+    \hline
+    -74.0 & -66.054 & -38.0 & -29.772 & -2.0  &  6.158 & 34.5 & 42.440 & 70.5 & 78.721 \\
+    \hline
+    -73.5 & -65.349 & -37.5 & -29.419 & -1.5  &  6.511 & 35.0 & 43.144 & 71.0 & 79.074 \\
+    \hline
+    -73.0 & -64.997 & -37.0 & -28.715 & -1.0  &  7.215 & 35.5 & 43.496 & 71.5 & 79.778 \\
+    \hline
+    -72.5 & -64.292 & -36.5 & -28.362 & -0.5  &  7.567 & 36.0 & 44.201 & 72.0 & 80.130 \\
+    \hline
+    -72.0 & -63.940 & -36.0 & -28.010 &  0.0  &  8.271 & 36.5 & 44.554 & 72.5 & 80.483 \\
+    \hline
+    -71.5 & -63.587 & -35.5 & -27.306 &  0.5  &  8.624 & 37.0 & 44.906 & 73.0 & 81.187 \\
+    \hline
+    -71.0 & -62.883 & -35.0 & -26.954 &  1.0  &  8.976 & 37.5 & 45.610 & 73.5 & 81.539 \\
+    \hline
+    -70.5 & -62.531 & -34.5 & -26.249 &  1.5  &  9.680 & 38.0 & 45.962 & 74.0 & 82.244 \\
+    \hline
+    -70.0 & -61.827 & -34.0 & -25.897 &  2.0  & 10.033 & 38.5 & 46.667 & 74.5 & 82.597 \\
+    \hline
+    -69.5 & -61.474 & -33.5 & -25.193 &  2.5  & 10.385 & 39.0 & 47.019 & 75.0 & 82.948 \\
+    \hline
+    -69.0 & -60.770 & -33.0 & -24.840 &  3.0  & 11.089 & 39.5 & 47.724 & 75.5 & 83.654 \\
+    \hline
+    -68.5 & -60.418 & -32.5 & -24.488 &  3.5  & 11.442 & 40.0 & 48.076 & 76.0 & 84.005 \\
+    \hline
+    -68.0 & -60.065 & -32.0 & -23.783 &  4.0  & 12.146 & 40.5 & 48.428 & 76.5 & 84.709 \\
+    \hline
+    -67.5 & -59.360 & -31.5 & -23.431 &  4.5  & 12.499 & 41.0 & 49.133 & 77.0 & 85.062 \\
+    \hline
+    -67.0 & -59.009 & -31.0 & -22.727 &  5.0  & 12.851 & 41.5 & 49.485 & 77.5 & 85.767 \\
+    \hline
+    -66.5 & -58.304 & -30.5 & -22.374 &  5.5  & 13.555 & 42.0 & 50.189 & 78.0 & 86.119 \\
+    \hline
+    -66.0 & -57.952 & -30.0 & -22.022 &  6.0  & 13.907 & 42.5 & 50.542 & 78.5 & 86.471 \\
+    \hline
+    -65.5 & -57.247 & -29.5 & -21.318 &  6.5  & 14.612 & 43.0 & 51.246 & 79.0 & 87.175 \\
+    \hline
+    -65.0 & -56.895 & -29.0 & -20.965 &  7.0  & 14.964 & 43.5 & 51.599 & 79.5 & 87.528 \\
+    \hline
+    -64.5 & -56.542 & -28.5 & -20.261 &  7.5  & 15.669 & 44.0 & 51.951 & 80.0 & 88.232 \\
+    \hline
+    -64.0 & -55.838 & -28.0 & -19.909 &  8.0  & 16.021 & 44.5 & 52.655 & 80.5 & 88.585 \\
+    \hline
+    -63.5 & -55.486 & -27.5 & -19.204 &  8.5  & 16.373 & 45.0 & 53.007 & 81.0 & 89.289 \\
+    \hline
+    -63.0 & -54.782 & -27.0 & -18.852 &  9.0  & 17.078 & 45.5 & 53.711 & 81.5 & 89.641 \\
+    \hline
+    -62.5 & -54.430 & -26.5 & -18.500 &  9.5  & 17.430 & 46.0 & 54.064 & 82.0 & 89.993 \\
+    \hline
+    -62.0 & -54.077 & -26.0 & -17.795 & 10.0  & 18.134 & 46.5 & 54.417 & 82.5 & 90.698 \\
+    \hline
+    -61.5 & -53.373 & -25.5 & -17.443 & 10.5  & 18.486 & 47.0 & 55.121 & 83.0 & 91.050 \\
+    \hline
+    -61.0 & -53.020 & -25.0 & -16.738 & 11.0  & 19.191 & 47.5 & 55.473 & 83.5 & 91.755 \\
+    \hline
+    -60.5 & -52.315 & -24.5 & -16.386 & 11.5  & 19.544 & 48.0 & 56.178 & 84.0 & 92.107 \\
+    \hline
+    -60.0 & -51.964 & -24.0 & -15.682 & 12.0  & 19.896 & 48.5 & 56.530 & 84.5 & 92.459 \\
+    \hline
+    -59.5 & -51.258 & -23.5 & -15.329 & 12.5  & 20.600 & 49.0 & 57.234 & 85.0 & 93.164 \\
+    \hline
+    -59.0 & -50.907 & -23.0 & -14.977 & 13.0  & 20.952 & 49.5 & 57.587 & 85.5 & 93.516 \\
+    \hline
+    -58.5 & -50.555 & -22.5 & -14.272 & 13.5  & 21.657 & 50.0 & 57.939 & 86.0 & 94.221 \\
+    \hline
+    -58.0 & -49.850 & -22.0 & -13.920 & 14.0  & 22.009 & 50.5 & 58.643 & 86.5 & 94.572 \\
+    \hline
+    -57.5 & -49.497 & -21.5 & -13.215 & 14.5  & 22.361 & 51.0 & 58.996 & 87.0 & 95.277 \\
+    \hline
+    -57.0 & -48.793 & -21.0 & -12.864 & 15.0  & 23.066 & 51.5 & 59.700 & 87.5 & 95.629 \\
+    \hline
+    -56.5 & -48.441 & -20.5 & -12.512 & 15.5  & 23.418 & 52.0 & 60.052 & 88.0 & 95.982 \\
+    \hline
+    -56.0 & -47.737 & -20.0 & -11.807 & 16.0  & 24.123 & 52.5 & 60.756 & 88.5 & 96.686 \\
+    \hline
+    -55.5 & -47.384 & -19.5 & -11.455 & 16.5  & 24.475 & 53.0 & 61.109 & 89.0 & 97.039 \\
+    \hline
+    -55.0 & -47.032 & -19.0 & -10.750 & 17.0  & 25.179 & 53.5 & 61.461 & 89.5 & 97.744 \\
+    \hline
+    -54.5 & -46.327 & -18.5 & -10.397 & 17.5  & 25.531 & 54.0 & 62.166 & 90.0 & 98.095 \\
+    \hline
+    \multicolumn{4}{c!{\vrule width 3pt}}{} & 18.0 & 25.884 & \multicolumn{4}{c}{} \\
+    \cmidrule(l{-3pt}){5-6}
+    \caption{Raw data of the aiming sensor pitch measurement}
+    \label{table:AimingSensorPitchData}
 \end{longtable}
 
 \clearpage
