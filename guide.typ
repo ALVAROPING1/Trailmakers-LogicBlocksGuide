@@ -223,9 +223,17 @@
 }
 
 // "booktab" table style
-#show table: block.with(stroke: (y: 0.7pt))
-#set table(row-gutter: 0.2em, stroke: (_, y) => if y == 0 { (bottom: 0.2pt) })
-#set table.hline(stroke: 0.2pt)
+#let table-stroke = (thin: 0.2pt, thick: 0.7pt)
+#set table.hline(stroke: table-stroke.thin)
+#set table.vline(stroke: table-stroke.thin)
+#let booktab-table(..args) = {
+  show table: block.with(stroke: (y: table-stroke.thick))
+  table(
+    row-gutter: 0.2em,
+    stroke: (_, y) => if y == 0 { (bottom: table-stroke.thin) },
+    ..args
+  )
+}
 
 // References style
 #show ref: it => {
@@ -1811,7 +1819,7 @@ When a block receives a set of inputs, it determines how it is activated based o
 
 
 #figure(
-  table(
+  booktab-table(
     columns: (6.5cm, auto),
     align: left,
     table.header([Block], [Value modified]),
@@ -2283,75 +2291,55 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
 === When to use each method
 
-/*
-\begin{table}[H]
-    \centering
-    \begin{tabular}{|c|m{20em}|m{20em}|}
-        \cline{2-3}
-        \multicolumn{1}{c|}{} & \thead{1-way} & \thead{2-way} \\
-        \hline
-        % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
-        \rotatebox[origin=c]{90}{\thead{Without cycle}}
-        &
-        Doesn't require an individual decoder:
-        \begin{itemize}
-            \item For $n <= 10$ use the general circuit
-            \item For $n > 10$ use the binary circuit
-            \newline
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 18$):
-        \begin{itemize}
-            \item For $n <= 18$ use the general circuit
-            \item For $n > 18$ use the decimal circuit
-        \end{itemize}
-        &
-        Doesn't require an individual decoder:
-        \begin{itemize}
-            \item For $n <= 23$ use the general circuit
-            \item For $n > 23$ use either the binary or decimal circuit
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 23$):
-        \begin{itemize}
-            \item For $n <= 23$ use the general circuit
-            \item For $n > 23$ use the decimal circuit
-        \end{itemize} \\
-        \hline
-        \rotatebox[origin=c]{90}{\thead{With cycle}}
-        &
-        Doesn't require an individual decoder:
-        \begin{itemize}
-            \item Use the binary circuit
-            \newline
-            \newline
-            \newline
-            \newline
-            \newline
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 15$):
-        \begin{itemize}
-            \item For $n <= 15$ use the general circuit
-            \item For $n > 15$ use the decimal circuit
-            \newline
-        \end{itemize}
-        &
-        Doesn't require an individual decoder:
-        \begin{itemize}
-            \item For $n = 4$, $n = 8$, or $11 < n <= 32$ use the binary circuit
-            \item For $4 < n <= 7$ or $8 < n <= 11$ use the general circuit
-            \item For $n > 32$ use either the binary or decimal circuit
-        \end{itemize}
-        Show values directly on a screen (only numbers for $n > 17$):
-        \begin{itemize}
-            \item For $n <= 17$ use the general circuit
-            \item For $n > 17$ use the decimal circuit
-            \newline
-        \end{itemize} \\
-        \hline
-    \end{tabular}
-    \caption{Comparison of the different counter methods}
-    \label{table:CounterComparison}
-\end{table}
-*/
+#figure(
+  table(
+    columns: (auto, 20em, 20em),
+    align: (x, y) => if x == 0 or y == 0 {center+horizon} else {left},
+    stroke: (x, y) => if x != 0 or y != 0 { table-stroke.thick },
+    "", [*1-way*], [*2-way*],
+    rotate(-90deg, reflow: true)[*Without cycle*],
+    [
+      Doesn't require an individual decoder:
+      - For $n <= 10$ use the general circuit
+      - For $n > 10$ use the binary circuit
+      \
+      Show values directly on a screen (only numbers for $n > 18$):
+      - For $n <= 18$ use the general circuit
+      - For $n > 18$ use the decimal circuit
+    ],
+    [
+      Doesn't require an individual decoder:
+      - For $n <= 23$ use the general circuit
+      - For $n > 23$ use either the binary or decimal circuit
+      Show values directly on a screen (only numbers for $n > 23$):
+      - For $n <= 23$ use the general circuit
+      - For $n > 23$ use the decimal circuit
+    ],
+    rotate(-90deg, reflow: true)[*With cycle*],
+    [
+      Doesn't require an individual decoder:
+      - Use the binary circuit
+      \
+      \
+      \
+      \
+      \
+      Show values directly on a screen (only numbers for $n > 15$):
+      - For $n <= 15$ use the general circuit
+      - For $n > 15$ use the decimal circuit
+    ],
+    [
+      Doesn't require an individual decoder:
+      - For $n = 4$, $n = 8$, or $11 < n <= 32$ use the binary circuit
+      - For $4 < n <= 7$ or $8 < n <= 11$ use the general circuit
+      - For $n > 32$ use either the binary or decimal circuit
+      Show values directly on a screen (only numbers for $n > 17$):
+      - For $n <= 17$ use the general circuit
+      - For $n > 17$ use the decimal circuit
+    ],
+  ),
+  caption: [Comparison of the different counter methods]
+) <table:CounterComparison>
 
 Notes:
 
@@ -2537,12 +2525,12 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
 #let data-table(header, cols, data, caption, label: none) = [
   #show figure: set block(breakable: true)
   #figure(
-    table(
+    booktab-table(
       columns: header.len() * cols,
       align: center + horizon,
       row-gutter: 0pt,
       ..range(1, cols).map(i =>
-        table.vline(stroke: 0.7pt, x: i * header.len())
+        table.vline(stroke: table-stroke.thick, x: i * header.len())
       ),
 
       table.header(..(header.map(h => [*#h*])) * cols),
@@ -2650,12 +2638,12 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 #let (first, ..rest) = (180, 360).map(a => (1, 2).map(s => load-file(a, s))).join()
 
 #figure(
-  table(
+  booktab-table(
     columns: 8,
     align: center + horizon,
     row-gutter: 0pt,
     ..range(1, 4).map(i =>
-      table.vline(stroke: if i == 2 {0.7pt} else {0.2pt}, x: i * 2)
+      table.vline(stroke: table-stroke.at(if i == 2 {"thick"} else {"thin"}), x: i * 2)
     ),
 
     table.header(..(180, 360).map(x => table.cell(colspan: 4)[*Angle #x*]), level: 1),
