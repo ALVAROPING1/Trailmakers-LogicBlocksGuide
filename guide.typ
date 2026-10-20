@@ -260,11 +260,13 @@
 #import "@preview/oxifmt:1.0.0": strfmt
 #import "@preview/zero:0.7.1": num
 #import "@preview/symbolica:0.1.0"
+#import "@preview/lilaq:0.6.0" as lq
 
 #let scientific(x, ..args) = num(x, exponent: "sci", round: (precision: 3), product: sym.dot, ..args)
+#let eval-math(expr, values: ()) = symbolica.evaluate(symbolica.math(expr), values: values).re
 
 #let maxFloat = $(2 - 2^(-23)) dot 2^127$
-#let maxFloatApprox = scientific(symbolica.evaluate(symbolica.math(maxFloat)).re)
+#let maxFloatApprox = scientific(eval-math(maxFloat))
 
 #let hfrac(x, y) = $frac(#x, #y, style: "horizontal")$
 #let tick = $hfrac(1, 60) "s"$
@@ -2514,12 +2516,13 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
   data
 }
 
+#let zip((first, ..rest)) = first.zip(..rest)
+
 #let transpose(data, cols) = {
   let col-size = calc.ceil(data.len()/cols)
   let default = ("",) * data.at(0).len()
   let fill = col-size * cols - data.len()
-  let (first, ..rest) = (data + (default,) * fill).chunks(col-size)
-  first.zip(..rest)
+  zip((data + (default,) * fill).chunks(col-size))
 }
 
 #let data-table(header, cols, data, caption, label: none) = [
@@ -2547,6 +2550,8 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
   }
 ]
 
+#let get-cols(data, ..cols) = cols.map(c => data.map(row => float(row.at(c))))
+
 #let process-row(row) = {
   row.insert(1, strfmt("{:.3}", float(row.at(1)) * 90))
   row
@@ -2562,30 +2567,43 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
   label: <table:InputValueMultiplierData>
 )
 
-/*
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        \begin{axis}[
-            height=27.5em,
-            width=42em,
-            title={Multiplier as a function of the input value},
-            xlabel={Input value},
-            ylabel={Multiplier},
-            domain = 0:1,
-            xmin=0, xmax=1,
-            ymin=0, ymax=1,
-            minor tick num=1,
-            grid=both
-        ]
-            \addplot[color=blue, mark=*] file {data/Input_Value_Multiplier.dat} node[above left, midway] {$f(x)$};
-            \addplot[color=black, samples=3] {x} node[above left, midway] {$y=x$};
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Graph of the multiplier for hinges as a function of the input value}
-    \label{fig:InputValueMultiplierGraph}
-\end{figure}
-*/
+#show: lq.set-tick(inset: 4pt)
+#show: lq.set-diagram(
+  height: 27.5em,
+  width: 42em,
+  margin: 0%,
+  xaxis: (subticks: 1),
+  yaxis: (subticks: 1),
+  legend: (position: top+left),
+)
+
+#let plot-fn(range, expr, label: auto, ..args) = lq.plot(
+  range,
+  x => eval-math(expr, values: ((symbolica.symbol("x"), x),)),
+  label: if label == auto {$y = #expr$} else { label },
+  color: black,
+  stroke: 1.2pt,
+  mark: none,
+  ..args
+)
+
+#let plot-data(xs, ys, label: auto, ..args) = lq.plot(
+  xs, ys,
+  label: if label == auto {$f(x)$} else { label },
+  mark: "o",
+  ..args
+)
+
+#figure(
+  lq.diagram(
+    title: [Multiplier as a function of the input value],
+    xlabel: [Input value],
+    ylabel: [Multiplier],
+    plot-data(..get-cols(data, 0, 2), clip: false),
+    plot-fn((0, 1), $x$)
+  ),
+  caption: [Graph of the multiplier for hinges as a function of the input value]
+) <fig:InputValueMultiplierGraph>
 
 = Input value to speed for servos with hold position <InputValueSpeed>
 
@@ -2599,43 +2617,34 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 - $f_(s, a)(x)$ represents the resulting speed of a servo with $s$ speed, $a$ angle, and $x$ input value
 - The resulting speed can be approximated by $hat(f)_(s, a)(x) = min(x/0.0611 dot a/90, s)$
 
-/*
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        \begin{axis}[
-            height=27.5em,
-            width=42em,
-            title={Speed as a function of the input value},
-            xlabel={Input value},
-            ylabel={Speed},
-            domain = 0:0.0625,
-            xmin=0, xmax=0.0625,
-            ymin=0, ymax=2,
-            minor tick num=1,
-            grid=both,
-            xticklabel style={
-                /pgf/number format/fixed,
-                /pgf/number format/precision = 3
-            },
-            scaled x ticks = false
-        ]
-            \addplot[color=blue, mark=*] file {data/Input_Value_Speed1_360.dat} node[above left, midway] {$f_(1, 360)(x)$};
-            \addplot[color=red, mark=*]  file {data/Input_Value_Speed2_360.dat} node[above left, midway] {$f_(2, 360)(x)$};
-            \addplot[color=Green, mark=*]  file {data/Input_Value_Speed1_180.dat} node[below right, midway] {$f_(1, 180)(x)$};
-            \addplot[color=DodgerBlue, mark=*]  file {data/Input_Value_Speed2_180.dat} node[below right, midway] {$f_(2, 180)(x)$};
-            \addplot[color=black, samples=3] {x/0.0611 * 360/90} node[above left, pos=0.35] {$y=x/0.0611 dot 360/90$};
-            \addplot[color=black, samples=3] {x/0.0611 * 180/90} node[below right, pos=0.75] {$y=x/0.0611 dot 180/90$};
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Graph of the speed for servos with hold position as a function of the input value}
-    \label{fig:InputValueSpeedGraph}
-\end{figure}
-*/
-
 #let path = "data/Input_Value_Speed{}_{}.dat"
 #let load-file(angle, speed) = load-data(strfmt(path, speed, angle)).slice(0, -1)
-#let (first, ..rest) = (180, 360).map(a => (1, 2).map(s => load-file(a, s))).join()
+#let data-cases = (180, 360).map(a => (1, 2).map(s => (a, s))).join()
+#let data = data-cases.map(conf => (conf, load-file(..conf)))
+#let xlim = (0, 0.0625)
+#let fhat(angle) = $x/0.0611 dot #angle/90$
+
+#figure(
+  lq.diagram(
+    title: [Speed as a function of the input value],
+    xlabel: [Input value],
+    ylabel: [Speed],
+    xlim: xlim,
+    ylim: (0, 2),
+    yaxis: (tick-distance: 0.2),
+    cycle: (green, blue, rgb("#0000ff"), rgb("#ff0000")),
+    ..data.enumerate().map(((i, ((a, s), d))) => plot-data(
+      ..get-cols(d, 0, 1),
+      label: $f_(#s, #a)(x)$,
+      z-index: if i < 2 {2.1} else {2},
+    )),
+    ..((180, 35%, right), (360, 75%, left)).map(((a, pos, align)) => (
+      plot-fn(xlim, fhat(a), label: none, z-index: 2.2),
+      lq.place(pos, 1.5, pad(1em, $y = #fhat(a)$), align: align)
+    )).flatten()
+  ),
+  caption: [Graph of the speed for servos with hold position as a function of the input value]
+) <fig:InputValueSpeedGraph>
 
 #figure(
   booktab-table(
@@ -2651,72 +2660,46 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
     table.hline(),
     table.header(..([*Input\ Value*], [*Final\ Speed*]) * 4, level: 3),
     table.hline(),
-    ..first.zip(..rest).flatten()
+    ..zip(data.map(((_, d)) => d)).flatten()
   ),
   caption: [Raw data of the input value speed for servos with hold position]
 ) <table:InputValueSpeedData>
 
 = Aiming sensor pitch measurement <AimingServoPitch>
 
+#let data = load-data("data/Aiming_Sensor_Pitch.dat").slice(0, -1)
+#let data-error = data.map(((x, y)) => (x, float(y) - float(x)))
+#let avg-error = data-error.map(row => row.at(1)).sum() / data-error.len()
+#let avg-error = calc.round(avg-error, digits: 3)
+
 When aiming sensors are used to measure the pitch of the camera, their output is offset from the real camera pitch angle. This section contains the measured values for many camera angles, found experimentally. Some notes about this process:
 
 - Measurements were done using a camera block on a hinge to set the camera pitch to known values, and then taking the measurement from an aiming sensor at the base
 - Aiming servos with verticality checks disabled have a similar behavior, although their angle measurement ends up being a lot more noisy
 - Angle measurements are in degrees and have an error of $plus.minus 0.0005 degree$
-- The average error between the measured pitch and the camera pitch is $8.096 degree$
+- The average error between the measured pitch and the camera pitch is $#avg-error degree$
 
-/*
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        \begin{axis}[
-            height=27.5em,
-            width=42em,
-            title={Measured pitch as a function of actual pitch},
-            xlabel={Real pitch},
-            ylabel={Measured pitch},
-            domain = -90:90,
-            xmin=-90, xmax=90,
-            ymin=-90, ymax=100,
-            minor tick num=1,
-            grid=both,
-            scaled x ticks = false,
-            clip marker paths=true % Draw plots in order
-        ]
-            \addplot[color=blue, mark=*] file {data/Aiming_Sensor_Pitch.dat} node[above left, midway] {$f(x)$};
-            \addplot[color=black, samples=3] {x} node[below right, midway] {$y=x$};
-            \addplot[color=red, samples=3] {x+8.096} node[above left, pos=0.75] {$y=x+8.096$};
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Graph of the pitch measured by aiming sensors as a function of the real camera pitch}
-    \label{fig:AimingSensorPitchGraph}
-\end{figure}
+#figure(
+  lq.diagram(
+    title: [Measured pitch as a function of actual pitch],
+    xlabel: [Real pitch],
+    ylabel: [Measured pitch],
+    plot-data(..get-cols(data, 0, 1)),
+    plot-fn((-90, 90), $x + #avg-error$, color: red),
+    plot-fn((-90, 90), $x$),
+  ),
+  caption: [Graph of the pitch measured by aiming sensors as a function of the real camera pitch]
+) <fig:AimingSensorPitchGraph>
 
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        \begin{axis}[
-            height=27.5em,
-            width=42em,
-            title={Error in measured pitch as a function of actual pitch},
-            xlabel={Real pitch},
-            ylabel={Error},
-            domain = -90:90,
-            xmin=-90, xmax=90,
-            ymin=7.8, ymax=8.4,
-            minor tick num=1,
-            grid=both,
-            scaled x ticks = false
-        ]
-            \addplot[color=blue, mark=*, thin] table[x index=0,y expr = \thisrowno{1} - \thisrowno{0}]{data/Aiming_Sensor_Pitch.dat};
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Graph of the error in pitch measured by aiming sensors as a function of the real camera pitch}
-    \label{fig:AimingSensorPitchGraphError}
-\end{figure}
-*/
-
-#let data = load-data("data/Aiming_Sensor_Pitch.dat").slice(0, -1)
+#figure(
+  lq.diagram(
+    title: [Error in measured pitch as a function of actual pitch],
+    xlabel: [Real pitch],
+    ylabel: [Error],
+    plot-data(..get-cols(data-error, 0, 1), label: none, stroke: 0.4pt),
+  ),
+  caption: [Graph of the error in pitch measured by aiming sensors as a function of the real camera pitch]
+) <fig:AimingSensorPitchGraphError>
 
 #data-table(
   ([Pitch], [Output]),
