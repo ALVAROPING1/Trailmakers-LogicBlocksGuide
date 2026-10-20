@@ -1,0 +1,2750 @@
+// LTeX: enabled=false
+
+/// Advances to the next clean page
+/// -> content
+#let newpage() = pagebreak(weak: true)
+
+/// LaTeX's `\noindent`, removes the first-line indentation of the paragraph
+#let noindent(body) = par(body, first-line-indent: 0pt)
+
+#let conf(
+  title: none,
+  author: none,
+  description: none,
+  date: none,
+  appendixes: none,
+  doc,
+) = {
+  // ───────────────────────────── Document setup ─────────────────────────────
+  set document(
+    title: title,
+    author: author,
+    description: description,
+    date: date,
+  )
+
+  // ─────────────────────────────── Page setup ───────────────────────────────
+
+  let in-frontmatter = state("in-frontmatter", false) // to control page number format in frontmatter
+
+  // Text
+  set text(size: 10pt, lang: "en", font: "New Computer Modern")
+
+  set par(
+    leading: 0.55em,
+    spacing: 1.15em,
+    first-line-indent: 1.8em,
+    justify: true,
+  )
+
+  // Headings
+  set heading(numbering: "1.1 ")
+  show heading: set block(above: 1.4em, below: 1em)
+
+  // Figures
+
+  // more space around figures
+  // https://stackoverflow.com/questions/78622060/add-spacing-around-figure-in-typst
+  show figure.where(kind: image).or(figure.where(kind: table)): it => {
+    let figure-spacing = 0.75em
+
+    if it.placement == none {
+      block(it, inset: (y: figure-spacing))
+    } else {
+      place(
+        it.placement,
+        float: true,
+        clearance: figure-spacing,
+        block(align(center, it), spacing: figure-spacing, width: 100%),
+      )
+    }
+  }
+
+  show figure: set figure(gap: 1em)
+
+  // References & Links
+  let hyperlink-blue = rgb(5, 99, 193)
+  show ref: set text(hyperlink-blue)
+  show link: set text(hyperlink-blue)
+
+  // Lists
+  let square(size) = rect(width: size, height: size, fill: black, stroke: none)
+  // indent lists
+  set list(indent: 1em, marker: ([•], [–], move(dy: 0.2em, square(0.25em))))
+  set enum(indent: 1em, numbering: "1)")
+
+  // Page layout
+  set page(
+    paper: "a4",
+    margin: 2.5cm,
+    footer: context {
+      set align(center)
+      // roman page numbers for the frontmatter, arabic otherwise
+      counter(page).display(if in-frontmatter.get() { "i" } else { "1" })
+    },
+  )
+
+  // ──────────────────────────────── Frontmatter ─────────────────────────────
+
+  in-frontmatter.update(true)
+
+  // Title
+  {
+    set align(center)
+    set par(spacing: 0.8em)
+
+    text(size: 18pt, underline(title))
+    image("img/thumbnail.png", width: 100%)
+
+    align(right, text(
+      size: 12pt,
+      date.display("[month repr:long] [day], [year]"),
+    ))
+  }
+
+  // Outlines
+  set outline.entry(fill: repeat([.], gap: 2pt))
+
+  /// Formats an outline entry.
+  ///
+  /// - it (content): Outline entry.
+  /// - fill (boolean): When `true`, add dots between the body and the page number.
+  /// - page (boolean): When `true`, shows the page number.
+  /// - above (auto, fraction, relative): The spacing between this block and its predecessor (`block.above`).
+  /// - text-weight (int, str): Text weight (`text.weight`).
+  /// - indented (boolean): Whether to indent the entry.
+  /// - justified (boolean): When `false`, wraps the entry in a `block` to prevent justification.
+  /// -> content
+  let outline-entry-formatter(
+    it,
+    fill: true,
+    above: auto,
+    text-weight: "regular",
+    indented: true,
+    justified: true,
+  ) = {
+    set block(above: above)
+    set text(
+      weight: text-weight,
+      fill: black,
+    )
+    show link: set text(black) // reset link color
+
+    let entry-body = {
+      it.body()
+
+      // fill
+      sym.space.nobreak
+      box(width: 1fr, if fill { it.fill } else {})
+      sym.space.en
+
+      it.page()
+    }
+    let entry = (it.prefix(), entry-body)
+
+    let justified-wrapper = if not justified { block } else { x => { x } }
+
+    justified-wrapper(
+      link(
+        it.element.location(), // make entry linkable
+        if indented { it.indented(..entry) } else { entry.join() },
+      ),
+    )
+  }
+
+  // top-level outline entries
+  show outline.entry.where(level: 1): it => {
+    // non-TOC outlines
+    if it.element.func() != heading {
+      return outline-entry-formatter(it)
+    }
+
+    // TOC outlines
+    outline-entry-formatter(
+      it,
+      above: 1.3em,
+      text-weight: "semibold",
+      justified: false,
+      indented: false,
+      fill: false,
+    )
+  }
+
+  // other TOC entries in regular with adapted filling
+  show outline.entry.where(level: 2).or(outline.entry.where(level: 3)): outline-entry-formatter.with(
+    above: 0.5em,
+  )
+
+  // contents
+  outline(title: "Contents", depth: 3)
+  // figures
+  outline(title: "List of Figures", target: figure.where(kind: image))
+  // tables
+  outline(title: "List of Tables", target: figure.where(kind: table))
+
+  newpage()
+  in-frontmatter.update(false)
+
+  // ─────────────────────────────── Document body ────────────────────────────
+
+  counter(page).update(1) // first chapter starts at page 1
+
+  doc
+
+  newpage()
+
+  // ─────────────────────────────── Appendixes ───────────────────────────────
+
+  show heading.where(level: 1): set heading(
+    // configure supplement
+    supplement: "Appendix",
+    // show just appendixes titles in outline
+    outlined: true,
+    numbering: "A ",
+  )
+  counter(heading).update(0)
+
+  if appendixes != none { appendixes }
+}
+
+#show: conf.with(
+  title: "Logic Blocks Guide",
+  author: "ALVAROPING1",
+  date: datetime.today(),
+)
+
+// underline external links
+#show link: it => if type(it.dest) == str { underline(it) } else { it }
+
+// prevent floating elements from spilling into the next section
+#show heading.where(level: 2): it => {
+  place.flush()
+  it
+}
+
+// "booktab" table style
+#show table: block.with(stroke: (y: 0.7pt))
+#set table(row-gutter: 0.2em, stroke: (_, y) => if y == 0 { (bottom: 0.2pt) })
+#set table.hline(stroke: 0.2pt)
+
+// References style
+#show ref: it => {
+  let el = it.element
+  if el == none { return it }
+  // Override heading references
+  if el.func() == heading and regex("\d+") in el.numbering {
+    return [#it, _#link(el.location(), el.body)_]
+  }
+  it
+}
+
+// TODO: remove after converting all figures/tables
+#show ref: it => {
+  let target = str(it.target)
+  if not (target.starts-with("fig:") or (target.starts-with("table:") and target
+    not in ("table:InputValueBlocks", "table:AimingSensorPitchData"))) {
+    it
+  } else {
+    it.target
+  }
+}
+
+#import "@preview/oxifmt:1.0.0": strfmt
+#import "@preview/zero:0.7.1": num
+#import "@preview/symbolica:0.1.0"
+
+#let scientific(x, ..args) = num(x, exponent: "sci", round: (precision: 3), product: sym.dot, ..args)
+
+#let maxFloat = $(2 - 2^(-23)) dot 2^127$
+#let maxFloatApprox = scientific(symbolica.evaluate(symbolica.math(maxFloat)).re)
+
+#let hfrac(x, y) = $frac(#x, #y, style: "horizontal")$
+#let tick = $hfrac(1, 60) "s"$
+
+#let steam(id, body) = link("https://steamcommunity.com/sharedfiles/filedetails/?id=" + id, body)
+
+#let block-ref(id) = link(id, {
+  let name = str(id).replace("-", " ")
+  upper(name.at(0)) + name.slice(1)
+})
+#let math-blocks = block-ref(<math-blocks>)
+#let logic-gates = block-ref(<logic-gates>)
+
+// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║                                 Document                                  ║
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+
+= Introduction
+
+#let trailmakers = link("https://store.steampowered.com/app/585420/Trailmakers/")[Trailmakers]
+
+The goal of this document is to explain the logic system in the game #trailmakers. It also aims to act as a
+comprehensive technical reference manual for all related mechanics and behaviours. This document also contains a section
+about commonly used logic circuits and how to make them, to aid in the design and understanding of more complex logic
+circuits.
+
+= Logic Blocks
+
+// chapter on new page
+#show heading.where(level: 1): it => {
+  newpage()
+  it
+}
+
+Logic blocks are a group of blocks that allow to obtain and process information, which in turn can be used to automate
+tasks or create more complex control schemes for creations, and more generally, perform any finite sequence of steps
+(known as executing an algorithm).
+
+Most logic blocks have a display with an arrow pointing away from the center of the block representing the value of
+their output signal. This arrow is empty when there is no output ($0$ value), and green/red when the output is
+positive/negative. On gravity/altitude/position sensors, this arrow is replaced with an icon (weight for gravity
+sensors, and an arrow pointing in the measured direction for altitude/position sensors), which has the same
+functionality (although it is white when there is no output). Blocks which can take other signals as inputs
+(#logic-gates and #math-blocks), with the exception of number displays, additionally have a second
+arrow pointing to the center of the block representing the input signals, which works like the output arrow but using
+the value of the sum of the input signals.
+
+Note: all settings which accept numbers are rounded after being confirmed. The value used is always the value displayed
+after rounding
+
+#let settings-intro(fig, prefix: [Its]) = noindent[
+  #prefix settings are shown in #ref(label("fig:" + fig)) and are as follows:
+]
+
+== Sensors
+
+Sensors are a group of blocks that measure a physical property, like speed or angle, and create either a boolean or real output based on it.
+
+=== Distance Sensor
+
+Distance sensors check for objects within a straight line in front of them and a predefined distance. Objects are detected with a raycast from a point in the detecting face, indicated by a red dot. The detecting face glows white when the sensor creates an output, and stays off otherwise.
+
+#settings-intro("SensorDistance")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Range: maximum distance between an object and the sensor for it to be detected, in meters ($1 "block" = 0.25 "m"$)
+  - Distance is measured from the surface of the detecting face, although the raycast used starts at the center of the block. This allows it to measure negative distances in the range $[-0.125, 0]$ m, which correspond with the distance between the center of the block and the surface of the detecting face
+- Output scale: multiplier of the output signal created by the block
+- Sensor offset: horizontal position from which the detecting face sends the raycast to detect objects
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the distance to the detected object in meters
+    - Same as "Trigger" when inverted trigger is used
+  - Normalized: output $"measurement"/"range"$ if $"distance" != 0$ ($0$ otherwise)
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when it detects an object
+  - Inverted: sends an output when it doesn't detect an object
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+- Blocks only: whether to trigger only when blocks are detected
+  - If enabled, raycast stops at the first obstacle regardless of what it is, but if it's not a block the output will be the same as no detection
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{distance_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (range)        at (-1, 9.9)  {Range};
+            \node[annotation, left]  (output_value) at (-1, 12.2) {Output scale};
+            \node[annotation, left]  (offset)       at (-1, 14.6) {Sensor offset};
+            \node[annotation, left]  (timers)       at (-1, 17.7) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 21.3) {Output mode};
+            \node[annotation, right] (channel)      at (9,  23.2) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 24.2) {Invert trigger};
+            \node[annotation, right] (blocks)       at (9,  25.3) {Blocks only};
+            \node[annotation, left]  (mute)         at (-1, 26.2) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (range.east)        -- (0.4, 9.9);
+            \draw[arrow] (output_value.east) -- (0.4, 12.2);
+            \draw[arrow] (offset.east)       -- (0.4, 14.6);
+            \draw[arrow] (timers.east)       -- (0.4, 16.7);
+            \draw[arrow] (timers.east)       -- (0.4, 17.7);
+            \draw[arrow] (timers.east)       -- (0.4, 18.9);
+            \draw[arrow] (mode.east)         -- (0.4, 21.3);
+            \draw[arrow] (channel.west)      -- (7.7, 23.2);
+            \draw[arrow] (trigger.east)      -- (0.4, 24.2);
+            \draw[arrow] (blocks.west)       -- (6.2, 25.3);
+            \draw[arrow] (mute.east)         -- (0.4, 26.2);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Distance Sensor settings \thefontsize}
+    \label{fig:SensorDistance}
+\end{figure}
+*/
+
+=== Altitude Sensor
+
+Altitude sensors measure the altitude of the block relative to a predefined frame of reference. They have a display which shows the currently measured altitude rounded to the nearest integer.
+
+#settings-intro("SensorAltitude")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Altitude: altitude threshold to trigger, in meters above the frame of reference ($1 "block" = 0.25 "m"$)
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current altitude in meters
+  - Normalized: output $"measurement"/"altitude"$ if $"altitude" != 0$ (same as measurement otherwise)
+- Frame of reference: position of the $0$ altitude point
+  - Ignore waves: fixed at the average sea level
+  - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
+  - Outside of high seas and when the wave setting is set to disabled, both options are equivalent
+  - On space sector, it's a "MAX" value (equivalent to $2001$ m) while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the altitude is above the configured value
+  - Below: sends an output when the altitude is below the configured value
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{altitude_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (altitude)     at (-1, 9.9)  {Altitude};
+            \node[annotation, left]  (output_value) at (-1, 12.2) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 15.4) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 19)   {Output mode};
+            \node[annotation, right] (channel)      at (9,  20.9) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 21.9) {Trigger below};
+            \node[annotation, right] (reference)    at (9,  23)   {Frame of reference};
+            \node[annotation, left]  (mute)         at (-1, 23.9) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (altitude.east)     -- (0.4, 9.9);
+            \draw[arrow] (output_value.east) -- (0.4, 12.2);
+            \draw[arrow] (timers.east)       -- (0.4, 14.4);
+            \draw[arrow] (timers.east)       -- (0.4, 15.4);
+            \draw[arrow] (timers.east)       -- (0.4, 16.6);
+            \draw[arrow] (mode.east)         -- (0.4, 19);
+            \draw[arrow] (channel.west)      -- (7.7, 20.9);
+            \draw[arrow] (trigger.east)      -- (0.4, 21.9);
+            \draw[arrow] (reference.west)    -- (6.2, 23);
+            \draw[arrow] (mute.east)         -- (0.4, 23.9);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Altitude Sensor settings}
+    \label{fig:SensorAltitude}
+\end{figure}
+*/
+
+=== Position Sensor
+
+Position sensors measure the horizontal position of the block on a chosen axis. They have a display which shows the currently measured position rounded to the nearest integer.
+
+#settings-intro("SensorPosition")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Threshold: position threshold to trigger, in meters ($1 "block" = 0.25 "m"$)
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current position in meters
+  - Normalized: output $"measurement"/"threshold"$ if $"threshold" != 0$ (same as measurement otherwise)
+- Mode: horizontal axis in which to measure the position, either latitude or longitude
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the altitude is above the configured value
+  - Below: sends an output when the altitude is below the configured value
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+- Relative: determines whether the position measured is absolute or relative to the initial position of the sensor when it was spawned
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{position_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (threshold)    at (-1, 9.9)  {Threshold};
+            \node[annotation, left]  (output_value) at (-1, 12.2) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 15.4) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 19)   {Output mode};
+            \node[annotation, right] (axis)         at (9,  20.9) {Mode};
+            \node[annotation, left]  (channel)      at (-1, 22.8) {Output channel};
+            \node[annotation, right] (trigger)      at (9,  23.9) {Trigger below};
+            \node[annotation, left]  (mute)         at (-1, 24.9) {Mute on input};
+            \node[annotation, right] (relative)     at (9,  25.9) {Relative};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (threshold.east)    -- (0.4, 9.9);
+            \draw[arrow] (output_value.east) -- (0.4, 12.2);
+            \draw[arrow] (timers.east)       -- (0.4, 14.4);
+            \draw[arrow] (timers.east)       -- (0.4, 15.4);
+            \draw[arrow] (timers.east)       -- (0.4, 16.6);
+            \draw[arrow] (mode.east)         -- (0.4, 19);
+            \draw[arrow] (axis.west)         -- (7.7, 20.9);
+            \draw[arrow] (channel.east)      -- (0.4, 22.8);
+            \draw[arrow] (trigger.west)      -- (5.2, 23.9);
+            \draw[arrow] (mute.east)         -- (0.4, 24.9);
+            \draw[arrow] (relative.west)     -- (4, 25.9);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Position Sensor settings}
+    \label{fig:SensorPosition}
+\end{figure}
+*/
+
+=== Speed Sensor
+
+Speed sensors measure the speed of the block in a given direction indicated by the arrow on the block. They have a display which shows the currently measured speed as a bar indicator, which is full when the speed is higher than or equal to the trigger speed and empty when the speed is negative or $0$.
+
+#settings-intro("SensorSpeed")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Speed: speed threshold to trigger, in km/h or mph depending on the speed unit settings
+- Output scale: value of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current speed in m/s
+  - Normalized: output $"measurement"/"speed (in m/s)"$ if $"speed" != 0$ (same as measurement otherwise)
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the speed is above the configured value
+  - Below: sends an output when the speed is below the configured value
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{speed_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (speed)        at (-1, 9.9)  {Speed};
+            \node[annotation, left]  (output_value) at (-1, 12.2) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 15.4) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 19)   {Output mode};
+            \node[annotation, right] (channel)      at (9,  20.9) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 22.5) {Trigger below};
+            \node[annotation, right] (mute)         at (9,  23.5) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (speed.east)        -- (0.4, 9.9);
+            \draw[arrow] (output_value.east) -- (0.4, 12.2);
+            \draw[arrow] (timers.east)       -- (0.4, 14.4);
+            \draw[arrow] (timers.east)       -- (0.4, 15.4);
+            \draw[arrow] (timers.east)       -- (0.4, 16.6);
+            \draw[arrow] (mode.east)         -- (0.4, 19);
+            \draw[arrow] (channel.west)      -- (7.7, 20.9);
+            \draw[arrow] (trigger.east)      -- (0.4, 22.5);
+            \draw[arrow] (mute.west)         -- (5.3, 23.5);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Speed Sensor settings}
+    \label{fig:SensorSpeed}
+\end{figure}
+*/
+
+=== Gravity Sensor
+
+Gravity sensors measure the gravity strength at the position of the block. They have a display which shows the currently measured gravity as a bar indicator, which is full when the gravity is higher than or equal to the trigger gravity and empty when the gravity is $0$.
+
+#settings-intro("SensorGravity")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Threshold: gravity strength threshold to trigger, relative to the normal gravity ($14 hfrac("m", "s"^2)$)
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current gravity relative to the normal gravity
+  - Normalized: output $"measurement"/"threshold"$ if $"threshold" != 0$ (same as measurement otherwise)
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the gravity strength is above the configured value
+  - Below: sends an output when the gravity strength is below the configured value
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{gravity_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (threshold)    at (-1, 9.9)  {Threshold};
+            \node[annotation, left]  (output_value) at (-1, 12.2) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 15.4) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 19)   {Output mode};
+            \node[annotation, right] (channel)      at (9,  20.9) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 22.5) {Trigger below};
+            \node[annotation, right] (mute)         at (9,  23.5) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (threshold.east)    -- (0.4, 9.9);
+            \draw[arrow] (output_value.east) -- (0.4, 12.2);
+            \draw[arrow] (timers.east)       -- (0.4, 14.4);
+            \draw[arrow] (timers.east)       -- (0.4, 15.4);
+            \draw[arrow] (timers.east)       -- (0.4, 16.6);
+            \draw[arrow] (mode.east)         -- (0.4, 19);
+            \draw[arrow] (channel.west)      -- (7.7, 20.9);
+            \draw[arrow] (trigger.east)      -- (0.4, 22.5);
+            \draw[arrow] (mute.west)         -- (5.3, 23.5);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Gravity Sensor settings}
+    \label{fig:SensorGravity}
+\end{figure}
+*/
+
+=== Angle Sensor
+
+Angle sensors measure the angle of the block relative to the closest direction to the up direction in the plane defined by the square faces of the block. This is done by projecting the up direction vector onto the plane (resulting in the direction of highest slope), and comparing a vector fixed to the block against that projection. They have a display which shows the currently measured angle, with a blue section representing the activation threshold and an output arrow representing the projected direction.
+
+#settings-intro("SensorAngle")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Direction: position of the middle point of the activation threshold, in degrees
+- Width: size of the activation threshold, in degrees
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
+  - Normalized: output $"measurement"/hfrac("width", 2)$ if $"width" != 0$ ($0$ otherwise)
+    - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - "width"$
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the angle is inside of the activation threshold
+  - Outside: sends an output when the angle is outside the activation threshold
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{angle_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (direction)    at (-1, 9.9)  {Direction};
+            \node[annotation, left]  (width)        at (-1, 12.2) {Width};
+            \node[annotation, left]  (output_value) at (-1, 14.6) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 17.7) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 21.3) {Output mode};
+            \node[annotation, right] (channel)      at (9,  23.2) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 24.2) {Trigger outside};
+            \node[annotation, right] (mute)         at (9,  25.3) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (direction.east)    -- (0.4, 9.9);
+            \draw[arrow] (width.east)        -- (0.4, 12.2);
+            \draw[arrow] (output_value.east) -- (0.4, 14.6);
+            \draw[arrow] (timers.east)       -- (0.4, 16.7);
+            \draw[arrow] (timers.east)       -- (0.4, 17.7);
+            \draw[arrow] (timers.east)       -- (0.4, 18.9);
+            \draw[arrow] (mode.east)         -- (0.4, 21.3);
+            \draw[arrow] (channel.west)      -- (7.7, 23.2);
+            \draw[arrow] (trigger.east)      -- (0.4, 24.2);
+            \draw[arrow] (mute.west)         -- (5.3, 25.3);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Angle Sensor settings}
+    \label{fig:SensorAngle}
+\end{figure}
+*/
+
+=== Compass
+
+Compasses measure the angle of the block relative to the closest direction to the north in the plane defined by the square faces of the block. This is done by projecting the north vector onto the plane, and comparing a vector fixed to the block against that projection. They have a display which shows the currently measured angle, with a red section representing the activation threshold, and an output arrow and cardinal direction letters representing the projected direction.
+
+#settings-intro("SensorCompass")
+
+- Direction: position of the middle point of the activation threshold, in degrees
+- Width: size of the activation threshold, in degrees
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
+  - Normalized: output $"measurement"/hfrac("width", 2)$ if $"width" != 0$ ($0$ otherwise)
+    - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - "width"$
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the angle is inside of the activation threshold
+  - Outside: sends an output when the angle is outside the activation threshold
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{compass}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (direction)    at (-1, 9.9)  {Direction};
+            \node[annotation, left]  (width)        at (-1, 12.2) {Width};
+            \node[annotation, left]  (output_value) at (-1, 14.6) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 17.7) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 21.3) {Output mode};
+            \node[annotation, right] (channel)      at (9,  23.2) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 24.2) {Trigger outside};
+            \node[annotation, right] (mute)         at (9,  25.3) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (direction.east)    -- (0.4, 9.9);
+            \draw[arrow] (width.east)        -- (0.4, 12.2);
+            \draw[arrow] (output_value.east) -- (0.4, 14.6);
+            \draw[arrow] (timers.east)       -- (0.4, 16.7);
+            \draw[arrow] (timers.east)       -- (0.4, 17.7);
+            \draw[arrow] (timers.east)       -- (0.4, 18.9);
+            \draw[arrow] (mode.east)         -- (0.4, 21.3);
+            \draw[arrow] (channel.west)      -- (7.7, 23.2);
+            \draw[arrow] (trigger.east)      -- (0.4, 24.2);
+            \draw[arrow] (mute.west)         -- (5.3, 25.3);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Compass settings}
+    \label{fig:SensorCompass}
+\end{figure}
+*/
+
+=== Aiming Sensor
+
+Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. This is done by projecting the camera direction vector onto the plane, and comparing a vector fixed to the block against that projection. The camera direction used is always that of the player who owns (spawned) the creation, although with an upwards pitch offset explained in @AimingServoPitch. They have a display which shows the currently measured angle, with a light blue section representing the activation threshold and an output arrow representing the projected direction.
+
+#settings-intro("SensorCamera")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Direction: position of the middle point of the activation threshold, in degrees
+- Width: size of the activation threshold, in degrees
+- Output scale: multiplier of the output signal created by the block
+- Output mode: type of output created by the sensor when it is activated (the output is always $0$ otherwise)
+  - Trigger: output 1
+  - Measurement: output the current signed angle (positive for counterclockwise) from either the center (normal trigger) or the closest edge (trigger outside) of the activation threshold to the output arrow in degrees
+  - Normalized: output $"measurement"/hfrac("width", 2)$ if $"width" != 0$ ($0$ otherwise)
+    - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - "width"$
+- Trigger: condition used to determine when to send an output
+  - Normal: sends an output when the angle is inside of the activation threshold
+  - Outside: sends an output when the angle is outside the activation threshold
+- Mute on input: determines whether inputs enable or disable the output
+  - Inputs disable the output when enabled, and enable the output otherwise
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{aiming_sensor}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.2) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 13.5) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 6.1)  {Keybinds/toggles};
+            \node[annotation, left]  (direction)    at (-1, 10.5) {Direction};
+            \node[annotation, left]  (width)        at (-1, 13.1) {Width};
+            \node[annotation, left]  (output_value) at (-1, 15.7) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 20.1) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 24.6) {Output mode};
+            \node[annotation, right] (channel)      at (9,  26.5) {Output channel};
+            \node[annotation, left]  (trigger)      at (-1, 27.9) {Trigger outside};
+            \node[annotation, right] (mute)         at (9,  28.9) {Mute on input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (17.6, 11.2);
+            \draw[arrow] (output_on.west)    -- (17.6, 13.5);
+            \draw[arrow] (keybinds.east)     -- (0.1, 6.1);
+            \draw[arrow] (direction.east)    -- (0.1, 10.5);
+            \draw[arrow] (width.east)        -- (0.1, 13.1);
+            \draw[arrow] (output_value.east) -- (0.1, 15.7);
+            \draw[arrow] (timers.east)       -- (0.1, 18.9);
+            \draw[arrow] (timers.east)       -- (0.1, 20.1);
+            \draw[arrow] (timers.east)       -- (0.1, 21.3);
+            \draw[arrow] (mode.east)         -- (0.1, 24.6);
+            \draw[arrow] (channel.west)      -- (7.4, 26.5);
+            \draw[arrow] (trigger.east)      -- (0.1, 27.9);
+            \draw[arrow] (mute.west)         -- (5.0, 28.9);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Aiming Sensor settings}
+    \label{fig:SensorCamera}
+\end{figure}
+*/
+
+== Logic gates <logic-gates>
+
+Logic gates are a group of blocks that take a set of boolean inputs, and create a boolean output based on their values. The conditions used are as follows, inputs will be discussed on @signals:
+
+- AND gate: all inputs are on
+- OR gate: at least one input is on
+- XOR gate: only one input is on
+- NOR gate: sum of inputs is $0$
+
+#settings-intro("LogicGate", prefix: [Their])
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Output scale: multiplier of the output signal created by the block, explained in @output-value-calculation
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{logic_gate}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (output_value) at (-1, 9.9)  {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 13)   {Timers};
+            \node[annotation, left]  (channel)      at (-1, 16.6) {Output channel};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (output_value.east) -- (0.4, 9.9);
+            \draw[arrow] (timers.east)       -- (0.4, 12);
+            \draw[arrow] (timers.east)       -- (0.4, 13);
+            \draw[arrow] (timers.east)       -- (0.4, 14.2);
+            \draw[arrow] (channel.east)      -- (0.4, 16.6);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Logic Gate settings}
+    \label{fig:LogicGate}
+\end{figure}
+*/
+
+=== Output value calculation <output-value-calculation>
+
+These are the steps used by the game to determine the value attached to the output signal created by logic gates. For more information about signals, see @signals.
+
++ The gate checks if its conditions are met. If they aren't, the gate doesn't create an output
++ The gate adds up the values of all of its inputs and clamps the result to the $[-1, 1]$ range
+  - Values smaller than $-1$ are replaced with $-1$, and values bigger than $1$ with $1$
++ The gate multiplies the result by its Output scale setting. For NOR gates, their setting replaces the result (which would otherwise always be $0$)
++ The gate sends the result as its output value
+
+This process can be described with the following formula:
+$ "output" = "output_value" dot op("boolean_operation")("inputs") dot op("clamp")(sum "inputs") $
+
+/*
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{output_value_diagram}
+    \caption{Output value calculation diagram made by Zoomah}
+    \label{fig:OutputValueDiagram}
+\end{figure}
+*/
+
+==== Example
+
+An AND gate with an output value of $0.5$ has 2 inputs, one of them has an output value of $0.8$ and the other of $0.5$. When at least one of them is off, it doesn't send an output. When both of them are on at the same time, the AND gate is able to send an output. On that case, the output values of the inputs are first added up: $0.8 + 0.5 = 1.3$. Because the sum, $1.3$, is bigger than $1$, the gate replaces it with $1$. Then that value is multiplied by the output value of the gate: $1 dot 0.5 = 0.5$. Finally, the AND gate sends an output with the value of that multiplication, $0.5$. On the steam version, if the sum of the inputs or the output value of the gate had been $0$, the resultant value of the multiplication would have also been $0$, in which case the gate wouldn't have sent an output.
+
+== Math blocks <math-blocks>
+
+Math blocks are a group of blocks that take a set of numeric inputs and perform some operation to get an output based on their values, either numeric or boolean. They are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range before interpreting it.
+
+=== Comparison Logic Gate
+
+Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode. They are also sometimes referred to as comparators.
+
+#settings-intro("Comparator")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Threshold: value used for the right hand side of the comparison
+- Output value: value of the output signal created by the block, explained in @signals
+- Comparison mode: comparison operation to perform. Possible values are "less than", "less equals", "greater than", "greater equals", "equal", and "not equal"
+  - When the mode is set to "less equals", the total input is rounded to 3 decimal places before performing the comparison, using the nearest mode and rounding numbers ending in $5$ up
+  - For the "equal" and "not equal" modes, numbers are compared with a tolerance of $epsilon = 0.0005$ (the numbers are equal if their difference is $< epsilon$)
+- Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{comparison_logic_gate}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (threshold)    at (-1, 9.9)  {Threshold};
+            \node[annotation, left]  (output_value) at (-1, 12.2) {Output scale};
+            \node[annotation, left]  (timers)       at (-1, 15.4) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 19)   {Comparison mode};
+            \node[annotation, right] (channel)      at (9,  20.9) {Output channel};
+            \node[annotation, left]  (clamp)        at (-1, 23.5) {Clamp input};
+
+            % Arrows
+            \draw[arrow] (output_off.west)   -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)    -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)     -- (0.4, 5.9);
+            \draw[arrow] (threshold.east)    -- (0.4, 9.9);
+            \draw[arrow] (output_value.east) -- (0.4, 12.2);
+            \draw[arrow] (timers.east)       -- (0.4, 14.4);
+            \draw[arrow] (timers.east)       -- (0.4, 15.4);
+            \draw[arrow] (timers.east)       -- (0.4, 16.6);
+            \draw[arrow] (mode.east)         -- (0.4, 19);
+            \draw[arrow] (channel.west)      -- (7.7, 20.9);
+            \draw[arrow] (clamp.east)        -- (0.4, 23.5);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Comparison Logic Gate settings}
+    \label{fig:Comparator}
+\end{figure}
+*/
+
+=== Accumulator
+
+Accumulators store and output a numeric value, and allow to increment/decrement it between some bounds. They are always initialized to the value closest to $0$ within the defined bounds. They have a display which shows the currently stored value as a bar indicator, which is full when the value is the maximum and empty when it is the minimum. Additionally, the bar indicator is white when the value is 0, and green/red when it is positive/negative.
+
+#settings-intro("Accumulator")
+
+#let min-max-range = $[min("minimum", "maximum"), space.en max("minimum", "maximum")]$
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Value bounds: minimum/maximum value that can be stored, the stored value will be clamped to the range #min-max-range
+- Scale: rate of change of the stored value, used to scale the value of the input
+- Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $hfrac(1, 60)$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{accumulator}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (bounds)       at (-1, 11)   {Value bounds};
+            \node[annotation, left]  (scale)        at (-1, 14.6) {Scale};
+            \node[annotation, left]  (timers)       at (-1, 17.7) {Timers};
+            \node[annotation, left]  (channel)      at (-1, 21.3) {Output channel};
+            \node[annotation, right] (steps)        at (9,  22.4) {Use steps};
+
+            % Arrows
+            \draw[arrow] (output_off.west) -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)  -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (bounds.east)     -- (0.4, 9.9);
+            \draw[arrow] (bounds.east)     -- (0.4, 12.2);
+            \draw[arrow] (scale.east)      -- (0.4, 14.6);
+            \draw[arrow] (timers.east)     -- (0.4, 16.7);
+            \draw[arrow] (timers.east)     -- (0.4, 17.7);
+            \draw[arrow] (timers.east)     -- (0.4, 18.9);
+            \draw[arrow] (channel.east)    -- (0.4, 21.3);
+            \draw[arrow] (steps.west)      -- (4.5, 22.4);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Accumulator settings}
+    \label{fig:Accumulator}
+\end{figure}
+*/
+
+=== Randomizer
+
+Randomizers generate and output random values.
+
+#settings-intro("Randomizer")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Value bounds: minimum/maximum value that can be generated, the generated
+  values will be in the range #min-max-range
+- Random mode: mode in which the values are generated
+  - Output on input: outputs a random value generated on each frame when it is activated, and $0$ otherwise
+  - Change on input: outputs a random value generated on each frame when it is activated, and the last generated value (initialized to $0$) otherwise
+  - Input defines range: outputs a random value generated on each frame in the intersection between the value bounds and the range $[min("inputs"), max("inputs")]$ when the block is activated, and the last generated value (initialized to a random value within the value bounds) otherwise
+    - If the intersection is empty, the value bounds range is used instead if any of the inputs isn't 0, otherwise the output is always 0
+  - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to a random value within the value bounds) when it is activated with a positive input
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{randomizer}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (bounds)       at (-1, 11)   {Value bounds};
+            \node[annotation, left]  (timers)       at (-1, 15.4) {Timers};
+            \node[annotation, left]  (mode)         at (-1, 19)   {Random mode};
+            \node[annotation, right] (channel)      at (9,  20.9) {Output channel};
+
+            % Arrows
+            \draw[arrow] (output_off.west) -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)  -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (bounds.east)     -- (0.4, 9.9);
+            \draw[arrow] (bounds.east)     -- (0.4, 12.2);
+            \draw[arrow] (timers.east)     -- (0.4, 14.4);
+            \draw[arrow] (timers.east)     -- (0.4, 15.4);
+            \draw[arrow] (timers.east)     -- (0.4, 16.6);
+            \draw[arrow] (mode.east)       -- (0.4, 19);
+            \draw[arrow] (channel.west)    -- (7.7, 20.9);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Randomizer settings}
+    \label{fig:Randomizer}
+\end{figure}
+*/
+
+=== Number Display
+
+Number displays output the sum of their inputs, similar to how OR logic gates work (although without clamping the sum to the $[-1, 1]$ range), and display it with an optional rounding. They display "N/A" in build mode.
+
+#settings-intro("NumberDisplay")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled", "nearest", "floor" (closest smaller integer), and "ceil" (closest bigger integer)
+  - When rounding is disabled, numbers are rounded to $2$ decimals using the nearest mode, rounding numbers ending in $0.005$ away from $0$
+  - For the "nearest" mode, numbers with a fractional part of $0.5$ are rounded to the closest even integer
+  - If the number is outside of the $[-1000, 1000]$ range, it's always displayed in scientific notation with $1$ decimal of precision
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{number_display}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (timers)       at (-1, 9.6)  {Timers};
+            \node[annotation, left]  (rounding)     at (-1, 13.2) {Rounding};
+            \node[annotation, below] (channel)      at (4,  17)   {Output channel};
+
+            % Arrows
+            \draw[arrow] (output_off.west) -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)  -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (timers.east)     -- (0.4, 8.6);
+            \draw[arrow] (timers.east)     -- (0.4, 9.6);
+            \draw[arrow] (timers.east)     -- (0.4, 10.8);
+            \draw[arrow] (rounding.east)   -- (0.4, 13.2);
+            \draw[arrow] (channel.north)   -- (4, 15.7);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Number Display settings}
+    \label{fig:NumberDisplay}
+\end{figure}
+*/
+
+=== Arithmetics Logic Block
+
+Arithmetics logic blocks perform an arithmetic binary operation with a constant and the sum of their inputs, and output the result. The constant is the first operand while the sum of the inputs is the second one. They have a display which shows the currently selected operation.
+
+#settings-intro("ArithmeticsBlock")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Constant: constant value to use as the first operand
+- Operation: binary operation to perform. Possible values are addition, subtraction, multiplication, division, modulo, power ($x^"constant"$), exponentiation ($"constant"^x$), and variable division
+  - Attempting to perform a division by $0$ or $a^b$ with $a < 0$ and $b in.not ZZ$ results in an output of $0$
+  - Attempting to perform $0^0$ results in $1$ when the operation is power and $0$ when the operation is exponentiation
+  - When there are no inputs, the operation is performed using an input of $0$
+  - Variable division uses the logic channel 0 for its first input (numerator) and logic channel 1 for its second input (denominator)
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{arithmetic_logic_block}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (constant)     at (-1, 9.9)  {Constant};
+            \node[annotation, left]  (timers)       at (-1, 13)   {Timers};
+            \node[annotation, left]  (operation)    at (-1, 16.6) {Operation};
+            \node[annotation, right] (channel)      at (9,  18.5) {Output channel};
+
+            % Arrows
+            \draw[arrow] (output_off.west) -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)  -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (constant.east)   -- (0.4, 9.9);
+            \draw[arrow] (timers.east)     -- (0.4, 12);
+            \draw[arrow] (timers.east)     -- (0.4, 13);
+            \draw[arrow] (timers.east)     -- (0.4, 14.2);
+            \draw[arrow] (operation.east)  -- (0.4, 16.6);
+            \draw[arrow] (channel.west)    -- (7.7, 18.5);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Arithmetics Logic Block settings}
+    \label{fig:ArithmeticsBlock}
+\end{figure}
+*/
+
+=== Functions Logic Block
+
+Functions logic blocks perform a unary operation with the sum of their inputs and output the result. They have a display which shows the currently selected operation.
+
+#settings-intro("FunctionsBlock")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, arctangent, floor, ceiling, rounding, arctan2, $log_2$, $log_e$, and $log_10$
+  - Attempting to perform an undefined operation (square root of a negative number, arcsine/arccosine of a number outside of the $[-1, 1]$ range, or logarithm of a negative value) results in an output of $0$
+  - Trigonometric functions use degrees as the angle unit
+  - Inverse trigonometric functions output the value in their #link("https://en.wikipedia.org/wiki/Principal_branch")[principal branch]
+    - For arcsine: $-90 degree <= arcsin(x) <= 90 degree$
+    - For arccosine: $0 degree <= arccos(x) <= 180 degree$
+    - For arctangent: $-90 degree < arctan(x) < 90 degree$
+  - For the rounding function, numbers with a fractional part of $0.5$ are rounded to the closest even integer
+  - Arctan2 uses the logic channel 0 for its first input ($y$) and logic channel 1 for its second input ($x$)
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{functions_block}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (timers)       at (-1, 10.7) {Timers};
+            \node[annotation, left]  (function)     at (-1, 14.3) {Function};
+            \node[annotation, below] (channel)      at (4,  18)   {Output channel};
+
+            % Arrows
+            \draw[arrow] (output_off.west) -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)  -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (timers.east)     -- (0.4, 9.7);
+            \draw[arrow] (timers.east)     -- (0.4, 10.7);
+            \draw[arrow] (timers.east)     -- (0.4, 11.9);
+            \draw[arrow] (function.east)   -- (0.4, 14.3);
+            \draw[arrow] (channel.north)   -- (4, 17);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Functions Logic Block settings}
+    \label{fig:FunctionsBlock}
+\end{figure}
+*/
+
+=== Aggregate Logic Block
+
+Aggregate logic blocks perform a (variadic) aggregation operation with their inputs and output the result. They have a display which shows the currently selected operation. Note: due to a bug, when the function isn't sum, the output can sometimes be updated instantly without the normal signal propagation delay.
+
+#settings-intro("AggregateBlock")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Logic output channel: tag added to the output signal, see @signals
+- Aggregate function: aggregate operation to perform. Possible values are sum, product, minimum, and maximum
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{aggregate_block}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (timers)       at (-1, 10.7) {Timers};
+            \node[annotation, left]  (function)     at (-1, 14.3) {Aggregate function};
+            \node[annotation, below] (channel)      at (4,  18)   {Output channel};
+
+            % Arrows
+            \draw[arrow] (output_off.west) -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)  -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (timers.east)     -- (0.4, 9.7);
+            \draw[arrow] (timers.east)     -- (0.4, 10.7);
+            \draw[arrow] (timers.east)     -- (0.4, 11.9);
+            \draw[arrow] (function.east)   -- (0.4, 14.3);
+            \draw[arrow] (channel.north)   -- (4, 17);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Aggregate Logic Block settings}
+    \label{fig:AggregateBlock}
+\end{figure}
+*/
+
+=== Hue Light Panel <hue-light-panel>
+
+Hue light panels are lights with configurable color determined from their input value.
+
+#settings-intro("HueLightPanel")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Saturation: saturation of the color of the light. Ignored when the input value is negative
+- Brightness: brightness of the color of the light
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{hue_light_panel}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (saturation)   at (-1, 9.9)  {Saturation};
+            \node[annotation, left]  (brightness)   at (-1, 12.2) {Brightness};
+            \node[annotation, left]  (timers)       at (-1, 15.4) {Timers};
+
+            % Arrows
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (saturation.east) -- (0.4, 9.9);
+            \draw[arrow] (brightness.east) -- (0.4, 12.2);
+            \draw[arrow] (timers.east)     -- (0.4, 14.4);
+            \draw[arrow] (timers.east)     -- (0.4, 15.4);
+            \draw[arrow] (timers.east)     -- (0.4, 16.6);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Hue Light Panel settings}
+    \label{fig:HueLightPanel}
+\end{figure}
+*/
+
+==== Color Calculation
+
+The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure @fig:HueLightPanelColor shows an example of the resulting colors for inputs in the range $[-1, 1]$ with $"saturation" = "brightness" = 1$. Inputs smaller than $-1$ result in the $[-1, 0]$ range being repeated, while inputs greater than $1$ result in the $[0, 1]$ range being repeated.
+
+$ op("color")(x) = cases(
+    op("HSV")(360(x "mod" 1), S, B)          space.quad & (x > 0),
+    "Off (Black)"                            space.quad & (x = 0),
+    op("greyscale")((1 - (x "mod" 1)) dot B) space.quad & (x < 0),
+) $
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \pgfmathsetlengthmacro\MajorTickLength{
+          \pgfkeysvalueof{/pgfplots/major tick length} * 2
+        }
+        \pgfmathsetlengthmacro\MinorTickLength{
+          \pgfkeysvalueof{/pgfplots/minor tick length} * 2
+        }
+        \begin{axis}[
+            height=2.5cm,
+            width=\linewidth,
+            axis on top=true,
+            axis y line=none,
+            xtick distance=1/6,
+            every x tick/.style={thick},
+            tick align=center,
+            major tick length=\MajorTickLength,
+            minor tick length=\MinorTickLength,
+            minor tick num=1,
+            xmin=-1, xmax=1,
+            ymin=-0.1, ymax=0.1,
+            samples=500,
+            xlabel={Input value},
+        ]
+            \addplot[
+                mesh,
+                line width=1cm,
+                domain=0:1,
+                variable=\u,
+                mesh/color input=explicit mathparse,
+                point meta={symbolic={Hsb=deg(u * 2 * pi),1,1}}
+            ] ({u},0);
+            \addplot[
+                mesh,
+                line width=1cm,
+                domain=-1:0,
+                variable=\u,
+                mesh/color input=explicit mathparse,
+                point meta={symbolic={Hsb=0,0,-u}}
+            ] ({u},0);
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Hue light panel color with $"saturation" = "brightness" = 1$ for inputs in the range $[-1, 1]$}
+    \label{fig:HueLightPanelColor}
+\end{figure}
+*/
+
+=== RC Blocks
+
+RC blocks are a pair of blocks that allow to send and receive logic signals between different creations.
+
+==== Radio Sender
+
+Radio senders transmit their input value to other radio receivers on the same channel and isolation level. The logic output of radio senders is always 0.
+
+#settings-intro("RCSender")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Channel: RC channel in which to emit the signal
+- Channel isolation: visibility type of the channel
+  - None: channel is shared by all players
+  - Team: channel is shared by all players of the same team. Different teams won't see each other's signals
+  - Player: channel is different for each player. Different players won't see each other's signals
+  - The player/team of the RC block is determined by the player who owns (spawned) the creation
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{rc_sender}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (channel)      at (-1, 9.9)  {Channel};
+            \node[annotation, left]  (timers)       at (-1, 13)   {Timers};
+            \node[annotation, left]  (isolation)    at (-1, 16.6) {Channel isolation};
+
+            % Arrows
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (channel.east)    -- (0.4, 9.9);
+            \draw[arrow] (timers.east)     -- (0.4, 12);
+            \draw[arrow] (timers.east)     -- (0.4, 13);
+            \draw[arrow] (timers.east)     -- (0.4, 14.2);
+            \draw[arrow] (isolation.east)  -- (0.4, 16.6);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{RC Sender settings}
+    \label{fig:RCSender}
+\end{figure}
+*/
+
+==== Radio Receiver
+
+Radio receivers gather signals from radio senders on the same channel and isolation level, and output their sum. The logic channel of the output is always 0. Logic inputs to the radio receiver are ignored, only radio senders are taken into account.
+
+#settings-intro("RCReceiver")
+
+- Keybinds: see @keybinds
+- Toggle: see @toggle
+- Timers: see @timers
+- Channel: RC channel in which to receive the signals
+- Channel isolation: visibility type of the channel
+  - None: channel is shared by all players
+  - Team: channel is shared by all players of the same team. Different teams won't see each other's signals
+  - Player: channel is different for each player. Different players won't see each other's signals
+  - The player/team of the RC block is determined by the player who owns (spawned) the creation
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        % Image in a node
+        \node[anchor=north west, inner sep=0] (image) at (0,0) {\includegraphics[width=0.4\textwidth]{rc_receiver}};
+        % Use the image as the bounding box of the tikzpicture for centering
+        \useasboundingbox (image.south east) rectangle (image.north west);
+
+        % Create scope with normalized axes
+        \begin{scope}[
+            x={($0.05*(image.north east)$)},
+            y=1em,
+            yscale=-1,
+        ]
+            % Draw grid
+            %\draw[lightgray,step=1] (image.south west) grid (image.north east);
+
+            % Draw axes labels
+            %\foreach \x in {0,1,...,20} {\node [above] at (\x,0) {\tiny \x};}
+            %\foreach \y in {0,1,...,30} {\node [left]  at (0,\y) {\tiny \y};}
+
+            % Nodes
+            \node[annotation, right] (output_off)   at (21, 11.5) {Output (off)};
+            \node[annotation, right] (output_on)    at (21, 14.2) {Output (on)};
+            \node[annotation, left]  (keybinds)     at (-1, 5.9)  {Keybinds/toggles};
+            \node[annotation, left]  (channel)      at (-1, 9.9)  {Channel};
+            \node[annotation, left]  (timers)       at (-1, 13)   {Timers};
+            \node[annotation, left]  (isolation)    at (-1, 16.6) {Channel isolation};
+
+            % Arrows
+            \draw[arrow] (output_off.west) -- (19.1, 11.5);
+            \draw[arrow] (output_on.west)  -- (19.1, 14.2);
+            \draw[arrow] (keybinds.east)   -- (0.4, 5.9);
+            \draw[arrow] (channel.east)    -- (0.4, 9.9);
+            \draw[arrow] (timers.east)     -- (0.4, 12);
+            \draw[arrow] (timers.east)     -- (0.4, 13);
+            \draw[arrow] (timers.east)     -- (0.4, 14.2);
+            \draw[arrow] (isolation.east)  -- (0.4, 16.6);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{RC Receiver settings}
+    \label{fig:RCReceiver}
+\end{figure}
+*/
+
+= Common block settings
+
+These are settings shared by all blocks in the game that can be activated with input signals.
+
+== Keybinds <keybinds>
+
+Keybinds are the most common input to activate a block, and all blocks that can be activated have either a single keybind (green) or two keybinds (green and red).
+
+- All keybinds on a single block act as a single input for each seat
+  - An AND gate with a green and a red keybind configured will send an output when just pressing one of the 2 keybinds, but will require someone in each seat that has control over it pressing the keybind to send an output
+  - If no keybinds are configured, the input isn't taken into account. This only makes a difference in AND gates, which would otherwise be impossible to trigger without keybinds
+- The green keybind has a positive value while the red keybind has a negative one. For more information about input values, see @signals
+  - For input methods that don't support analog inputs (keyboards and normal buttons on controllers), the value is always $1$
+  - For input methods that support analog inputs (controller joysticks and triggers), the value is the one given by the input method normalized to the range $[0, 1]$
+
+== Toggle <toggle>
+
+Toggle allows to make inputs alternate the activation state of a block between on and off without requiring a continuous input signal to remain active.
+
+- There is a toggle setting associated with positive inputs (below the green keybind) and another with negative ones (below the red keybind)
+- Toggles *inputs*
+  - When the sum of the inputs goes from $0$ to a different value, multiple things happen depending on the new value:
+    + If the opposite sign of the input is toggled on, it is toggled off instantly
+    + If the sign of the input has toggle enabled, it is toggled: if it was off it turns on, and if it was on it turns off (which will happen on the falling edge of the input). Otherwise, the gate is enabled normally
+  - Toggle retains the value of the last non-$0$ sum of inputs while active
+  - To toggle the output instead of the inputs, make the signal go through another gate with the toggle
+
+== Timers <timers>
+
+Timers are a group of settings that allow to automate the activation/deactivation of a block after a set amount of time.
+
+#let arrow = sym.arrow
+
+- Timers apply to the inputs of the block and are shared by all of them, and start as soon as the block receives a *single input*. For logic blocks, this still applies even if the block doesn't meet its conditions to send an output
+- The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one written rounded to 8 decimal places. Due to a bug, only up to 5 characters can be written, so depending on the exact value the number of decimals which can be used will vary
+- All values are specified in seconds
+- Delay: amount of time between the block receives an input and the block activates
+  - Note: each logic gate has an extra delay of #tick due to the state of all the logic gates being updated once per physics' frame at the same time
+- Duration (previously active time): amount of time before the block automatically deactivates after it has been activated
+  - A value of $0$ indicates that it will never deactivate automatically
+  - Shortest pulse length is $1$ frame (#tick), values smaller than this won't activate the block
+- Pause (previously inactive time): amount of time before the block reactivates and the duration timer is restarted, after the duration timer expires
+  - A value of $0$ indicates that the block will never reactivate automatically
+  - It's ignored if the duration timer is $0$
+- During the delay/pause timers, the block is deactivated by overriding the input value with $0$
+- The order of the timers is as follows: delay #arrow duration #arrow pause #arrow back to duration (if pause is $0$ it ends after the duration ends)
+- In the case of the delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames, which can be calculated with $"seconds" dot 60$
+  - If this number is not an integer, it will be rounded down to the nearest integer
+  - If this number is an integer, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames
+  - Pause timers aren't subject to this, and the exact time in seconds is used for them
+
+= Signals <signals>
+
+Signals are the method used to communicate different logic blocks between eachother and other blocks. All block inputs, both from logic blocks and keybinds, are represented with signals. Signals are made up of 3 important properties:
+
+- Input/output value: value attached to each signal, usually in the range $[-1, 1]$.
+  - #math-blocks are the only blocks which don't clamp the sum of their inputs to the $[-1, 1]$ range, instead they use the range $[-#maxFloat, #maxFloat] approx [-#maxFloatApprox, #maxFloatApprox]$
+  - They are represented with a standard #link("https://en.wikipedia.org/wiki/Single-precision_floating-point_format")[IEEE 754 single-precision floating-point number]
+- Truthness value: value that determines if a signal is on or off
+  - A signal is on if its associated value is not $0$. Additionally, for blocks with multiple inputs, the sum of their inputs must also be non-$0$ in order for them to be activated
+- Logic channel: tag added to signals to be able to group them. Its exact value is meaningless, as it's only ever used to determine how to group signals received by a single block. The value of each group is the sum of the signals within that group received. Most blocks ignore it, but some blocks can treat each group differently.
+  - Keybinds always use the C0 channel
+  - Toggle/timers state is shared by all channels
+
+When a block receives a set of inputs, it determines how it is activated based on the value of their sum. Blocks with a single configurable keybind, except the gyro stabilizer and hue light panels, additionally use the absolute value before interpreting it, which makes both signs equivalent. The resulting value represents the percentage of power that whatever it activates will use, applied to the value set in its settings as a multiplier (if applicable). Values modified for each block are in @table:InputValueBlocks. Some important notes:
+
+- For hinges/wings the rotation speed depends on the max angle set in their settings and not on the angle achieved with the input value, resulting in faster speeds with fractional input values for the same final angle
+- By default, the response of hinges/wings to fractional inputs is not linear, resulting in smaller angles. See @InputValueMultiplier for more information
+- Due to a bug, close to 0 inputs in servos with hold position also result in lower speeds as well. See @InputValueSpeed for more information
+- For rotating servos, an angle of "infinity" actually represents $360 degree$
+- For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
+
+
+#figure(
+  table(
+    columns: (6.5cm, auto),
+    align: left,
+    table.header([Block], [Value modified]),
+    [Engines], [Max speed and acceleration (torque)],
+    [Thrusters, gimbals, propellers, boat engines, and quantum rudders], [Power (thrust)],
+    [Rotating servos, hinges, and wings with control surfaces (without hold position)], [Angle],
+    [Spinning servos, helicopter engines, pistons, gyros, and gyro stabilizers], [Speed],
+    [Tone generators], [Volume],
+    [Logic gates and math blocks], [Output value (see #logic-gates and #math-blocks)],
+    [Hue light panels], [Color (see #block-ref(<hue-light-panel>))],
+    [Other], [None],
+  ),
+  caption: [Value modified by the input value for each block]
+) <table:InputValueBlocks>
+
+= Useful Circuits <useful-circuits>
+
+This section contains commonly used logic circuits and how to make them, to aid in the design and understanding of more complex logic circuits.
+
+== Pulse generator/Rising edge detector
+
+- Sends a pulse of a specific length (usually a single frame which is #tick) when the input goes from off to on
+- Made by setting the duration to the length of the pulse on an OR gate
+
+== Falling edge detector
+
+- Sends a pulse of a specific length when the input goes from on to off
+- Made by connecting a NOT gate to a pulse generator
+
+== Latch (T-FlipFlop)
+
+- Stores a single bit of information
+- Made by activating toggle on an OR gate, requires the input to be a pulse to be easily controlled by other gates (use a pulse generator for this)
+
+== Counter
+
+#let example-bps(id1, id1c, id2, id2c) = [
+  Example blueprints: #steam(id1)[1-way], #steam(id1c)[1-way+cycle], #steam(id2)[2-way] and #steam(id2c)[2-way+cycle]
+]
+
+- Stores the value of a variable with $n$ possible (discrete) values
+- Depending on how it's made, it can be 1 or 2 way and have cycle or not
+  - 1-way: the value can only be increased
+  - 2-way: the value can be both increased and decreased
+  - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
+  - Base designs described are 1-way without cycle, with the modifications needed to implement 2-way or cycle being explained afterwards
+- The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
+- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is least complex depends on the situation
+  - The general circuit and decimal methods can be implemented using logic gates or accumulators. Generally accumulator-based counters are less complex, but logic gate based designs will still be described as they can be less complex under some circumstances (like needing a counter which only changes its value when a function of its current value is true)
+
+=== General Circuit (Base $N$)
+
+==== Logic Gates Implementation
+
+- $n = "amount of cells"$
+- The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
+- Diagram of the circuit:
+/*
+\begin{figure}[H]
+    \makebox[\textwidth][c]{
+    \begin{tikzpicture}
+        % Nodes
+
+        % Cell 1
+        \node[node]       (OR_1)                          {Toggled OR gate\\with 1 frame\\delay (output)};
+        \node[node]       (AND_1)   [below = 5mm of OR_1] {AND gate};
+        \coordinate[above=16pt of OR_1]   (cell_1);
+
+        % Hidden cell 1
+        \node[hiddenNode] (OR_h1)   [right = of OR_1]     {};
+        \node[hiddenNode] (AND_h1)  [right = of AND_1]    {};
+
+        % Cell k
+        \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\with 1 frame\\delay (output)};
+        \node[node]       (AND_k)   [right = of AND_h1]   {AND gate};
+        \coordinate[above=16pt of OR_k]   (cell_k);
+
+        % Cell k+1
+        \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\with 1 frame\\delay (output)};
+        \node[node]       (AND_k+1) [right = of AND_k]    {AND gate};
+        \coordinate[above=16pt of OR_k+1] (cell_k+1);
+
+        % Hidden cell 2
+        \node[hiddenNode] (OR_h2)   [right = of OR_k+1]   {};
+        \node[hiddenNode] (AND_h2)  [right = of AND_k+1]  {};
+
+        % Cell n
+        \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\with 1 frame\\delay (output)};
+        \node[hiddenNode] (AND_n)   [right = of AND_h2]   {};
+        \coordinate[above=16pt of OR_n]   (cell_n);
+
+        % Input gate
+        \node[node] (input_pulse) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node,       fit=(OR_1)(AND_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(OR_h1)(AND_h1)]             {#sym.dots.h.c};
+            \node[node,       fit=(OR_k)(AND_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(OR_h2)(AND_h2)]             {#sym.dots.h.c};
+            \node[node,       fit=(OR_n)(AND_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
+        \end{scope}
+
+        % Arrows
+
+        % Cell 1
+        \draw[arrow] (AND_1.east)                   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
+        \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
+
+        % Hidden cell 1
+        \draw[arrow] (AND_h1.east)                  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
+
+        % Cell k
+        \draw[arrow] (AND_k.east)                   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
+        \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
+
+        % Cell k+1
+        \draw[arrow] (AND_k+1.east)                 -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
+        \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
+        \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
+
+        % Hidden cell 2
+        \draw[arrow] (AND_h2.east)                  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
+
+        % Input gate
+        \coordinate  (input) at ($(input_pulse.north) + (0, 0.5)$);
+        \draw[line]  (input_pulse.north)            -- (input);
+        \draw[arrow] (input)                        -| (AND_1.south);
+        \draw[arrow] (input)                        -| (AND_h2.south);
+        \draw[arrow] (input -| AND_h1)              -- (AND_h1.south);
+        \draw[arrow] (input -| AND_k)               -- (AND_k.south);
+        \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
+    \end{tikzpicture}
+    }
+    \caption{Diagram of the general method counter (logic gates implementation)}
+    \label{fig:CounterGeneral}
+\end{figure}
+*/
+- To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
+- To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
+- Requires a startup pulse to one of the toggled OR gates to work (achieved with a 1 frame pulse generator)
+- Complexity
+  - 1-way: $2n$
+  - 1-way+cycle: $2n + 1$
+  - 2-way: $3n$
+  - 2-way+cycle: $3n + 1$
+- Takes 3 frames to update
+- #example-bps("2134486907", "2134487841", "2075055361", "2134489564")
+
+==== Accumulators Implementation
+
+- $n = "amount of comparators"$
+- The output is encoded as the active comparator
+- Made by choosing $n$ equally spaced numbers, configuring an accumulator to use steps and setting its minimum, maximum, and scale settings to go through those numbers as the value is changed, and connecting the accumulator to $n$ comparators set to equality with each of the chosen numbers
+  - The minimum/maximum must be the minimum/maximum chosen numbers, and the scale their spacing. Additionally, in order for the comparators to work, $"spacing" >= 0.001$ must hold
+  - If $"minimum" <= 0 <= "maximum"$, $0$ should be within the chosen numbers. Otherwise, the counter needs to be pushed to its minimum/maximum value to initialize it
+  - For simplicity, the integers from $0$ to $n-1$ are usually used by setting the minimum/maximum values to $0$/$n-1$ respectively and the scale to $1$, but other configurations can be useful in certain circumstances
+    - Using a negative minimum value allows the initial value to not be the lowest value, which might be useful for 2-way counters
+    - Using (positive) scale values closer to $0$ allows to increase the amount of stored values beyond $101$
+    - Using different minimum/maximum values might reduce the complexity if analog value outputs are wanted by avoiding having to perform transformation of the value ranges
+  - The value can be increased/decreased by sending a $plus.minus 1$ input to the accumulator (the circuit is the same for 1 and 2-way)
+  - In some cases, it might be useful to not enable use steps and set the scale to $60 dot "spacing"$. This allows to change the stored value on each frame, but requires the input to come from a  1 frame pulse generator to get the normal input behaviour
+- To add cycle, connect the comparator with the biggest threshold to an AND gate with the positive accumulator input as its second input. Connect that AND gate to an arithmetic logic block set to multiplication with a $-1000$ constant and $0.02$ duration, and that arithmetic logic block to the accumulator
+  - The normal input to the accumulator must come from a 1 frame pulse generator
+  - If using the circuit as 2-way, repeat the process with the comparator with the smallest threshold and the negative input of the accumulator. The AND gate should have an additional $-2$ always on input (which can be achieved with an arithmetic logic block set to addition with a $-1000$ constant). The arithmetic logic block and input pulse generator can be reused, using negative inputs to reduce the value
+- Complexity
+  - 1-way: $n+1$
+  - 1-way+cycle: $n+4$
+  - 2-way: $n+1$
+  - 2-way+cycle: $n+5$
+- Takes 2 frames to update without cycle, and 3 frames otherwise
+- #example-bps("3309036414", "3309036347", "3309036504", "3309036241")
+
+=== Decimal (Base $10$)
+
+==== Logic Gates Implementation
+
+- Works best when $n$ is of the form $c dot 10^k$ where $c$ is an integer in the range $[1, 9]$ and $k$ is any positive integer. If it isn't, more gates are needed to cap the value at $n$
+- $n = 10^"amount of cells"$; $"amount of cells" = ceil(log_10 n)$
+- Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 <= n <= 10$ and doesn't need to have cycle
+- The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Diagram of the circuit:
+/*
+\begin{figure}[H]
+    \makebox[\textwidth][c]{
+    \begin{tikzpicture}
+        % Nodes
+
+        % Cell 1
+        \node[node]       (ORs_1)                                        {All OR gates\\except the last};
+        \node[node]       (OR_final_1)    [below = 1.5mm of ORs_1]       {Last OR gate};
+        \node[node]       (ANDs_1)        [below = 1.5mm of OR_final_1]  {All AND gates};
+        \coordinate[above=16pt of ORs_1]       (cell_1);
+
+        % Hidden cell 1
+        \node[hiddenNode] (ORs_h1)        [right = of ORs_1]             {};
+        \node[hiddenNode] (OR_final_h1)   [right = of OR_final_1]        {};
+        \node[hiddenNode] (ANDs_h1)       [right = of ANDs_1]            {};
+
+        % Cell k
+        \node[node]       (ORs_k)         [right = of ORs_h1]            {All OR gates\\except the last};
+        \node[node]       (OR_final_k)    [right = of OR_final_h1]       {Last OR gate};
+        \node[node]       (ANDs_k)        [right = of ANDs_h1]           {All AND gates};
+        \coordinate[above=16pt of ORs_k]       (cell_k);
+
+        % Cell k+1
+        \node[node]       (ORs_k+1)       [right = of ORs_k]             {All OR gates\\except the last};
+        \node[node]       (OR_final_k+1)  [right = of OR_final_k]        {Last OR gate};
+        \node[node]       (ANDs_k+1)      [right = of ANDs_k]            {All AND gates};
+        \coordinate[above=16pt of ORs_k+1]     (cell_k+1);
+
+        % Hidden cell 2
+        \node[hiddenNode] (ORs_h2)        [right = of ORs_k+1]           {};
+        \node[hiddenNode] (OR_final_h2)   [right = of OR_final_k+1]      {};
+        \node[hiddenNode] (ANDs_h2)       [right = of ANDs_k+1]          {};
+
+        % Cell n
+        \node[node]       (ORs_n)         [right = of ORs_h2]            {All OR gates\\except the last};
+        \node[hiddenNode] (OR_final_n)    [right = of OR_final_h2]       {};
+        \node[node]       (ANDs_n)        [right = of ANDs_h2]           {All AND gates};
+        \coordinate[above=16pt of ORs_n]       (cell_n);
+
+        % Input gate
+        \node[node]       (input_pulse) at ($(ANDs_k) + (0.45, -3.25)$)  {1 frame pulse\\generator (input)};
+        \node[node]       (input_OR)      [right = 1.5mm of input_pulse] {OR gate};
+        \coordinate[above=16pt of input_pulse] (input_cell);
+
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node,       fit=(ORs_1)(ANDs_1)(OR_final_1)(cell_1),         label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(ORs_h1)(ANDs_h1)(OR_final_h1)]              {#sym.dots.h.c};
+            \node[node,       fit=(ORs_k)(ANDs_k)(OR_final_k)(cell_k),         label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(ORs_k+1)(ANDs_k+1)(OR_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(ORs_h2)(ANDs_h2)(OR_final_h2)]              {#sym.dots.h.c};
+            \node[node,       fit=(ORs_n)(ANDs_n)(OR_final_n)(cell_n),         label={[anchor=north, yshift=-2.5pt]Cell $ceil(log_10 n)$}] {};
+            \node[node,       fit=(input_pulse)(input_OR)(input_cell),         label={[anchor=north, yshift=-2.5pt]Input circuit}] {};
+        \end{scope}
+
+        % Arrows
+
+        % Points between cells (top)
+        \coordinate (1-h1)    at ($(ORs_1.east)!0.5!(ORs_h1.west)   + (0, 1.75)$);
+        \coordinate (h1-k)    at ($(ORs_h1.east)!0.5!(ORs_k.west)   + (0, 1.75)$);
+        \coordinate (k-k+1)   at ($(ORs_k.east)!0.5!(ORs_k+1.west)  + (0, 1.75)$);
+        \coordinate (k+1-h2)  at ($(ORs_k+1.east)!0.5!(ORs_h2.west) + (0, 1.75)$);
+        \coordinate (h2-n)    at ($(ORs_h2.east)!0.5!(ORs_n.west)   + (0, 1.75)$);
+        \coordinate (n-)      at ($(ORs_n.east)                     + (0.5, 1.75)$);
+        % Points between cells (bottom)
+        \coordinate (1-h1-)   at ($(1-h1)                           - (0, 4.6)$);
+        \coordinate (h1-k-)   at ($(h1-k)                           - (0, 4.6)$);
+        \coordinate (k-k+1-)  at ($(k-k+1)                          - (0, 4.6)$);
+        \coordinate (k+1-h2-) at ($(k+1-h2)                         - (0, 4.6)$);
+        \coordinate (h2-n-)   at ($(h2-n)                           - (0, 4.6)$);
+
+        % Cell 1
+        \draw[line]  (ORs_1.east)         -- (ORs_1 -| 1-h1);
+        \draw[arrow] (OR_final_1.east)    -- (OR_final_1 -| 1-h1)      |- (ANDs_h1.west);
+
+        % Hidden cell 1
+        \draw[line]  (ORs_h1.east)        -- (ORs_h1 -| h1-k);
+        \draw[arrow] (OR_final_h1.east)   -- (OR_final_h1 -| h1-k)     |- (ANDs_k.west);
+        \draw[->-]   (ANDs_1 -| 1-h1)     -- (1-h1-) -- (h1-k-)        -- (h1-k |- ANDs_k);
+        \draw[->-]   (ORs_1  -| 1-h1)     -- (1-h1)  -- (h1-k)         -- (h1-k |- ORs_k);
+
+        % Cell k
+        \draw[line]  (ORs_k.east)         -| (k-k+1);
+        \draw[arrow] (OR_final_k.east)    -- (OR_final_k -| k-k+1)     |- (ANDs_k+1.west);
+        \draw[->-]   (h1-k-)              -- (k-k+1-);
+        \draw[->-]   (h1-k)               -- (k-k+1);
+        \draw[line]  (ANDs_k -| k-k+1)    -- (k-k+1-);
+
+        % Cell k+1
+        \draw[line]  (ORs_k+1.east)       -| (k+1-h2);
+        \draw[arrow] (OR_final_k+1.east)  -- (OR_final_k+1 -| k+1-h2)  |- (ANDs_h2.west);
+        \draw[->-]   (k-k+1-)             -- (k+1-h2-);
+        \draw[->-]   (k-k+1)              -- (k+1-h2);
+
+        % Hidden cell 2
+        \draw[line]  (ORs_h2.east)        -- (ORs_h2 -| h2-n);
+        \draw[arrow] (OR_final_h2.east)   -- (OR_final_h2 -| h2-n)     |- (ANDs_n.west);
+        \draw[->-]   (ANDs_k+1 -| k+1-h2) -- (k+1-h2-) -- (h2-n-)      -- (h2-n |- ANDs_n);
+        \draw[->-]   (k+1-h2)             -- (h2-n);
+
+        % Cell n
+        \draw[arrow] (ORs_n.east)         -- (ORs_n -| n-)             |- (input_OR.east);
+        \draw[->-]   (ORs_h2 -| h2-n)     -- (h2-n) -- (n-)            -- (n- |- ORs_n);
+
+        % Input gate
+        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
+        \draw[arrow] (input_pulse.north)  -- (input)                   -| (ANDs_1.south);
+        \draw[line]  (input_OR.north)     |- (input);
+        \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
+    \end{tikzpicture}
+    }
+    \caption{Diagram of the decimal method counter (logic gates implementation)}
+    \label{fig:CounterDecimal}
+\end{figure}
+*/
+- To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
+- To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first OR gate of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
+- Might require a decoder (unless you want to show numbers on a screen)
+  - To create it, take $n$ AND gates and assign a different combination of 1 output gate from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
+  - Has a complexity of $n$ gates
+- Requires a startup pulse to one of the toggled OR gates on each cell to work (achieved with a 1 frame pulse generator)
+- Complexity
+  #let complexity(a, b, c) = $#a ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
+  - 1-way:       #complexity(2, 20, 19)
+
+  - 1-way+cycle: #complexity(2, 20, 19)
+
+  - 2-way:       #complexity(3, 30, 28)
+
+  - 2-way+cycle: #complexity(3, 30, 28)
+- Takes 3 frames to update with cycle and 4 frames otherwise
+- #example-bps("2134491881", "2134492935", "2134494676", "2134496082")
+
+==== Accumulator Implementation
+
+- Works best when $n$ is of the form $c dot 10^k$ where $c$ is an integer in the range $[1, 9]$ and $k$ is any positive integer. If it isn't, more gates are needed to cap the value at $n$
+- $n = 10^"amount of cells"$; $"amount of cells" = ceil(log_10 n)$
+- Each cell is the general circuit implemented with accumulators for $n=10$ with cycle and without use steps, except for the last cell which can have any value $2 <= n <= 10$ and doesn't need to have cycle
+- The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Made by connecting the last comparator of each cell to the AND gate from the cycle circuit of all following cells, and the AND gate from the cycle circuit of each cell to the accumulator of the next cell.
+  - Requires a different input circuit: the positive input should be in a 1 frame pulse generator connected to an AND gate connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells. All comparators except the last on each cell should be connected to an OR gate connected to the AND gate from the input circuit
+- To add cycle, add cycle to the last cell and remove all the gates in the input circuit except the pulse generator, which should be connected to the accumulator of the first cell and the AND gate from the cycle circuit of all cells
+- To make it 2-way, duplicate the input circuit but connect all comparators except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first comparator of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
+  - The AND gate from the second input circuit should have a $-1$ output scale
+- Might require a decoder (unless you want to show numbers on a screen)
+  - To create it, take $n$ AND gates and assign a different combination of 1 comparator from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
+  - Has a complexity of $n$ gates
+- Complexity
+  #let complexity(b, c) = $ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
+  - 1-way:       #complexity(13, 9)
+
+  - 1-way+cycle: #complexity(13, 9)
+
+  - 2-way:       #complexity(14, 7)
+
+  - 2-way+cycle: #complexity(14, 8)
+- Takes 3 frames to update
+- #example-bps("3309037356", "3309037285", "3309037105", "3309037186")
+
+=== Binary (Base $2$)
+
+- Works best when $n$ is a power of $2$. If it isn't, more gates are needed to cap the value at $n$
+- $n = 2^"amount of cells"$; $"amount of cells" = ceil(log_2 n)$
+- The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
+- Diagram of the circuit:
+/*
+\begin{figure}[H]
+    \makebox[\textwidth][c]{
+    \begin{tikzpicture}
+        % Nodes
+
+        % Cell 1
+        \node[node]       (OR_1)                                         {Toggled OR gate\\(output)};
+        \node[node]       (AND_1)         [below = 5mm of OR_1]          {AND gate};
+        \coordinate[above=16pt of OR_1]        (cell_1);
+
+        % Hidden cell 1
+        \node[hiddenNode] (OR_h1)         [right = of OR_1]              {};
+        \node[hiddenNode] (AND_h1)        [right = of AND_1]             {};
+
+        % Cell k
+        \node[node]       (OR_k)          [right = of OR_h1]             {Toggled OR gate\\(output)};
+        \node[node]       (AND_k)         [right = of AND_h1]            {AND gate};
+        \coordinate[above=16pt of OR_k]        (cell_k);
+
+        % Cell k+1
+        \node[node]       (OR_k+1)        [right = of OR_k]              {Toggled OR gate\\(output)};
+        \node[node]       (AND_k+1)       [right = of AND_k]             {AND gate};
+        \coordinate[above=16pt of OR_k+1]      (cell_k+1);
+
+        % Hidden cell 2
+        \node[hiddenNode] (OR_h2)         [right = of OR_k+1]            {};
+        \node[hiddenNode] (AND_h2)        [right = of AND_k+1]           {};
+
+        % Cell n
+        \node[node]       (OR_n)          [right = of OR_h2]             {Toggled OR gate\\(output)};
+        \node[node]       (AND_n)         [right = of AND_h2]            {AND gate};
+        \coordinate[above=16pt of OR_n]        (cell_n);
+
+        % Input circuit
+        \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)   {1 frame pulse\\generator (input)};
+        \node[node]       (input_NAND)    [right = 1.5mm of input_pulse] {NAND gate};
+        \coordinate[above=16pt of input_pulse] (input_cell);
+
+        % Cell bounding boxes
+        \begin{scope}[on background layer]
+            \node[node,       fit=(OR_1)(AND_1)(cell_1),                 label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
+            \node[hiddenNode, fit=(OR_h1)(AND_h1)]                       {#sym.dots.h.c};
+            \node[node,       fit=(OR_k)(AND_k)(cell_k),                 label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
+            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1),           label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
+            \node[hiddenNode, fit=(OR_h2)(AND_h2)]                       {#sym.dots.h.c};
+            \node[node,       fit=(OR_n)(AND_n)(cell_n),                 label={[anchor=north, yshift=-2.5pt]Cell $ceil(log_2 n)$}] {};
+            \node[node,       fit=(input_pulse)(input_NAND)(input_cell), label={[anchor=north, yshift=-2.5pt]Input Circuit}] {};
+        \end{scope}
+
+        % Arrows
+
+        % Points between cells
+        \coordinate (1-h1)   at ($(OR_1.east)!0.5!(OR_h1.west)   + (0, 1.75)$);
+        \coordinate (h1-k)   at ($(OR_h1.east)!0.5!(OR_k.west)   + (0, 1.75)$);
+        \coordinate (k-k+1)  at ($(OR_k.east)!0.5!(OR_k+1.west)  + (0, 1.75)$);
+        \coordinate (k+1-h2) at ($(OR_k+1.east)!0.5!(OR_h2.west) + (0, 1.75)$);
+        \coordinate (h2-n)   at ($(OR_h2.east)!0.5!(OR_n.west)   + (0, 1.75)$);
+        \coordinate (n-)     at ($(OR_n.east)                    + (0.5, 1.75)$);
+
+        % Cell 1
+        \draw[arrow] (AND_1.north)       -- (OR_1.south);
+        \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1)     |- (AND_h1.west);
+
+        % Hidden cell 1
+        \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k)    |- (AND_k.west);
+        \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k)   -- (h1-k |- OR_k);
+
+        % Cell k
+        \draw[arrow] (AND_k.north)       -- (OR_k.south);
+        \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1)    |- (AND_k+1.west);
+        \draw[->-]   (h1-k)              -- (k-k+1);
+        \draw[line]  (OR_k -| k-k+1)     -- (k-k+1);
+
+        % Cell k+1
+        \draw[arrow] (AND_k+1.north)     -- (OR_k+1.south);
+        \draw[arrow] (OR_k+1.east)       -- (OR_k+1 -| k+1-h2) |- (AND_h2.west);
+        \draw[->-]   (k-k+1)             -- (k+1-h2);
+        \draw[line]  (OR_k+1 -| k+1-h2)  -- (k+1-h2);
+
+        % Hidden cell 2
+        \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n)    |- (AND_n.west);
+        \draw[->-]   (k+1-h2)            -- (h2-n);
+
+        % Cell n
+        \draw[arrow] (AND_n.north)       -- (OR_n.south);
+        \draw[arrow] (OR_n.east)         -- (OR_n -| n-)       |- (input_NAND.east);
+        \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
+
+        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
+        \draw[->-]   (input_pulse.north) -- (input);
+        \draw[->-]   (input_NAND.north)  -- (input_NAND |- input);
+        \draw[arrow] (input)             -| (AND_1.south);
+        \draw[arrow] (input)             -| (AND_n.south);
+        \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
+        \draw[arrow] (input -| AND_k)    -| (AND_k.south);
+        \draw[arrow] (input -| AND_k+1)  -| (AND_k+1.south);
+        \draw[arrow] (input -| AND_h2)   -| (AND_h2.south);
+    \end{tikzpicture}
+    }
+    \caption{Diagram of the binary method counter}
+    \label{fig:CounterBinary}
+\end{figure}
+*/
+- To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
+- To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gates. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
+- Might require a decoder
+  - To create it, add a NOT gate to each cell and replace the NAND gate of the input circuit with an OR gate like in the 2-way version (if using the 1-way versions). Then, take $n$ AND gates and assign each of them a different combination of either the OR or NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
+  - Has a complexity of $ceil(log_2 n) + n - 1$ for the 1-way version, $ceil(log_2 n) + n$ for the 1-way+cycle version and $n$ for the 2-way versions
+- Complexity
+  #let complexity(a, b) = $#a ceil(log_2 n) #if b != 0 { $+ #b$ } else {}$
+  - 1-way:       #complexity(2, 3)
+  - 1-way+cycle: #complexity(2, 0)
+  - 2-way:       #complexity(4, 4)
+  - 2-way+cycle: #complexity(4, 0)
+- Takes 3 frames to update for 1-way+cycle and 4 frames otherwise
+- #example-bps("2134497489", "2134498845", "2134500019", "2134500705")
+
+=== When to use each method
+
+/*
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|m{20em}|m{20em}|}
+        \cline{2-3}
+        \multicolumn{1}{c|}{} & \thead{1-way} & \thead{2-way} \\
+        \hline
+        % In order for the "Without cycle" text to be properly vertically centered, the other columns need to be vertically centered as well. To make them look like they are aligned at the top, they must have the same amount of lines
+        \rotatebox[origin=c]{90}{\thead{Without cycle}}
+        &
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item For $n <= 10$ use the general circuit
+            \item For $n > 10$ use the binary circuit
+            \newline
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 18$):
+        \begin{itemize}
+            \item For $n <= 18$ use the general circuit
+            \item For $n > 18$ use the decimal circuit
+        \end{itemize}
+        &
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item For $n <= 23$ use the general circuit
+            \item For $n > 23$ use either the binary or decimal circuit
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 23$):
+        \begin{itemize}
+            \item For $n <= 23$ use the general circuit
+            \item For $n > 23$ use the decimal circuit
+        \end{itemize} \\
+        \hline
+        \rotatebox[origin=c]{90}{\thead{With cycle}}
+        &
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item Use the binary circuit
+            \newline
+            \newline
+            \newline
+            \newline
+            \newline
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 15$):
+        \begin{itemize}
+            \item For $n <= 15$ use the general circuit
+            \item For $n > 15$ use the decimal circuit
+            \newline
+        \end{itemize}
+        &
+        Doesn't require an individual decoder:
+        \begin{itemize}
+            \item For $n = 4$, $n = 8$, or $11 < n <= 32$ use the binary circuit
+            \item For $4 < n <= 7$ or $8 < n <= 11$ use the general circuit
+            \item For $n > 32$ use either the binary or decimal circuit
+        \end{itemize}
+        Show values directly on a screen (only numbers for $n > 17$):
+        \begin{itemize}
+            \item For $n <= 17$ use the general circuit
+            \item For $n > 17$ use the decimal circuit
+            \newline
+        \end{itemize} \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of the different counter methods}
+    \label{table:CounterComparison}
+\end{table}
+*/
+
+Notes:
+
+- Calculated for $n >= 3$, for $n = 2$ a latch is always best
+- All mentions of the general and decimal circuits refer to the accumulator-based implementations
+- If an individual decoder is needed, the general circuit is always best
+- For 2-way without an individual decoder, decimal and binary circuits are very close in terms of complexity. Use their complexity formulas to figure out which is best for your use case. If they have the same complexity, decimal is better due to being faster
+- This is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, refer to the circuits' descriptions to compare the speed for the needed use case
+
+== No-Delay Signal Toggle
+
+- Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
+- Doesn't work when the output block is an AND/XOR gate
+- Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
+        % Nodes
+
+        \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
+        \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
+        \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
+        \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
+        \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
+        \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
+        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output scale};
+
+        % Arrows
+
+        \draw[arrow] (input_signal.east)  -- (output_blocks.west);
+        \draw[arrow] (input_signal.north) |- (XOR.west);
+        \draw[arrow] (XOR.east)           -| (output_blocks.north);
+        \draw[->-]   (input_toggle1.east) -- (toggles);
+        \draw[->-]   (input_toggle2.west) -- (toggles);
+        \draw[arrow] (toggles)            -- (XOR.north);
+    \end{tikzpicture}
+    \caption{Diagram of the no-delay signal toggle}
+    \label{fig:NoDelaySignalToggle}
+\end{figure}
+*/
+- #steam("3054610284")[Example blueprint]
+
+= Historical Circuits
+
+This section contains old circuits that were previously in @useful-circuits, but have since been superseded by new blocks. They are kept here for historical reasons and in case they are seen in older circuits.
+
+== NOR/NOT Gate
+
+- Superseded by the NOR gate block
+- Inverts the state of the input
+- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to a XOR gate
+- If it only has a single input that isn't the always on input it will act as a NOT gate, if it has multiple it will act as a NOR gate
+- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
+
+== Feedback Loop
+
+- Superseded by accumulators
+- Allows to store an analog value in the range $[-1, 1]$
+- Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
+- Each frame the input is active, the stored value increases by the value of the input
+  - With a close to 0 input value, the circuit can be used to generate an analog output value
+- One of the OR gates can be replaced with an XOR to add a reset input. In this case, the normal input should go to the OR gate only and the reset input must be 2 different signals connected to the XOR gate
+  - Be aware that this method adds a 1 frame jitter to the stored signal
+
+=== Clamped Feedback Loop
+
+- Allows limiting the output signal of a feedback loop to the range $[0, 1]$
+- Diagram of the circuit:
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[trim left=-12em]
+        % Nodes
+
+        \node[node] (feedback_top)                               {OR Gate};
+        \node[node] (feedback_bot) [below = 5mm of feedback_top] {OR Gate};
+        \coordinate (feedback_mid) at ($(feedback_top.west)!0.5!(feedback_bot.west)$);
+
+        \node[node] (input)        [left = of feedback_mid]      {Input Signal};
+
+        \coordinate[above=16pt of feedback_top] (feedback);
+
+        \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
+        \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output scale};
+
+        \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output scale\\(output)};
+
+        % Bounding boxes
+        \begin{scope}[on background layer]
+            \node[node, fit=(feedback_top)(feedback_bot)(feedback), label={[anchor=north, yshift=-2.5pt]Feedback Loop}] {};
+        \end{scope}
+
+        % Arrows
+
+        \coordinate  (input_split) at ($(input.east) + (0.5, 0)$);
+        \draw[line]  (input.east)                    -- (input_split);
+        \draw[arrow] (input_split)                   |- (feedback_top.west);
+        \draw[arrow] (input_split)                   |- (feedback_bot.west);
+        \draw[arrow] ($(feedback_bot.north) + (2mm, 0)$)  -- ($(feedback_top.south) + (2mm, 0)$);
+        \draw[arrow] ($(feedback_top.south) + (-2mm, 0)$) -- ($(feedback_bot.north) + (-2mm, 0)$);
+        \draw[arrow] (C+1.west)                      -- (feedback_bot.east);
+        \draw[arrow] (C+1.north)                     -- (C-1.south);
+        \draw[arrow] (C-1.west |- feedback_top.east) |- (feedback_top.east);
+        \draw[arrow] (C-1.east)                      -- (output.west);
+        \draw[arrow] (feedback_bot.south) -- ($(feedback_bot.south) + (0, -0.5)$) -| (output);
+    \end{tikzpicture}
+    \caption{Diagram of the clamped feedback loop}
+    \label{fig:ClampedFeedbackLoop}
+\end{figure}
+*/
+- Note: the input signal is reversed. This means that a negative value increases the stored value while a positive value decreases it
+- Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
+- #steam("2911246646")[Example blueprint]
+- Python script to simulate the behaviour (input value is automatically reversed):
+
+  ```python
+  def clamp(x: float) -> float:
+      return min(max(x, -1), 1)
+
+  def update(
+      feedback_top: float, feedback_bottom: float, user_input: float
+  ) -> tuple[float, float]:
+      return (
+          clamp(feedback_bottom - user_input + 1),
+          clamp(feedback_top    - user_input - 1)
+      )
+
+  def print_state(feedback_top: float, feedback_bottom: float):
+      print("State:")
+      print("\tFeedback Top: ", round(feedback_top, 3))
+      print("\tFeedback Bottom: ", round(feedback_bottom, 3))
+      print("Output: ", round(clamp(-(feedback_top - 1)), 3))
+
+  feedback_top, feedback_bottom = 1, 0
+  print_state(feedback_top, feedback_bottom)
+  while True:
+      user_input = input("Enter input (between -1 and 1, Q to quit): ")
+      if user_input.lower() == "q":
+          break
+      try:
+          user_input = float(user_input)
+      except ValueError:
+          print("Invalid input. Try again")
+          continue
+      feedback_top, feedback_bottom = update(feedback_top, feedback_bottom, user_input)
+      print_state(feedback_top, feedback_bottom)
+  ```
+
+- Credits to Precache for figuring out this circuit
+
+#show heading.where(level: 1): set heading(
+  // configure supplement
+  supplement: "Appendix",
+  // show just appendixes titles in outline
+  outlined: true,
+  numbering: "A ",
+)
+#counter(heading).update(0)
+
+= Input value to multiplier for hinges/wings with control surfaces <InputValueMultiplier>
+
+
+By default, the angle by which hinges/wings/other blocks with the "steering help" setting rotate doesn't scale linearly with the input value. The angle is smaller than what a linear relationship would result in, to improve steering on controller. In hinges, this can be adjusted with the steering mode setting, where a "linear" value results in a linear relationship while any other value results in the non-linear relationship. This section contains the multipliers used for many input values in the non-linear relationship, found experimentally. Some notes about this process:
+
+- Final angle is the resulting angle of the hinge measured with a max angle of $90 degree$ and an error of $plus.minus 0.005 degree$
+- The multiplier was calculated with $"multiplier" = "final angle"/90$
+- A calculator using this data made by confusionextended can be found #link("https://www.desmos.com/calculator/i70yadxqyy")[here]
+
+#let load-data(path) = {
+  let data = read(path).split("\n").slice(1).map(l => l.split(" "))
+  data
+}
+
+#let transpose(data, cols) = {
+  let col-size = calc.ceil(data.len()/cols)
+  let default = ("",) * data.at(0).len()
+  let fill = col-size * cols - data.len()
+  let (first, ..rest) = (data + (default,) * fill).chunks(col-size)
+  first.zip(..rest)
+}
+
+#let data-table(header, cols, data, caption, label: none) = [
+  #show figure: set block(breakable: true)
+  #figure(
+    table(
+      columns: header.len() * cols,
+      align: center + horizon,
+      row-gutter: 0pt,
+      ..range(1, cols).map(i =>
+        table.vline(stroke: 0.7pt, x: i * header.len())
+      ),
+
+      table.header(..(header.map(h => [*#h*])) * cols),
+      ..transpose(data, cols).flatten(),
+    ),
+    caption: caption
+  )
+  #if label != none {
+    assert(
+      type(label) == std.label,
+      message: "You must provide a label, e.g. `<table:id>`",
+    )
+    label
+  }
+]
+
+#let process-row(row) = {
+  row.insert(1, strfmt("{:.3}", float(row.at(1)) * 90))
+  row
+}
+
+#let data = load-data("data/Input_Value_Multiplier.dat").map(process-row)
+
+#data-table(
+  ([Input\ Value], [Final\ Angle], [Multiplier]),
+  3,
+  data,
+  [Raw data of the input value multiplier for hinges],
+  label: <table:InputValueMultiplierData>
+)
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            height=27.5em,
+            width=42em,
+            title={Multiplier as a function of the input value},
+            xlabel={Input value},
+            ylabel={Multiplier},
+            domain = 0:1,
+            xmin=0, xmax=1,
+            ymin=0, ymax=1,
+            minor tick num=1,
+            grid=both
+        ]
+            \addplot[color=blue, mark=*] file {data/Input_Value_Multiplier.dat} node[above left, midway] {$f(x)$};
+            \addplot[color=black, samples=3] {x} node[above left, midway] {$y=x$};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the multiplier for hinges as a function of the input value}
+    \label{fig:InputValueMultiplierGraph}
+\end{figure}
+*/
+
+= Input value to speed for servos with hold position <InputValueSpeed>
+
+Due to a bug, the speed at which rotating servos with hold position rotate changes with the input value when small values are used. This section contains the speed multipliers used for many input values, found experimentally. Some notes about this process:
+
+- Speed is the speed required on a servo with an input value of $1$ to match the speed of a servo with a speed being tested and the given input value, with an error of $plus.minus 0.00005$ speed units for speeds lower than $1$ and an error of $plus.minus 0.0005$ otherwise
+  - To compare the speeds of the servos, they were run continuously for some time and the final angle was compared
+    - For servos with $360$ angle, they were run for $3$ min
+    - For servos with less than $360$ angle, they were run for slightly less than the time required to reach the maximum angle
+  - Servos with a configured speed of $1$ and $2$ as well as $360$ and $180$ angle were tested, with other speeds/angles being checked to verify the results
+- $f_(s, a)(x)$ represents the resulting speed of a servo with $s$ speed, $a$ angle, and $x$ input value
+- The resulting speed can be approximated by $hat(f)_(s, a)(x) = min(x/0.0611 dot a/90, s)$
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            height=27.5em,
+            width=42em,
+            title={Speed as a function of the input value},
+            xlabel={Input value},
+            ylabel={Speed},
+            domain = 0:0.0625,
+            xmin=0, xmax=0.0625,
+            ymin=0, ymax=2,
+            minor tick num=1,
+            grid=both,
+            xticklabel style={
+                /pgf/number format/fixed,
+                /pgf/number format/precision = 3
+            },
+            scaled x ticks = false
+        ]
+            \addplot[color=blue, mark=*] file {data/Input_Value_Speed1_360.dat} node[above left, midway] {$f_(1, 360)(x)$};
+            \addplot[color=red, mark=*]  file {data/Input_Value_Speed2_360.dat} node[above left, midway] {$f_(2, 360)(x)$};
+            \addplot[color=Green, mark=*]  file {data/Input_Value_Speed1_180.dat} node[below right, midway] {$f_(1, 180)(x)$};
+            \addplot[color=DodgerBlue, mark=*]  file {data/Input_Value_Speed2_180.dat} node[below right, midway] {$f_(2, 180)(x)$};
+            \addplot[color=black, samples=3] {x/0.0611 * 360/90} node[above left, pos=0.35] {$y=x/0.0611 dot 360/90$};
+            \addplot[color=black, samples=3] {x/0.0611 * 180/90} node[below right, pos=0.75] {$y=x/0.0611 dot 180/90$};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the speed for servos with hold position as a function of the input value}
+    \label{fig:InputValueSpeedGraph}
+\end{figure}
+*/
+
+#let path = "data/Input_Value_Speed{}_{}.dat"
+#let load-file(angle, speed) = load-data(strfmt(path, speed, angle)).slice(0, -1)
+#let (first, ..rest) = (180, 360).map(a => (1, 2).map(s => load-file(a, s))).join()
+
+#figure(
+  table(
+    columns: 8,
+    align: center + horizon,
+    row-gutter: 0pt,
+    ..range(1, 4).map(i =>
+      table.vline(stroke: if i == 2 {0.7pt} else {0.2pt}, x: i * 2)
+    ),
+
+    table.header(..(180, 360).map(x => table.cell(colspan: 4)[*Angle #x*]), level: 1),
+    table.header(..((1, 2).map(x => table.cell(colspan: 2)[*Speed #x*])) * 2, level: 2),
+    table.hline(),
+    table.header(..([*Input\ Value*], [*Final\ Speed*]) * 4, level: 3),
+    table.hline(),
+    ..first.zip(..rest).flatten()
+  ),
+  caption: [Raw data of the input value speed for servos with hold position]
+) <table:InputValueSpeedData>
+
+= Aiming sensor pitch measurement <AimingServoPitch>
+
+When aiming sensors are used to measure the pitch of the camera, their output is offset from the real camera pitch angle. This section contains the measured values for many camera angles, found experimentally. Some notes about this process:
+
+- Measurements were done using a camera block on a hinge to set the camera pitch to known values, and then taking the measurement from an aiming sensor at the base
+- Aiming servos with verticality checks disabled have a similar behavior, although their angle measurement ends up being a lot more noisy
+- Angle measurements are in degrees and have an error of $plus.minus 0.0005 degree$
+- The average error between the measured pitch and the camera pitch is $8.096 degree$
+
+/*
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            height=27.5em,
+            width=42em,
+            title={Measured pitch as a function of actual pitch},
+            xlabel={Real pitch},
+            ylabel={Measured pitch},
+            domain = -90:90,
+            xmin=-90, xmax=90,
+            ymin=-90, ymax=100,
+            minor tick num=1,
+            grid=both,
+            scaled x ticks = false,
+            clip marker paths=true % Draw plots in order
+        ]
+            \addplot[color=blue, mark=*] file {data/Aiming_Sensor_Pitch.dat} node[above left, midway] {$f(x)$};
+            \addplot[color=black, samples=3] {x} node[below right, midway] {$y=x$};
+            \addplot[color=red, samples=3] {x+8.096} node[above left, pos=0.75] {$y=x+8.096$};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the pitch measured by aiming sensors as a function of the real camera pitch}
+    \label{fig:AimingSensorPitchGraph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            height=27.5em,
+            width=42em,
+            title={Error in measured pitch as a function of actual pitch},
+            xlabel={Real pitch},
+            ylabel={Error},
+            domain = -90:90,
+            xmin=-90, xmax=90,
+            ymin=7.8, ymax=8.4,
+            minor tick num=1,
+            grid=both,
+            scaled x ticks = false
+        ]
+            \addplot[color=blue, mark=*, thin] table[x index=0,y expr = \thisrowno{1} - \thisrowno{0}]{data/Aiming_Sensor_Pitch.dat};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Graph of the error in pitch measured by aiming sensors as a function of the real camera pitch}
+    \label{fig:AimingSensorPitchGraphError}
+\end{figure}
+*/
+
+#let data = load-data("data/Aiming_Sensor_Pitch.dat").slice(0, -1)
+
+#data-table(
+  ([Pitch], [Output]),
+  5,
+  data,
+  [Raw data of the aiming sensor pitch measurement],
+  label: <table:AimingSensorPitchData>
+)
+
+= Tips
+
+- If you want your system to not modify the input that passes through, configure all of the logic gates to have an output scale of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
+- Arithmetics logic blocks can be used to get always on signals with a constant value by using the addition operation with the desired constant. The signal can be toggled by setting the operation to multiplication and using a $+1$ input
+- Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
+- If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
+- If you still have any questions or need help with something, feel free to
+  contact me on the #link("https://discord.gg/trailmakers")[official Trailmakers discord server]
+
+#text(size: 12pt)[*Made by #context document.author.at(0)*]
