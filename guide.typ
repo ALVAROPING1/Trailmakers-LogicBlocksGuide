@@ -1574,54 +1574,35 @@ $ op("color")(x) = cases(
     op("greyscale")((1 - (x "mod" 1)) dot B) space.quad & (x < 0),
 ) $
 
-/*
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}
-        \pgfmathsetlengthmacro\MajorTickLength{
-          \pgfkeysvalueof{/pgfplots/major tick length} * 2
+#figure(
+  {
+    let gradient-line((min, max), colors) = lq.line(
+      (min, 0), (max, 0),
+      stroke: 1cm + gradient.linear(..colors, space: color.hsv),
+    )
+
+    show: lq.set-tick(inset: 6pt, outset: 6pt, stroke: luma(50%))
+    lq.diagram(
+      height: 1cm,
+      width: 95%,
+      xlabel: [Input value],
+      xaxis: (
+        subticks: 1,
+        ticks: range(-6, 7).map(i => i/6),
+        format-ticks: (ticks, ..args) => {
+          let tick-info = (..args.tick-info, significant-digits: 2)
+          lq.tick-format.linear(ticks, ..args, tick-info: tick-info)
         }
-        \pgfmathsetlengthmacro\MinorTickLength{
-          \pgfkeysvalueof{/pgfplots/minor tick length} * 2
-        }
-        \begin{axis}[
-            height=2.5cm,
-            width=\linewidth,
-            axis on top=true,
-            axis y line=none,
-            xtick distance=1/6,
-            every x tick/.style={thick},
-            tick align=center,
-            major tick length=\MajorTickLength,
-            minor tick length=\MinorTickLength,
-            minor tick num=1,
-            xmin=-1, xmax=1,
-            ymin=-0.1, ymax=0.1,
-            samples=500,
-            xlabel={Input value},
-        ]
-            \addplot[
-                mesh,
-                line width=1cm,
-                domain=0:1,
-                variable=\u,
-                mesh/color input=explicit mathparse,
-                point meta={symbolic={Hsb=deg(u * 2 * pi),1,1}}
-            ] ({u},0);
-            \addplot[
-                mesh,
-                line width=1cm,
-                domain=-1:0,
-                variable=\u,
-                mesh/color input=explicit mathparse,
-                point meta={symbolic={Hsb=0,0,-u}}
-            ] ({u},0);
-        \end{axis}
-    \end{tikzpicture}
-    \caption{Hue light panel color with $"saturation" = "brightness" = 1$ for inputs in the range $[-1, 1]$}
-    \label{fig:HueLightPanelColor}
-\end{figure}
-*/
+      ),
+      yaxis: none,
+      grid: none,
+      margin: 0%,
+      gradient-line((-1, 0), (white, black)),
+      gradient-line((0, 1), range(4).map(i => color.hsv(i * 120deg, 100%, 100%))),
+    )
+  },
+  caption: [Hue light panel color with $"saturation" = "brightness" = 1$ for inputs in the range $[-1, 1]$]
+) <fig:HueLightPanelColor>
 
 === RC Blocks
 
