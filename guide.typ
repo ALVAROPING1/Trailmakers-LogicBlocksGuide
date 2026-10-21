@@ -1039,14 +1039,10 @@ These are the steps used by the game to determine the value attached to the outp
 This process can be described with the following formula:
 $ "output" = "output_value" dot op("boolean_operation")("inputs") dot op("clamp")(sum "inputs") $
 
-/*
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{output_value_diagram}
-    \caption{Output value calculation diagram made by Zoomah}
-    \label{fig:OutputValueDiagram}
-\end{figure}
-*/
+#figure(
+  image("img/output_value_diagram.png", width: 100%),
+  caption: [Output value calculation diagram made by Zoomah]
+) <fig:OutputValueDiagram>
 
 ==== Example
 
