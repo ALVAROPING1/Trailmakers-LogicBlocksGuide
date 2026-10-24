@@ -246,9 +246,6 @@
   it
 }
 
-// TODO: remove after converting all figures/tables
-#show ref: it => context if query(it.target).len() > 0 { it } else { it.target }
-
 #import "@preview/cetz:0.5.3"
 #import "@preview/oxifmt:1.0.0": strfmt
 #import "@preview/zero:0.7.1": num
@@ -336,6 +333,33 @@ after rounding
   })
 })
 
+#let text-box(pos, body, width: auto, ..args) = cetz.draw.content(
+  pos,
+  block(
+    width: width, inset: 0.4em,
+    align(center+horizon, par(justify: false, text(bottom-edge: "bounds", body))),
+  ),
+  frame: "rect",
+  fill: white,
+  ..args,
+)
+
+#let pts-spec(..pts) = {
+  let pts = pts.pos()
+  for (i, p) in pts.enumerate() {
+    let off(j) = pts.at(i + j)
+    if p in ("-|", "|-") { ((off(-1), p, off(+1)),) }
+    else if p in ("-|-", "|-|") {
+      let (s, e) = (off(-1), off(+1))
+      pts-spec(s, p.slice(0, 2), (s, 50%, e), p.slice(1, 3), e)
+    } else { (p,) }
+  }
+}
+
+#let line-spec(..pts) = cetz.draw.line(..pts-spec(..pts.pos()), ..pts.named())
+#let arrow-mark(pos) = ((pos): ")>", fill: black, scale: 0.8)
+#let arrow(..pts, pos: "end") = line-spec(..pts, mark: arrow-mark(pos))
+
 #let annotation(body, side, pos, targets) = {
   import cetz.draw: *
   let (x, arrow-len, anchor) = (
@@ -345,12 +369,12 @@ after rounding
     below:  ( 2.0,  0.5,  "north"),
   ).at(side)
   let pos = (x, pos)
-  content(pos, pad(0.4em, body), frame: "rect", anchor: anchor, fill: white)
+  text-box(pos, body, anchor: anchor)
   for target in targets {
     let target = if type(target) == array { target }
       else if side == "below" { (0, -arrow-len) }
       else { (arrow-len, target) }
-    line(pos, (rel: target), mark: (end: ")>", fill: black, scale: 0.8))
+    arrow(pos, (rel: target))
   }
 }
 
@@ -1039,7 +1063,7 @@ Toggle allows to make inputs alternate the activation state of a block between o
 
 Timers are a group of settings that allow to automate the activation/deactivation of a block after a set amount of time.
 
-#let arrow = sym.arrow
+#let textarrow = sym.arrow
 
 - Timers apply to the inputs of the block and are shared by all of them, and start as soon as the block receives a *single input*. For logic blocks, this still applies even if the block doesn't meet its conditions to send an output
 - The number will be rounded to have only 2 decimal places when shown on the menu, but the number which will be used is the one written rounded to 8 decimal places. Due to a bug, only up to 5 characters can be written, so depending on the exact value the number of decimals which can be used will vary
@@ -1053,7 +1077,7 @@ Timers are a group of settings that allow to automate the activation/deactivatio
   - A value of $0$ indicates that the block will never reactivate automatically
   - It's ignored if the duration timer is $0$
 - During the delay/pause timers, the block is deactivated by overriding the input value with $0$
-- The order of the timers is as follows: delay #arrow duration #arrow pause #arrow back to duration (if pause is $0$ it ends after the duration ends)
+- The order of the timers is as follows: delay #textarrow duration #textarrow pause #textarrow back to duration (if pause is $0$ it ends after the duration ends)
 - In the case of the delay and duration timers, even though their values are expressed in seconds, the game handles them as a number of frames, which can be calculated with $"seconds" dot 60$
   - If this number is not an integer, it will be rounded down to the nearest integer
   - If this number is an integer, it will randomly either be kept as it is or be subtracted one frame depending on the exact value used, so it's recommended to add $0.01$ to the original number to make sure it always stays in the correct number of frames
@@ -1140,90 +1164,94 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - $n = "amount of cells"$
 - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
 - Diagram of the circuit:
-/*
-\begin{figure}[H]
-    \makebox[\textwidth][c]{
-    \begin{tikzpicture}
-        % Nodes
 
-        % Cell 1
-        \node[node]       (OR_1)                          {Toggled OR gate\\with 1 frame\\delay (output)};
-        \node[node]       (AND_1)   [below = 5mm of OR_1] {AND gate};
-        \coordinate[above=16pt of OR_1]   (cell_1);
+#let node(..args) = text-box(width: 30.4mm, ..args)
+#let hidden-node(pos, _body, ..args) = text-box(width: 5mm, pos, [], ..args)
+#let offset(off, ..pts) = pts.map(p => (rel: off, to: p))
 
-        % Hidden cell 1
-        \node[hiddenNode] (OR_h1)   [right = of OR_1]     {};
-        \node[hiddenNode] (AND_h1)  [right = of AND_1]    {};
+#let framed(id, name, body) = cetz.draw.group(name: id, {
+  cetz.draw.group(name: "body", body)
+  cetz.draw.content((rel: (0, 3.5mm), to: "body.north"), name, name: "name")
+  cetz.draw.rect-around("name", "body", padding: 1.5mm)
+})
 
-        % Cell k
-        \node[node]       (OR_k)    [right = of OR_h1]    {Toggled OR gate\\with 1 frame\\delay (output)};
-        \node[node]       (AND_k)   [right = of AND_h1]   {AND gate};
-        \coordinate[above=16pt of OR_k]   (cell_k);
+#let cell(id, name, elems, hidden: false, last: false) = {
+  import cetz.draw: *
+  let prev = "c" + str(id - 1) + ".body"
+  let id = "c" + str(id)
 
-        % Cell k+1
-        \node[node]       (OR_k+1)  [right = of OR_k]     {Toggled OR gate\\with 1 frame\\delay (output)};
-        \node[node]       (AND_k+1) [right = of AND_k]    {AND gate};
-        \coordinate[above=16pt of OR_k+1] (cell_k+1);
+  let right(i) = (rel: (1cm, 0), to: prev + "." + str(i) + ".east")
+  let pos(i, elem) = if id != "c0" { arguments(anchor: "west", right(i)) } else {
+    let space = if "arrows" in elem { 5mm } else { 1.5mm }
+    let pos = (rel: (0, -space), to: str(i - 1) + ".south")
+    arguments(anchor: "north", if i != 0 { pos } else { () })
+  }
+  let (wrap, node) = if hidden { (hide, hidden-node) } else { (x => x, node) }
+  wrap(framed(id, [Cell $#name$], for (i, e) in elems.enumerate() {
+    let hide-last = e.at("hide-last", default: false)
+    let wrap = if last and hide-last { hide } else { x => x }
+    wrap({
+      node(name: str(i), ..pos(i, e), e.body)
 
-        % Hidden cell 2
-        \node[hiddenNode] (OR_h2)   [right = of OR_k+1]   {};
-        \node[hiddenNode] (AND_h2)  [right = of AND_k+1]  {};
+      let curr = str(i) + ".north"
+      let prev = str(i - 1) + ".south"
+      let arrows = e.at("arrows", default: none)
 
-        % Cell n
-        \node[node]       (OR_n)    [right = of OR_h2]    {Toggled OR gate\\with 1 frame\\delay (output)};
-        \node[hiddenNode] (AND_n)   [right = of AND_h2]   {};
-        \coordinate[above=16pt of OR_n]   (cell_n);
+      if arrows == "up" { arrow(curr, prev) }
+      else if arrows == "down" { arrow(prev, curr) }
+      else if arrows == "both" {
+        arrow(..offset((-2mm, 0), prev, curr))
+        arrow(..offset((2mm, 0), curr, prev))
+      }
+    })
+  }))
+  if hidden { content(id, sym.dots.h.c) }
+}
 
-        % Input gate
-        \node[node] (input_pulse) at ($(AND_k)!0.5!(AND_k+1) + (0, -2.25)$) {1 frame pulse\\generator (input)};
+#let cell-group(cells, cell-elems) = cetz.draw.group(
+  name: "cells",
+  for (i, curr) in cells.enumerate() {
+    let hidden = curr.at("hidden", default: false)
+    cell(i, curr.name, cell-elems, hidden: hidden, last: i == cells.len() - 1)
+  }
+)
+#let cell-anchor(i, anchor) = "cells.c" + str(i) + ".body." + anchor
+#let gap(i) = (cell-anchor(i, "east"), 50%, cell-anchor(i + 1, "west"))
 
-        % Cell bounding boxes
-        \begin{scope}[on background layer]
-            \node[node,       fit=(OR_1)(AND_1)(cell_1),       label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(OR_h1)(AND_h1)]             {#sym.dots.h.c};
-            \node[node,       fit=(OR_k)(AND_k)(cell_k),       label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(OR_h2)(AND_h2)]             {#sym.dots.h.c};
-            \node[node,       fit=(OR_n)(AND_n)(cell_n),       label={[anchor=north, yshift=-2.5pt]Cell $n$}] {};
-        \end{scope}
+#figure(
+  cetz.canvas({
+    import cetz.draw: *
+    // Nodes
+    let cells = (
+      (name: $1$),
+      (name: "h1", hidden: true),
+      (name: $k$),
+      (name: $k+1$),
+      (name: "h2", hidden: true),
+      (name: $n$),
+    )
+    cell-group(cells, (
+      (body: [Toggled OR gate with 1 frame delay (output)]),
+      (body: [AND gate], arrows: "both", hide-last: true),
+    ))
+    node(name: "input-gate", (rel: (0, -1.5), to: "cells.south"), [1 frame pulse generator (input)])
 
-        % Arrows
-
-        % Cell 1
-        \draw[arrow] (AND_1.east)                   -- ($(AND_1.east)!0.5!(AND_h1.west)$)   |- (OR_h1.west);
-        \draw[arrow] ($(OR_1.south) + (-2mm, 0)$)   -- ($(AND_1.north) + (-2mm, 0)$);
-        \draw[arrow] ($(AND_1.north) + (2mm, 0)$)   -- ($(OR_1.south) + (2mm, 0)$);
-
-        % Hidden cell 1
-        \draw[arrow] (AND_h1.east)                  -- ($(AND_h1.east)!0.5!(AND_k.west)$)   |- (OR_k.west);
-
-        % Cell k
-        \draw[arrow] (AND_k.east)                   -- ($(AND_k.east)!0.5!(AND_k+1.west)$)  |- (OR_k+1.west);
-        \draw[arrow] ($(OR_k.south) + (-2mm, 0)$)   -- ($(AND_k.north) + (-2mm, 0)$);
-        \draw[arrow] ($(AND_k.north) + (2mm, 0)$)   -- ($(OR_k.south) + (2mm, 0)$);
-
-        % Cell k+1
-        \draw[arrow] (AND_k+1.east)                 -- ($(AND_k+1.east)!0.5!(AND_h2.west)$) |- (OR_h2.west);
-        \draw[arrow] ($(OR_k+1.south) + (-2mm, 0)$) -- ($(AND_k+1.north) + (-2mm, 0)$);
-        \draw[arrow] ($(AND_k+1.north) + (2mm, 0)$) -- ($(OR_k+1.south) + (2mm, 0)$);
-
-        % Hidden cell 2
-        \draw[arrow] (AND_h2.east)                  -- ($(AND_h2.east)!0.5!(AND_n.west)$)   |- (OR_n.west);
-
-        % Input gate
-        \coordinate  (input) at ($(input_pulse.north) + (0, 0.5)$);
-        \draw[line]  (input_pulse.north)            -- (input);
-        \draw[arrow] (input)                        -| (AND_1.south);
-        \draw[arrow] (input)                        -| (AND_h2.south);
-        \draw[arrow] (input -| AND_h1)              -- (AND_h1.south);
-        \draw[arrow] (input -| AND_k)               -- (AND_k.south);
-        \draw[arrow] (input -| AND_k+1)             -- (AND_k+1.south);
-    \end{tikzpicture}
+    // Arrows
+    // Between cells
+    for curr in range(1, cells.len()) {
+      arrow(cell-anchor(curr - 1, "1.east"), "-|-", cell-anchor(curr, "0.west"))
     }
-    \caption{Diagram of the general method counter (logic gates implementation)}
-    \label{fig:CounterGeneral}
-\end{figure}
-*/
+    // Input connections
+    let input = (rel: (0, 0.5), to: "input-gate.north")
+    arrow(pos: "symbol", "cells.c0.body.south", "|-", input, "-|", "cells.c4.body.south")
+    line(input, "input-gate")
+    for target in range(1, cells.len() - 2) {
+      arrow(cell-anchor(target, "south"), ((), "|-", input), pos: "start")
+    }
+  }),
+  caption: [Diagram of the general method counter (logic gates implementation)]
+) <fig:CounterGeneral>
+
 - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
 - To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
 - Requires a startup pulse to one of the toggled OR gates to work (achieved with a 1 frame pulse generator)
@@ -1268,122 +1296,62 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - Each cell is the general circuit for $n=10$ with cycle and no input gate, except for the last cell which can have any value $2 <= n <= 10$ and doesn't need to have cycle
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 - Diagram of the circuit:
-/*
-\begin{figure}[H]
-    \makebox[\textwidth][c]{
-    \begin{tikzpicture}
-        % Nodes
 
-        % Cell 1
-        \node[node]       (ORs_1)                                        {All OR gates\\except the last};
-        \node[node]       (OR_final_1)    [below = 1.5mm of ORs_1]       {Last OR gate};
-        \node[node]       (ANDs_1)        [below = 1.5mm of OR_final_1]  {All AND gates};
-        \coordinate[above=16pt of ORs_1]       (cell_1);
+#let input-circuit(space, left, right) = framed("input", [Input circuit], {
+  let center = (rel: (0, -space), to: "cells.south")
+  node((rel: (-0.75mm, 0), to: center), anchor: "north-east", name: "left", left)
+  node((rel: (+0.75mm, 0), to: center), anchor: "north-west", name: "right", right)
+})
 
-        % Hidden cell 1
-        \node[hiddenNode] (ORs_h1)        [right = of ORs_1]             {};
-        \node[hiddenNode] (OR_final_h1)   [right = of OR_final_1]        {};
-        \node[hiddenNode] (ANDs_h1)       [right = of ANDs_1]            {};
+#figure(
+  cetz.canvas({
+    import cetz.draw: *
+    // Nodes
+    let cells = (
+      (name: $1$),
+      (name: "h1", hidden: true),
+      (name: $k$),
+      (name: $k+1$),
+      (name: "h2", hidden: true),
+      (name: $ceil(log_10 n)$),
+    )
+    cell-group(cells, (
+      (body: [All OR gates except the last]),
+      (body: [Last OR gate], hide-last: true),
+      (body: [All AND gates]),
+    ))
+    input-circuit(2cm, [1 frame pulse generator (input)], [OR gate])
 
-        % Cell k
-        \node[node]       (ORs_k)         [right = of ORs_h1]            {All OR gates\\except the last};
-        \node[node]       (OR_final_k)    [right = of OR_final_h1]       {Last OR gate};
-        \node[node]       (ANDs_k)        [right = of ANDs_h1]           {All AND gates};
-        \coordinate[above=16pt of ORs_k]       (cell_k);
+    // Arrows
+    let input-dist = (rel: (0, -5mm), to: "cells.c0.south")
+    let input = (rel: (0, -5mm), to: input-dist)
+    let step = ((rel: (0, 5mm), to: "cells.c0.north"), "-|", (rel: (5mm, 0), to: "cells.c5.body.east"))
 
-        % Cell k+1
-        \node[node]       (ORs_k+1)       [right = of ORs_k]             {All OR gates\\except the last};
-        \node[node]       (OR_final_k+1)  [right = of OR_final_k]        {Last OR gate};
-        \node[node]       (ANDs_k+1)      [right = of ANDs_k]            {All AND gates};
-        \coordinate[above=16pt of ORs_k+1]     (cell_k+1);
+    arrow("input.body.right.north", "|-", input, "cells.c0.body.south")
+    line("input.body.left.north", ((), "|-", input))
 
-        % Hidden cell 2
-        \node[hiddenNode] (ORs_h2)        [right = of ORs_k+1]           {};
-        \node[hiddenNode] (OR_final_h2)   [right = of OR_final_k+1]      {};
-        \node[hiddenNode] (ANDs_h2)       [right = of ANDs_k+1]          {};
+    let end = "cells.c4.body.1.east"
+    line-spec(input-dist, "-|", (end, "-|", gap(4)), end)
+    arrow("cells.c0.body.0.east", ((), "-|", gap(0)), "|-", step, "|-", "input.body.right.east")
 
-        % Cell n
-        \node[node]       (ORs_n)         [right = of ORs_h2]            {All OR gates\\except the last};
-        \node[hiddenNode] (OR_final_n)    [right = of OR_final_h2]       {};
-        \node[node]       (ANDs_n)        [right = of ANDs_h2]           {All AND gates};
-        \coordinate[above=16pt of ORs_n]       (cell_n);
-
-        % Input gate
-        \node[node]       (input_pulse) at ($(ANDs_k) + (0.45, -3.25)$)  {1 frame pulse\\generator (input)};
-        \node[node]       (input_OR)      [right = 1.5mm of input_pulse] {OR gate};
-        \coordinate[above=16pt of input_pulse] (input_cell);
-
-        % Cell bounding boxes
-        \begin{scope}[on background layer]
-            \node[node,       fit=(ORs_1)(ANDs_1)(OR_final_1)(cell_1),         label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(ORs_h1)(ANDs_h1)(OR_final_h1)]              {#sym.dots.h.c};
-            \node[node,       fit=(ORs_k)(ANDs_k)(OR_final_k)(cell_k),         label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node,       fit=(ORs_k+1)(ANDs_k+1)(OR_final_k+1)(cell_k+1), label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(ORs_h2)(ANDs_h2)(OR_final_h2)]              {#sym.dots.h.c};
-            \node[node,       fit=(ORs_n)(ANDs_n)(OR_final_n)(cell_n),         label={[anchor=north, yshift=-2.5pt]Cell $ceil(log_10 n)$}] {};
-            \node[node,       fit=(input_pulse)(input_OR)(input_cell),         label={[anchor=north, yshift=-2.5pt]Input circuit}] {};
-        \end{scope}
-
-        % Arrows
-
-        % Points between cells (top)
-        \coordinate (1-h1)    at ($(ORs_1.east)!0.5!(ORs_h1.west)   + (0, 1.75)$);
-        \coordinate (h1-k)    at ($(ORs_h1.east)!0.5!(ORs_k.west)   + (0, 1.75)$);
-        \coordinate (k-k+1)   at ($(ORs_k.east)!0.5!(ORs_k+1.west)  + (0, 1.75)$);
-        \coordinate (k+1-h2)  at ($(ORs_k+1.east)!0.5!(ORs_h2.west) + (0, 1.75)$);
-        \coordinate (h2-n)    at ($(ORs_h2.east)!0.5!(ORs_n.west)   + (0, 1.75)$);
-        \coordinate (n-)      at ($(ORs_n.east)                     + (0.5, 1.75)$);
-        % Points between cells (bottom)
-        \coordinate (1-h1-)   at ($(1-h1)                           - (0, 4.6)$);
-        \coordinate (h1-k-)   at ($(h1-k)                           - (0, 4.6)$);
-        \coordinate (k-k+1-)  at ($(k-k+1)                          - (0, 4.6)$);
-        \coordinate (k+1-h2-) at ($(k+1-h2)                         - (0, 4.6)$);
-        \coordinate (h2-n-)   at ($(h2-n)                           - (0, 4.6)$);
-
-        % Cell 1
-        \draw[line]  (ORs_1.east)         -- (ORs_1 -| 1-h1);
-        \draw[arrow] (OR_final_1.east)    -- (OR_final_1 -| 1-h1)      |- (ANDs_h1.west);
-
-        % Hidden cell 1
-        \draw[line]  (ORs_h1.east)        -- (ORs_h1 -| h1-k);
-        \draw[arrow] (OR_final_h1.east)   -- (OR_final_h1 -| h1-k)     |- (ANDs_k.west);
-        \draw[->-]   (ANDs_1 -| 1-h1)     -- (1-h1-) -- (h1-k-)        -- (h1-k |- ANDs_k);
-        \draw[->-]   (ORs_1  -| 1-h1)     -- (1-h1)  -- (h1-k)         -- (h1-k |- ORs_k);
-
-        % Cell k
-        \draw[line]  (ORs_k.east)         -| (k-k+1);
-        \draw[arrow] (OR_final_k.east)    -- (OR_final_k -| k-k+1)     |- (ANDs_k+1.west);
-        \draw[->-]   (h1-k-)              -- (k-k+1-);
-        \draw[->-]   (h1-k)               -- (k-k+1);
-        \draw[line]  (ANDs_k -| k-k+1)    -- (k-k+1-);
-
-        % Cell k+1
-        \draw[line]  (ORs_k+1.east)       -| (k+1-h2);
-        \draw[arrow] (OR_final_k+1.east)  -- (OR_final_k+1 -| k+1-h2)  |- (ANDs_h2.west);
-        \draw[->-]   (k-k+1-)             -- (k+1-h2-);
-        \draw[->-]   (k-k+1)              -- (k+1-h2);
-
-        % Hidden cell 2
-        \draw[line]  (ORs_h2.east)        -- (ORs_h2 -| h2-n);
-        \draw[arrow] (OR_final_h2.east)   -- (OR_final_h2 -| h2-n)     |- (ANDs_n.west);
-        \draw[->-]   (ANDs_k+1 -| k+1-h2) -- (k+1-h2-) -- (h2-n-)      -- (h2-n |- ANDs_n);
-        \draw[->-]   (k+1-h2)             -- (h2-n);
-
-        % Cell n
-        \draw[arrow] (ORs_n.east)         -- (ORs_n -| n-)             |- (input_OR.east);
-        \draw[->-]   (ORs_h2 -| h2-n)     -- (h2-n) -- (n-)            -- (n- |- ORs_n);
-
-        % Input gate
-        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
-        \draw[arrow] (input_pulse.north)  -- (input)                   -| (ANDs_1.south);
-        \draw[line]  (input_OR.north)     |- (input);
-        \draw[->-]   (ANDs_1 |- 1-h1-)    -- (1-h1-);
-    \end{tikzpicture}
+    for i in range(4) {
+      line-spec(cell-anchor(i, "1.east"), "-|", (input-dist, "-|", gap(i)))
+      line-spec(cell-anchor(i+1, "0.east"), "-|", (step, "-|", gap(i+1)))
+      let v = (gap(i), 50%, gap(i+1))
+      mark((v, "|-", input-dist), (rel: (1, 0)), ..arrow-mark("symbol"))
+      mark((v, "|-", step), (rel: (1, 0)), ..arrow-mark("symbol"))
     }
-    \caption{Diagram of the decimal method counter (logic gates implementation)}
-    \label{fig:CounterDecimal}
-\end{figure}
-*/
+    mark((input-dist, "-|", (input-dist, 50%, gap(0))), (rel: (1, 0)), ..arrow-mark("symbol"))
+    mark((step, "-|", (step, 50%, gap(4))), (rel: (1, 0)), ..arrow-mark("symbol"))
+
+    for i in range(5) {
+      arrow(cell-anchor(i+1, "2.west"), ((), "-|", gap(i)), pos: "start")
+    }
+    line("cells.c5.body.0.east", ((), "-|", step))
+  }),
+  caption: [Diagram of the decimal method counter (logic gates implementation)]
+) <fig:CounterDecimal>
+
 - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
 - To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first OR gate of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
 - Might require a decoder (unless you want to show numbers on a screen)
@@ -1434,110 +1402,56 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - $n = 2^"amount of cells"$; $"amount of cells" = ceil(log_2 n)$
 - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 - Diagram of the circuit:
-/*
-\begin{figure}[H]
-    \makebox[\textwidth][c]{
-    \begin{tikzpicture}
-        % Nodes
 
-        % Cell 1
-        \node[node]       (OR_1)                                         {Toggled OR gate\\(output)};
-        \node[node]       (AND_1)         [below = 5mm of OR_1]          {AND gate};
-        \coordinate[above=16pt of OR_1]        (cell_1);
+#figure(
+  cetz.canvas({
+    import cetz.draw: *
+    // Nodes
+    let cells = (
+      (name: $1$),
+      (name: "h1", hidden: true),
+      (name: $k$),
+      (name: $k+1$),
+      (name: "h2", hidden: true),
+      (name: $ceil(log_2 n)$),
+    )
+    cell-group(cells, (
+      (body: [Toggled OR gate (output)]),
+      (body: [AND gate], arrows: "up"),
+    ))
+    input-circuit(1.5cm, [1 frame pulse generator (input)], [NAND gate])
 
-        % Hidden cell 1
-        \node[hiddenNode] (OR_h1)         [right = of OR_1]              {};
-        \node[hiddenNode] (AND_h1)        [right = of AND_1]             {};
-
-        % Cell k
-        \node[node]       (OR_k)          [right = of OR_h1]             {Toggled OR gate\\(output)};
-        \node[node]       (AND_k)         [right = of AND_h1]            {AND gate};
-        \coordinate[above=16pt of OR_k]        (cell_k);
-
-        % Cell k+1
-        \node[node]       (OR_k+1)        [right = of OR_k]              {Toggled OR gate\\(output)};
-        \node[node]       (AND_k+1)       [right = of AND_k]             {AND gate};
-        \coordinate[above=16pt of OR_k+1]      (cell_k+1);
-
-        % Hidden cell 2
-        \node[hiddenNode] (OR_h2)         [right = of OR_k+1]            {};
-        \node[hiddenNode] (AND_h2)        [right = of AND_k+1]           {};
-
-        % Cell n
-        \node[node]       (OR_n)          [right = of OR_h2]             {Toggled OR gate\\(output)};
-        \node[node]       (AND_n)         [right = of AND_h2]            {AND gate};
-        \coordinate[above=16pt of OR_n]        (cell_n);
-
-        % Input circuit
-        \node[node]       (input_pulse) at ($(AND_k) + (0.45, -2.75)$)   {1 frame pulse\\generator (input)};
-        \node[node]       (input_NAND)    [right = 1.5mm of input_pulse] {NAND gate};
-        \coordinate[above=16pt of input_pulse] (input_cell);
-
-        % Cell bounding boxes
-        \begin{scope}[on background layer]
-            \node[node,       fit=(OR_1)(AND_1)(cell_1),                 label={[anchor=north, yshift=-2.5pt]Cell $1$}] {};
-            \node[hiddenNode, fit=(OR_h1)(AND_h1)]                       {#sym.dots.h.c};
-            \node[node,       fit=(OR_k)(AND_k)(cell_k),                 label={[anchor=north, yshift=-2.5pt]Cell $k$}] {};
-            \node[node,       fit=(OR_k+1)(AND_k+1)(cell_k+1),           label={[anchor=north, yshift=-2.5pt]Cell $k+1$}] {};
-            \node[hiddenNode, fit=(OR_h2)(AND_h2)]                       {#sym.dots.h.c};
-            \node[node,       fit=(OR_n)(AND_n)(cell_n),                 label={[anchor=north, yshift=-2.5pt]Cell $ceil(log_2 n)$}] {};
-            \node[node,       fit=(input_pulse)(input_NAND)(input_cell), label={[anchor=north, yshift=-2.5pt]Input Circuit}] {};
-        \end{scope}
-
-        % Arrows
-
-        % Points between cells
-        \coordinate (1-h1)   at ($(OR_1.east)!0.5!(OR_h1.west)   + (0, 1.75)$);
-        \coordinate (h1-k)   at ($(OR_h1.east)!0.5!(OR_k.west)   + (0, 1.75)$);
-        \coordinate (k-k+1)  at ($(OR_k.east)!0.5!(OR_k+1.west)  + (0, 1.75)$);
-        \coordinate (k+1-h2) at ($(OR_k+1.east)!0.5!(OR_h2.west) + (0, 1.75)$);
-        \coordinate (h2-n)   at ($(OR_h2.east)!0.5!(OR_n.west)   + (0, 1.75)$);
-        \coordinate (n-)     at ($(OR_n.east)                    + (0.5, 1.75)$);
-
-        % Cell 1
-        \draw[arrow] (AND_1.north)       -- (OR_1.south);
-        \draw[arrow] (OR_1.east)         -- (OR_1 -| 1-h1)     |- (AND_h1.west);
-
-        % Hidden cell 1
-        \draw[arrow] (OR_h1.east)        -- (OR_h1 -| h1-k)    |- (AND_k.west);
-        \draw[->-]   (OR_1 -| 1-h1)      -- (1-h1) -- (h1-k)   -- (h1-k |- OR_k);
-
-        % Cell k
-        \draw[arrow] (AND_k.north)       -- (OR_k.south);
-        \draw[arrow] (OR_k.east)         -- (OR_k -| k-k+1)    |- (AND_k+1.west);
-        \draw[->-]   (h1-k)              -- (k-k+1);
-        \draw[line]  (OR_k -| k-k+1)     -- (k-k+1);
-
-        % Cell k+1
-        \draw[arrow] (AND_k+1.north)     -- (OR_k+1.south);
-        \draw[arrow] (OR_k+1.east)       -- (OR_k+1 -| k+1-h2) |- (AND_h2.west);
-        \draw[->-]   (k-k+1)             -- (k+1-h2);
-        \draw[line]  (OR_k+1 -| k+1-h2)  -- (k+1-h2);
-
-        % Hidden cell 2
-        \draw[arrow] (OR_h2.east)        -- (OR_h2 -| h2-n)    |- (AND_n.west);
-        \draw[->-]   (k+1-h2)            -- (h2-n);
-
-        % Cell n
-        \draw[arrow] (AND_n.north)       -- (OR_n.south);
-        \draw[arrow] (OR_n.east)         -- (OR_n -| n-)       |- (input_NAND.east);
-        \draw[->-]   (OR_h2 -| h2-n)     -- (h2-n) -- (n-)     -- (n- |- OR_n);
-
-        \coordinate  (input) at ($(input_pulse.north) + (0, 1.25)$);
-        \draw[->-]   (input_pulse.north) -- (input);
-        \draw[->-]   (input_NAND.north)  -- (input_NAND |- input);
-        \draw[arrow] (input)             -| (AND_1.south);
-        \draw[arrow] (input)             -| (AND_n.south);
-        \draw[arrow] (input -| AND_h1)   -| (AND_h1.south);
-        \draw[arrow] (input -| AND_k)    -| (AND_k.south);
-        \draw[arrow] (input -| AND_k+1)  -| (AND_k+1.south);
-        \draw[arrow] (input -| AND_h2)   -| (AND_h2.south);
-    \end{tikzpicture}
+    // Arrows
+    // Between cells
+    for i in range(5) {
+      arrow(cell-anchor(i, "0.east"), "-|-", cell-anchor(i + 1, "1.west"))
     }
-    \caption{Diagram of the binary method counter}
-    \label{fig:CounterBinary}
-\end{figure}
-*/
+
+    // Input
+    let input = ("cells.south", 50%, "input.north")
+    let top-line = ((rel: (0, 5mm), to: "cells.c0.north"), "-|", (rel: (5mm, 0), to: "cells.c5.body.east"))
+
+    arrow(pos: "symbol", "cells.c0.body.south", "|-", input, "-|", "cells.c5.body.south")
+    for i in ("left", "right") {
+      line("input.body." + i + ".north", ((), "|-", input))
+    }
+    for i in range(1, cells.len() - 1) {
+      arrow(cell-anchor(i, "south"), ((), "|-", input), pos: "start")
+      line((cell-anchor(i, "0.east"), "-|", gap(i)), ((), "|-", top-line))
+    }
+
+    arrow(("cells.c0.body.0.east", "-|", gap(0)), "|-", top-line, "|-", "input.body.right.east")
+    line("cells.c5.body.0.east", ((), "-|", top-line))
+
+    for i in range(4) {
+      let v = (gap(i), 50%, gap(i+1))
+      mark((v, "|-", top-line), (rel: (1, 0)), ..arrow-mark("symbol"))
+    }
+    mark(((gap(4), "|-", top-line), 50%, top-line), (rel: (1, 0)), ..arrow-mark("symbol"))
+  }),
+  caption: [Diagram of the binary method counter]
+) <fig:CounterBinary>
+
 - To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
 - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gates. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
 - Might require a decoder
@@ -1617,33 +1531,37 @@ Notes:
 - Allows to enable/disable an analog signal without increasing the signal delay like normal AND/XOR gate methods do
 - Doesn't work when the output block is an AND/XOR gate
 - Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
-/*
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}[wideNode/.style={node, minimum width=30.5mm}]
-        % Nodes
 
-        \node[wideNode] (input_signal)                                 {Input Signals\\(can be multiple\\blocks)};
-        \node[wideNode] (output_blocks) [right = 5cm of input_signal]  {Output Blocks};
-        \node[wideNode] (input_toggle1) [above = 1.5cm of input_signal]  {OR Gate with\\toggle keybind};
-        \node[wideNode] (input_toggle2) [right = 5cm of input_toggle1] {OR Gate with\\toggle keybind};
-        \coordinate (toggles)    at ($(input_toggle1)!0.5!(input_toggle2)$);
-        \coordinate (middle)     at ($(input_signal)!0.5!(input_toggle1)$);
-        \node[node] (XOR)        at (toggles |- middle) {XOR gate with\\-1 output scale};
+#let pos(d, to) = (
+  r: arguments((rel: (d, 0), to: to + ".east"), anchor: "west"),
+  l: arguments((rel: (-d, 0), to: to + ".west"), anchor: "east"),
+  u: arguments((rel: (0, d), to: to + ".north"), anchor: "south"),
+  d: arguments((rel: (0, -d), to: to + ".south"), anchor: "north"),
+)
+#figure(
+  cetz.canvas({
+    import cetz.draw: *
+    // Nodes
+    node((),                                  [Input Signals (can be multiple blocks)], name: "input")
+    node(..pos(5cm, "input").r, [Output Blocks], name: "output")
+    node(..pos(1.5cm, "input").u, [OR Gate with toggle keybind], name: "toggle1")
+    node(..pos(5cm, "toggle1").r, [OR Gate with toggle keybind], name: "toggle2")
+    let toggles = ("toggle1", 50%, "toggle2")
+    let middle = ("input.north", 50%, "toggle1.south")
+    node((toggles, "|-", middle), [XOR gate with -1 output scale], name: "XOR")
 
-        % Arrows
+    // Arrows
+    arrow("input", "output")
+    arrow("input", "|-", "XOR")
+    arrow("XOR", "-|", "output")
+    line("toggle1", "toggle2")
+    arrow(toggles, "XOR")
+    mark(("toggle1.east", 50%, toggles), toggles, ..arrow-mark("symbol"))
+    mark(("toggle2.west", 50%, toggles), toggles, ..arrow-mark("symbol"))
+  }),
+  caption: [Diagram of the no-delay signal toggle]
+) <fig:NoDelaySignalToggle>
 
-        \draw[arrow] (input_signal.east)  -- (output_blocks.west);
-        \draw[arrow] (input_signal.north) |- (XOR.west);
-        \draw[arrow] (XOR.east)           -| (output_blocks.north);
-        \draw[->-]   (input_toggle1.east) -- (toggles);
-        \draw[->-]   (input_toggle2.west) -- (toggles);
-        \draw[arrow] (toggles)            -- (XOR.north);
-    \end{tikzpicture}
-    \caption{Diagram of the no-delay signal toggle}
-    \label{fig:NoDelaySignalToggle}
-\end{figure}
-*/
 - #steam("3054610284")[Example blueprint]
 
 = Historical Circuits
@@ -1672,48 +1590,35 @@ This section contains old circuits that were previously in @useful-circuits, but
 
 - Allows limiting the output signal of a feedback loop to the range $[0, 1]$
 - Diagram of the circuit:
-/*
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}[trim left=-12em]
-        % Nodes
 
-        \node[node] (feedback_top)                               {OR Gate};
-        \node[node] (feedback_bot) [below = 5mm of feedback_top] {OR Gate};
-        \coordinate (feedback_mid) at ($(feedback_top.west)!0.5!(feedback_bot.west)$);
+#figure(
+  cetz.canvas({
+    import cetz.draw: *
+    // Nodes
+    cell(0, [Feedback Loop], (
+      (body: [OR Gate]),
+      (body: [OR Gate], arrows: "both"),
+    ))
+    node(..pos(1cm, "c0.body").l, [Input Signal], name: "input")
 
-        \node[node] (input)        [left = of feedback_mid]      {Input Signal};
+    node(..pos(1cm, "c0.body.1").r, [Always on sensor], name: "c+1")
+    node(..pos(5mm, "c+1").u, [OR gate with -1 output scale], name: "c-1")
 
-        \coordinate[above=16pt of feedback_top] (feedback);
+    node(..pos(1cm, "c-1").r, [OR gate with -1 output scale (output)], name: "output")
 
-        \node[node] (C+1)          [right = of feedback_bot]     {Always on sensor};
-        \node[node] (C-1)          [above = 5mm of C+1]          {OR gate with\\-1 output scale};
+    // Arrows
+    let input-split = (rel: (5mm, 0), to: "input.east")
+    line("input", input-split)
+    arrow("c0.body.0.west", "-|", input-split, "|-", "c0.body.1.west", pos: "symbol")
+    arrow("c+1", "c0.body.1.east")
+    arrow("c+1", "c-1")
+    arrow("c-1", "output")
+    arrow("c0.body.0.east", ((), "-|", "c-1.west"), pos: "start")
+    arrow("c0.body.south", (rel: (0, -5mm), to: "c0.body.south"), "-|", "output")
+  }),
+  caption: [Diagram of the clamped feedback loop]
+) <fig:ClampedFeedbackLoop>
 
-        \node[node] (output)       [right = of C-1]              {OR gate with\\-1 output scale\\(output)};
-
-        % Bounding boxes
-        \begin{scope}[on background layer]
-            \node[node, fit=(feedback_top)(feedback_bot)(feedback), label={[anchor=north, yshift=-2.5pt]Feedback Loop}] {};
-        \end{scope}
-
-        % Arrows
-
-        \coordinate  (input_split) at ($(input.east) + (0.5, 0)$);
-        \draw[line]  (input.east)                    -- (input_split);
-        \draw[arrow] (input_split)                   |- (feedback_top.west);
-        \draw[arrow] (input_split)                   |- (feedback_bot.west);
-        \draw[arrow] ($(feedback_bot.north) + (2mm, 0)$)  -- ($(feedback_top.south) + (2mm, 0)$);
-        \draw[arrow] ($(feedback_top.south) + (-2mm, 0)$) -- ($(feedback_bot.north) + (-2mm, 0)$);
-        \draw[arrow] (C+1.west)                      -- (feedback_bot.east);
-        \draw[arrow] (C+1.north)                     -- (C-1.south);
-        \draw[arrow] (C-1.west |- feedback_top.east) |- (feedback_top.east);
-        \draw[arrow] (C-1.east)                      -- (output.west);
-        \draw[arrow] (feedback_bot.south) -- ($(feedback_bot.south) + (0, -0.5)$) -| (output);
-    \end{tikzpicture}
-    \caption{Diagram of the clamped feedback loop}
-    \label{fig:ClampedFeedbackLoop}
-\end{figure}
-*/
 - Note: the input signal is reversed. This means that a negative value increases the stored value while a positive value decreases it
 - Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
 - #steam("2911246646")[Example blueprint]
