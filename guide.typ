@@ -1309,53 +1309,14 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
 - The multiplier was calculated with $"multiplier" = "final angle"/90$
 - A calculator using this data made by confusionextended can be found #link("https://www.desmos.com/calculator/i70yadxqyy")[here]
 
-#let load-data(path) = {
-  let data = read(path).split("\n").slice(1).map(l => l.split(" "))
-  data
-}
-
-#let zip((first, ..rest)) = first.zip(..rest)
-
-#let transpose(data, cols) = {
-  let col-size = calc.ceil(data.len()/cols)
-  let default = ("",) * data.at(0).len()
-  let fill = col-size * cols - data.len()
-  zip((data + (default,) * fill).chunks(col-size))
-}
-
-#let data-table(header, cols, data, caption, label: none) = [
-  #show figure: set block(breakable: true)
-  #figure(
-    booktab-table(
-      columns: header.len() * cols,
-      align: center + horizon,
-      row-gutter: 0pt,
-      ..range(1, cols).map(i =>
-        table.vline(stroke: table-stroke.thick, x: i * header.len())
-      ),
-
-      table.header(..(header.map(h => [*#h*])) * cols),
-      ..transpose(data, cols).flatten(),
-    ),
-    caption: caption
-  )
-  #if label != none {
-    assert(
-      type(label) == std.label,
-      message: "You must provide a label, e.g. `<table:id>`",
-    )
-    label
-  }
-]
-
-#let get-cols(data, ..cols) = cols.map(c => data.map(row => float(row.at(c))))
+#import "/utils/data.typ": load-data, data-table, zip, get-cols
 
 #let process-row(row) = {
   row.insert(1, strfmt("{:.3}", float(row.at(1)) * 90))
   row
 }
 
-#let data = load-data("data/Input_Value_Multiplier.dat").map(process-row)
+#let data = load-data("/data/Input_Value_Multiplier.dat").map(process-row)
 
 #data-table(
   ([Input\ Value], [Final\ Angle], [Multiplier]),
@@ -1415,7 +1376,7 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 - $f_(s, a)(x)$ represents the resulting speed of a servo with $s$ speed, $a$ angle, and $x$ input value
 - The resulting speed can be approximated by $hat(f)_(s, a)(x) = min(x/0.0611 dot a/90, s)$
 
-#let path = "data/Input_Value_Speed{}_{}.dat"
+#let path = "/data/Input_Value_Speed{}_{}.dat"
 #let load-file(angle, speed) = load-data(strfmt(path, speed, angle)).slice(0, -1)
 #let data-cases = (180, 360).map(a => (1, 2).map(s => (a, s))).join()
 #let data = data-cases.map(conf => (conf, load-file(..conf)))
@@ -1465,7 +1426,7 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 
 = Aiming sensor pitch measurement <AimingServoPitch>
 
-#let data = load-data("data/Aiming_Sensor_Pitch.dat").slice(0, -1)
+#let data = load-data("/data/Aiming_Sensor_Pitch.dat").slice(0, -1)
 #let data-error = data.map(((x, y)) => (x, float(y) - float(x)))
 #let avg-error = data-error.map(row => row.at(1)).sum() / data-error.len()
 #let avg-error = calc.round(avg-error, digits: 3)
