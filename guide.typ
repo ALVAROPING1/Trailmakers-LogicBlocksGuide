@@ -1623,7 +1623,6 @@ This section contains old circuits that were previously in @useful-circuits, but
 - Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
 - #steam("2911246646")[Example blueprint]
 - Python script to simulate the behaviour (input value is automatically reversed):
-
   ```python
   def clamp(x: float) -> float:
       return min(max(x, -1), 1)
@@ -1656,7 +1655,6 @@ This section contains old circuits that were previously in @useful-circuits, but
       feedback_top, feedback_bottom = update(feedback_top, feedback_bottom, user_input)
       print_state(feedback_top, feedback_bottom)
   ```
-
 - Credits to Precache for figuring out this circuit
 
 #show heading.where(level: 1): set heading(
