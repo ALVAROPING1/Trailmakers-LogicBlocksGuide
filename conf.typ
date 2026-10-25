@@ -245,10 +245,10 @@
 
 // "booktab" table style
 #let table-stroke = (thin: 0.2pt, thick: 0.7pt)
-#set table.hline(stroke: table-stroke.thin)
-#set table.vline(stroke: table-stroke.thin)
 #let booktab-table(..args) = {
   show table: block.with(stroke: (y: table-stroke.thick))
+  set table.hline(stroke: table-stroke.thin)
+  set table.vline(stroke: table-stroke.thin)
   table(
     row-gutter: 0.2em,
     stroke: (_, y) => if y == 0 { (bottom: table-stroke.thin) },
