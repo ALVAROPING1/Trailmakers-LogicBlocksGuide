@@ -5,7 +5,7 @@
 
 = Aiming sensor pitch measurement <AimingSensorPitch>
 
-#let data = load-data("/data/Aiming_Sensor_Pitch.dat").slice(0, -1)
+#let (header, ..data) = csv("/data/Aiming_Sensor_Pitch.csv")
 #let data-error = data.map(((x, y)) => (x, float(y) - float(x)))
 #let avg-error = data-error.map(row => row.at(1)).sum() / data-error.len()
 #let avg-error = calc.round(avg-error, digits: 3)
@@ -40,9 +40,7 @@ When aiming sensors are used to measure the pitch of the camera, their output is
 ) <fig:AimingSensorPitchGraphError>
 
 #data-table(
-  ([Pitch], [Output]),
-  5,
-  data,
+  header, 5, data,
   [Raw data of the aiming sensor pitch measurement],
   label: <table:AimingSensorPitchData>
 )

@@ -2,11 +2,6 @@
 
 #import "/conf.typ": booktab-table, table-stroke
 
-#let load-data(path) = {
-  let data = read(path).split("\n").slice(1).map(l => l.split(" "))
-  data
-}
-
 #let zip((first, ..rest)) = first.zip(..rest)
 
 #let transpose(data, cols) = {

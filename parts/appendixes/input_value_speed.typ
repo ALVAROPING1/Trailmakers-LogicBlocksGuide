@@ -8,21 +8,23 @@
 
 Due to a bug, the speed at which rotating servos with hold position rotate changes with the input value when small values are used. This section contains the speed multipliers used for many input values, found experimentally. Some notes about this process:
 
+#let fhat(angle) = $x/0.0611 dot #angle/90$
+
 - Speed is the speed required on a servo with an input value of $1$ to match the speed of a servo with a speed being tested and the given input value, with an error of $plus.minus 0.00005$ speed units for speeds lower than $1$ and an error of $plus.minus 0.0005$ otherwise
   - To compare the speeds of the servos, they were run continuously for some time and the final angle was compared
     - For servos with $360$ angle, they were run for $3$ min
     - For servos with less than $360$ angle, they were run for slightly less than the time required to reach the maximum angle
   - Servos with a configured speed of $1$ and $2$ as well as $360$ and $180$ angle were tested, with other speeds/angles being checked to verify the results
 - $f_(s, a)(x)$ represents the resulting speed of a servo with $s$ speed, $a$ angle, and $x$ input value
-- The resulting speed can be approximated by $hat(f)_(s, a)(x) = min(x/0.0611 dot a/90, s)$
+- The resulting speed can be approximated by $hat(f)_(s, a)(x) = min(fhat(a), s)$
 
-#let path = "/data/Input_Value_Speed{}_{}.dat"
-#let load-file(angle, speed) = load-data(strfmt(path, speed, angle)).slice(0, -1)
+#let path = "/data/Input_Value_Speed{}_{}.csv"
+#let load-data(angle, speed) = csv(strfmt(path, speed, angle)).slice(1)
 #let data-cases = (180, 360).map(a => (1, 2).map(s => (a, s))).join()
-#let data = data-cases.map(conf => (conf, load-file(..conf)))
+#let data = data-cases.map(conf => (conf, load-data(..conf)))
+
 #let pairs = data.map(((_, d)) => d)
 #let xlim = (0, calc.max(..pairs.join().map(((x, _)) => float(x))))
-#let fhat(angle) = $x/0.0611 dot #angle/90$
 
 #figure(
   lq.diagram(
