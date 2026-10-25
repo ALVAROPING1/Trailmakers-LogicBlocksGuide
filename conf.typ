@@ -216,6 +216,14 @@
     it
   }
 
+  // chapter on new page
+  show heading.where(level: 1): it => {
+    if counter(heading).get().first() != 2 or regex("\d+") not in it.numbering {
+      newpage()
+    }
+    it
+  }
+
   counter(page).update(1) // first chapter starts at page 1
 
   doc

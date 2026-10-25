@@ -1,14 +1,20 @@
 // LTeX: enabled=false
 
 #import "/conf.typ": conf, newpage, table-stroke, booktab-table
+#import "/deps.typ": *
 
 #show: conf.with(
   title: "Logic Blocks Guide",
   author: "ALVAROPING1",
   date: datetime.today(),
+  appendixes: [
+    #include "/parts/appendixes/hinge_angle.typ"
+    #include "/parts/appendixes/input_value_speed.typ"
+    #include "/parts/appendixes/aiming_sensor_pitch.typ"
+    #include "/parts/appendixes/tips.typ"
+  ]
 )
 
-#import "/deps.typ": *
 #import "/utils/plots.typ": eval-math
 
 /// LaTeX's `\noindent`, removes the first-line indentation of the paragraph
@@ -45,12 +51,6 @@ about commonly used logic circuits and how to make them, to aid in the design an
 circuits.
 
 = Logic Blocks
-
-// chapter on new page
-#show heading.where(level: 1): it => {
-  newpage()
-  it
-}
 
 Logic blocks are a group of blocks that allow to obtain and process information, which in turn can be used to automate
 tasks or create more complex control schemes for creations, and more generally, perform any finite sequence of steps
@@ -345,7 +345,7 @@ Compasses measure the angle of the block relative to the closest direction to th
 
 === Aiming Sensor
 
-Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. This is done by projecting the camera direction vector onto the plane, and comparing a vector fixed to the block against that projection. The camera direction used is always that of the player who owns (spawned) the creation, although with an upwards pitch offset explained in @AimingServoPitch. They have a display which shows the currently measured angle, with a light blue section representing the activation threshold and an output arrow representing the projected direction.
+Aiming sensors measure the angle of the block relative to the closest direction to camera direction in the plane defined by the square faces of the block. This is done by projecting the camera direction vector onto the plane, and comparing a vector fixed to the block against that projection. The camera direction used is always that of the player who owns (spawned) the creation, although with an upwards pitch offset explained in @AimingSensorPitch. They have a display which shows the currently measured angle, with a light blue section representing the activation threshold and an output arrow representing the projected direction.
 
 #settings-intro()
 
@@ -1288,165 +1288,3 @@ This section contains old circuits that were previously in @useful-circuits, but
       print_state(feedback_top, feedback_bottom)
   ```
 - Credits to Precache for figuring out this circuit
-
-#show heading.where(level: 1): set heading(
-  // configure supplement
-  supplement: "Appendix",
-  // show just appendixes titles in outline
-  outlined: true,
-  numbering: "A ",
-)
-#counter(heading).update(0)
-
-= Input value to multiplier for hinges/wings with control surfaces <InputValueMultiplier>
-
-
-By default, the angle by which hinges/wings/other blocks with the "steering help" setting rotate doesn't scale linearly with the input value. The angle is smaller than what a linear relationship would result in, to improve steering on controller. In hinges, this can be adjusted with the steering mode setting, where a "linear" value results in a linear relationship while any other value results in the non-linear relationship. This section contains the multipliers used for many input values in the non-linear relationship, found experimentally. Some notes about this process:
-
-- Final angle is the resulting angle of the hinge measured with a max angle of $90 degree$ and an error of $plus.minus 0.005 degree$
-- The multiplier was calculated with $"multiplier" = "final angle"/90$
-- A calculator using this data made by confusionextended can be found #link("https://www.desmos.com/calculator/i70yadxqyy")[here]
-
-#import "/utils/data.typ": load-data, data-table, zip, get-cols
-
-#let process-row(row) = {
-  row.insert(1, strfmt("{:.3}", float(row.at(1)) * 90))
-  row
-}
-
-#let data = load-data("/data/Input_Value_Multiplier.dat").map(process-row)
-
-#data-table(
-  ([Input\ Value], [Final\ Angle], [Multiplier]),
-  3,
-  data,
-  [Raw data of the input value multiplier for hinges],
-  label: <table:InputValueMultiplierData>
-)
-
-#import "/utils/plots.typ": plot-data, plot-fn
-
-#figure(
-  lq.diagram(
-    title: [Multiplier as a function of the input value],
-    xlabel: [Input value],
-    ylabel: [Multiplier],
-    plot-data(..get-cols(data, 0, 2), clip: false),
-    plot-fn((0, 1), $x$)
-  ),
-  caption: [Graph of the multiplier for hinges as a function of the input value]
-) <fig:InputValueMultiplierGraph>
-
-= Input value to speed for servos with hold position <InputValueSpeed>
-
-Due to a bug, the speed at which rotating servos with hold position rotate changes with the input value when small values are used. This section contains the speed multipliers used for many input values, found experimentally. Some notes about this process:
-
-- Speed is the speed required on a servo with an input value of $1$ to match the speed of a servo with a speed being tested and the given input value, with an error of $plus.minus 0.00005$ speed units for speeds lower than $1$ and an error of $plus.minus 0.0005$ otherwise
-  - To compare the speeds of the servos, they were run continuously for some time and the final angle was compared
-    - For servos with $360$ angle, they were run for $3$ min
-    - For servos with less than $360$ angle, they were run for slightly less than the time required to reach the maximum angle
-  - Servos with a configured speed of $1$ and $2$ as well as $360$ and $180$ angle were tested, with other speeds/angles being checked to verify the results
-- $f_(s, a)(x)$ represents the resulting speed of a servo with $s$ speed, $a$ angle, and $x$ input value
-- The resulting speed can be approximated by $hat(f)_(s, a)(x) = min(x/0.0611 dot a/90, s)$
-
-#let path = "/data/Input_Value_Speed{}_{}.dat"
-#let load-file(angle, speed) = load-data(strfmt(path, speed, angle)).slice(0, -1)
-#let data-cases = (180, 360).map(a => (1, 2).map(s => (a, s))).join()
-#let data = data-cases.map(conf => (conf, load-file(..conf)))
-#let pairs = data.map(((_, d)) => d)
-#let xlim = (0, calc.max(..pairs.join().map(((x, _)) => float(x))))
-#let fhat(angle) = $x/0.0611 dot #angle/90$
-
-#figure(
-  lq.diagram(
-    title: [Speed as a function of the input value],
-    xlabel: [Input value],
-    ylabel: [Speed],
-    xlim: xlim,
-    ylim: (0, 2),
-    yaxis: (tick-distance: 0.2),
-    cycle: (green, blue, rgb("#0000ff"), rgb("#ff0000")),
-    ..data.enumerate().map(((i, ((angle, speed), d))) => plot-data(
-      ..get-cols(d, 0, 1),
-      label: $f_(#speed, #angle)(x)$,
-      z-index: if i < 2 {2.1} else {2},
-    )),
-    ..((180, 35%, right), (360, 75%, left)).map(((a, pos, align)) => (
-      plot-fn(xlim, fhat(a), label: none, z-index: 2.2),
-      lq.place(pos, 1.5, pad(1em, $y = #fhat(a)$), align: align)
-    )).flatten()
-  ),
-  caption: [Graph of the speed for servos with hold position as a function of the input value]
-) <fig:InputValueSpeedGraph>
-
-#figure(
-  booktab-table(
-    columns: 8,
-    align: center + horizon,
-    row-gutter: 0pt,
-    ..range(1, 4).map(i =>
-      table.vline(stroke: table-stroke.at(if i == 2 {"thick"} else {"thin"}), x: i * 2)
-    ),
-
-    table.header(..(180, 360).map(x => table.cell(colspan: 4)[*Angle #x*]), level: 1),
-    table.header(..((1, 2).map(x => table.cell(colspan: 2)[*Speed #x*])) * 2, level: 2),
-    table.hline(),
-    table.header(..([*Input\ Value*], [*Final\ Speed*]) * 4, level: 3),
-    table.hline(),
-    ..zip(pairs).flatten()
-  ),
-  caption: [Raw data of the input value speed for servos with hold position]
-) <table:InputValueSpeedData>
-
-= Aiming sensor pitch measurement <AimingServoPitch>
-
-#let data = load-data("/data/Aiming_Sensor_Pitch.dat").slice(0, -1)
-#let data-error = data.map(((x, y)) => (x, float(y) - float(x)))
-#let avg-error = data-error.map(row => row.at(1)).sum() / data-error.len()
-#let avg-error = calc.round(avg-error, digits: 3)
-
-When aiming sensors are used to measure the pitch of the camera, their output is offset from the real camera pitch angle. This section contains the measured values for many camera angles, found experimentally. Some notes about this process:
-
-- Measurements were done using a camera block on a hinge to set the camera pitch to known values, and then taking the measurement from an aiming sensor at the base
-- Aiming servos with verticality checks disabled have a similar behavior, although their angle measurement ends up being a lot more noisy
-- Angle measurements are in degrees and have an error of $plus.minus 0.0005 degree$
-- The average error between the measured pitch and the camera pitch is $#avg-error degree$
-
-#figure(
-  lq.diagram(
-    title: [Measured pitch as a function of actual pitch],
-    xlabel: [Real pitch],
-    ylabel: [Measured pitch],
-    plot-data(..get-cols(data, 0, 1)),
-    plot-fn((-90, 90), $x + #avg-error$, color: red),
-    plot-fn((-90, 90), $x$),
-  ),
-  caption: [Graph of the pitch measured by aiming sensors as a function of the real camera pitch]
-) <fig:AimingSensorPitchGraph>
-
-#figure(
-  lq.diagram(
-    title: [Error in measured pitch as a function of actual pitch],
-    xlabel: [Real pitch],
-    ylabel: [Error],
-    plot-data(..get-cols(data-error, 0, 1), label: none, stroke: 0.4pt),
-  ),
-  caption: [Graph of the error in pitch measured by aiming sensors as a function of the real camera pitch]
-) <fig:AimingSensorPitchGraphError>
-
-#data-table(
-  ([Pitch], [Output]),
-  5,
-  data,
-  [Raw data of the aiming sensor pitch measurement],
-  label: <table:AimingSensorPitchData>
-)
-
-= Tips
-
-- If you want your system to not modify the input that passes through, configure all of the logic gates to have an output scale of 1. Then, if a gate needs to have more inputs other than the original one, make sure the sum of the output values of those other inputs is 0. This will make the output which reaches whatever your system activates be the output that the sensors/keybinds had
-- Arithmetics logic blocks can be used to get always on signals with a constant value by using the addition operation with the desired constant. The signal can be toggled by setting the operation to multiplication and using a $+1$ input
-- Organize the logic gates on a testbed while working with them before adding them to your vehicle, having the logic gates organized as opposed to scattered across your entire vehicle will make remembering what each gate does easier. There is no wrong way to organize them as long as they aren't randomly placed, but the way I do it is by splitting the gates into groups depending on function, inside each group the arrows of logic gates point towards the outputs of that gate and away from its inputs, then I put the groups of logic gates that a group outputs to in the direction the arrows of the logic gates that the group uses as output are pointing, while I put the groups that group uses as input in the opposite direction
-- If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
-- If you still have any questions or need help with something, feel free to
-  contact me on the #link("https://discord.gg/trailmakers")[official Trailmakers discord server]
