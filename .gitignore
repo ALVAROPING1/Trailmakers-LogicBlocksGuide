@@ -1,6 +1,3 @@
-.vscode/
 *.pdf
-~$*.rtf
-*.tmp
 .markdownlint.json
 .spell/
