@@ -1353,7 +1353,8 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 #let load-file(angle, speed) = load-data(strfmt(path, speed, angle)).slice(0, -1)
 #let data-cases = (180, 360).map(a => (1, 2).map(s => (a, s))).join()
 #let data = data-cases.map(conf => (conf, load-file(..conf)))
-#let xlim = (0, 0.0625)
+#let pairs = data.map(((_, d)) => d)
+#let xlim = (0, calc.max(..pairs.join().map(((x, _)) => float(x))))
 #let fhat(angle) = $x/0.0611 dot #angle/90$
 
 #figure(
@@ -1365,9 +1366,9 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
     ylim: (0, 2),
     yaxis: (tick-distance: 0.2),
     cycle: (green, blue, rgb("#0000ff"), rgb("#ff0000")),
-    ..data.enumerate().map(((i, ((a, s), d))) => plot-data(
+    ..data.enumerate().map(((i, ((angle, speed), d))) => plot-data(
       ..get-cols(d, 0, 1),
-      label: $f_(#s, #a)(x)$,
+      label: $f_(#speed, #angle)(x)$,
       z-index: if i < 2 {2.1} else {2},
     )),
     ..((180, 35%, right), (360, 75%, left)).map(((a, pos, align)) => (
@@ -1392,7 +1393,7 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
     table.hline(),
     table.header(..([*Input\ Value*], [*Final\ Speed*]) * 4, level: 3),
     table.hline(),
-    ..zip(data.map(((_, d)) => d)).flatten()
+    ..zip(pairs).flatten()
   ),
   caption: [Raw data of the input value speed for servos with hold position]
 ) <table:InputValueSpeedData>
