@@ -69,6 +69,8 @@
   let hyperlink-blue = rgb(5, 99, 193)
   show ref: set text(hyperlink-blue)
   show link: set text(hyperlink-blue)
+  // underline external links
+  show link: it => if type(it.dest) == str { underline(it) } else { it }
 
   // Lists
   let square(size) = rect(width: size, height: size, fill: black, stroke: none)
@@ -202,9 +204,6 @@
 
   // ─────────────────────────────── Document body ────────────────────────────
 
-  // underline external links
-  show link: it => if type(it.dest) == str { underline(it) } else { it }
-
   // References style
   show ref: it => {
     let el = it.element
@@ -235,8 +234,6 @@
   show heading.where(level: 1): set heading(
     // configure supplement
     supplement: "Appendix",
-    // show just appendixes titles in outline
-    outlined: true,
     numbering: "A ",
   )
   counter(heading).update(0)
