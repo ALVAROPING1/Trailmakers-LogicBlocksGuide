@@ -1476,5 +1476,3 @@ When aiming sensors are used to measure the pitch of the camera, their output is
 - If you have problems figuring out how to do something with logic gates, draw it on paper first, being able to see all connections at once helps a lot. Another method is writing it with if statements as they translate to logic gates easily (each logic gate is an individual if statement)
 - If you still have any questions or need help with something, feel free to
   contact me on the #link("https://discord.gg/trailmakers")[official Trailmakers discord server]
-
-#text(size: 12pt)[*Made by #context document.author.at(0)*]

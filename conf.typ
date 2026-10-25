@@ -223,6 +223,8 @@
   counter(heading).update(0)
 
   if appendixes != none { appendixes }
+
+  text(size: 12pt)[*Made by #author*]
 }
 
 // "booktab" table style
