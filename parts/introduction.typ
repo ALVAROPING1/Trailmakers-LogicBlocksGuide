@@ -1,4 +1,4 @@
-// LTeX: enabled=false
+// LTeX: language=en
 
 = Introduction
 

@@ -1,4 +1,4 @@
-// LTeX: enabled=false
+// LTeX: language=en
 
 #import "/utils/data.typ": *
 #import "/utils/plots.typ": *
@@ -18,6 +18,7 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 - $f_(s, a)(x)$ represents the resulting speed of a servo with $s$ speed, $a$ angle, and $x$ input value
 - The resulting speed can be approximated by $hat(f)_(s, a)(x) = min(fhat(a), s)$
 
+// LTeX: enabled=false
 #let path = "/data/Input_Value_Speed{}_{}.csv"
 #let load-data(angle, speed) = csv(strfmt(path, speed, angle)).slice(1)
 #let data-cases = (180, 360).map(a => (1, 2).map(s => (a, s))).join()

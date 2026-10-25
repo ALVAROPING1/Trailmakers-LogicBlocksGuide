@@ -1,4 +1,4 @@
-// LTeX: enabled=false
+// LTeX: language=en
 
 #import "/utils/common.typ": tick
 
@@ -19,7 +19,7 @@ Keybinds are the most common input to activate a block, and all blocks that can 
 
 == Toggle <toggle>
 
-Toggle allows to make inputs alternate the activation state of a block between on and off without requiring a continuous input signal to remain active.
+Toggle allows making inputs alternate the activation state of a block between on and off without requiring a continuous input signal to remain active.
 
 - There is a toggle setting associated with positive inputs (below the green keybind) and another with negative ones (below the red keybind)
 - Toggles *inputs*

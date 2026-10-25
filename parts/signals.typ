@@ -1,4 +1,4 @@
-// LTeX: enabled=false
+// LTeX: language=en
 
 #import "/conf.typ": booktab-table
 #import "/utils/common.typ": *

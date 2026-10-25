@@ -1,4 +1,4 @@
-// LTeX: enabled=false
+// LTeX: language=en
 
 #import "/utils/data.typ": *
 #import "/utils/plots.typ": *
@@ -17,6 +17,7 @@ When aiming sensors are used to measure the pitch of the camera, their output is
 - Angle measurements are in degrees and have an error of $plus.minus 0.0005 degree$
 - The average error between the measured pitch and the camera pitch is $#avg-error degree$
 
+// LTeX: enabled=false
 #figure(
   lq.diagram(
     title: [Measured pitch as a function of actual pitch],

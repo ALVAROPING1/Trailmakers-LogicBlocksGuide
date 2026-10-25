@@ -1,4 +1,4 @@
-// LTeX: enabled=false
+// LTeX: language=en
 
 #import "/utils/data.typ": *
 #import "/utils/plots.typ": *
@@ -12,6 +12,7 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
 - The multiplier was calculated with $"multiplier" = "final angle"/90$
 - A calculator using this data made by confusionextended can be found #link("https://www.desmos.com/calculator/i70yadxqyy")[here]
 
+// LTeX: enabled=false
 #let (_, ..data) = csv("/data/Input_Value_Multiplier.csv")
 #let data = data.map(((i, a)) => (i, a, strfmt("{:.8}", float(a)/90)))
 

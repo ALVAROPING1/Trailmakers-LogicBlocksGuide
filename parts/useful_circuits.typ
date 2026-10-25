@@ -1,4 +1,4 @@
-// LTeX: enabled=false
+// LTeX: language=en
 
 #import "/deps.typ": cetz
 #import "/conf.typ": table-stroke
@@ -36,7 +36,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - Cycle: determines if trying to increase/decrease the value past its maximum/minimum will result in it cycling back to the smallest/biggest value or staying at the maximum/minimum value
   - Base designs described are 1-way without cycle, with the modifications needed to implement 2-way or cycle being explained afterwards
 - The complexity of a design is the amount of logic gates used by it without counting the ones used to create a startup pulse or always on sensors (those can be reused)
-- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is least complex depends on the situation
+- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$) and binary (base $2$). Which one is the least complex depends on the situation
   - The general circuit and decimal methods can be implemented using logic gates or accumulators. Generally accumulator-based counters are less complex, but logic gate based designs will still be described as they can be less complex under some circumstances (like needing a counter which only changes its value when a function of its current value is true)
 
 === General Circuit (Base $N$)
@@ -47,6 +47,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - The output is encoded as the position of the active gate in the row of output gates (with the one from the first cell being the minimum value and the one from the last cell being the maximum value)
 - Diagram of the circuit:
 
+// LTeX: enabled=false
 #figure(
   cetz.canvas({
     import "/utils/diagrams.typ": *
@@ -80,6 +81,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   }),
   caption: [Diagram of the general method counter (logic gates implementation)]
 ) <fig:CounterGeneral>
+// LTeX: enabled=true
 
 - To add cycle, add an AND gate to the last cell configured in the same way as the others and using the first cell as its next cell
 - To make it 2-way, add a new AND gate to each cell configured in the same way as the other one but going in the opposite direction and using a different pulse generator as input
@@ -101,10 +103,10 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - If $"minimum" <= 0 <= "maximum"$, $0$ should be within the chosen numbers. Otherwise, the counter needs to be pushed to its minimum/maximum value to initialize it
   - For simplicity, the integers from $0$ to $n-1$ are usually used by setting the minimum/maximum values to $0$/$n-1$ respectively and the scale to $1$, but other configurations can be useful in certain circumstances
     - Using a negative minimum value allows the initial value to not be the lowest value, which might be useful for 2-way counters
-    - Using (positive) scale values closer to $0$ allows to increase the amount of stored values beyond $101$
+    - Using (positive) scale values closer to $0$ increases the amount of stored values beyond $101$
     - Using different minimum/maximum values might reduce the complexity if analog value outputs are wanted by avoiding having to perform transformation of the value ranges
   - The value can be increased/decreased by sending a $plus.minus 1$ input to the accumulator (the circuit is the same for 1 and 2-way)
-  - In some cases, it might be useful to not enable use steps and set the scale to $60 dot "spacing"$. This allows to change the stored value on each frame, but requires the input to come from a  1 frame pulse generator to get the normal input behaviour
+  - In some cases, it might be useful to not enable use steps and set the scale to $60 dot "spacing"$. This allows to change the stored value on each frame, but requires the input to come from a 1 frame pulse generator to get the normal input behaviour
 - To add cycle, connect the comparator with the biggest threshold to an AND gate with the positive accumulator input as its second input. Connect that AND gate to an arithmetic logic block set to multiplication with a $-1000$ constant and $0.02$ duration, and that arithmetic logic block to the accumulator
   - The normal input to the accumulator must come from a 1 frame pulse generator
   - If using the circuit as 2-way, repeat the process with the comparator with the smallest threshold and the negative input of the accumulator. The AND gate should have an additional $-2$ always on input (which can be achieved with an arithmetic logic block set to addition with a $-1000$ constant). The arithmetic logic block and input pulse generator can be reused, using negative inputs to reduce the value
@@ -126,6 +128,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - The output is encoded as a decimal number with a digit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 - Diagram of the circuit:
 
+// LTeX: enabled=false
 #figure(
   cetz.canvas({
     import "/utils/diagrams.typ": *
@@ -174,6 +177,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   }),
   caption: [Diagram of the decimal method counter (logic gates implementation)]
 ) <fig:CounterDecimal>
+// LTeX: enabled=true
 
 - To add cycle, add cycle to the last cell and remove the OR gate from the input circuit
 - To make it 2-way, duplicate the input circuit but connect all OR gates except the first from each cell to the OR gate. Then, make each cell 2-way, connect the cells in the same direction using the first OR gate of each cell rather than the last, and connect the new input circuit to all AND gates for the second direction
@@ -183,11 +187,11 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - Requires a startup pulse to one of the toggled OR gates on each cell to work (achieved with a 1 frame pulse generator)
 - Complexity
   #let complexity(a, b, c) = $#a ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
-  - 1-way:       #complexity(2, 20, 19)
+  - 1-way: #complexity(2, 20, 19)
 
   - 1-way+cycle: #complexity(2, 20, 19)
 
-  - 2-way:       #complexity(3, 30, 28)
+  - 2-way: #complexity(3, 30, 28)
 
   - 2-way+cycle: #complexity(3, 30, 28)
 - Takes 3 frames to update with cycle and 4 frames otherwise
@@ -209,11 +213,11 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - Has a complexity of $n$ gates
 - Complexity
   #let complexity(b, c) = $ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
-  - 1-way:       #complexity(13, 9)
+  - 1-way: #complexity(13, 9)
 
   - 1-way+cycle: #complexity(13, 9)
 
-  - 2-way:       #complexity(14, 7)
+  - 2-way: #complexity(14, 7)
 
   - 2-way+cycle: #complexity(14, 8)
 - Takes 3 frames to update
@@ -226,6 +230,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 - The output is encoded as a binary number with a bit stored in each cell (with the first cell being the least significant digit and the last cell being the most significant digit)
 - Diagram of the circuit:
 
+// LTeX: enabled=false
 #figure(
   cetz.canvas({
     import "/utils/diagrams.typ": *
@@ -274,6 +279,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
   }),
   caption: [Diagram of the binary method counter]
 ) <fig:CounterBinary>
+// LTeX: enabled=true
 
 - To add cycle, remove the NAND gate from the input circuit and the AND gate on the first cell, and connect the 1 frame pulse generator directly to the OR gate in the first cell
 - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a new AND gate connected in the same way as the old AND gate, but using the NOT gate of all previous cells as input instead of the OR gates. Then replace the NAND gate on the input circuit with an OR gate and duplicate it (with the copy being connected to the new AND gates on each cell rather than the old ones). Connect the NOT gate of all the cells to the OR gate of the first input circuit, and the OR gate of all the cells to the OR gate of the second input circuit
@@ -281,10 +287,10 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - To create it, add a NOT gate to each cell and replace the NAND gate of the input circuit with an OR gate like in the 2-way version (if using the 1-way versions). Then, take $n$ AND gates and assign each of them a different combination of either the OR or NOT from each cell (if you only need to use it combined with other circuits you can combine all of their decoders into a single one to use less gates)
   - Has a complexity of $ceil(log_2 n) + n - 1$ for the 1-way version, $ceil(log_2 n) + n$ for the 1-way+cycle version and $n$ for the 2-way versions
 - Complexity
-  #let complexity(a, b) = $#a ceil(log_2 n) #if b != 0 { $+ #b$ } else {}$
-  - 1-way:       #complexity(2, 3)
+  #let complexity(a, b) = $#a ceil(log_2 n) #if b != 0 { $+ #b$ }$
+  - 1-way: #complexity(2, 3)
   - 1-way+cycle: #complexity(2, 0)
-  - 2-way:       #complexity(4, 4)
+  - 2-way: #complexity(4, 4)
   - 2-way+cycle: #complexity(4, 0)
 - Takes 3 frames to update for 1-way+cycle and 4 frames otherwise
 - #example-bps("2134497489", "2134498845", "2134500019", "2134500705")
@@ -347,7 +353,7 @@ Notes:
 - All mentions of the general and decimal circuits refer to the accumulator-based implementations
 - If an individual decoder is needed, the general circuit is always best
 - For 2-way without an individual decoder, decimal and binary circuits are very close in terms of complexity. Use their complexity formulas to figure out which is best for your use case. If they have the same complexity, decimal is better due to being faster
-- This is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, refer to the circuits' descriptions to compare the speed for the needed use case
+- This is just based on the amount of logic gates each circuit uses (unless there is a tie, in which case update speed is used). However, the amount of time it takes for the system to update might also matter depending on the situation. In that case, refer to the circuits' descriptions to compare the speed for the needed use-case
 
 == No-Delay Signal Toggle
 
@@ -355,6 +361,7 @@ Notes:
 - Doesn't work when the output block is an AND/XOR gate
 - Commonly used to enable/disable angle sensor stabilization (with the input being angle sensors and the output helicopter engines)
 
+// LTeX: enabled=false
 #figure(
   cetz.canvas({
     import "/utils/diagrams.typ": *
@@ -378,5 +385,6 @@ Notes:
   }),
   caption: [Diagram of the no-delay signal toggle]
 ) <fig:NoDelaySignalToggle>
+// LTeX: enabled=true
 
 - #steam("3054610284")[Example blueprint]

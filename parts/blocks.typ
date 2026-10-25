@@ -19,6 +19,8 @@
   #prefix settings are shown in #ref(label("fig:" + curr-block-id())) and are as follows:
 ]
 
+// LTeX: enabled=true, language=en
+
 = Logic Blocks
 
 Logic blocks are a group of blocks that allow to obtain and process information, which in turn can be used to automate
@@ -30,7 +32,7 @@ their output signal. This arrow is empty when there is no output ($0$ value), an
 positive/negative. On gravity/altitude/position sensors, this arrow is replaced with an icon (weight for gravity
 sensors, and an arrow pointing in the measured direction for altitude/position sensors), which has the same
 functionality (although it is white when there is no output). Blocks which can take other signals as inputs
-(#logic-gates and #math-blocks), with the exception of number displays, additionally have a second
+(#logic-gates and #math-blocks), except number displays, additionally have a second
 arrow pointing to the center of the block representing the input signals, which works like the output arrow but using
 the value of the sum of the input signals.
 
@@ -68,6 +70,7 @@ Distance sensors check for objects within a straight line in front of them and a
 - Blocks only: whether to trigger only when blocks are detected
   - If enabled, raycast stops at the first obstacle regardless of what it is, but if it's not a block the output will be the same as no detection
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -82,6 +85,7 @@ Distance sensors check for objects within a straight line in front of them and a
   annotation([Blocks only],      "mid",   9.55, ((-1.4, 0),))
   annotation([Mute on input],    "left",  9.9,  (0,))
 })
+// LTeX: enabled=true
 
 === Altitude Sensor
 
@@ -102,14 +106,15 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 - Frame of reference: position of the $0$ altitude point
   - Ignore waves: fixed at the average sea level
   - Relative to waves: at the position of the water surface at the horizontal coordinates of the sensor
-  - Outside of high seas and when the wave setting is set to disabled, both options are equivalent
-  - On space sector, it's a "MAX" value (equivalent to $2001$ m) while outside an atmosphere and the distance to a point close to the center of the planet while inside of one
+  - Outside high seas and when the wave setting is set to disabled, both options are equivalent
+  - On space sector, it's a "MAX" value (equivalent to $2001$ m) while outside an atmosphere and the distance to a point close to the center of the planet while inside one
 - Trigger: condition used to determine when to send an output
   - Normal: sends an output when the altitude is above the configured value
   - Below: sends an output when the altitude is below the configured value
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],       "right", 4.35, (0,))
   annotation([Output (on)],        "right", 5.35, (0,))
@@ -123,6 +128,7 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
   annotation([Frame of reference], "mid",   8.7,  ((-1.5, 0),))
   annotation([Mute on input],      "left",  9.0,  (0,))
 })
+// LTeX: enabled=true
 
 === Position Sensor
 
@@ -148,6 +154,7 @@ Position sensors measure the horizontal position of the block on a chosen axis. 
   - Inputs disable the output when enabled, and enable the output otherwise
 - Relative: determines whether the position measured is absolute or relative to the initial position of the sensor when it was spawned
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -162,6 +169,7 @@ Position sensors measure the horizontal position of the block on a chosen axis. 
   annotation([Mute on input],    "left",  9.35, (0,))
   annotation([Relative],         "mid",   9.75, ((-2.5, 0),))
 })
+// LTeX: enabled=true
 
 === Speed Sensor
 
@@ -185,6 +193,7 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -197,6 +206,7 @@ Speed sensors measure the speed of the block in a given direction indicated by t
   annotation([Trigger below],    "left",  8.5,  (0,))
   annotation([Mute on input],    "mid",   8.85, ((-1.8, 0),))
 })
+// LTeX: enabled=true
 
 === Gravity Sensor
 
@@ -220,6 +230,7 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -232,6 +243,7 @@ Gravity sensors measure the gravity strength at the position of the block. They 
   annotation([Trigger below],    "left",  8.5,  (0,))
   annotation([Mute on input],    "mid",   8.85, ((-1.8, 0),))
 })
+// LTeX: enabled=true
 
 === Angle Sensor
 
@@ -252,11 +264,12 @@ Angle sensors measure the angle of the block relative to the closest direction t
   - Normalized: output $"measurement"/hfrac("width", 2)$ if $"width" != 0$ ($0$ otherwise)
     - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - "width"$
 - Trigger: condition used to determine when to send an output
-  - Normal: sends an output when the angle is inside of the activation threshold
+  - Normal: sends an output when the angle is inside the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
+// LTeX: enabled=false
 #let angle-sensor-annotations = {
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -271,6 +284,7 @@ Angle sensors measure the angle of the block relative to the closest direction t
   annotation([Mute on input],    "mid",   9.55, ((-1.8, 0),))
 }
 #settings-annotation(angle-sensor-annotations)
+// LTeX: enabled=true
 
 === Compass
 
@@ -287,7 +301,7 @@ Compasses measure the angle of the block relative to the closest direction to th
   - Normalized: output $"measurement"/hfrac("width", 2)$ if $"width" != 0$ ($0$ otherwise)
     - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - "width"$
 - Trigger: condition used to determine when to send an output
-  - Normal: sends an output when the angle is inside of the activation threshold
+  - Normal: sends an output when the angle is inside the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
@@ -313,11 +327,12 @@ Aiming sensors measure the angle of the block relative to the closest direction 
   - Normalized: output $"measurement"/hfrac("width", 2)$ if $"width" != 0$ ($0$ otherwise)
     - Note: if using trigger outside, the width used is that of the outside area, i.e. $360 - "width"$
 - Trigger: condition used to determine when to send an output
-  - Normal: sends an output when the angle is inside of the activation threshold
+  - Normal: sends an output when the angle is inside the activation threshold
   - Outside: sends an output when the angle is outside the activation threshold
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
+// LTeX: enabled=false
 #settings-annotation({
   let l(y) = (0.55, y)
   annotation([Output (off)],     "right", 4.25,  ((-1.7, 0),))
@@ -332,6 +347,7 @@ Aiming sensors measure the angle of the block relative to the closest direction 
   annotation([Trigger outside],  "left",  10.55, (l(0),))
   annotation([Mute on input],    "mid",   10.9,  ((-2, 0),))
 })
+// LTeX: enabled=true
 
 == Logic gates <logic-gates>
 
@@ -350,6 +366,7 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 - Logic output channel: tag added to the output signal, see @signals
 - Output scale: multiplier of the output signal created by the block, explained in @output-value-calculation
 
+// LTeX: enabled=false
 #settings-annotation(name: "Logic Gate", {
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -358,6 +375,7 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
   annotation([Timers],           "left",  4.9,  (0, -0.4, 0.4))
   annotation([Output channel],   "left",  6.3,  (0,))
 })
+// LTeX: enabled=true
 
 === Output value calculation <output-value-calculation>
 
@@ -387,7 +405,7 @@ Math blocks are a group of blocks that take a set of numeric inputs and perform 
 
 === Comparison Logic Gate
 
-Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left hand side is the sum of all their inputs and the right hand side is a constant. They have a display which shows the currently selected comparison mode. They are also sometimes referred to as comparators.
+Comparison logic gates calculate the boolean value of a predefined comparison and return it as their output, where the left-hand side is the sum of all their inputs and the right-hand side is a constant. They have a display which shows the currently selected comparison mode. They are also sometimes referred to as comparators.
 
 #settings-intro()
 
@@ -395,13 +413,14 @@ Comparison logic gates calculate the boolean value of a predefined comparison an
 - Toggle: see @toggle
 - Timers: see @timers
 - Logic output channel: tag added to the output signal, see @signals
-- Threshold: value used for the right hand side of the comparison
+- Threshold: value used for the right-hand side of the comparison
 - Output value: value of the output signal created by the block, explained in @signals
 - Comparison mode: comparison operation to perform. Possible values are "less than", "less equals", "greater than", "greater equals", "equal", and "not equal"
   - When the mode is set to "less equals", the total input is rounded to 3 decimal places before performing the comparison, using the nearest mode and rounding numbers ending in $5$ up
   - For the "equal" and "not equal" modes, numbers are compared with a tolerance of $epsilon = 0.0005$ (the numbers are equal if their difference is $< epsilon$)
 - Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -413,6 +432,7 @@ Comparison logic gates calculate the boolean value of a predefined comparison an
   annotation([Output channel],   "mid",   7.9,  (0,))
   annotation([Clamp input],      "left",  8.85, (0,))
 })
+// LTeX: enabled=true
 
 === Accumulator
 
@@ -430,6 +450,7 @@ Accumulators store and output a numeric value, and allow to increment/decrement 
 - Scale: rate of change of the stored value, used to scale the value of the input
 - Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $hfrac(1, 60)$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -440,6 +461,7 @@ Accumulators store and output a numeric value, and allow to increment/decrement 
   annotation([Output channel],   "left",  8.05, (0,))
   annotation([Use steps],        "mid",   8.45, ((-2.2, 0),))
 })
+// LTeX: enabled=true
 
 === Randomizer
 
@@ -460,6 +482,7 @@ Randomizers generate and output random values.
     - If the intersection is empty, the value bounds range is used instead if any of the inputs isn't 0, otherwise the output is always 0
   - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to a random value within the value bounds) when it is activated with a positive input
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -469,6 +492,7 @@ Randomizers generate and output random values.
   annotation([Random mode],      "left",  7.15, (0,))
   annotation([Output channel],   "mid",   7.9, (0,))
 })
+// LTeX: enabled=true
 
 === Number Display
 
@@ -483,8 +507,9 @@ Number displays output the sum of their inputs, similar to how OR logic gates wo
 - Rounding: rounding mode applied to the sum of the inputs, always done to an integer when enabled. Possible values are "disabled", "nearest", "floor" (closest smaller integer), and "ceil" (closest bigger integer)
   - When rounding is disabled, numbers are rounded to $2$ decimals using the nearest mode, rounding numbers ending in $0.005$ away from $0$
   - For the "nearest" mode, numbers with a fractional part of $0.5$ are rounded to the closest even integer
-  - If the number is outside of the $[-1000, 1000]$ range, it's always displayed in scientific notation with $1$ decimal of precision
+  - If the number is outside the $[-1000, 1000]$ range, it's always displayed in scientific notation with $1$ decimal of precision
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -493,6 +518,7 @@ Number displays output the sum of their inputs, similar to how OR logic gates wo
   annotation([Rounding],         "left",  5.0,  (0,))
   annotation([Output channel],   "below", 6.45,  (0,))
 })
+// LTeX: enabled=true
 
 === Arithmetics Logic Block
 
@@ -511,6 +537,7 @@ Arithmetics logic blocks perform an arithmetic binary operation with a constant 
   - When there are no inputs, the operation is performed using an input of $0$
   - Variable division uses the logic channel 0 for its first input (numerator) and logic channel 1 for its second input (denominator)
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -520,6 +547,7 @@ Arithmetics logic blocks perform an arithmetic binary operation with a constant 
   annotation([Operation],        "left",  6.3,  (0,))
   annotation([Output channel],   "mid",   7.0,  (0,))
 })
+// LTeX: enabled=true
 
 === Functions Logic Block
 
@@ -532,7 +560,7 @@ Functions logic blocks perform a unary operation with the sum of their inputs an
 - Timers: see @timers
 - Logic output channel: tag added to the output signal, see @signals
 - Function: unary operation to perform. Possible values are absolute value, sign, square root, sine, cosine, tangent, arcsine, arccosine, arctangent, floor, ceiling, rounding, arctan2, $log_2$, $log_e$, and $log_10$
-  - Attempting to perform an undefined operation (square root of a negative number, arcsine/arccosine of a number outside of the $[-1, 1]$ range, or logarithm of a negative value) results in an output of $0$
+  - Attempting to perform an undefined operation (square root of a negative number, arcsine/arccosine of a number outside the $[-1, 1]$ range, or logarithm of a negative value) results in an output of $0$
   - Trigonometric functions use degrees as the angle unit
   - Inverse trigonometric functions output the value in their #link("https://en.wikipedia.org/wiki/Principal_branch")[principal branch]
     - For arcsine: $-90 degree <= arcsin(x) <= 90 degree$
@@ -541,6 +569,7 @@ Functions logic blocks perform a unary operation with the sum of their inputs an
   - For the rounding function, numbers with a fractional part of $0.5$ are rounded to the closest even integer
   - Arctan2 uses the logic channel 0 for its first input ($y$) and logic channel 1 for its second input ($x$)
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -549,6 +578,7 @@ Functions logic blocks perform a unary operation with the sum of their inputs an
   annotation([Function],         "left",  5.4,  (0,))
   annotation([Output channel],   "below", 6.9, (0,))
 })
+// LTeX: enabled=true
 
 === Aggregate Logic Block
 
@@ -562,6 +592,7 @@ Aggregate logic blocks perform a (variadic) aggregation operation with their inp
 - Logic output channel: tag added to the output signal, see @signals
 - Aggregate function: aggregate operation to perform. Possible values are sum, product, minimum, and maximum
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],       "right", 4.35, (0,))
   annotation([Output (on)],        "right", 5.35, (0,))
@@ -570,6 +601,7 @@ Aggregate logic blocks perform a (variadic) aggregation operation with their inp
   annotation([Aggregate function], "left",  5.4,  (0,))
   annotation([Output channel],     "below", 6.9,  (0,))
 })
+// LTeX: enabled=true
 
 === Hue Light Panel <hue-light-panel>
 
@@ -583,12 +615,14 @@ Hue light panels are lights with configurable color determined from their input 
 - Saturation: saturation of the color of the light. Ignored when the input value is negative
 - Brightness: brightness of the color of the light
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Keybinds/toggles], "left",  2.2,  (0,))
   annotation([Saturation],       "left",  3.8,  (0,))
   annotation([Brightness],       "left",  4.65, (0,))
   annotation([Timers],           "left",  5.8,  (0, -0.4, 0.4))
 })
+// LTeX: enabled=true
 
 ==== Color Calculation
 
@@ -648,12 +682,14 @@ Radio senders transmit their input value to other radio receivers on the same ch
   - Player: channel is different for each player. Different players won't see each other's signals
   - The player/team of the RC block is determined by the player who owns (spawned) the creation
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Keybinds/toggles],  "left",  2.2,  (0,))
   annotation([Channel],           "left",  3.8,  (0,))
   annotation([Timers],            "left",  4.9,  (0, -0.4, 0.4))
   annotation([Channel isolation], "left",  6.3,  (0,))
 })
+// LTeX: enabled=true
 
 ==== Radio Receiver
 
@@ -671,6 +707,7 @@ Radio receivers gather signals from radio senders on the same channel and isolat
   - Player: channel is different for each player. Different players won't see each other's signals
   - The player/team of the RC block is determined by the player who owns (spawned) the creation
 
+// LTeX: enabled=false
 #settings-annotation({
   annotation([Output (off)],      "right", 4.35, (0,))
   annotation([Output (on)],       "right", 5.35, (0,))
@@ -679,3 +716,4 @@ Radio receivers gather signals from radio senders on the same channel and isolat
   annotation([Timers],            "left",  4.9,  (0, -0.4, 0.4))
   annotation([Channel isolation], "left",  6.3,  (0,))
 })
+// LTeX: enabled=true

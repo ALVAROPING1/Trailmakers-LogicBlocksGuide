@@ -1,3 +1,4 @@
 *.pdf
 .markdownlint.json
+.ltex/
 .spell/
