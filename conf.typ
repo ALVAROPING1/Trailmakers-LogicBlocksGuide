@@ -87,6 +87,18 @@
     },
   )
 
+  // Plot diagrams
+  import "/deps.typ": lq
+  show: lq.set-tick(inset: 4pt)
+  show: lq.set-diagram(
+    height: 27.5em,
+    width: 42em,
+    margin: 0%,
+    xaxis: (subticks: 1),
+    yaxis: (subticks: 1),
+    legend: (position: top+left),
+  )
+
   // ──────────────────────────────── Frontmatter ─────────────────────────────
 
   in-frontmatter.update(true)
@@ -203,7 +215,6 @@
     }
     it
   }
-
 
   counter(page).update(1) // first chapter starts at page 1
 

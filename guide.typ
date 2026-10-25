@@ -9,12 +9,12 @@
 )
 
 #import "/deps.typ": *
+#import "/utils/plots.typ": eval-math
 
 /// LaTeX's `\noindent`, removes the first-line indentation of the paragraph
 #let noindent(body) = par(body, first-line-indent: 0pt)
 
 #let scientific(x, ..args) = num(x, exponent: "sci", round: (precision: 3), product: sym.dot, ..args)
-#let eval-math(expr, values: ()) = symbolica.evaluate(symbolica.math(expr), values: values).re
 
 #let maxFloat = $(2 - 2^(-23)) dot 2^127$
 #let maxFloatApprox = scientific(eval-math(maxFloat))
@@ -662,7 +662,6 @@ $ op("color")(x) = cases(
       width: 95%,
       xlabel: [Input value],
       xaxis: (
-        subticks: 1,
         ticks: range(-6, 7).map(i => i/6),
         format-ticks: (ticks, ..args) => {
           let tick-info = (..args.tick-info, significant-digits: 2)
@@ -671,7 +670,6 @@ $ op("color")(x) = cases(
       ),
       yaxis: none,
       grid: none,
-      margin: 0%,
       gradient-line((-1, 0), (white, black)),
       gradient-line((0, 1), range(4).map(i => color.hsv(i * 120deg, 100%, 100%))),
     )
@@ -1326,32 +1324,7 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
   label: <table:InputValueMultiplierData>
 )
 
-#show: lq.set-tick(inset: 4pt)
-#show: lq.set-diagram(
-  height: 27.5em,
-  width: 42em,
-  margin: 0%,
-  xaxis: (subticks: 1),
-  yaxis: (subticks: 1),
-  legend: (position: top+left),
-)
-
-#let plot-fn(range, expr, label: auto, ..args) = lq.plot(
-  range,
-  x => eval-math(expr, values: ((symbolica.symbol("x"), x),)),
-  label: if label == auto {$y = #expr$} else { label },
-  color: black,
-  stroke: 1.2pt,
-  mark: none,
-  ..args
-)
-
-#let plot-data(xs, ys, label: auto, ..args) = lq.plot(
-  xs, ys,
-  label: if label == auto {$f(x)$} else { label },
-  mark: "o",
-  ..args
-)
+#import "/utils/plots.typ": plot-data, plot-fn
 
 #figure(
   lq.diagram(
