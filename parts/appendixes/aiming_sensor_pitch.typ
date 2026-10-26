@@ -10,12 +10,20 @@
 #let avg-error = data-error.map(row => row.at(1)).sum() / data-error.len()
 #let avg-error = calc.round(avg-error, digits: 3)
 
-When aiming sensors are used to measure the pitch of the camera, their output is offset from the real camera pitch angle. This section contains the measured values for many camera angles, found experimentally. Some notes about this process:
+When aiming sensors are used to measure the pitch of the camera, their output is
+offset from the real camera pitch angle. This section contains the measured
+values for many camera angles, found experimentally. Some notes about this
+process:
 
-- Measurements were done using a camera block on a hinge to set the camera pitch to known values, and then taking the measurement from an aiming sensor at the base
-- Aiming servos with verticality checks disabled have a similar behavior, although their angle measurement ends up being a lot more noisy
-- Angle measurements are in degrees and have an error of $plus.minus 0.0005 degree$
-- The average error between the measured pitch and the camera pitch is $#avg-error degree$
+- Measurements were done using a camera block on a hinge to set the camera pitch
+  to known values, and then taking the measurement from an aiming sensor at the
+  base
+- Aiming servos with verticality checks disabled have a similar behavior,
+  although their angle measurement ends up being a lot more noisy
+- Angle measurements are in degrees and have an error of
+  $plus.minus 0.0005 degree$
+- The average error between the measured pitch and the camera pitch is
+  $#avg-error degree$
 
 // LTeX: enabled=false
 #figure(
@@ -27,7 +35,10 @@ When aiming sensors are used to measure the pitch of the camera, their output is
     plot-fn((-90, 90), $x + #avg-error$, color: red),
     plot-fn((-90, 90), $x$),
   ),
-  caption: [Graph of the pitch measured by aiming sensors as a function of the real camera pitch],
+  caption: [
+    Graph of the pitch measured by aiming sensors as a function of the real
+    camera pitch
+  ],
 ) <fig:AimingSensorPitchGraph>
 
 #figure(
@@ -37,7 +48,10 @@ When aiming sensors are used to measure the pitch of the camera, their output is
     ylabel: [Error],
     plot-data(..get-cols(data-error, 0, 1), label: none, stroke: 0.4pt),
   ),
-  caption: [Graph of the error in pitch measured by aiming sensors as a function of the real camera pitch],
+  caption: [
+    Graph of the error in pitch measured by aiming sensors as a function of the
+    real camera pitch
+  ],
 ) <fig:AimingSensorPitchGraphError>
 
 #data-table(

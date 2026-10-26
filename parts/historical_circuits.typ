@@ -5,24 +5,35 @@
 
 = Historical Circuits
 
-This section contains old circuits that were previously in @useful-circuits, but have since been superseded by new blocks. They are kept here for historical reasons and in case they are seen in older circuits.
+This section contains old circuits that were previously in @useful-circuits, but
+have since been superseded by new blocks. They are kept here for historical
+reasons and in case they are seen in older circuits.
 
 == NOR/NOT Gate
 
 - Superseded by the NOR gate block
 - Inverts the state of the input
-- Made by connecting an always on input (a sensor that is always on, all sensors can be configured to work like this but the most commonly used one is a distance sensor with 0 range and invert trigger) to an XOR gate
-- If it only has a single input that isn't the always on input it will act as a NOT gate, otherwise it will act as a NOR gate
-- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate and taking the output from the NOT gate
+- Made by connecting an always on input (a sensor that is always on, all sensors
+  can be configured to work like this but the most commonly used one is a
+  distance sensor with 0 range and invert trigger) to an XOR gate
+- If it only has a single input that isn't the always on input it will act as a
+  NOT gate, otherwise it will act as a NOR gate
+- You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate
+  and taking the output from the NOT gate
 
 == Feedback Loop
 
 - Superseded by accumulators
 - Allows storing an analog value in the range $[-1, 1]$
-- Made by connecting 2 OR gates to each other, connecting the input to both of them, and taking the output from one of them
-- Each frame the input is active, the stored value increases by the value of the input
-  - With a close to 0 input value, the circuit can be used to generate an analog output value
-- One of the OR gates can be replaced with an XOR to add a reset input. In this case, the normal input should go to the OR gate only and the reset input must be 2 different signals connected to the XOR gate
+- Made by connecting 2 OR gates to each other, connecting the input to both of
+  them, and taking the output from one of them
+- Each frame the input is active, the stored value increases by the value of the
+  input
+  - With a close to 0 input value, the circuit can be used to generate an analog
+    output value
+- One of the OR gates can be replaced with an XOR to add a reset input. In this
+  case, the normal input should go to the OR gate only and the reset input must
+  be 2 different signals connected to the XOR gate
   - Be aware that this method adds a 1 frame jitter to the stored signal
 
 === Clamped Feedback Loop
@@ -62,10 +73,14 @@ This section contains old circuits that were previously in @useful-circuits, but
 ) <fig:ClampedFeedbackLoop>
 // LTeX: enabled=true
 
-- Note: the input signal is reversed. This means that a negative value increases the stored value while a positive value decreases it
-- Keybinds can be added to one of the OR gates in the feedback loop to go to the max/min value. The green keybind sets the min value while the red keybind sets the max value
+- Note: the input signal is reversed. This means that a negative value increases
+  the stored value while a positive value decreases it
+- Keybinds can be added to one of the OR gates in the feedback loop to go to the
+  max/min value. The green keybind sets the min value while the red keybind sets
+  the max value
 - #steam("2911246646")[Example blueprint]
-- Python script to simulate the behaviour (input value is automatically reversed):
+- Python script to simulate the behaviour (input value is automatically
+  reversed):
   ```python
   def clamp(x: float) -> float:
       return min(max(x, -1), 1)
