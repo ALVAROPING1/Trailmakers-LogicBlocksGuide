@@ -2,13 +2,15 @@
 
 #import "/utils/data.typ": *
 #import "/utils/plots.typ": *
+#import "/utils/common.typ": array-avg, array-std
 
 = Aiming sensor pitch measurement <AimingSensorPitch>
 
 #let (header, ..data) = csv("/data/Aiming_Sensor_Pitch.csv")
 #let data-error = data.map(((x, y)) => (x, float(y) - float(x)))
-#let avg-error = data-error.map(row => row.at(1)).sum() / data-error.len()
-#let avg-error = calc.round(avg-error, digits: 3)
+#let error = data-error.map(row => row.at(1))
+#let funcs = (array-avg, array-std)
+#let (avg-error, std-error) = funcs.map(fn => calc.round(fn(error), digits: 3))
 
 When aiming sensors are used to measure the pitch of the camera, their output is
 offset from the real camera pitch angle. This section contains the measured
@@ -23,7 +25,7 @@ process:
 - Angle measurements are in degrees and have an error of
   $plus.minus 0.0005 degree$
 - The average error between the measured pitch and the camera pitch is
-  $#avg-error degree$
+  $#avg-error degree$, with a standard deviation of $#std-error degree$
 
 // LTeX: enabled=false
 #figure(

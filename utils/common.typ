@@ -51,3 +51,13 @@
 })
 #let math-blocks = block-ref(<math-blocks>)
 #let logic-gates = block-ref(<logic-gates>)
+
+/// Calculates the average of an array
+#let array-avg(arr) = arr.sum() / arr.len()
+
+/// Calculates the standard deviation of an array's elements
+#let array-std(arr) = {
+  let avg = array-avg(arr)
+  let total = arr.map(x => calc.pow(x - avg, 2)).sum()
+  calc.sqrt(total / (arr.len() - 1))
+}
