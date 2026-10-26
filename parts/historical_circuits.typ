@@ -42,21 +42,23 @@ This section contains old circuits that were previously in @useful-circuits, but
     node(..pos(1cm, "c0.body").l, [Input Signal], name: "input")
 
     node(..pos(1cm, "c0.body.1").r, [Always on sensor], name: "c+1")
-    node(..pos(5mm, "c+1").u, [OR gate with -1 output scale], name: "c-1")
-
-    node(..pos(1cm, "c-1").r, [OR gate with -1 output scale (output)], name: "output")
+    let invert = [OR gate with -1 output scale]
+    node(..pos(5mm, "c+1").u, invert, name: "c-1")
+    node(..pos(1cm, "c-1").r, [#invert (output)], name: "output")
 
     // Arrows
     let input-split = (rel: (5mm, 0), to: "input.east")
     line("input", input-split)
-    arrow("c0.body.0.west", "-|", input-split, "|-", "c0.body.1.west", pos: "symbol")
+    let (top, bottom) = ("c0.body.0.west", "c0.body.1.west")
+    arrow(top, "-|", input-split, "|-", bottom, pos: "symbol")
     arrow("c+1", "c0.body.1.east")
     arrow("c+1", "c-1")
     arrow("c-1", "output")
     arrow("c0.body.0.east", ((), "-|", "c-1.west"), pos: "start")
-    arrow("c0.body.south", (rel: (0, -5mm), to: "c0.body.south"), "-|", "output")
+    let bottom = "c0.body.south"
+    arrow(bottom, (rel: (0, -5mm), to: bottom), "-|", "output")
   }),
-  caption: [Diagram of the clamped feedback loop]
+  caption: [Diagram of the clamped feedback loop],
 ) <fig:ClampedFeedbackLoop>
 // LTeX: enabled=true
 

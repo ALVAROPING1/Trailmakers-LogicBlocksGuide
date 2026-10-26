@@ -21,7 +21,8 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
 // LTeX: enabled=false
 #let path = "/data/Input_Value_Speed{}_{}.csv"
 #let load-data(angle, speed) = csv(strfmt(path, speed, angle)).slice(1)
-#let data-cases = (180, 360).map(a => (1, 2).map(s => (a, s))).join()
+#let (angles, speeds) = ((180, 360), (1, 2))
+#let data-cases = angles.map(a => speeds.map(s => (a, s))).join()
 #let data = data-cases.map(conf => (conf, load-data(..conf)))
 
 #let pairs = data.map(((_, d)) => d)
@@ -36,34 +37,45 @@ Due to a bug, the speed at which rotating servos with hold position rotate chang
     ylim: (0, 2),
     yaxis: (tick-distance: 0.2),
     cycle: (green, blue, rgb("#0000ff"), rgb("#ff0000")),
-    ..data.enumerate().map(((i, ((angle, speed), d))) => plot-data(
-      ..get-cols(d, 0, 1),
-      label: $f_(#speed, #angle)(x)$,
-      z-index: if i < 2 {2.1} else {2},
-    )),
-    ..((180, 35%, right), (360, 75%, left)).map(((a, pos, align)) => (
-      plot-fn(xlim, fhat(a), label: none, z-index: 2.2),
-      lq.place(pos, 1.5, pad(1em, $y = #fhat(a)$), align: align)
-    )).flatten()
+    ..data
+      .enumerate()
+      .map(((i, ((angle, speed), d))) => plot-data(
+        ..get-cols(d, 0, 1),
+        label: $f_(#speed, #angle)(x)$,
+        z-index: if i < 2 { 2.1 } else { 2 },
+      )),
+    ..((180, 35%, right), (360, 75%, left))
+      .map(((a, pos, align)) => (
+        plot-fn(xlim, fhat(a), label: none, z-index: 2.2),
+        lq.place(pos, 1.5, pad(1em, $y = #fhat(a)$), align: align),
+      ))
+      .flatten(),
   ),
-  caption: [Graph of the speed for servos with hold position as a function of the input value]
+  caption: [Graph of the speed for servos with hold position as a function of the input value],
 ) <fig:InputValueSpeedGraph>
 
+#let headers = (
+  angles.map(x => [*Angle #x*]),
+  speeds.map(x => [*Speed #x*]),
+  ([*Input\ Value*], [*Final\ Speed*]),
+)
 #figure(
   booktab-table(
     columns: 8,
     align: center + horizon,
     row-gutter: 0pt,
-    ..range(1, 4).map(i =>
-      table.vline(stroke: table-stroke.at(if i == 2 {"thick"} else {"thin"}), x: i * 2)
-    ),
+    ..range(1, 4).map(i => table.vline(
+      stroke: table-stroke.at(if i == 2 { "thick" } else { "thin" }),
+      x: i * 2,
+    )),
 
-    table.header(..(180, 360).map(x => table.cell(colspan: 4)[*Angle #x*]), level: 1),
-    table.header(..((1, 2).map(x => table.cell(colspan: 2)[*Speed #x*])) * 2, level: 2),
-    table.hline(),
-    table.header(..([*Input\ Value*], [*Final\ Speed*]) * 4, level: 3),
-    table.hline(),
-    ..zip(pairs).flatten()
+    ..for (l, cells) in headers.enumerate() {
+      let pow = calc.pow(2, l)
+      let cells = cells.map(table.cell.with(colspan: int(4 / pow)))
+      (table.header(level: l + 1, ..cells * pow),)
+      (table.hline(),)
+    },
+    ..zip(pairs).flatten(),
   ),
-  caption: [Raw data of the input value speed for servos with hold position]
+  caption: [Raw data of the input value speed for servos with hold position],
 ) <table:InputValueSpeedData>

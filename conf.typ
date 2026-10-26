@@ -98,7 +98,7 @@
     margin: 0%,
     xaxis: (subticks: 1),
     yaxis: (subticks: 1),
-    legend: (position: top+left),
+    legend: (position: top + left),
   )
 
   // ──────────────────────────────── Frontmatter ─────────────────────────────
@@ -188,7 +188,10 @@
   }
 
   // other TOC entries in regular with adapted filling
-  show outline.entry.where(level: 2).or(outline.entry.where(level: 3)): outline-entry-formatter.with(
+  show outline
+    .entry
+    .where(level: 2)
+    .or(outline.entry.where(level: 3)): outline-entry-formatter.with(
     above: 0.5em,
   )
 

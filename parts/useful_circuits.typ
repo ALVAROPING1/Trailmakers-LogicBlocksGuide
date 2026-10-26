@@ -2,7 +2,7 @@
 
 #import "/deps.typ": cetz
 #import "/conf.typ": table-stroke
-#import "/utils/common.typ": tick, steam
+#import "/utils/common.typ": steam, tick
 
 = Useful Circuits <useful-circuits>
 
@@ -64,7 +64,11 @@ This section contains commonly used logic circuits and how to make them, to aid 
       (body: [Toggled OR gate with 1 frame delay (output)]),
       (body: [AND gate], arrows: "both", hide-last: true),
     ))
-    node(name: "input-gate", (rel: (0, -1.5), to: "cells.south"), [1 frame pulse generator (input)])
+    node(
+      name: "input",
+      (rel: (0, -1.5), to: "cells.south"),
+      [1 frame pulse generator (input)],
+    )
 
     // Arrows
     // Between cells
@@ -72,14 +76,15 @@ This section contains commonly used logic circuits and how to make them, to aid 
       arrow(cell-anchor(curr - 1, "1.east"), "-|-", cell-anchor(curr, "0.west"))
     }
     // Input connections
-    let input = (rel: (0, 0.5), to: "input-gate.north")
-    arrow(pos: "symbol", "cells.c0.body.south", "|-", input, "-|", "cells.c4.body.south")
-    line(input, "input-gate")
+    let input = (rel: (0, 0.5), to: "input.north")
+    let (first, last) = ("cells.c0.body.south", "cells.c4.body.south")
+    arrow(first, "|-", input, "-|", last, pos: "symbol")
+    line(input, "input")
     for target in range(1, cells.len() - 2) {
       arrow(cell-anchor(target, "south"), ((), "|-", input), pos: "start")
     }
   }),
-  caption: [Diagram of the general method counter (logic gates implementation)]
+  caption: [Diagram of the general method counter (logic gates implementation)],
 ) <fig:CounterGeneral>
 // LTeX: enabled=true
 
@@ -151,31 +156,42 @@ This section contains commonly used logic circuits and how to make them, to aid 
     // Arrows
     let input-dist = (rel: (0, -5mm), to: "cells.c0.south")
     let input = (rel: (0, -5mm), to: input-dist)
-    let step = ((rel: (0, 5mm), to: "cells.c0.north"), "-|", (rel: (5mm, 0), to: "cells.c5.body.east"))
+    let step = (
+      (rel: (0, 5mm), to: "cells.c0.north"),
+      "-|",
+      (rel: (5mm, 0), to: "cells.c5.body.east"),
+    )
 
     arrow("input.body.right.north", "|-", input, "cells.c0.body.south")
     line("input.body.left.north", ((), "|-", input))
 
     let end = "cells.c4.body.1.east"
     line-spec(input-dist, "-|", (end, "-|", gap(4)), end)
-    arrow("cells.c0.body.0.east", ((), "-|", gap(0)), "|-", step, "|-", "input.body.right.east")
+    arrow(
+      "cells.c0.body.0.east",
+      ((), "-|", gap(0)),
+      "|-",
+      step,
+      "|-",
+      "input.body.right.east",
+    )
 
     for i in range(4) {
       line-spec(cell-anchor(i, "1.east"), "-|", (input-dist, "-|", gap(i)))
-      line-spec(cell-anchor(i+1, "0.east"), "-|", (step, "-|", gap(i+1)))
-      let v = (gap(i), 50%, gap(i+1))
-      mark((v, "|-", input-dist), (rel: (1, 0)), ..arrow-mark("symbol"))
-      mark((v, "|-", step), (rel: (1, 0)), ..arrow-mark("symbol"))
+      line-spec(cell-anchor(i + 1, "0.east"), "-|", (step, "-|", gap(i + 1)))
+      let v = (gap(i), 50%, gap(i + 1))
+      arrow-mark((v, "|-", input-dist))
+      arrow-mark((v, "|-", step))
     }
-    mark((input-dist, "-|", (input-dist, 50%, gap(0))), (rel: (1, 0)), ..arrow-mark("symbol"))
-    mark((step, "-|", (step, 50%, gap(4))), (rel: (1, 0)), ..arrow-mark("symbol"))
+    arrow-mark((input-dist, "-|", (input-dist, 50%, gap(0))))
+    arrow-mark((step, "-|", (step, 50%, gap(4))))
 
     for i in range(5) {
-      arrow(cell-anchor(i+1, "2.west"), ((), "-|", gap(i)), pos: "start")
+      arrow(cell-anchor(i + 1, "2.west"), ((), "-|", gap(i)), pos: "start")
     }
     line("cells.c5.body.0.east", ((), "-|", step))
   }),
-  caption: [Diagram of the decimal method counter (logic gates implementation)]
+  caption: [Diagram of the decimal method counter (logic gates implementation)],
 ) <fig:CounterDecimal>
 // LTeX: enabled=true
 
@@ -186,7 +202,9 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - Has a complexity of $n$ gates
 - Requires a startup pulse to one of the toggled OR gates on each cell to work (achieved with a 1 frame pulse generator)
 - Complexity
-  #let complexity(a, b, c) = $#a ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
+  #let complexity(a, b, c) = {
+    $#a ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
+  }
   - 1-way: #complexity(2, 20, 19)
 
   - 1-way+cycle: #complexity(2, 20, 19)
@@ -212,7 +230,9 @@ This section contains commonly used logic circuits and how to make them, to aid 
   - To create it, take $n$ AND gates and assign a different combination of 1 comparator from each cell to each of them (if you only need to use it combined with other circuits, you can combine all of their decoders into a single one to use less gates)
   - Has a complexity of $n$ gates
 - Complexity
-  #let complexity(b, c) = $ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
+  #let complexity(b, c) = {
+    $ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
+  }
   - 1-way: #complexity(13, 9)
 
   - 1-way+cycle: #complexity(13, 9)
@@ -257,9 +277,14 @@ This section contains commonly used logic circuits and how to make them, to aid 
 
     // Input
     let input = ("cells.south", 50%, "input.north")
-    let top-line = ((rel: (0, 5mm), to: "cells.c0.north"), "-|", (rel: (5mm, 0), to: "cells.c5.body.east"))
+    let top-line = (
+      (rel: (0, 5mm), to: "cells.c0.north"),
+      "-|",
+      (rel: (5mm, 0), to: "cells.c5.body.east"),
+    )
 
-    arrow(pos: "symbol", "cells.c0.body.south", "|-", input, "-|", "cells.c5.body.south")
+    let (first, last) = ("cells.c0.body.south", "cells.c5.body.south")
+    arrow(first, "|-", input, "-|", last, pos: "symbol")
     for i in ("left", "right") {
       line("input.body." + i + ".north", ((), "|-", input))
     }
@@ -268,16 +293,22 @@ This section contains commonly used logic circuits and how to make them, to aid 
       line((cell-anchor(i, "0.east"), "-|", gap(i)), ((), "|-", top-line))
     }
 
-    arrow(("cells.c0.body.0.east", "-|", gap(0)), "|-", top-line, "|-", "input.body.right.east")
+    arrow(
+      ("cells.c0.body.0.east", "-|", gap(0)),
+      "|-",
+      top-line,
+      "|-",
+      "input.body.right.east",
+    )
     line("cells.c5.body.0.east", ((), "-|", top-line))
 
     for i in range(4) {
-      let v = (gap(i), 50%, gap(i+1))
-      mark((v, "|-", top-line), (rel: (1, 0)), ..arrow-mark("symbol"))
+      let v = (gap(i), 50%, gap(i + 1))
+      arrow-mark((v, "|-", top-line))
     }
-    mark(((gap(4), "|-", top-line), 50%, top-line), (rel: (1, 0)), ..arrow-mark("symbol"))
+    arrow-mark(((gap(4), "|-", top-line), 50%, top-line))
   }),
-  caption: [Diagram of the binary method counter]
+  caption: [Diagram of the binary method counter],
 ) <fig:CounterBinary>
 // LTeX: enabled=true
 
@@ -300,7 +331,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
 #figure(
   table(
     columns: (auto, 20em, 20em),
-    align: (x, y) => if x == 0 or y == 0 {center+horizon} else {left},
+    align: (x, y) => if x == 0 or y == 0 { center + horizon } else { left },
     stroke: (x, y) => if x != 0 or y != 0 { table-stroke.thick },
     "", [*1-way*], [*2-way*],
     rotate(-90deg, reflow: true)[*Without cycle*],
@@ -321,6 +352,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
       - For $n <= 23$ use the general circuit
       - For $n > 23$ use the decimal circuit
     ],
+
     rotate(-90deg, reflow: true)[*With cycle*],
     [
       Doesn't require an individual decoder:
@@ -344,7 +376,7 @@ This section contains commonly used logic circuits and how to make them, to aid 
       - For $n > 17$ use the decimal circuit
     ],
   ),
-  caption: [Comparison of the different counter methods]
+  caption: [Comparison of the different counter methods],
 ) <table:CounterComparison>
 
 Notes:
@@ -366,10 +398,11 @@ Notes:
   cetz.canvas({
     import "/utils/diagrams.typ": *
     // Nodes
-    node((),                                  [Input Signals (can be multiple blocks)], name: "input")
+    node((), [Input Signals (can be multiple blocks)], name: "input")
     node(..pos(5cm, "input").r, [Output Blocks], name: "output")
-    node(..pos(1.5cm, "input").u, [OR Gate with toggle keybind], name: "toggle1")
-    node(..pos(5cm, "toggle1").r, [OR Gate with toggle keybind], name: "toggle2")
+    let toggle = [OR Gate with toggle keybind]
+    node(..pos(1.5cm, "input").u, toggle, name: "toggle1")
+    node(..pos(5cm, "toggle1").r, toggle, name: "toggle2")
     let toggles = ("toggle1", 50%, "toggle2")
     let middle = ("input.north", 50%, "toggle1.south")
     node((toggles, "|-", middle), [XOR gate with -1 output scale], name: "XOR")
@@ -380,10 +413,10 @@ Notes:
     arrow("XOR", "-|", "output")
     line("toggle1", "toggle2")
     arrow(toggles, "XOR")
-    mark(("toggle1.east", 50%, toggles), toggles, ..arrow-mark("symbol"))
-    mark(("toggle2.west", 50%, toggles), toggles, ..arrow-mark("symbol"))
+    arrow-mark(("toggle1.east", 50%, toggles), dir: toggles)
+    arrow-mark(("toggle2.west", 50%, toggles), dir: toggles)
   }),
-  caption: [Diagram of the no-delay signal toggle]
+  caption: [Diagram of the no-delay signal toggle],
 ) <fig:NoDelaySignalToggle>
 // LTeX: enabled=true
 

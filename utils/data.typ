@@ -5,7 +5,7 @@
 #let zip((first, ..rest)) = first.zip(..rest)
 
 #let transpose(data, cols) = {
-  let col-size = calc.ceil(data.len()/cols)
+  let col-size = calc.ceil(data.len() / cols)
   let default = ("",) * data.at(0).len()
   let fill = col-size * cols - data.len()
   zip((data + (default,) * fill).chunks(col-size))
@@ -18,14 +18,15 @@
       columns: header.len() * cols,
       align: center + horizon,
       row-gutter: 0pt,
-      ..range(1, cols).map(i =>
-        table.vline(stroke: table-stroke.thick, x: i * header.len())
-      ),
+      ..range(1, cols).map(i => table.vline(
+        stroke: table-stroke.thick,
+        x: i * header.len(),
+      )),
 
       table.header(..(header.map(h => [*#h*])) * cols),
       ..transpose(data, cols).flatten(),
     ),
-    caption: caption
+    caption: caption,
   )
   #if label != none {
     assert(

@@ -7,10 +7,12 @@
 
 #let text-box(pos, body, width: auto, ..args) = content(
   pos,
-  block(
-    width: width, inset: 0.4em,
-    align(center+horizon, par(justify: false, text(bottom-edge: "bounds", body))),
-  ),
+  {
+    set align(center + horizon)
+    set par(justify: false)
+    set text(bottom-edge: "bounds")
+    block(width: width, inset: 0.4em, body)
+  },
   frame: "rect",
   fill: white,
   ..args,
@@ -20,8 +22,9 @@
   let pts = pts.pos()
   for (i, p) in pts.enumerate() {
     let off(j) = pts.at(i + j)
-    if p in ("-|", "|-") { ((off(-1), p, off(+1)),) }
-    else if p in ("-|-", "|-|") {
+    if p in ("-|", "|-") {
+      ((off(-1), p, off(+1)),)
+    } else if p in ("-|-", "|-|") {
       let (s, e) = (off(-1), off(+1))
       pts-spec(s, p.slice(0, 2), (s, 50%, e), p.slice(1, 3), e)
     } else { (p,) }
@@ -29,30 +32,42 @@
 }
 
 #let line-spec(..pts) = line(..pts-spec(..pts.pos()), ..pts.named())
-#let arrow-mark(pos) = ((pos): ")>", fill: black, scale: 0.8)
-#let arrow(..pts, pos: "end") = line-spec(..pts, mark: arrow-mark(pos))
+#let mark-style(pos) = ((pos): ")>", fill: black, scale: 0.8)
+#let arrow(..pts, pos: "end") = line-spec(..pts, mark: mark-style(pos))
+#let arrow-mark(pos, dir: (rel: (1, 0))) = mark(
+  pos,
+  dir,
+  ..mark-style("symbol"),
+)
 
 // ──────────────────────────── Settings annotations ────────────────────────────
 
 #let annotated-img(path, body, debug: false) = cetz.canvas({
   scale(y: -1) // Make y axis increase downwards
   get-ctx(ctx => {
-    let img = content((0,0), anchor: "south-west", block(width: 7.1cm, image(path)))
+    let img = block(width: 7.1cm, image(path))
+    let img = content((0, 0), anchor: "south-west", img)
     let (bounds: (high: (max-x, max-y, _))) = cetz.process.many(ctx, img)
     img
     translate(y: -max-y)
-    scale(x: max-x/10)
+    scale(x: max-x / 10)
     floating(if debug {
-      grid((0, 0), (10, max-y), help-lines: true, step: 0.5)
-      for x in range(11) { content((x, -0.1), anchor: "south", text(size: 0.7em, [#x])) }
-      for y in range(int(max-y) + 1) { content((-0.1, y), anchor: "east", text(size: 0.7em, [#y])) }
+      let bounds = ((0, 0), (10, max-y))
+      grid(..bounds, help-lines: true, step: 0.5)
+      for x in range(int(bounds.at(1).at(0)) + 1) {
+        content((x, -0.1), anchor: "south", text(size: 0.7em, [#x]))
+      }
+      for y in range(int(bounds.at(1).at(1)) + 1) {
+        content((-0.1, y), anchor: "east", text(size: 0.7em, [#y]))
+      }
     })
     floating(body)
   })
 })
 
 #let annotation(body, side, pos, targets) = {
-  let (x, arrow-len, anchor) = (
+  // @typstyle off
+  let (x, size, anchor) = (
     left:   (-0.5,  0.65, "east"),
     mid:    ( 4.5, -0.7,  "west"),
     right:  (10.5, -0.95, "west"),
@@ -61,9 +76,11 @@
   let pos = (x, pos)
   text-box(pos, body, anchor: anchor)
   for target in targets {
-    let target = if type(target) == array { target }
-      else if side == "below" { (0, -arrow-len) }
-      else { (arrow-len, target) }
+    let target = if type(target) == array {
+      target
+    } else if side == "below" {
+      (0, -size)
+    } else { (size, target) }
     arrow(pos, (rel: target))
   }
 }
@@ -85,7 +102,9 @@
   let id = "c" + str(id)
 
   let right(i) = (rel: (1cm, 0), to: prev + "." + str(i) + ".east")
-  let pos(i, elem) = if id != "c0" { arguments(anchor: "west", right(i)) } else {
+  let pos(i, elem) = if id != "c0" {
+    arguments(anchor: "west", right(i))
+  } else {
     let space = if "arrows" in elem { 5mm } else { 1.5mm }
     let pos = (rel: (0, -space), to: str(i - 1) + ".south")
     arguments(anchor: "north", if i != 0 { pos } else { () })
@@ -101,6 +120,7 @@
       let prev = str(i - 1) + ".south"
       let arrows = e.at("arrows", default: none)
 
+      // @typstyle off
       if arrows == "up" { arrow(curr, prev) }
       else if arrows == "down" { arrow(prev, curr) }
       else if arrows == "both" {
@@ -117,15 +137,16 @@
   for (i, curr) in cells.enumerate() {
     let hidden = curr.at("hidden", default: false)
     cell(i, curr.name, cell-elems, hidden: hidden, last: i == cells.len() - 1)
-  }
+  },
 )
 #let cell-anchor(i, anchor) = "cells.c" + str(i) + ".body." + anchor
 #let gap(i) = (cell-anchor(i, "east"), 50%, cell-anchor(i + 1, "west"))
 
-#let input-circuit(space, left, right, name: [Input circuit]) = framed("input", name, {
+#let input-circuit(space, l, r, name: [Input circuit]) = framed("input", name, {
   let center = (rel: (0, -space), to: "cells.south")
-  node((rel: (-0.75mm, 0), to: center), anchor: "north-east", name: "left", left)
-  node((rel: (+0.75mm, 0), to: center), anchor: "north-west", name: "right", right)
+  let pos(i) = (rel: (i * 0.75mm, 0), to: center)
+  node(pos(-1), anchor: "north-east", name: "left", l)
+  node(pos(+1), anchor: "north-west", name: "right", r)
 })
 
 #let pos(d, to) = (

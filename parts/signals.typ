@@ -28,6 +28,7 @@ When a block receives a set of inputs, it determines how it is activated based o
 - For the gyro stabilizer, it only works with disabled by default, and negative values make it stabilize in the opposite direction
 
 #figure(
+  // @typstyle off
   booktab-table(
     columns: (6.5cm, auto),
     align: left,
@@ -41,5 +42,5 @@ When a block receives a set of inputs, it determines how it is activated based o
     [Hue light panels], [Color (see #block-ref(<hue-light-panel>))],
     [Other], [None],
   ),
-  caption: [Value modified by the input value for each block]
+  caption: [Value modified by the input value for each block],
 ) <table:InputValueBlocks>

@@ -11,7 +11,7 @@
   #let id = curr-block-id()
   #figure(
     annotated-img("/img/" + id + ".png", ..args),
-    caption: [#name settings]
+    caption: [#name settings],
   ) #label("fig:" + id)
 ]
 
@@ -70,7 +70,7 @@ Distance sensors check for objects within a straight line in front of them and a
 - Blocks only: whether to trigger only when blocks are detected
   - If enabled, raycast stops at the first obstacle regardless of what it is, but if it's not a block the output will be the same as no detection
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -114,7 +114,7 @@ Altitude sensors measure the altitude of the block relative to a predefined fram
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],       "right", 4.35, (0,))
   annotation([Output (on)],        "right", 5.35, (0,))
@@ -154,7 +154,7 @@ Position sensors measure the horizontal position of the block on a chosen axis. 
   - Inputs disable the output when enabled, and enable the output otherwise
 - Relative: determines whether the position measured is absolute or relative to the initial position of the sensor when it was spawned
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -193,7 +193,7 @@ Speed sensors measure the speed of the block in a given direction indicated by t
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -230,7 +230,7 @@ Gravity sensors measure the gravity strength at the position of the block. They 
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -269,7 +269,7 @@ Angle sensors measure the angle of the block relative to the closest direction t
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #let angle-sensor-annotations = {
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -332,7 +332,7 @@ Aiming sensors measure the angle of the block relative to the closest direction 
 - Mute on input: determines whether inputs enable or disable the output
   - Inputs disable the output when enabled, and enable the output otherwise
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   let l(y) = (0.55, y)
   annotation([Output (off)],     "right", 4.25,  ((-1.7, 0),))
@@ -366,7 +366,7 @@ Logic gates are a group of blocks that take a set of boolean inputs, and create 
 - Logic output channel: tag added to the output signal, see @signals
 - Output scale: multiplier of the output signal created by the block, explained in @output-value-calculation
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation(name: "Logic Gate", {
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -388,11 +388,13 @@ These are the steps used by the game to determine the value attached to the outp
 + The gate sends the result as its output value
 
 This process can be described with the following formula:
-$ "output" = "output_value" dot op("boolean_operation")("inputs") dot op("clamp")(sum "inputs") $
+$
+  "output" = "output_value" dot op("boolean_operation")("inputs") dot op("clamp")(sum "inputs")
+$
 
 #figure(
   image("/img/output_value_diagram.png", width: 100%),
-  caption: [Output value calculation diagram made by Zoomah]
+  caption: [Output value calculation diagram made by Zoomah],
 ) <fig:OutputValueDiagram>
 
 ==== Example
@@ -420,7 +422,7 @@ Comparison logic gates calculate the boolean value of a predefined comparison an
   - For the "equal" and "not equal" modes, numbers are compared with a tolerance of $epsilon = 0.0005$ (the numbers are equal if their difference is $< epsilon$)
 - Clamp input: whether the result of the sum of the inputs should be clamped to the $[-1, 1]$ range or not
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -450,7 +452,7 @@ Accumulators store and output a numeric value, and allow to increment/decrement 
 - Scale: rate of change of the stored value, used to scale the value of the input
 - Use steps: whether to change the stored value continuously (in which case the scale is change per second, achieved by using $hfrac(1, 60)$th the scale on each frame) or only once per input activation (on the rising edge of the signal)
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -482,7 +484,7 @@ Randomizers generate and output random values.
     - If the intersection is empty, the value bounds range is used instead if any of the inputs isn't 0, otherwise the output is always 0
   - -Change, +Output: generates and stores a random value on each frame when the block is activated with a negative input, and outputs the last generated value (initialized to a random value within the value bounds) when it is activated with a positive input
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -490,7 +492,7 @@ Randomizers generate and output random values.
   annotation([Value bounds],     "left",  4.15, (-0.4, 0.4))
   annotation([Timers],           "left",  5.8,  (0, -0.4, 0.4))
   annotation([Random mode],      "left",  7.15, (0,))
-  annotation([Output channel],   "mid",   7.9, (0,))
+  annotation([Output channel],   "mid",   7.9,  (0,))
 })
 // LTeX: enabled=true
 
@@ -509,14 +511,14 @@ Number displays output the sum of their inputs, similar to how OR logic gates wo
   - For the "nearest" mode, numbers with a fractional part of $0.5$ are rounded to the closest even integer
   - If the number is outside the $[-1000, 1000]$ range, it's always displayed in scientific notation with $1$ decimal of precision
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
   annotation([Keybinds/toggles], "left",  2.2,  (0,))
   annotation([Timers],           "left",  3.6,  (0, -0.4, 0.4))
   annotation([Rounding],         "left",  5.0,  (0,))
-  annotation([Output channel],   "below", 6.45,  (0,))
+  annotation([Output channel],   "below", 6.45, (0,))
 })
 // LTeX: enabled=true
 
@@ -537,7 +539,7 @@ Arithmetics logic blocks perform an arithmetic binary operation with a constant 
   - When there are no inputs, the operation is performed using an input of $0$
   - Variable division uses the logic channel 0 for its first input (numerator) and logic channel 1 for its second input (denominator)
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
@@ -569,14 +571,14 @@ Functions logic blocks perform a unary operation with the sum of their inputs an
   - For the rounding function, numbers with a fractional part of $0.5$ are rounded to the closest even integer
   - Arctan2 uses the logic channel 0 for its first input ($y$) and logic channel 1 for its second input ($x$)
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],     "right", 4.35, (0,))
   annotation([Output (on)],      "right", 5.35, (0,))
   annotation([Keybinds/toggles], "left",  2.2,  (0,))
   annotation([Timers],           "left",  4.0,  (0, -0.4, 0.4))
   annotation([Function],         "left",  5.4,  (0,))
-  annotation([Output channel],   "below", 6.9, (0,))
+  annotation([Output channel],   "below", 6.9,  (0,))
 })
 // LTeX: enabled=true
 
@@ -592,7 +594,7 @@ Aggregate logic blocks perform a (variadic) aggregation operation with their inp
 - Logic output channel: tag added to the output signal, see @signals
 - Aggregate function: aggregate operation to perform. Possible values are sum, product, minimum, and maximum
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],       "right", 4.35, (0,))
   annotation([Output (on)],        "right", 5.35, (0,))
@@ -615,7 +617,7 @@ Hue light panels are lights with configurable color determined from their input 
 - Saturation: saturation of the color of the light. Ignored when the input value is negative
 - Brightness: brightness of the color of the light
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Keybinds/toggles], "left",  2.2,  (0,))
   annotation([Saturation],       "left",  3.8,  (0,))
@@ -628,18 +630,22 @@ Hue light panels are lights with configurable color determined from their input 
 
 The color displayed as a function of their input value can be determined with the following formula, where $S$ and $B$ are the saturation and brightness settings respectively. Figure @fig:HueLightPanelColor shows an example of the resulting colors for inputs in the range $[-1, 1]$ with $"saturation" = "brightness" = 1$. Inputs smaller than $-1$ result in the $[-1, 0]$ range being repeated, while inputs greater than $1$ result in the $[0, 1]$ range being repeated.
 
-$ op("color")(x) = cases(
+// @typstyle off
+$
+  op("color")(x) = cases(
     op("HSV")(360(x "mod" 1), S, B)          space.quad & (x > 0),
     "Off (Black)"                            space.quad & (x = 0),
     op("greyscale")((1 - (x "mod" 1)) dot B) space.quad & (x < 0),
-) $
+  )
+$
 
 #figure(
   {
-    let gradient-line((min, max), colors) = lq.line(
-      (min, 0), (max, 0),
+    let gradient-line(bounds, colors) = lq.line(
+      ..bounds.zip((0, 0)),
       stroke: 1cm + gradient.linear(..colors, space: color.hsv),
     )
+    let hue(h) = color.hsv(h, 100%, 100%)
 
     show: lq.set-tick(inset: 6pt, outset: 6pt, stroke: luma(50%))
     lq.diagram(
@@ -647,19 +653,19 @@ $ op("color")(x) = cases(
       width: 95%,
       xlabel: [Input value],
       xaxis: (
-        ticks: range(-6, 7).map(i => i/6),
+        ticks: range(-6, 7).map(i => i / 6),
         format-ticks: (ticks, ..args) => {
           let tick-info = (..args.tick-info, significant-digits: 2)
           lq.tick-format.linear(ticks, ..args, tick-info: tick-info)
-        }
+        },
       ),
       yaxis: none,
       grid: none,
       gradient-line((-1, 0), (white, black)),
-      gradient-line((0, 1), range(4).map(i => color.hsv(i * 120deg, 100%, 100%))),
+      gradient-line((0, 1), range(4).map(i => hue(i * 120deg))),
     )
   },
-  caption: [Hue light panel color with $"saturation" = "brightness" = 1$ for inputs in the range $[-1, 1]$]
+  caption: [Hue light panel color with $"saturation" = "brightness" = 1$ for inputs in the range $[-1, 1]$],
 ) <fig:HueLightPanelColor>
 
 === RC Blocks
@@ -682,12 +688,12 @@ Radio senders transmit their input value to other radio receivers on the same ch
   - Player: channel is different for each player. Different players won't see each other's signals
   - The player/team of the RC block is determined by the player who owns (spawned) the creation
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
-  annotation([Keybinds/toggles],  "left",  2.2,  (0,))
-  annotation([Channel],           "left",  3.8,  (0,))
-  annotation([Timers],            "left",  4.9,  (0, -0.4, 0.4))
-  annotation([Channel isolation], "left",  6.3,  (0,))
+  annotation([Keybinds/toggles],  "left",  2.2, (0,))
+  annotation([Channel],           "left",  3.8, (0,))
+  annotation([Timers],            "left",  4.9, (0, -0.4, 0.4))
+  annotation([Channel isolation], "left",  6.3, (0,))
 })
 // LTeX: enabled=true
 
@@ -707,7 +713,7 @@ Radio receivers gather signals from radio senders on the same channel and isolat
   - Player: channel is different for each player. Different players won't see each other's signals
   - The player/team of the RC block is determined by the player who owns (spawned) the creation
 
-// LTeX: enabled=false
+// LTeX: enabled=false @typstyle off
 #settings-annotation({
   annotation([Output (off)],      "right", 4.35, (0,))
   annotation([Output (on)],       "right", 5.35, (0,))

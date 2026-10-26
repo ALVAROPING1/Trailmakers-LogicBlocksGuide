@@ -14,12 +14,14 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
 
 // LTeX: enabled=false
 #let (_, ..data) = csv("/data/Input_Value_Multiplier.csv")
-#let data = data.map(((i, a)) => (i, a, strfmt("{:.8}", float(a)/90)))
+#let data = data.map(((i, a)) => (i, a, strfmt("{:.8}", float(a) / 90)))
 
 #data-table(
-  ([Input\ Value], [Final\ Angle], [Multiplier]), 3, data,
+  ([Input\ Value], [Final\ Angle], [Multiplier]),
+  3,
+  data,
   [Raw data of the input value multiplier for hinges],
-  label: <table:InputValueMultiplierData>
+  label: <table:InputValueMultiplierData>,
 )
 
 #import "/utils/plots.typ": plot-data, plot-fn
@@ -30,8 +32,8 @@ By default, the angle by which hinges/wings/other blocks with the "steering help
     xlabel: [Input value],
     ylabel: [Multiplier],
     plot-data(..get-cols(data, 0, 2), clip: false),
-    plot-fn((0, 1), $x$)
+    plot-fn((0, 1), $x$),
   ),
-  caption: [Graph of the multiplier for hinges as a function of the input value]
+  caption: [Graph of the multiplier for hinges as a function of the input value],
 ) <fig:InputValueMultiplierGraph>
 
