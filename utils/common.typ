@@ -17,7 +17,15 @@
   product: sym.dot,
   ..args,
 )
-#import "plots.typ": eval-math
+/// Evaluates a math expression with the given symbol values
+///
+/// - expr (content): Math expression to evaluate
+/// - values (dictionary): Map of symbol names to their values
+/// -> float
+#let eval-math(expr, values: (:)) = {
+  let values = values.pairs().map(((k, v)) => (symbolica.symbol(k), v))
+  symbolica.evaluate(symbolica.math(expr), values: values).re
+}
 
 /// Alias for a horizontal fraction in math mode
 #let hfrac(num, denom) = $frac(#num, #denom, style: "horizontal")$
