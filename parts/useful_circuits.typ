@@ -75,14 +75,7 @@ in the design and understanding of more complex logic circuits.
   cetz.canvas({
     import "/utils/diagrams.typ": *
     // Nodes
-    let cells = (
-      (name: $1$),
-      (name: "h1", hidden: true),
-      (name: $k$),
-      (name: $k+1$),
-      (name: "h2", hidden: true),
-      (name: $n$),
-    )
+    let cells = ($1$, none, $k$, $k+1$, none, $n$)
     cell-group(cells, (
       (body: [Toggled OR gate with 1 frame delay (output)]),
       (body: [AND gate], arrows: "both", hide-last: true),
@@ -196,14 +189,7 @@ in the design and understanding of more complex logic circuits.
   cetz.canvas({
     import "/utils/diagrams.typ": *
     // Nodes
-    let cells = (
-      (name: $1$),
-      (name: "h1", hidden: true),
-      (name: $k$),
-      (name: $k+1$),
-      (name: "h2", hidden: true),
-      (name: $ceil(log_10 n)$),
-    )
+    let cells = ($1$, none, $k$, $k+1$, none, $ceil(log_10 n)$)
     cell-group(cells, (
       (body: [All OR gates except the last]),
       (body: [Last OR gate], hide-last: true),
@@ -347,14 +333,7 @@ in the design and understanding of more complex logic circuits.
   cetz.canvas({
     import "/utils/diagrams.typ": *
     // Nodes
-    let cells = (
-      (name: $1$),
-      (name: "h1", hidden: true),
-      (name: $k$),
-      (name: $k+1$),
-      (name: "h2", hidden: true),
-      (name: $ceil(log_2 n)$),
-    )
+    let cells = ($1$, none, $k$, $k+1$, none, $ceil(log_2 n)$)
     cell-group(cells, (
       (body: [Toggled OR gate (output)]),
       (body: [AND gate], arrows: "up"),
