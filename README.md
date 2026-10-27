@@ -1,22 +1,14 @@
-<h1 align="center">
-    <img src="https://i.imgur.com/YNxhfqJ.png"/>
-</h1>
-
 # Trailmakers Logic Blocks Guide
+
+![Thumbnail](./img/thumbnail.png)
 
 A guide about how logic blocks work in the game "Trailmakers"
 
-## Building from source
+## Compilation
 
-### Requisites
+Install [Typst](https://github.com/typst/typst?tab=readme-ov-file#installation)
+and run:
 
-- [Pandoc](https://pandoc.org/installing.html) with a latex distribution for PDF output
-- The cloned repository
-
-### Compiling the guide
-
-Enter the cloned repository, then run:
-
-```bash
-pandoc --defaults=pandoc_options.yaml -o "Logic Blocks Guide.pdf" "Logic Blocks Guide.md"
+```sh
+typst c --pdf-standard=a-4 guide.typ "Logic Blocks Guide.pdf"
 ```
