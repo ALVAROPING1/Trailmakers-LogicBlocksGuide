@@ -860,6 +860,8 @@ channel and isolation level. The logic output of radio senders is always 0.
 - Toggle: see @toggle
 - Timers: see @timers
 - Channel: RC channel in which to emit the signal
+  - Note: not to be confused with the logic output channel, which is always 0
+    for this block
 - Channel isolation: visibility type of the channel
   - None: channel is shared by all players
   - Team: channel is shared by all players of the same team. Different teams
@@ -891,6 +893,8 @@ taken into account.
 - Toggle: see @toggle
 - Timers: see @timers
 - Channel: RC channel in which to receive the signals
+  - Note: not to be confused with the logic output channel, which is always 0
+    for this block
 - Channel isolation: visibility type of the channel
   - None: channel is shared by all players
   - Team: channel is shared by all players of the same team. Different teams
