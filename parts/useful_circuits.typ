@@ -487,8 +487,9 @@ Notes:
 - Allows to enable/disable an analog signal without increasing the signal delay
   like normal AND/XOR gate methods do
 - Doesn't work when the output block is an AND/XOR gate
-- Commonly used to enable/disable angle sensor stabilization (with the input
-  being angle sensors and the output helicopter engines)
+- Historically used to enable/disable angle sensor stabilization (with the input
+  being angle sensors and the output helicopter engines), although for sensors
+  it's been superseded by sensor inputs
 
 // LTeX: enabled=false
 #figure(
