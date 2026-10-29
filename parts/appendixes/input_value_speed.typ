@@ -29,6 +29,18 @@ notes about this process:
   angle, and $x$ input value
 - The resulting speed can be approximated by
   $hat(f)_(s, a)(x) = min(fhat(a), s)$
+- It is hypothesized that this happens due to the input limiting the max angle
+  even with hold position (with hold position simply setting the neutral angle
+  to the current one on each tick)
+  - Since the neutral angle is set to the current angle on each tick, input only
+    makes a difference when the limited angle is small enough for the servo to
+    rotate past it on a single tick, causing the angle to be clamped back to the
+    limited angle. This repeats on each tick, rotating less on each one and thus
+    reducing the effective speed
+  - Since the limited angle rotation on each tick is proportional to the max
+    angle, the resulting speed is proportional to it as well
+  - Since the speed only determines the maximum possible rotation per tick, it
+    just acts as a clamp of the maximum possible speed
 
 // LTeX: enabled=false
 #let path = "/data/Input_Value_Speed{}_{}.csv"
