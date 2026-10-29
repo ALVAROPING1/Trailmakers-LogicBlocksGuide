@@ -56,7 +56,7 @@ notes about this process:
         label: $f_(#speed, #angle)(x)$,
         z-index: if i < 2 { 2.1 } else { 2 },
       )),
-    ..((180, 35%, right), (360, 75%, left))
+    ..((360, 35%, right), (180, 75%, left))
       .map(((a, pos, align)) => (
         plot-fn(xlim, fhat(a), label: none, z-index: 2.2),
         lq.place(pos, 1.5, pad(1em, $y = #fhat(a)$), align: align),
