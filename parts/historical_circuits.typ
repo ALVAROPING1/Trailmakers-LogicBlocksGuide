@@ -21,6 +21,267 @@ reasons and in case they are seen in older circuits.
 - You can make a NAND/XNOR gate by making an AND/XOR gate output to a NOT gate
   and taking the output from the NOT gate
 
+== Counter
+
+#import "useful_circuits.typ": example-bps
+
+- Superseded by accumulators, see @counter for more information
+- The complexity of a design is the amount of logic gates used by it, without
+  counting the ones used to create a startup pulse or always on blocks (as those
+  can be reused)
+- There are 3 ways of doing it: general circuit (base $N$), decimal (base $10$)
+  and binary (base $2$). Which one is the least complex depends on the situation
+
+=== General Circuit (Base $N$)
+
+- $n = "amount of cells"$
+- The output is encoded as the position of the active gate in the row of output
+  gates (with the one from the first cell being the minimum value and the one
+  from the last cell being the maximum value)
+- Diagram of the circuit:
+
+// LTeX: enabled=false
+#figure(
+  cetz.canvas({
+    import "/utils/diagrams.typ": *
+    // Nodes
+    let cells = ($1$, none, $k$, $k+1$, none, $n$)
+    cell-group(cells, (
+      (body: [Toggled OR gate with 1 frame delay (output)]),
+      (body: [AND gate], arrows: "both", hide-last: true),
+    ))
+    node(
+      name: "input",
+      (rel: (0, -1.5), to: "cells.south"),
+      [1 frame pulse generator (input)],
+    )
+
+    // Arrows
+    // Between cells
+    for curr in range(1, cells.len()) {
+      arrow(cell-anchor(curr - 1, "1.east"), "-|-", cell-anchor(curr, "0.west"))
+    }
+    // Input connections
+    let input = (rel: (0, 0.5), to: "input.north")
+    let (first, last) = ("cells.c0.body.south", "cells.c4.body.south")
+    arrow(first, "|-", input, "-|", last, pos: "symbol")
+    line(input, "input")
+    for target in range(1, cells.len() - 2) {
+      arrow(cell-anchor(target, "south"), ((), "|-", input), pos: "start")
+    }
+  }),
+  caption: [Diagram of the general method counter (logic gates implementation)],
+) <fig:CounterGeneral>
+// LTeX: enabled=true
+
+- To add cycle, add an AND gate to the last cell configured in the same way as
+  the others and using the first cell as its next cell
+- To make it 2-way, add a new AND gate to each cell configured in the same way
+  as the other one but going in the opposite direction and using a different
+  pulse generator as input
+- Requires a startup pulse to one of the toggled OR gates to work (achieved with
+  a 1 frame pulse generator)
+- Complexity
+  - 1-way: $2n$
+  - 1-way+cycle: $2n + 1$
+  - 2-way: $3n$
+  - 2-way+cycle: $3n + 1$
+- Takes 3 frames to update
+- #example-bps("2134486907", "2134487841", "2075055361", "2134489564")
+
+=== Decimal (Base $10$)
+
+- Works best when $n$ is of the form $c dot 10^k$ where $c$ is an integer in the
+  range $[1, 9]$ and $k$ is any positive integer. If it isn't, more gates are
+  needed to cap the value at $n$
+- $n = 10^"amount of cells"$; $"amount of cells" = ceil(log_10 n)$
+- Each cell is the general circuit for $n=10$ with cycle and no input gate,
+  except for the last cell which can have any value $2 <= n <= 10$ and doesn't
+  need to have cycle
+- The output is encoded as a decimal number with a digit stored in each cell
+  (with the first cell being the least significant digit and the last cell being
+  the most significant digit)
+- Diagram of the circuit:
+
+// LTeX: enabled=false
+#figure(
+  cetz.canvas({
+    import "/utils/diagrams.typ": *
+    // Nodes
+    let cells = ($1$, none, $k$, $k+1$, none, $ceil(log_10 n)$)
+    cell-group(cells, (
+      (body: [All OR gates except the last]),
+      (body: [Last OR gate], hide-last: true),
+      (body: [All AND gates]),
+    ))
+    input-circuit(2cm, [1 frame pulse generator (input)], [OR gate])
+
+    // Arrows
+    let input-dist = (rel: (0, -5mm), to: "cells.c0.south")
+    let input = (rel: (0, -5mm), to: input-dist)
+    let step = (
+      (rel: (0, 5mm), to: "cells.c0.north"),
+      "-|",
+      (rel: (5mm, 0), to: "cells.c5.body.east"),
+    )
+
+    arrow("input.body.right.north", "|-", input, "cells.c0.body.south")
+    line("input.body.left.north", ((), "|-", input))
+
+    let end = "cells.c4.body.1.east"
+    line-spec(input-dist, "-|", (end, "-|", gap(4)), end)
+    arrow(
+      "cells.c0.body.0.east",
+      ((), "-|", gap(0)),
+      "|-",
+      step,
+      "|-",
+      "input.body.right.east",
+    )
+
+    for i in range(4) {
+      line-spec(cell-anchor(i, "1.east"), "-|", (input-dist, "-|", gap(i)))
+      line-spec(cell-anchor(i + 1, "0.east"), "-|", (step, "-|", gap(i + 1)))
+      let v = (gap(i), 50%, gap(i + 1))
+      arrow-mark((v, "|-", input-dist))
+      arrow-mark((v, "|-", step))
+    }
+    arrow-mark((input-dist, "-|", (input-dist, 50%, gap(0))))
+    arrow-mark((step, "-|", (step, 50%, gap(4))))
+
+    for i in range(5) {
+      arrow(cell-anchor(i + 1, "2.west"), ((), "-|", gap(i)), pos: "start")
+    }
+    line("cells.c5.body.0.east", ((), "-|", step))
+  }),
+  caption: [Diagram of the decimal method counter (logic gates implementation)],
+) <fig:CounterDecimal>
+// LTeX: enabled=true
+
+- To add cycle, add cycle to the last cell and remove the OR gate from the input
+  circuit
+- To make it 2-way, duplicate the input circuit but connect all OR gates except
+  the first from each cell to the OR gate. Then, make each cell 2-way, connect
+  the cells in the same direction using the first OR gate of each cell rather
+  than the last, and connect the new input circuit to all AND gates for the
+  second direction
+- Might require a decoder (unless you want to show numbers on a screen)
+  - To create it, take $n$ AND gates and assign a different combination of 1
+    output gate from each cell to each of them (if you only need to use it
+    combined with other circuits, you can combine all of their decoders into a
+    single one to use less gates)
+  - Has a complexity of $n$ gates
+- Requires a startup pulse to one of the toggled OR gates on each cell to work
+  (achieved with a 1 frame pulse generator)
+- Complexity
+  #let complexity(a, b, c) = {
+    $#a ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
+  }
+  - 1-way: #complexity(2, 20, 19)
+
+  - 1-way+cycle: #complexity(2, 20, 19)
+
+  - 2-way: #complexity(3, 30, 28)
+
+  - 2-way+cycle: #complexity(3, 30, 28)
+- Takes 3 frames to update with cycle and 4 frames otherwise
+- #example-bps("2134491881", "2134492935", "2134494676", "2134496082")
+
+=== Binary (Base $2$)
+
+- Works best when $n$ is a power of $2$. If it isn't, more gates are needed to
+  cap the value at $n$
+- $n = 2^"amount of cells"$; $"amount of cells" = ceil(log_2 n)$
+- The output is encoded as a binary number with a bit stored in each cell (with
+  the first cell being the least significant digit and the last cell being the
+  most significant digit)
+- Diagram of the circuit:
+
+// LTeX: enabled=false
+#figure(
+  cetz.canvas({
+    import "/utils/diagrams.typ": *
+    // Nodes
+    let cells = ($1$, none, $k$, $k+1$, none, $ceil(log_2 n)$)
+    cell-group(cells, (
+      (body: [Toggled OR gate (output)]),
+      (body: [AND gate], arrows: "up"),
+    ))
+    input-circuit(1.5cm, [1 frame pulse generator (input)], [NAND gate])
+
+    // Arrows
+    // Between cells
+    for i in range(5) {
+      arrow(cell-anchor(i, "0.east"), "-|-", cell-anchor(i + 1, "1.west"))
+    }
+
+    // Input
+    let input = ("cells.south", 50%, "input.north")
+    let top-line = (
+      (rel: (0, 5mm), to: "cells.c0.north"),
+      "-|",
+      (rel: (5mm, 0), to: "cells.c5.body.east"),
+    )
+
+    let (first, last) = ("cells.c0.body.south", "cells.c5.body.south")
+    arrow(first, "|-", input, "-|", last, pos: "symbol")
+    for i in ("left", "right") {
+      line("input.body." + i + ".north", ((), "|-", input))
+    }
+    for i in range(1, cells.len() - 1) {
+      arrow(cell-anchor(i, "south"), ((), "|-", input), pos: "start")
+      line((cell-anchor(i, "0.east"), "-|", gap(i)), ((), "|-", top-line))
+    }
+
+    arrow(
+      ("cells.c0.body.0.east", "-|", gap(0)),
+      "|-",
+      top-line,
+      "|-",
+      "input.body.right.east",
+    )
+    line("cells.c5.body.0.east", ((), "-|", top-line))
+
+    for i in range(4) {
+      let v = (gap(i), 50%, gap(i + 1))
+      arrow-mark((v, "|-", top-line))
+    }
+    arrow-mark(((gap(4), "|-", top-line), 50%, top-line))
+  }),
+  caption: [Diagram of the binary method counter],
+) <fig:CounterBinary>
+// LTeX: enabled=true
+
+- To add cycle, remove the NAND gate from the input circuit and the AND gate on
+  the first cell, and connect the 1 frame pulse generator directly to the OR
+  gate in the first cell
+- To make it 2-way, add a NOT gate to each cell with its OR gate as input and a
+  new AND gate connected in the same way as the old AND gate, but using the NOT
+  gate of all previous cells as input instead of the OR gates. Then replace the
+  NAND gate on the input circuit with an OR gate and duplicate it (with the copy
+  being connected to the new AND gates on each cell rather than the old ones).
+  Connect the NOT gate of all the cells to the OR gate of the first input
+  circuit, and the OR gate of all the cells to the OR gate of the second input
+  circuit
+- Might require a decoder
+  - To create it, add a NOT gate to each cell and replace the NAND gate of the
+    input circuit with an OR gate like in the 2-way version (if using the 1-way
+    versions). Then, take $n$ AND gates and assign each of them a different
+    combination of either the OR or NOT from each cell (if you only need to use
+    it combined with other circuits you can combine all of their decoders into a
+    single one to use less gates)
+  - Has a complexity of $ceil(log_2 n) + n - 1$ for the 1-way version,
+    $ceil(log_2 n) + n$ for the 1-way+cycle version and $n$ for the 2-way
+    versions
+- Complexity
+  #let complexity(a, b) = $#a ceil(log_2 n) #if b != 0 { $+ #b$ }$
+  - 1-way: #complexity(2, 3)
+  - 1-way+cycle: #complexity(2, 0)
+  - 2-way: #complexity(4, 4)
+  - 2-way+cycle: #complexity(4, 0)
+- Takes 3 frames to update for 1-way+cycle and 4 frames otherwise
+- #example-bps("2134497489", "2134498845", "2134500019", "2134500705")
+
 == Feedback Loop
 
 - Superseded by accumulators
