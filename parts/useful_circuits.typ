@@ -2,7 +2,7 @@
 
 #import "/deps.typ": cetz
 #import "/conf.typ": table-stroke
-#import "/utils/common.typ": steam, tick
+#import "/utils/common.typ": hfrac, steam, tick
 
 = Useful Circuits <useful-circuits>
 
@@ -25,6 +25,90 @@ in the design and understanding of more complex logic circuits.
 - Stores a single bit of information
 - Made by activating toggle on an OR gate, requires the input to be a pulse to
   be easily controlled by other gates (use a pulse generator for this)
+
+== Decoder
+
+- Converts a single real value signal into multiple signals representing the
+  same value in base $n$
+  - For a number $x = limits(sum)_(i = a)^b (c_i * n^i)$, obtains the
+    coefficients $c_i$ in separate gates
+  - Integers $a$ and $b$ define the range of coefficients obtained
+  - To decode integers, $a = 0$ and $b = ceil(log_n "maximum_value")$ are used
+- There is a general circuit that works for any base $n$, although for the
+  special case of $n = 2$ (binary) there is a better implementation. Both of
+  them will be described here
+
+=== General Circuit (Base $N$)
+
+- Made by repeating a cell circuit for each $c_i$ that wants to be extracted:
+
+// LTeX: enabled=false
+#figure(
+  cetz.canvas({
+    import "/utils/diagrams.typ": *
+    // Nodes
+    let cells = ($0$, $1$, $2$, none, $k$, none, $n$)
+    framed("cell", [Cell $i$], {
+      node(name: "div", (), [Arithmetic gate $times hfrac(1, b^i)$])
+      node(name: "mod", ..pos(5mm, "div").r, [Arithmetic gate $% b$])
+      node(name: "floor", ..pos(5mm, "mod").r, [Functions gate $floor(b)$])
+    })
+
+    let pos = pos(1cm, "cell.body")
+    text-box(name: "in", ..pos.l, [Input], frame: none)
+    text-box(name: "out", ..pos.r, [Output], frame: none)
+    let cell-elems = ("div", "mod", "floor")
+    let elems = ("in", ..cell-elems.map(x => "cell.body." + x), "out")
+    for (prev, curr) in elems.windows(2) {
+      arrow(prev + ".east", curr + ".west")
+    }
+  }),
+  caption: [Diagram of the cells of the general method decoder],
+) <fig:DecoderGeneral>
+// LTeX: enabled=true
+
+- In some cases, some of the gates in the cell can be skipped:
+  - When $i = 0$, the division can be skipped
+  - When $i = a$, the floor can be skipped
+  - When $i = b$, the modulo can be skipped
+- For some values of $i$, the constant needed in the arithmetics gate the
+  division might not fit in the configuration setting due to being too small.
+  There are 2 ways to solve this:
+  - Chaining the division of multiple cells, at the cost of increased output
+    latency
+  - Using variable division with the denominator specified on a different
+    arithmetic gate, at the cost of an extra block
+
+=== Binary (Base $2$)
+
+- Made by repeating a cell circuit for each $c_i$ that wants to be extracted:
+
+// LTeX: enabled=false
+#figure(
+  cetz.canvas({
+    import "/utils/diagrams.typ": *
+    // Nodes
+    let cells = ($0$, $1$, $2$, none, $k$, none, $n$)
+    framed("cell", [Cell $i$], {
+      node(name: "mod", (), [Arithmetic gate $% 2^(i + 1)$])
+      node(name: "comparison", ..pos(5mm, "mod").r, [Comparator\ $>= 2^i$])
+    })
+
+    let pos = pos(1cm, "cell.body")
+    text-box(name: "in", ..pos.l, [Input], frame: none)
+    text-box(name: "out", ..pos.r, [Output], frame: none)
+    let cell-elems = ("mod", "comparison")
+    let elems = ("in", ..cell-elems.map(x => "cell.body." + x), "out")
+    for (prev, curr) in elems.windows(2) {
+      arrow(prev + ".east", curr + ".west")
+    }
+  }),
+  caption: [Diagram of the cells of the binary decoder],
+) <fig:DecoderBinary>
+// LTeX: enabled=true
+
+- In some cases, some of the gates in the cell can be skipped:
+  - When $i = b$, the modulo can be skipped
 
 == Counter
 
