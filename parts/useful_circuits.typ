@@ -11,8 +11,8 @@ in the design and understanding of more complex logic circuits.
 
 == Pulse generator/Rising edge detector
 
-- Sends a pulse of a specific length (usually a single frame which is #tick)
-  when the input goes from off to on
+- Sends a pulse of a specific length (usually a single tick which is #tick) when
+  the input goes from off to on
 - Made by setting the duration to the length of the pulse on an OR gate
 
 == Falling edge detector
@@ -147,15 +147,15 @@ in the design and understanding of more complex logic circuits.
   - The value can be increased/decreased by sending a $plus.minus 1$ input to
     the accumulator (the circuit is the same for 1 and 2-way)
   - In some cases, it might be useful to not enable steps mode and set the scale
-    to $60 dot "step_size"$. This allows to change the stored value on each
-    frame (instead of every 2 frames), but requires the input to come from a 1
-    frame pulse generator to get the normal input behaviour
+    to $60 dot "step_size"$. This allows to change the stored value on each tick
+    (instead of every 2 ticks), but requires the input to come from a 1 tick
+    pulse generator to get the normal input behaviour
 - To add cycle, add a comparator set to equality with the maximum value as
   threshold and connect it to an AND gate with the positive accumulator input as
   second input. Connect that AND gate to an arithmetic logic block set to
   multiplication with a $-1000$ constant and $0.02$ duration, and that
   arithmetic logic block to the accumulator
-  - The normal input to the accumulator must come from a 1 frame pulse generator
+  - The normal input to the accumulator must come from a 1 tick pulse generator
   - If using the circuit as 2-way, repeat the process with a comparator checking
     for the minimum value and the negative input of the accumulator. The AND
     gate should have an additional $-2$ always on input (which can be achieved

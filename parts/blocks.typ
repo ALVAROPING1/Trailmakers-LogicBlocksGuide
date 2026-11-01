@@ -577,7 +577,7 @@ is 0, and green/red when it is positive/negative.
   input
 - Use steps: whether to change the stored value continuously (in which case the
   scale is change per second, achieved by using $hfrac(1, 60)$th the scale on
-  each frame) or only once per input activation (on the rising edge of the
+  each tick) or only once per input activation (on the rising edge of the
   signal)
 
 // LTeX: enabled=false @typstyle off
@@ -606,18 +606,18 @@ Randomizers generate and output random values.
 - Value bounds: minimum/maximum value that can be generated, the generated
   values will be in the range #min-max-range
 - Random mode: mode in which the values are generated
-  - Output on input: outputs a random value generated on each frame when it is
+  - Output on input: outputs a random value generated on each tick when it is
     activated, and $0$ otherwise
-  - Change on input: outputs a random value generated on each frame when it is
+  - Change on input: outputs a random value generated on each tick when it is
     activated, and the last generated value (initialized to $0$) otherwise
-  - Input defines range: outputs a random value generated on each frame in the
+  - Input defines range: outputs a random value generated on each tick in the
     intersection between the value bounds and the range
     $[min("inputs"), max("inputs")]$ when the block is activated, and the last
     generated value (initialized to a random value within the value bounds)
     otherwise
     - If the intersection is empty, the value bounds range is used instead if
       any of the inputs isn't 0, otherwise the output is always 0
-  - -Change, +Output: generates and stores a random value on each frame when the
+  - -Change, +Output: generates and stores a random value on each tick when the
     block is activated with a negative input, and outputs the last generated
     value (initialized to a random value within the value bounds) when it is
     activated with a positive input

@@ -47,13 +47,13 @@ reasons and in case they are seen in older circuits.
     // Nodes
     let cells = ($1$, none, $k$, $k+1$, none, $n$)
     cell-group(cells, (
-      (body: [Toggled OR gate with 1 frame delay (output)]),
+      (body: [Toggled OR gate with 1 tick delay (output)]),
       (body: [AND gate], arrows: "both", hide-last: true),
     ))
     node(
       name: "input",
       (rel: (0, -1.5), to: "cells.south"),
-      [1 frame pulse generator (input)],
+      [1 tick pulse generator (input)],
     )
 
     // Arrows
@@ -80,13 +80,13 @@ reasons and in case they are seen in older circuits.
   as the other one but going in the opposite direction and using a different
   pulse generator as input
 - Requires a startup pulse to one of the toggled OR gates to work (achieved with
-  a 1 frame pulse generator)
+  a 1 tick pulse generator)
 - Complexity
   - 1-way: $2n$
   - 1-way+cycle: $2n + 1$
   - 2-way: $3n$
   - 2-way+cycle: $3n + 1$
-- Takes 3 frames to update
+- Takes 3 ticks to update
 - #example-bps("2134486907", "2134487841", "2075055361", "2134489564")
 
 === Decimal (Base $10$)
@@ -114,7 +114,7 @@ reasons and in case they are seen in older circuits.
       (body: [Last OR gate], hide-last: true),
       (body: [All AND gates]),
     ))
-    input-circuit(2cm, [1 frame pulse generator (input)], [OR gate])
+    input-circuit(2cm, [1 tick pulse generator (input)], [OR gate])
 
     // Arrows
     let input-dist = (rel: (0, -5mm), to: "cells.c0.south")
@@ -172,7 +172,7 @@ reasons and in case they are seen in older circuits.
     single one to use less gates)
   - Has a complexity of $n$ gates
 - Requires a startup pulse to one of the toggled OR gates on each cell to work
-  (achieved with a 1 frame pulse generator)
+  (achieved with a 1 tick pulse generator)
 - Complexity
   #let complexity(a, b, c) = {
     $#a ceil(n/10^(ceil(log_10 n) - 1)) + #b ceil(log_10 n) - #c$
@@ -184,7 +184,7 @@ reasons and in case they are seen in older circuits.
   - 2-way: #complexity(3, 30, 28)
 
   - 2-way+cycle: #complexity(3, 30, 28)
-- Takes 3 frames to update with cycle and 4 frames otherwise
+- Takes 3 ticks to update with cycle and 4 ticks otherwise
 - #example-bps("2134491881", "2134492935", "2134494676", "2134496082")
 
 === Binary (Base $2$)
@@ -207,7 +207,7 @@ reasons and in case they are seen in older circuits.
       (body: [Toggled OR gate (output)]),
       (body: [AND gate], arrows: "up"),
     ))
-    input-circuit(1.5cm, [1 frame pulse generator (input)], [NAND gate])
+    input-circuit(1.5cm, [1 tick pulse generator (input)], [NAND gate])
 
     // Arrows
     // Between cells
@@ -253,8 +253,8 @@ reasons and in case they are seen in older circuits.
 // LTeX: enabled=true
 
 - To add cycle, remove the NAND gate from the input circuit and the AND gate on
-  the first cell, and connect the 1 frame pulse generator directly to the OR
-  gate in the first cell
+  the first cell, and connect the 1 tick pulse generator directly to the OR gate
+  in the first cell
 - To make it 2-way, add a NOT gate to each cell with its OR gate as input and a
   new AND gate connected in the same way as the old AND gate, but using the NOT
   gate of all previous cells as input instead of the OR gates. Then replace the
@@ -279,7 +279,7 @@ reasons and in case they are seen in older circuits.
   - 1-way+cycle: #complexity(2, 0)
   - 2-way: #complexity(4, 4)
   - 2-way+cycle: #complexity(4, 0)
-- Takes 3 frames to update for 1-way+cycle and 4 frames otherwise
+- Takes 3 ticks to update for 1-way+cycle and 4 ticks otherwise
 - #example-bps("2134497489", "2134498845", "2134500019", "2134500705")
 
 == Feedback Loop
@@ -288,14 +288,14 @@ reasons and in case they are seen in older circuits.
 - Allows storing an analog value in the range $[-1, 1]$
 - Made by connecting 2 OR gates to each other, connecting the input to both of
   them, and taking the output from one of them
-- Each frame the input is active, the stored value increases by the value of the
+- Each tick the input is active, the stored value increases by the value of the
   input
   - With a close to 0 input value, the circuit can be used to generate an analog
     output value
 - One of the OR gates can be replaced with an XOR to add a reset input. In this
   case, the normal input should go to the OR gate only and the reset input must
   be 2 different signals connected to the XOR gate
-  - Be aware that this method adds a 1 frame jitter to the stored signal
+  - Be aware that this method adds a 1 tick jitter to the stored signal
 
 === Clamped Feedback Loop
 
