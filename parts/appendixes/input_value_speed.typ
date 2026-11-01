@@ -18,10 +18,9 @@ notes about this process:
   error of $plus.minus 0.00005$ speed units for speeds lower than $1$ and an
   error of $plus.minus 0.0005$ otherwise
   - To compare the speeds of the servos, they were run continuously for some
-    time and the final angle was compared
-    - For servos with $360$ angle, they were run for $3$ min
-    - For servos with less than $360$ angle, they were run for slightly less
-      than the time required to reach the maximum angle
+    time ($3$ min for servos with $360$ angle, slightly less than the time
+    required to reach the maximum angle otherwise) and the final angle was
+    compared
   - Servos with a configured speed of $1$ and $2$ as well as $360$ and $180$
     angle were tested, with other speeds/angles being checked to verify the
     results
@@ -41,6 +40,8 @@ notes about this process:
     angle, the resulting speed is proportional to it as well
   - Since the speed only determines the maximum possible rotation per tick, it
     just acts as a clamp of the maximum possible speed
+- The servos move at max speed on the last tick of each revolution, but it's
+  unknown why this happens
 
 // LTeX: enabled=false
 #let path = "/data/Input_Value_Speed{}_{}.csv"
