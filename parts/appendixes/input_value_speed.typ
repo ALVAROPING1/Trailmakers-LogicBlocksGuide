@@ -75,10 +75,8 @@ notes about this process:
       ))
       .flatten(),
   ),
-  caption: [
-    Graph of the speed for servos with hold position as a function of the input
-    value
-  ],
+  caption: [Graph of the speed for servos with hold position as a function of
+    the input value],
 ) <fig:InputValueSpeedGraph>
 
 #let headers = (

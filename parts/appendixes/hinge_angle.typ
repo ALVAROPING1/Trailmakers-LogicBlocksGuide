@@ -44,8 +44,7 @@ Some notes about this process:
     plot-data(..get-cols(data, 0, 2), clip: false),
     plot-fn((0, 1), $x$),
   ),
-  caption: [
-    Graph of the multiplier for hinges as a function of the input value
-  ],
+  caption: [Graph of the multiplier for hinges as a function of the input
+    value],
 ) <fig:InputValueMultiplierGraph>
 

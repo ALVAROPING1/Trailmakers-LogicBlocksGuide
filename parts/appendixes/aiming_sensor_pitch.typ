@@ -37,10 +37,8 @@ process:
     plot-fn((-90, 90), $x + #avg-error$, color: red),
     plot-fn((-90, 90), $x$),
   ),
-  caption: [
-    Graph of the pitch measured by aiming sensors as a function of the real
-    camera pitch
-  ],
+  caption: [Graph of the pitch measured by aiming sensors as a function of the
+    real camera pitch],
 ) <fig:AimingSensorPitchGraph>
 
 #figure(
@@ -50,10 +48,8 @@ process:
     ylabel: [Error],
     plot-data(..get-cols(data-error, 0, 1), label: none, stroke: 0.4pt),
   ),
-  caption: [
-    Graph of the error in pitch measured by aiming sensors as a function of the
-    real camera pitch
-  ],
+  caption: [Graph of the error in pitch measured by aiming sensors as a function
+    of the real camera pitch],
 ) <fig:AimingSensorPitchGraphError>
 
 #data-table(
