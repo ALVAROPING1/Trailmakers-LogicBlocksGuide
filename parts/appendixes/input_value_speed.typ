@@ -23,7 +23,7 @@ notes about this process:
     compared
   - Servos with a configured speed of $1$ and $2$ as well as $360$ and $180$
     angle were tested, with other speeds/angles being checked to verify the
-    results
+    generality of the results
 - $f_(s, a)(x)$ represents the resulting speed of a servo with $s$ speed, $a$
   angle, and $x$ input value
 - The resulting speed can be approximated by
