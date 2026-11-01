@@ -133,7 +133,7 @@
 
     align(right, text(
       size: 12pt,
-      date.display("[month repr:long] [day], [year]"),
+      date.display("[month repr:long] [day padding:none], [year]"),
     ))
   }
 
