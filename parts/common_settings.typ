@@ -31,19 +31,25 @@ red).
 == Toggle <toggle>
 
 Toggle allows making inputs alternate the activation state of a block between on
-and off without requiring a continuous input signal to remain active.
+and off, without requiring a continuous input signal to remain active.
 
 - There is a toggle setting associated with positive inputs (below the green
   keybind) and another with negative ones (below the red keybind)
 - Toggles *inputs*
   - When the sum of the inputs goes from $0$ to a different value, multiple
     things happen depending on the new value:
-    + If the opposite sign of the input is toggled on, it is toggled off
-      instantly
-    + If the sign of the input has toggle enabled, it is toggled: if it was off
-      it turns on, and if it was on it turns off (which will happen on the
-      falling edge of the input). Otherwise, the gate is enabled normally
-  - Toggle retains the value of the last non-$0$ sum of inputs while active
+    + If the opposite sign of the sum is toggled on, it is toggled off instantly
+    + If the sign of the sum has toggle enabled, it is toggled: if it was off it
+      turns on, and if it was on it turns off.
+  - Toggle retains the value of the sum for each logic channel at the moment it
+    was toggled on
+  - While toggled on, the value of the toggle replaces the sum of inputs for
+    output calculations, ignoring the actual value of the sum
+    - For blocks whose output depends on the raw inputs instead of their sum,
+      toggle is effectively ignored as they never read the value of the sum
+  - While toggled off, the gate uses the value of the input for output
+    calculations (if the input toggled the block off, the block might remain
+    active until the falling edge of the input)
   - To toggle the output instead of the inputs, make the signal go through
     another gate with the toggle
 
