@@ -131,10 +131,8 @@
     text(size: 18pt, underline(title))
     image("img/thumbnail.png", width: 100%)
 
-    align(right, text(
-      size: 12pt,
-      date.display("[month repr:long] [day padding:none], [year]"),
-    ))
+    let date = date.display("[month repr:long] [day padding:none], [year]")
+    align(right, text(size: 12pt, date))
   }
 
   // Outlines
