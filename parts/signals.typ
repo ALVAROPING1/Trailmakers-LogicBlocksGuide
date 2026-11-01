@@ -70,7 +70,7 @@ modified for each block are in @table:InputValueBlocks. Some important notes:
   caption: [Value modified by the input value for each block],
 ) <table:InputValueBlocks>
 
-== Update order
+== Update order <update-order>
 
 #let double-buffer = "https://en.wikipedia.org/wiki/Multiple_buffering"
 #let dfs = "https://en.wikipedia.org/wiki/Depth-first_search"

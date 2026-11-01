@@ -60,23 +60,22 @@ activation/deactivation of a block after a set amount of time.
 
 #let textarrow = sym.arrow
 
-- Timers apply to the inputs of the block and are shared by all of them, and
-  start as soon as the block receives a *single input*. For logic blocks, this
-  still applies even if the block doesn't meet its conditions to send an output
-- The number will be rounded to have only 2 decimal places when shown on the
-  menu, but the number which will be used is the one written rounded to 8
-  decimal places. Due to a bug, only up to 5 characters can be written, so
-  depending on the exact value the number of decimals which can be used will
-  vary
+- Timers apply to the sum of inputs of the block, after toggle is applied
+  - They start as soon as *the value is non-$0$*. For logic blocks, this still
+    applies even if the block doesn't meet its conditions to send an output
+  - Timers are applied to the global sum of inputs as well as a filter for raw
+    inputs
+    - As a result, they are ignored by blocks that make use of logic channels
 - All values are specified in seconds
 - Delay: amount of time between the block receives an input and the block
   activates
-  - Note: each logic gate has an extra delay of #tick due to the state of all
-    the logic gates being updated once per physics' frame at the same time
+  - Note: in most cases (see @update-order) each block has an extra delay of
+    #tick due to the state of blocks being updated once per tick at the same
+    time
 - Duration (previously active time): amount of time before the block
   automatically deactivates after it has been activated
   - A value of $0$ indicates that it will never deactivate automatically
-  - Shortest pulse length is $1$ frame (#tick), values smaller than this won't
+  - Shortest pulse length is $1$ tick (#tick), values smaller than this won't
     activate the block
 - Pause (previously inactive time): amount of time before the block reactivates
   and the duration timer is restarted, after the duration timer expires
@@ -92,7 +91,7 @@ activation/deactivation of a block after a set amount of time.
   be calculated with $"seconds" dot 60$
   - If this number is not an integer, it will be rounded down to the nearest
     integer
-  - If this number is an integer, it will randomly either be kept as it is or be
+  - If this number is an integer, it will randomly either be kept as is or be
     subtracted one frame depending on the exact value used, so it's recommended
     to add $0.01$ to the original number to make sure it always stays in the
     correct number of frames
