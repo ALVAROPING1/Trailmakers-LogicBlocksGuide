@@ -58,8 +58,6 @@ and off, without requiring a continuous input signal to remain active.
 Timers are a group of settings that allow to automate the
 activation/deactivation of a block after a set amount of time.
 
-#let textarrow = sym.arrow
-
 - Timers apply to the sum of inputs of the block, after toggle is applied
   - They start as soon as *the value is non-$0$*. For logic blocks, this still
     applies even if the block doesn't meet its conditions to send an output
@@ -83,9 +81,6 @@ activation/deactivation of a block after a set amount of time.
   - It's ignored if the duration timer is $0$
 - During the delay/pause timers, the block is deactivated by overriding the
   input value with $0$
-- The order of the timers is as follows: delay #textarrow duration #textarrow
-  pause #textarrow back to duration (if pause is $0$ it ends after the duration
-  ends)
 - In the case of the delay and duration timers, even though their values are
   expressed in seconds, the game handles them as a number of frames, which can
   be calculated with $"seconds" dot 60$
@@ -97,3 +92,36 @@ activation/deactivation of a block after a set amount of time.
     correct number of frames
   - Pause timers aren't subject to this, and the exact time in seconds is used
     for them
+- The order of the timers can be seen in @fig:timers
+
+// LTeX: enabled=false
+#figure(
+  {
+    set text(0.8em)
+    import "/deps.typ": cetz, fletcher
+    import fletcher: diagram, edge, node
+    let r = 2.75em
+    let final = (extrude: (-2.5, 0))
+    let output(node, extrude, ..params) = {
+      fletcher.shapes.circle(node, extrude, ..params)
+      fletcher.cetz.draw.line((-r, 0), (r, 0), stroke: node.stroke)
+    }
+    diagram(
+      node-stroke: 0.1em,
+      spacing: 6em,
+      edge((-1, 0), "r", "-|>", `Start`, label-pos: 0, label-side: center),
+      node((0, 0), [`Delay`\ \ `Off`], radius: r, shape: output),
+      edge($"duration" != 0$, "-|>"),
+      node((1, 0), [`Duration`\ \ `On`], radius: r, shape: output),
+      edge($"pause" != 0$, "-|>"),
+      node((2, 0), [`Pause`\ \ `Off`], radius: r, shape: output),
+      edge((2, 0), "l", [], "-|>", bend: 40deg),
+      node((0, 1), `On`, radius: r, ..final),
+      node((1, 1), `Off`, radius: r, ..final),
+      edge((1, 0), "d", $"pause" = 0$, "-|>"),
+      edge((0, 0), "d", $"duration" = 0$, "-|>"),
+    )
+  },
+  caption: [State machine controlling the timers],
+) <fig:timers>
+// LTeX: enabled=true
