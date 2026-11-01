@@ -24,6 +24,7 @@
   // ─────────────────────────────── Page setup ───────────────────────────────
 
   let in-frontmatter = state("in-frontmatter", false) // to control page number format in frontmatter
+  let in-appendix = state("in-appendix", false) // to control heading formatting in the appendixes
 
   // Text
   set text(size: 10pt, lang: lang, font: "New Computer Modern")
@@ -63,7 +64,24 @@
     }
   }
 
-  show figure: set figure(gap: 1em)
+  // figure captions
+  show figure.caption: it => {
+    let counter = context it.counter.display(it.numbering)
+    let fig = [#it.supplement #counter#it.separator]
+    [#text(weight: "semibold", fig)#it.body]
+  }
+
+  // show chapter on numbering
+  set figure(numbering: (..num) => numbering(
+    if in-appendix.get() { "A.1" } else { "1.1" },
+    counter(heading).get().first(),
+    num.pos().first(),
+  ))
+
+  // images
+  show figure.where(kind: image): set figure(supplement: "Fig.", gap: 1em)
+  // tables
+  show figure.where(kind: table): set figure.caption(position: top)
 
   // References & Links
   let hyperlink-blue = rgb(5, 99, 193)
@@ -218,8 +236,12 @@
     it
   }
 
-  // chapter on new page
   show heading.where(level: 1): it => {
+    // reset figure counters so they are counted per chapter
+    counter(figure.where(kind: image)).update(0)
+    counter(figure.where(kind: table)).update(0)
+
+    // chapter on new page
     if counter(heading).get().first() != 2 or regex("\d+") not in it.numbering {
       newpage()
     }
@@ -234,6 +256,8 @@
 
   // ─────────────────────────────── Appendixes ───────────────────────────────
 
+  in-appendix.update(true)
+
   show heading.where(level: 1): set heading(
     // configure supplement
     supplement: "Appendix",
@@ -244,6 +268,10 @@
   if appendixes != none { appendixes }
 
   text(size: 12pt)[*Made by #author*]
+
+  // we _would_ need to set this on a new page,
+  // but as there are none, it's not needed
+  // in-appendix.update(false)
 }
 
 // "booktab" table style
