@@ -852,7 +852,10 @@ between different creations.
 ==== Radio Sender
 
 Radio senders transmit their input value to other radio receivers on the same
-channel and isolation level. The logic output of radio senders is always 0.
+channel and isolation level. Although normally radio senders can't have logic
+output connections to other blocks, using mirror mode it's possible to bug the
+sender into connecting to other blocks, in which case the output value is its
+sum of inputs.
 
 #settings-intro()
 
@@ -885,8 +888,10 @@ channel and isolation level. The logic output of radio senders is always 0.
 Radio receivers gather signals from radio senders on the same channel and
 isolation level, and output their sum. The logic channel of the output is
 always 0. The value from radio senders is processed as if it was another logic
-input (i.e. is considered by the sum of inputs), although keybinds are the only
-actual logic input that can be used by the radio receivers.
+input (i.e. is considered by the sum of inputs). Keybinds are the only actual
+logic input that can be normally used by the radio receivers, although using
+mirror mode it's possible to bug the receiver into accepting logic inputs from
+other blocks.
 
 #settings-intro()
 
