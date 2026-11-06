@@ -884,8 +884,9 @@ channel and isolation level. The logic output of radio senders is always 0.
 
 Radio receivers gather signals from radio senders on the same channel and
 isolation level, and output their sum. The logic channel of the output is
-always 0. Logic inputs to the radio receiver are ignored, only radio senders are
-taken into account.
+always 0. The value from radio senders is processed as if it was another logic
+input (i.e. is considered by the sum of inputs), although keybinds are the only
+actual logic input that can be used by the radio receivers.
 
 #settings-intro()
 
