@@ -96,20 +96,21 @@ considered undefined behavior and avoided where possible.
 
 Instead of using a double buffer of signals, the game stores the value of all
 inputs and the sum of inputs of each block. On each update tick, the update of
-blocks is divided in 2 main steps:
-+ Each block calculates its current sum of inputs from the raw inputs table
+blocks is divided in 4 main steps:
++ Each non-RC block calculates its current sum of inputs from the raw inputs
+  table
   - Order is irrelevant as the raw inputs table isn't modified during this step
   - The sign of this sum is used for the display of the input arrows in all
     #logic-gates and #math-blocks
   - Blocks that make use of logic channels also calculate the sum of inputs for
     each channel
-+ Each block in spawn order calculates its new output, updating its value in the
-  inputs table
++ Each non-RC block in spawn order calculates its new output, updating its value
+  in the inputs table
   - Block spawn order is the order in which the blocks were created in the
     build, from oldest to newest, and is preserved across blueprint save/loads
   - Whenever the output of a block changes, its connected output blocks are
     processed recursively as well, resulting in a #link(dfs)[depth-first search]
-    (updating neighbors of the block in cration order as well)
+    (also updating neighbors of the block in cration order)
     - This causes the update order to potentially change based on the exact
       values of the signals going through the circuit and the state of all
       blocks at the end of the previous tick
@@ -131,3 +132,15 @@ blocks is divided in 2 main steps:
       - Theoretically this applies to any input ancestor block, although in
         practice it's usually enough to consider only up until the first or
         second one that doesn't depend on the raw inputs table
++ RC receivers calculate their sum of inputs and new output from that
+  - Order is the same as for non-RC blocks (spawn order with depth-first search)
+  - Under normal circumstances, order is irrelevant as receivers can't take
+    logic inputs and RC signals don't change during this step
+  - Since they are always updated before senders, RC transmission from senders
+    to receivers always has 1 tick of transmission delay
++ RC senders calculate their sum of inputs and update the RC signals
+  - Order is the same as for non-RC blocks (spawn order with depth-first search)
+  - Under normal circumstances, order is irrelevant as receivers can't output to
+    other blocks, and other logic inputs don't change during this step
+  - Since they are always updated after all other blocks, they always have 0
+    ticks of transmission delay
