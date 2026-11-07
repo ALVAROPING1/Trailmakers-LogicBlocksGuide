@@ -82,7 +82,7 @@ exactly how the game works, and as a result the update order can make a
 difference in some cases, particularly in blocks that need to access raw inputs
 instead of their aggregated sum. In practice, this makes the biggest difference
 when multiple inputs of an aggregate logic block in non-sum mode change in the
-same tick, since the aggregate block might temporarilly see partially updated
+same tick, since the aggregate block might temporarily see partially updated
 inputs and thus produce a wrong output value. It can also have a smaller effect
 with a single input change, where the aggregate block can have a transmission
 delay of either 0 or 1 ticks depending on the update order.
@@ -110,7 +110,7 @@ blocks is divided in 4 main steps:
     build, from oldest to newest, and is preserved across blueprint save/loads
   - Whenever the output of a block changes, its connected output blocks are
     processed recursively as well, resulting in a #link(dfs)[depth-first search]
-    (also updating neighbors of the block in cration order)
+    (also updating neighbors of the block in creation order)
     - This causes the update order to potentially change based on the exact
       values of the signals going through the circuit and the state of all
       blocks at the end of the previous tick
